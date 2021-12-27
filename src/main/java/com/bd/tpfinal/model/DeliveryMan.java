@@ -3,45 +3,64 @@ package com.bd.tpfinal.model;
 import java.util.Date;
 import java.util.List;
 
-public class DeliveryMan extends User{
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 
-    private int numberOfSuccessOrders;
+@Entity
+public class DeliveryMan extends User {
+    
+	private int numberOfSuccessOrders;
 
-    private boolean free;
+	private boolean free;
 
-    private Date dateOfAdmission;
+	private Date dateOfAdmission;
 
-    private List<Order> ordersPending;
+    @OneToMany( mappedBy = "deliveryMan", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+	private List<Order> ordersPending;
 
-    public int getNumberOfSuccessOrders() {
-        return numberOfSuccessOrders;
-    }
+    
+	public DeliveryMan() {
+		super();
+	}
 
-    public void setNumberOfSuccessOrders(int numberOfSuccessOrders) {
-        this.numberOfSuccessOrders = numberOfSuccessOrders;
-    }
+	public int getNumberOfSuccessOrders() {
+		return numberOfSuccessOrders;
+	}
 
-    public boolean isFree() {
-        return free;
-    }
+	public void setNumberOfSuccessOrders(int numberOfSuccessOrders) {
+		this.numberOfSuccessOrders = numberOfSuccessOrders;
+	}
 
-    public void setFree(boolean free) {
-        this.free = free;
-    }
+	public boolean isFree() {
+		return free;
+	}
 
-    public Date getDateOfAdmission() {
-        return dateOfAdmission;
-    }
+	public void setFree(boolean free) {
+		this.free = free;
+	}
 
-    public void setDateOfAdmission(Date dateOfAdmission) {
-        this.dateOfAdmission = dateOfAdmission;
-    }
+	public Date getDateOfAdmission() {
+		return dateOfAdmission;
+	}
 
-    public List<Order> getOrdersPending() {
-        return ordersPending;
-    }
+	public void setDateOfAdmission(Date dateOfAdmission) {
+		this.dateOfAdmission = dateOfAdmission;
+	}
 
-    public void setOrdersPending(List<Order> ordersPending) {
-        this.ordersPending = ordersPending;
-    }
+	public List<Order> getOrdersPending() {
+		return ordersPending;
+	}
+
+	public void setOrdersPending(List<Order> ordersPending) {
+		this.ordersPending = ordersPending;
+	}
+
+	@Override
+	public String toString() {
+		return "DeliveryMan [numberOfSuccessOrders=" + numberOfSuccessOrders + ", free=" + free + ", dateOfAdmission="
+				+ dateOfAdmission + ", ordersPending=" + ordersPending + "]";
+	}
+	
 }

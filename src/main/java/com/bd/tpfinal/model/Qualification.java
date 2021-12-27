@@ -1,34 +1,59 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Qualification {
 
-    private float score;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_qualification")
+    private Long id;
+    
+	private float score;
 
-    private String commentary;
+	private String commentary;
 
-    private Order order;
+	@OneToOne(mappedBy = "qualification")
+	private Order order;
 
-    public float getScore() {
-        return score;
-    }
+	
+	public Qualification() {
+		super();
+	}
 
-    public void setScore(float score) {
-        this.score = score;
-    }
+	public float getScore() {
+		return score;
+	}
 
-    public String getCommentary() {
-        return commentary;
-    }
+	public void setScore(float score) {
+		this.score = score;
+	}
 
-    public void setCommentary(String commentary) {
-        this.commentary = commentary;
-    }
+	public String getCommentary() {
+		return commentary;
+	}
 
-    public Order getOrder() {
-        return order;
-    }
+	public void setCommentary(String commentary) {
+		this.commentary = commentary;
+	}
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
+	}
+
+	@Override
+	public String toString() {
+		return "Qualification [id=" + id + ", score=" + score + ", commentary=" + commentary + ", order=" + order + "]";
+	}
+	
 }

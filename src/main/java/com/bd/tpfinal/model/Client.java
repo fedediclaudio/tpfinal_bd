@@ -3,35 +3,53 @@ package com.bd.tpfinal.model;
 import java.util.Date;
 import java.util.List;
 
-public class Client extends User{
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 
-    private Date dateOfRegister;
+@Entity
+public class Client extends User {
+    
+	private Date dateOfRegister;
 
-    private List<Order> orders;
+    @OneToMany( mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+	private List<Order> orders;
 
-    private List<Address> addresses;
+    @OneToMany( mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+	private List<Address> addresses;
 
-    public Date getDateOfRegister() {
-        return dateOfRegister;
-    }
+	public Client() {
+		super();
+	}
 
-    public void setDateOfRegister(Date dateOfRegister) {
-        this.dateOfRegister = dateOfRegister;
-    }
+	public Date getDateOfRegister() {
+		return dateOfRegister;
+	}
 
-    public List<Order> getOrders() {
-        return orders;
-    }
+	public void setDateOfRegister(Date dateOfRegister) {
+		this.dateOfRegister = dateOfRegister;
+	}
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
+	public List<Order> getOrders() {
+		return orders;
+	}
 
-    public List<Address> getAddresses() {
-        return addresses;
-    }
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
 
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
-    }
+	public List<Address> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<Address> addresses) {
+		this.addresses = addresses;
+	}
+
+	@Override
+	public String toString() {
+		return "Client [dateOfRegister=" + dateOfRegister + ", orders=" + orders + ", addresses=" + addresses + "]";
+	}
+	
 }

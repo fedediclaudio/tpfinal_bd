@@ -1,76 +1,108 @@
 package com.bd.tpfinal.model;
 
+import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Supplier {
 
-    private String name;
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_supplier")
+    private Long id;
+	
+	private String name;
 
-    private String cuil;
+	private String cuil;
 
-    private String address;
+	private String address;
 
-    private float[] coords;
+	private float[] coords;
 
-    private float qualificationOfUsers;
+	private float qualificationOfUsers;
 
-    private List<Product> products;
+	@OneToMany( mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+	private List<Product> products;
 
-    private SupplierType type;
+	@ManyToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+    @JoinColumn( name = "id_supplier_type" )
+	private SupplierType type;
 
-    public String getName() {
-        return name;
-    }
+	
+	public Supplier() {}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getCuil() {
-        return cuil;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setCuil(String cuil) {
-        this.cuil = cuil;
-    }
+	public String getCuil() {
+		return cuil;
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	public void setCuil(String cuil) {
+		this.cuil = cuil;
+	}
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+	public String getAddress() {
+		return address;
+	}
 
-    public float[] getCoords() {
-        return coords;
-    }
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
-    public void setCoords(float[] coords) {
-        this.coords = coords;
-    }
+	public float[] getCoords() {
+		return coords;
+	}
 
-    public float getQualificationOfUsers() {
-        return qualificationOfUsers;
-    }
+	public void setCoords(float[] coords) {
+		this.coords = coords;
+	}
 
-    public void setQualificationOfUsers(float qualificationOfUsers) {
-        this.qualificationOfUsers = qualificationOfUsers;
-    }
+	public float getQualificationOfUsers() {
+		return qualificationOfUsers;
+	}
 
-    public List<Product> getProducts() {
-        return products;
-    }
+	public void setQualificationOfUsers(float qualificationOfUsers) {
+		this.qualificationOfUsers = qualificationOfUsers;
+	}
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
+	public List<Product> getProducts() {
+		return products;
+	}
 
-    public SupplierType getType() {
-        return type;
-    }
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
 
-    public void setType(SupplierType type) {
-        this.type = type;
-    }
+	public SupplierType getType() {
+		return type;
+	}
+
+	public void setType(SupplierType type) {
+		this.type = type;
+	}
+
+	@Override
+	public String toString() {
+		return "Supplier [id=" + id + ", name=" + name + ", cuil=" + cuil + ", address=" + address + ", coords="
+				+ Arrays.toString(coords) + ", qualificationOfUsers=" + qualificationOfUsers + ", products=" + products
+				+ ", type=" + type + "]";
+	}
+	
 }

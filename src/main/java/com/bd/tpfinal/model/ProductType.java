@@ -2,35 +2,61 @@ package com.bd.tpfinal.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+@Entity
 public class ProductType {
 
-    private String name;
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_product_type")
+    private Long id;
+    
+	private String name;
 
-    private String description;
+	private String description;
 
-    private List<Product> products;
+	@OneToMany( mappedBy = "type", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+	private List<Product> products;
 
-    public String getName() {
-        return name;
-    }
+	
+	public ProductType() {}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public List<Product> getProducts() {
-        return products;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+
+	@Override
+	public String toString() {
+		return "ProductType [id=" + id + ", name=" + name + ", description=" + description + ", products=" + products
+				+ "]";
+	}
+	
 }

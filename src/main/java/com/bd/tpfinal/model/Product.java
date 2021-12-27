@@ -2,75 +2,108 @@ package com.bd.tpfinal.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Product {
 
-    private String name;
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_product")
+    private Long id;
+	
+	private String name;
 
-    private float price;
+	private float price;
 
-    private float weight;
+	private float weight;
 
-    private String description;
+	private String description;
 
-    private Supplier supplier;
+	@ManyToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+    @JoinColumn( name = "id_supplier" )
+	private Supplier supplier;
 
-    private ProductType type;
+	@OneToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn( name="id_type" )
+	private ProductType type;
 
-    private List<HistoricalProductPrice> prices;
+	@OneToMany( mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+	private List<HistoricalProductPrice> prices;
 
-    public String getName() {
-        return name;
-    }
+	
+	public Product() {}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public float getPrice() {
-        return price;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setPrice(float price) {
-        this.price = price;
-    }
+	public float getPrice() {
+		return price;
+	}
 
-    public float getWeight() {
-        return weight;
-    }
+	public void setPrice(float price) {
+		this.price = price;
+	}
 
-    public void setWeight(float weight) {
-        this.weight = weight;
-    }
+	public float getWeight() {
+		return weight;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setWeight(float weight) {
+		this.weight = weight;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public Supplier getSupplier() {
-        return supplier;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
+	public Supplier getSupplier() {
+		return supplier;
+	}
 
-    public ProductType getType() {
-        return type;
-    }
+	public void setSupplier(Supplier supplier) {
+		this.supplier = supplier;
+	}
 
-    public void setType(ProductType type) {
-        this.type = type;
-    }
+	public ProductType getType() {
+		return type;
+	}
 
-    public List<HistoricalProductPrice> getPrices() {
-        return prices;
-    }
+	public void setType(ProductType type) {
+		this.type = type;
+	}
 
-    public void setPrices(List<HistoricalProductPrice> prices) {
-        this.prices = prices;
-    }
+	public List<HistoricalProductPrice> getPrices() {
+		return prices;
+	}
+
+	public void setPrices(List<HistoricalProductPrice> prices) {
+		this.prices = prices;
+	}
+
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", name=" + name + ", price=" + price + ", weight=" + weight + ", description="
+				+ description + ", supplier=" + supplier + ", type=" + type + ", prices=" + prices + "]";
+	}
+	
 }

@@ -2,35 +2,61 @@ package com.bd.tpfinal.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+@Entity
 public class SupplierType {
 
-    private String name;
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_suplier_type")
+    private Long id;
+	
+	private String name;
 
-    private String description;
+	private String description;
 
-    private List<Supplier> suppliers;
+	@OneToMany( mappedBy = "type", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+	private List<Supplier> suppliers;
+	
+	
+	public SupplierType() {}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public List<Supplier> getSuppliers() {
-        return suppliers;
-    }
+	public List<Supplier> getSuppliers() {
+		return suppliers;
+	}
 
-    public void setSuppliers(List<Supplier> suppliers) {
-        this.suppliers = suppliers;
-    }
+	public void setSuppliers(List<Supplier> suppliers) {
+		this.suppliers = suppliers;
+	}
+
+	@Override
+	public String toString() {
+		return "SupplierType [id=" + id + ", name=" + name + ", description=" + description + ", suppliers=" + suppliers
+				+ "]";
+	}
+	
 }
