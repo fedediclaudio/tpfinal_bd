@@ -8,8 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class TpfinalApplicationTests {
 
-//	@Autowired
-//	private DeliveryService service;
+	@Autowired
+	private DeliveryService service;
 
 	@Test
 	void contextLoads() {

@@ -7,15 +7,48 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 
 
-//////////
-//
-// Hay que decidir que tipo de herencia hacer
-//
-//////////
+/* 
+SINGLE_TABLE - Single table per class hierarchy
+The SINGLE_TABLE strategy has the advantage of being simple. Loading entities requires querying only one table, 
+with the discriminator column being used to determine the type of the entity. This simplicity also helps when 
+manually inspecting or modifying the entities stored in the database.
+
+A disadvantage of this strategy is that the single table becomes very large when there are a lot of classes in 
+the hierarchy. Also, columns that are mapped to a subclass in the hierarchy should be nullable, which is especially 
+annoying with large inheritance hierarchies. Finally, a change to any one class in the hierarchy requires the 
+single table to be altered, making the SINGLE_TABLE strategy only suitable for small inheritance hierarchies.
+
+TABLE_PER_CLASS - Table per concrete class
+The TABLE_PER_CLASS strategy does not require columns to be made nullable, and results in a database schema that is 
+relatively simple to understand. As a result it is also easy to inspect or modify manually.
+
+A downside is that polymorphically loading entities requires a UNION of all the mapped tables, which may impact 
+performance. Finally, the duplication of column corresponding to superclass fields causes the database design to not 
+be normalized. This makes it hard to perform aggregate (SQL) queries on the duplicated columns. As such this strategy 
+is best suited to wide, but not deep, inheritance hierarchies in which the superclass fields are not ones you want to 
+query on.
+
+JOINED - Table per class
+The JOINED strategy gives you a nicely normalized database schema without any duplicate columns or unwanted nullable 
+columns. As such it is best suited to large inheritance hierarchies, be the deep or wide.
+
+This strategy does make the data harder to inspect or modify manually. Also, the JOIN operation needed to load 
+entities can become a performance problem or a downright barrier to the size of your inheritance strategy. Also note 
+that Hibernate does not correctly handle discriminator columns when using the JOINED strategy.
+
+BTW, when using Hibernate proxies, be aware that lazily loading a class mapped with any of the three strategies 
+above always returns a proxy that is an instanceof the superclass.
+ 
+*/
 
 @Entity
+@Table(name = "default_user")
+@Inheritance( strategy = InheritanceType.TABLE_PER_CLASS )
 public abstract class User {
 	
     @Id
