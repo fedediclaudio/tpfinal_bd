@@ -63,4 +63,14 @@ public class DeliveryMan extends User {
 				+ dateOfAdmission + ", ordersPending=" + ordersPending + "]";
 	}
 	
+	public void deductScore() throws Exception {
+		int actualScore = this.getScore();
+		this.setScore(actualScore - 2);
+	}
+	
+	public void addScore() throws Exception {
+		int actualScore = this.getScore();
+		this.setScore(actualScore + 1);
+	}
+	
 }

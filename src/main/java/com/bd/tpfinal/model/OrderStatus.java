@@ -68,10 +68,6 @@ public abstract class OrderStatus {
 		return false;
 	}
 
-	public boolean addItem() throws Exception {
-		throw new Exception("No se puede realizarse esta accion");
-	}
-
 	public boolean assign(DeliveryMan deliveryMan) throws Exception {
 		throw new Exception("No se puede realizarse esta accion");
 	}

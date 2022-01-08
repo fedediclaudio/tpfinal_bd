@@ -21,18 +21,24 @@ public class Pending extends OrderStatus {
 	}
 
 	@Override
-	public boolean addItem() throws Exception {
-		throw new Exception("No se puede realizarse esta accion");
-	}
-
-	@Override
 	public boolean assign(DeliveryMan deliveryMan) throws Exception {
-		throw new Exception("No se puede realizarse esta accion");
+		// Se asigna el DeliveryMan a la Orden
+		this.getOrder().setDeliveryMan( deliveryMan );
+		
+		// Se pasa la Orden a estado de Asignado
+		this.getOrder().setStatus( new Assigned() );
+		
+		return true;
 	}
 
 	@Override
 	public boolean cancel() throws Exception {
-		throw new Exception("No se puede realizarse esta accion");
+		// La orden no esta asignada, asi que no resta puntos a nadie
+		this.getOrder().cancelOrder();
+		// Configuro que fue cancelada por el usuario
+		((Cancel)this.getOrder().getStatus()).setCancelledByClient(true);
+		
+		return true;
 	}
 
 }

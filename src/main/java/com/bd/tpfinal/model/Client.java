@@ -52,4 +52,14 @@ public class Client extends User {
 		return "Client [dateOfRegister=" + dateOfRegister + ", orders=" + orders + ", addresses=" + addresses + "]";
 	}
 	
+	public void deductScore() throws Exception {
+		int actualScore = this.getScore();
+		this.setScore(actualScore - 1);
+	}
+	
+	public void addScore() throws Exception {
+		int actualScore = this.getScore();
+		this.setScore(actualScore + 1);
+	}
+	
 }

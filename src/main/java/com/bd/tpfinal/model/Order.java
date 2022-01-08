@@ -1,5 +1,6 @@
 package com.bd.tpfinal.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.bd.tpfinal.model.orderStatusTypes.Cancel;
+import com.bd.tpfinal.model.orderStatusTypes.Pending;
+
 @Entity
 @Table(name = "user_order")
 public class Order {
@@ -28,7 +32,7 @@ public class Order {
     @Column(nullable = false)
 	private Date dateOfOrder;
 
-	@Column(length = 500)
+	@Column(length = 800)
 	private String comments;
 
 	@Column(nullable = false)
@@ -61,7 +65,13 @@ public class Order {
     private int version;
     
     
-	public Order() {}
+	public Order() {
+		// Por defecto la orden esta en Pendiente
+		this.setStatus( new Pending() );
+		
+		// Inicializo la lista de Items
+		this.items = new ArrayList<>();
+	}
 	
 	public int getNumber() {
 		return number;
@@ -151,4 +161,39 @@ public class Order {
 				+ version + "]";
 	}
 	
+	/////////////////////////
+	// Metodos adicionales //
+	/////////////////////////
+	
+	public boolean addItem(Item item) throws Exception {
+		if (this.getStatus().canAddItem()) {
+			this.getItems().add(item);
+			return true;
+		}
+		return false;
+	}
+	
+	
+	public void cancelOrder() throws Exception {
+		this.setStatus( new Cancel() );
+	}
+	
+	
+	public void deductClientScore() throws Exception {
+		this.getClient().deductScore();
+	}
+	
+	public void addClientScore() throws Exception {
+		this.getClient().addScore();
+	}
+	
+	
+	
+	public void deductDeliveryManScore() throws Exception {
+		this.getDeliveryMan().deductScore();
+	}
+	
+	public void addDeliveryManScore() throws Exception {
+		this.getDeliveryMan().addScore();
+	}
 }

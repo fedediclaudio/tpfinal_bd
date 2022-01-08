@@ -11,7 +11,11 @@ public class Sent extends OrderStatus {
 
 	@Override
 	public boolean finish() throws Exception {
-		throw new Exception("No se puede realizarse esta accion");
+		// Se actualizan los puntajes del cliente y del DeliveryMan
+		this.getOrder().addClientScore();
+		this.getOrder().addDeliveryManScore();
+		
+		return true;
 	}
 	
 }
