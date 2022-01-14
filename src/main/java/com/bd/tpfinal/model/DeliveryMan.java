@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class DeliveryMan extends User {
     
@@ -17,6 +19,7 @@ public class DeliveryMan extends User {
 
 	private Date dateOfAdmission;
 
+	@JsonIgnore
     @OneToMany( mappedBy = "deliveryMan", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
 	private List<Order> ordersPending;
 

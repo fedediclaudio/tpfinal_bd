@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Address {
 	
@@ -36,6 +38,7 @@ public class Address {
 	@JoinColumn( name="id_client" )
 	private Client client;
 
+	@JsonIgnore
 	@OneToMany( mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
 	private List<Order> orders;
 
@@ -101,8 +104,7 @@ public class Address {
 	@Override
 	public String toString() {
 		return "Address [id=" + id + ", name=" + name + ", address=" + address + ", apartment=" + apartment
-				+ ", coords=" + Arrays.toString(coords) + ", description=" + description + ", client=" + client
-				+ ", orders=" + orders + "]";
+				+ ", coords=" + Arrays.toString(coords) + ", description=" + description + ", orders=" + orders + "]";
 	}
 	
 }

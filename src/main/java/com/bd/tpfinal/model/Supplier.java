@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Supplier {
 
@@ -32,6 +34,7 @@ public class Supplier {
 
 	private float qualificationOfUsers;
 
+	@JsonIgnore
 	@OneToMany( mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
 	private List<Product> products;
 

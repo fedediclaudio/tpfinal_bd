@@ -20,6 +20,7 @@ import javax.persistence.Version;
 
 import com.bd.tpfinal.model.orderStatusTypes.Cancel;
 import com.bd.tpfinal.model.orderStatusTypes.Pending;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "user_order")
@@ -57,6 +58,7 @@ public class Order {
 	@JoinColumn( name="id_qualification" )
 	private Qualification qualification;
 
+	@JsonIgnore
 	@OneToMany( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
 	private List<Item> items;
 	

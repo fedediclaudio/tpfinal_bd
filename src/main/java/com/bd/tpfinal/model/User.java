@@ -1,6 +1,6 @@
 package com.bd.tpfinal.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -68,11 +68,11 @@ public abstract class User {
 	@Column(length = 80, unique = true, nullable = false)
 	private String email;
 
-	private Date dateOfBirth;
+	private LocalDate dateOfBirth;
 
 	private boolean active;
 
-	private int score;
+	private int score = 0;
 
 	
 	public User() {}
@@ -117,11 +117,11 @@ public abstract class User {
 		this.email = email;
 	}
 
-	public Date getDateOfBirth() {
+	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(Date dateOfBirth) {
+	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 

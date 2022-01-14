@@ -1,6 +1,6 @@
 package com.bd.tpfinal.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -8,14 +8,18 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Client extends User {
     
-	private Date dateOfRegister;
-
+	private LocalDate dateOfRegister;
+	
+	@JsonIgnore
     @OneToMany( mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
 	private List<Order> orders;
 
+    @JsonIgnore
     @OneToMany( mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
 	private List<Address> addresses;
 
@@ -23,11 +27,11 @@ public class Client extends User {
 		super();
 	}
 
-	public Date getDateOfRegister() {
+	public LocalDate getDateOfRegister() {
 		return dateOfRegister;
 	}
 
-	public void setDateOfRegister(Date dateOfRegister) {
+	public void setDateOfRegister(LocalDate dateOfRegister) {
 		this.dateOfRegister = dateOfRegister;
 	}
 

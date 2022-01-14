@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class SupplierType {
 
@@ -23,6 +25,7 @@ public class SupplierType {
 
 	private String description;
 
+	@JsonIgnore
 	@OneToMany( mappedBy = "type", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
 	private List<Supplier> suppliers;
 	

@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public abstract class OrderStatus {
 
@@ -23,6 +25,7 @@ public abstract class OrderStatus {
 
 	private Date startDate;
 
+	@JsonIgnore
     @OneToOne( fetch = FetchType.LAZY, optional = false )
     @JoinColumn(name = "order_number", nullable = false)
 	private Order order;

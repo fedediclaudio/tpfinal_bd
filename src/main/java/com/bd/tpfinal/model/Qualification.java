@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Qualification {
 
@@ -19,6 +21,7 @@ public class Qualification {
 
 	private String commentary;
 
+	@JsonIgnore
 	@OneToOne(mappedBy = "qualification")
 	private Order order;
 
