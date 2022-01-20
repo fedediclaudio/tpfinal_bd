@@ -15,13 +15,13 @@ public class UserServiceImpl implements UserService {
 	@Autowired UserRepository userRepository;
 	
 	@Transactional
-	public boolean addNewUser(User user) {
+	public boolean addNewUser(User user) throws Exception {
 		try {
 			this.userRepository.save(user);			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			throw e;
 		}
 		return true;
 	}

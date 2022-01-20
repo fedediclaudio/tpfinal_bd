@@ -1,4 +1,4 @@
-package com.bd.tpfinal.initializer;
+	package com.bd.tpfinal.initializer;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -42,6 +42,29 @@ public class ApplicationInitializer implements CommandLineRunner {
 		addr.setClient(cli);
 		
 		userService.addNewUser(cli);
+
+		
+		Address addr2 = new Address();
+		addr2.setName("Direccion Nombre Cli 2");
+		addr2.setAddress("1 y 115");
+		addr2.setApartment(null);
+		addr2.setCoords( new float[]{ 30, 55 } );
+		addr2.setDescription("Segunda direccion");
+		addressList = new ArrayList<Address>();
+		addressList.add(addr2);
+		
+		Client cli2 = new Client();
+		cli2.setActive(false);
+		cli2.setAddresses( addressList );
+		cli2.setDateOfBirth( LocalDate.of( 1983 , 5 , 20 ) );
+		cli2.setDateOfRegister( LocalDate.now() );
+		cli2.setEmail("dos@email.com");
+		cli2.setName("Cliente Prueba 2");
+		cli2.setPassword("unaPasssss");
+		cli2.setUsername("cliente2");
+		
+		addr2.setClient(cli2);
+		userService.addNewUser(cli2);
 		
 	}
 	
