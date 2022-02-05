@@ -15,6 +15,9 @@ public class Sent extends OrderStatus {
 		this.getOrder().addClientScore();
 		this.getOrder().addDeliveryManScore();
 		
+		// Configuro al DeliveryMan como libre
+		this.getOrder().setDeliveryManBusyTo(false);
+		
 		return true;
 	}
 	

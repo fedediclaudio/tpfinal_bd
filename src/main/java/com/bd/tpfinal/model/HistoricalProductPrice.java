@@ -1,6 +1,6 @@
 package com.bd.tpfinal.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,9 +22,9 @@ public class HistoricalProductPrice {
 	
 	private float price;
 
-	private Date startDate;
+	private LocalDate startDate;
 
-	private Date finishDate;
+	private LocalDate finishDate;
 
 	@ManyToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL )
     @JoinColumn( name = "id_product" )
@@ -32,6 +32,12 @@ public class HistoricalProductPrice {
 
 	
 	public HistoricalProductPrice() {}
+	
+	public HistoricalProductPrice(Product product) {
+		this.price = product.getPrice();
+		this.startDate = LocalDate.now();
+		this.finishDate = null;
+	}
 
 	public float getPrice() {
 		return price;
@@ -41,19 +47,19 @@ public class HistoricalProductPrice {
 		this.price = price;
 	}
 
-	public Date getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getFinishDate() {
+	public LocalDate getFinishDate() {
 		return finishDate;
 	}
 
-	public void setFinishDate(Date finishDate) {
+	public void setFinishDate(LocalDate finishDate) {
 		this.finishDate = finishDate;
 	}
 

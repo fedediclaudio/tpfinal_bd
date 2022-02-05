@@ -43,6 +43,14 @@ public class Client extends User {
 		this.orders = orders;
 	}
 
+	public void addOrder(Order order) {
+		this.orders.add(order);
+	}
+	
+	public void removeOrder(Order order) {
+		this.orders.removeIf(o -> o.getNumber() == order.getNumber());
+	}
+	
 	public List<Address> getAddresses() {
 		return addresses;
 	}

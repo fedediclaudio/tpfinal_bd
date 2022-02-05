@@ -71,6 +71,10 @@ public abstract class OrderStatus {
 		return false;
 	}
 
+	public boolean canChangeAddress() {
+		return false;
+	}
+	
 	public boolean assign(DeliveryMan deliveryMan) throws Exception {
 		throw new Exception("No se puede realizarse esta accion");
 	}

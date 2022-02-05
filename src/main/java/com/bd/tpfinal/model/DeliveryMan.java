@@ -1,6 +1,7 @@
 package com.bd.tpfinal.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,15 +18,20 @@ public class DeliveryMan extends User {
 
 	private boolean free;
 
-	private Date dateOfAdmission;
+	private LocalDate dateOfAdmission;
 
 	@JsonIgnore
-    @OneToMany( mappedBy = "deliveryMan", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+    @OneToMany( mappedBy = "deliveryMan", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.LAZY )
 	private List<Order> ordersPending;
 
     
 	public DeliveryMan() {
 		super();
+		
+		this.numberOfSuccessOrders = 0;
+		this.free = true;
+		this.dateOfAdmission = LocalDate.now(); 
+		this.ordersPending = new ArrayList<Order>();
 	}
 
 	public int getNumberOfSuccessOrders() {
@@ -44,11 +50,11 @@ public class DeliveryMan extends User {
 		this.free = free;
 	}
 
-	public Date getDateOfAdmission() {
+	public LocalDate getDateOfAdmission() {
 		return dateOfAdmission;
 	}
 
-	public void setDateOfAdmission(Date dateOfAdmission) {
+	public void setDateOfAdmission(LocalDate dateOfAdmission) {
 		this.dateOfAdmission = dateOfAdmission;
 	}
 
@@ -59,10 +65,18 @@ public class DeliveryMan extends User {
 	public void setOrdersPending(List<Order> ordersPending) {
 		this.ordersPending = ordersPending;
 	}
-
+	
+	public void addPendingOrder(Order order) {
+		this.ordersPending.add(order);
+	}
+	
+	public void removePendingOrder(Order order) {
+		this.ordersPending.removeIf(o -> o.getNumber() == order.getNumber());
+	}
+	
 	@Override
 	public String toString() {
-		return "DeliveryMan [numberOfSuccessOrders=" + numberOfSuccessOrders + ", free=" + free + ", dateOfAdmission="
+		return super.toString() + " DeliveryMan [numberOfSuccessOrders=" + numberOfSuccessOrders + ", free=" + free + ", dateOfAdmission="
 				+ dateOfAdmission + ", ordersPending=" + ordersPending + "]";
 	}
 	

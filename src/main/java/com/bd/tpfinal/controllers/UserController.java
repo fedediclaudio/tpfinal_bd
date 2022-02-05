@@ -14,13 +14,28 @@ import com.bd.tpfinal.services.UserService;
 
 @RestController
 @RequestMapping(value = "/api/user")
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT ,RequestMethod.DELETE})
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
 public class UserController {
 	@Autowired UserService userService;
+		
+	@GetMapping("/getUserCount")
+    public long getUserCount() {
+		try {
+			return userService.userCount();			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
 	
 	@GetMapping("/getAllUsers")
-    public List<User> getAllUsers(){
-        return userService.getAllUsers();
+    public List<User> getAllUsers() {
+		try {
+			return userService.getAllUsers();			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
 
 }

@@ -1,7 +1,7 @@
 package com.bd.tpfinal.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -31,7 +31,7 @@ public class Order {
 	private int number;
 
     @Column(nullable = false)
-	private Date dateOfOrder;
+	private LocalDate dateOfOrder;
 
 	@Column(length = 800)
 	private String comments;
@@ -67,13 +67,19 @@ public class Order {
     private int version;
     
     
-	public Order() {
+	public Order() {}
+	
+	public Order(Client client) {
 		// Por defecto la orden esta en Pendiente
 		this.setStatus( new Pending() );
+		this.dateOfOrder = LocalDate.now();
+		this.client = client;
 		
 		// Inicializo la lista de Items
 		this.items = new ArrayList<>();
 	}
+	
+	
 	
 	public int getNumber() {
 		return number;
@@ -83,11 +89,11 @@ public class Order {
 		this.number = number;
 	}
 
-	public Date getDateOfOrder() {
+	public LocalDate getDateOfOrder() {
 		return dateOfOrder;
 	}
 
-	public void setDateOfOrder(Date dateOfOrder) {
+	public void setDateOfOrder(LocalDate dateOfOrder) {
 		this.dateOfOrder = dateOfOrder;
 	}
 
@@ -190,6 +196,10 @@ public class Order {
 	}
 	
 	
+	
+	public void setDeliveryManBusyTo(boolean isBusy) {
+		this.getDeliveryMan().setFree(!isBusy);
+	}
 	
 	public void deductDeliveryManScore() throws Exception {
 		this.getDeliveryMan().deductScore();

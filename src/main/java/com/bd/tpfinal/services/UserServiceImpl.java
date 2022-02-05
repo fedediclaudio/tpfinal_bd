@@ -16,33 +16,15 @@ public class UserServiceImpl implements UserService {
 	
 	@Transactional
 	public boolean addNewUser(User user) throws Exception {
-		try {
-			this.userRepository.save(user);			
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
+		userRepository.save( user );
 		return true;
 	}
 	
-	public long userCount() {
-		try {
-			return this.userRepository.count();			
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return 0;
-		}
+	public long userCount() throws Exception {
+		return this.userRepository.count();
 	}
 	
-	public List<User> getAllUsers() {
-		try {
-			return this.userRepository.findAll();			
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+	public List<User> getAllUsers() throws Exception {
+		return this.userRepository.findAll();
 	}
 }
