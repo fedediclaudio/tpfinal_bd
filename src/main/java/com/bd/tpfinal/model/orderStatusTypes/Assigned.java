@@ -1,8 +1,20 @@
 package com.bd.tpfinal.model.orderStatusTypes;
 
+import java.time.LocalDate;
+
+import javax.persistence.Entity;
+
+import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.OrderStatus;
 
+@Entity
 public class Assigned extends OrderStatus {
+	
+	public Assigned() {}
+	
+	public Assigned(Order order) {
+		super("Assigned", LocalDate.now(), order);
+	}
 	
 	@Override
 	public boolean canRefuse() {
@@ -41,7 +53,7 @@ public class Assigned extends OrderStatus {
 	@Override
 	public boolean deliver() throws Exception {
 		// Asigno la orden como en Envio
-		this.getOrder().setStatus( new Sent() );
+		this.getOrder().setStatus( new Sent(this.getOrder()) );
 		
 		// Configuro al DeliveryMan como ocupado
 		this.getOrder().setDeliveryManBusyTo(true);

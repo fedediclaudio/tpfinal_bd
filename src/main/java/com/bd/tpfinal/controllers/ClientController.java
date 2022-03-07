@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,8 +23,19 @@ import com.bd.tpfinal.services.ClientService;
 public class ClientController {
 	@Autowired private ClientService clientService;
 	
+	@PostMapping("/addNew")
+	public long addNewClient( @RequestBody Client client ) {
+    	try {
+    		client = clientService.addNewClient(client);
+    		return (client != null) ? client.getId() : -1;
+		}
+    	catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+    }
 	
-	@GetMapping("/getAllClients")
+	@GetMapping("/getAll")
     public List<Client> getAllClients() {
     	try {
     		return clientService.getAllClients();
@@ -34,9 +47,9 @@ public class ClientController {
     }
 
     @GetMapping("/getAllPendingOrders")
-    public List<Order> getAllPendingOrders(@RequestParam(required = true, name = "idDeliveryMan") long idDeliveryMan) {
+    public List<Order> getAllPendingOrders(@RequestParam(required = true, name = "idClient") long idClient) {
     	try {
-    		return clientService.getAllPendingOrders(idDeliveryMan);
+    		return clientService.getAllPendingOrders(idClient);
 		}
     	catch (Exception e) {
 			e.printStackTrace();
@@ -45,9 +58,9 @@ public class ClientController {
     }
     
     @GetMapping("/getNextPendingOrder")
-    public Order getNextPendingOrder(@RequestParam(required = true, name = "idDeliveryMan") long idDeliveryMan) {
+    public Order getNextPendingOrder(@RequestParam(required = true, name = "idClient") long idClient) {
     	try {
-    		return clientService.getNextPendingOrder(idDeliveryMan);
+    		return clientService.getNextPendingOrder(idClient);
 		}
     	catch (Exception e) {
 			e.printStackTrace();
@@ -56,10 +69,10 @@ public class ClientController {
     }
     
     @PutMapping("/cancelPendingOrder")
-    public boolean cancelPendingOrder(@RequestParam(required = true, name = "idDeliveryMan") long idDeliveryMan,
-    								  @RequestParam(required = true, name = "idOrder") long idOrder) {
+    public boolean cancelPendingOrder(@RequestParam(required = true, name = "idClient") long idClient,
+    								  @RequestParam(required = true, name = "orderNumber") int orderNumber) {
     	try {
-    		return clientService.cancelPendingOrder(idDeliveryMan, idOrder);
+    		return clientService.cancelPendingOrder(idClient, orderNumber);
 		}
     	catch (Exception e) {
 			e.printStackTrace();

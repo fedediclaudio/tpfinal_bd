@@ -33,11 +33,11 @@ public class Product {
 
 	private String description;
 
-	@ManyToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+	@ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL )
     @JoinColumn( name = "id_supplier" )
 	private Supplier supplier;
 
-	@OneToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn( name="id_type" )
 	private ProductType type;
 

@@ -5,9 +5,9 @@ import com.bd.tpfinal.model.Order;
 public interface OrderService {
 	
 	Order createOrder(long idClient) throws Exception;
-	boolean assignAddressToOrder(long idOrder, long idAddress) throws Exception;
-	boolean addProductToOrder(long idOrder, long idProduct, int quantity, String description) throws Exception;
-	boolean cancel(long idOrder) throws Exception;
-	boolean confirmOrder(long idOrder) throws Exception;
+	boolean assignAddressToOrder(int orderNumber, long idAddress) throws Exception;
+	boolean addProductToOrder(int orderNumber, long idProduct, int quantity, String description) throws Exception;
+	boolean cancel(int orderNumber) throws Exception;
+	boolean confirmOrder(int orderNumber) throws Exception;
 	
 }

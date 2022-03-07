@@ -7,7 +7,7 @@ import com.bd.tpfinal.model.Product;
 
 public interface ProductService {
 	
-	Product createNewProduct(String name, float price, float weight, String description, long idSupplier, long idProductType) throws Exception;
+	Product createNewProduct(Product product) throws Exception;
 	boolean changeProductPrice(long idProduct, float newPrice) throws Exception;
 	List<Product> getProductList() throws Exception;
 	List<HistoricalProductPrice> getHistoricalPricesFromProduct(long idProduct) throws Exception;

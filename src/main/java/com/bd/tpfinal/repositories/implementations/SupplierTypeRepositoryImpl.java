@@ -5,10 +5,11 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
-import com.bd.tpfinal.repositories.interfaces.ISupplierRepository;
+import com.bd.tpfinal.repositories.interfaces.ISupplierTypeRepository;
 
 @Repository
-public class SupplierRepositoryImpl implements ISupplierRepository {
+public class SupplierTypeRepositoryImpl implements ISupplierTypeRepository {
 	@PersistenceContext private EntityManager em;
+	
 	
 }

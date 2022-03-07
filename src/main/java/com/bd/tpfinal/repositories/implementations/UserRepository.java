@@ -9,7 +9,7 @@ public interface UserRepository extends JpaRepository<User, Long>, IUserReposito
 
 	// Aca se definen los metodos que van a ser utilizados pero que son implementados por Spring Boot
 	
-	User getUserById(Long id);
+	User getUserById(long id);
 	
 	// Retorna el usuario a partir de un usuario y una contraseña
 	User getUserByUsernameAndPassword(String username, String password);

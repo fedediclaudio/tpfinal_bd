@@ -26,7 +26,7 @@ public class HistoricalProductPrice {
 
 	private LocalDate finishDate;
 
-	@ManyToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+	@ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL )
     @JoinColumn( name = "id_product" )
 	private Product product;
 
@@ -34,6 +34,7 @@ public class HistoricalProductPrice {
 	public HistoricalProductPrice() {}
 	
 	public HistoricalProductPrice(Product product) {
+		this.product = product;
 		this.price = product.getPrice();
 		this.startDate = LocalDate.now();
 		this.finishDate = null;

@@ -1,3 +1,4 @@
+
 package com.bd.tpfinal.controllers;
 
 import java.util.List;
@@ -16,28 +17,26 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.services.DeliveryManService;
-import com.bd.tpfinal.services.UserService;
 
 @RestController
 @RequestMapping(value = "/api/DeliveryMan")
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
 public class DeliveryManController {
-	
-    @Autowired private DeliveryManService deliveryManService;
-    @Autowired private UserService userService;
+	@Autowired private DeliveryManService deliveryManService;
 
-    @PostMapping("/addNewUser")
-	public boolean addNewDeliveryMan( @RequestBody DeliveryMan deliveryMan ) {
+    @PostMapping("/addNew")
+	public long addNewDeliveryMan( @RequestBody DeliveryMan deliveryMan ) {
     	try {
-    		return userService.addNewUser(deliveryMan);
+    		deliveryMan = deliveryManService.addNewDeliveryMan(deliveryMan);
+    		return (deliveryMan != null) ? deliveryMan.getId() : -1;
 		}
     	catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			return -1;
 		}
     }
     
-    @GetMapping("/getAllDeliveryMan")
+    @GetMapping("/getAll")
     public List<DeliveryMan> getAllDeliveryMan() {
     	try {
     		return deliveryManService.getAllDeliveryMan();

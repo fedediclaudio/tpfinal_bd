@@ -9,6 +9,7 @@ public interface ProductTypeRepository extends JpaRepository<ProductType, Long>,
 
 	// Aca se definen los metodos que van a ser utilizados pero que son implementados por Spring Boot
 	
-	ProductType getProductTypeById(Long id);
+	ProductType getProductTypeById(long id);
+	ProductType getProductTypeByName(String name);
 	
 }

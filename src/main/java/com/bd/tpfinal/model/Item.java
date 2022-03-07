@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Item {
     
@@ -23,11 +25,12 @@ public class Item {
 
 	private String description;
 
-	@ManyToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+	@ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL )
     @JoinColumn( name = "id_order" )
+	@JsonIgnore
 	private Order order;
 
-	@OneToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn( name="id_product" )
 	private Product product;
 

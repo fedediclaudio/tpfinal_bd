@@ -9,6 +9,6 @@ public interface AddressRepository extends JpaRepository<Address, Long>, IAddres
 
 	// Aca se definen los metodos que van a ser utilizados pero que son implementados por Spring Boot
 	
-	Address getAddressById(Long id);
+	Address getAddressById(long id);
 	
 }

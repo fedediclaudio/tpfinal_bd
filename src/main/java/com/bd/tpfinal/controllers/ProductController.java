@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,16 +23,11 @@ import com.bd.tpfinal.services.ProductService;
 public class ProductController {
 	@Autowired ProductService productService;
 	
-	@PostMapping("/createProduct")
-    public long createOrder( @RequestParam(name = "name") String name,
-				    		@RequestParam(name = "price") float price,
-				    		@RequestParam(name = "weight") float weight,
-				    		@RequestParam(name = "description") String description,
-				    		@RequestParam(name = "idSupplier") long idSupplier,
-				    		@RequestParam(name = "idProductType") long idProductType) {
+	@PostMapping("/create")
+    public long createProduct( @RequestBody Product product) {
 		try {
-			Product product = productService.createNewProduct(name, price, weight, description, idSupplier, idProductType);
-			return product.getId();
+			product = productService.createNewProduct(product);
+			return (product != null) ? product.getId() : -1;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -39,7 +35,7 @@ public class ProductController {
 		}
     }
 	
-	@PutMapping("/changeProductPrice")
+	@PutMapping("/changePrice")
 	public boolean changeProductPrice(@RequestParam(name = "idProduct") long idProduct, @RequestParam(name = "newPrice") float newPrice) {
 		try {
 			return productService.changeProductPrice(idProduct, newPrice);
@@ -61,7 +57,7 @@ public class ProductController {
 		}
     }
 	
-	@GetMapping("/getHistoricalPricesFromProduct")
+	@GetMapping("/getHistoricalPrices")
     public List<HistoricalProductPrice> getHistoricalPricesFromProduct( @RequestParam(name = "idProduct") long idProduct ) {
 		try {
 			return productService.getHistoricalPricesFromProduct(idProduct);

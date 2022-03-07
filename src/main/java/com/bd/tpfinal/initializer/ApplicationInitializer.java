@@ -10,15 +10,18 @@ import org.springframework.stereotype.Component;
 
 import com.bd.tpfinal.model.Address;
 import com.bd.tpfinal.model.Client;
-import com.bd.tpfinal.services.UserService;
+import com.bd.tpfinal.model.DeliveryMan;
+import com.bd.tpfinal.services.ClientService;
+import com.bd.tpfinal.services.DeliveryManService;
 
 @Component
 public class ApplicationInitializer implements CommandLineRunner {
-	@Autowired UserService userService;
+	@Autowired ClientService clientService;
+	@Autowired DeliveryManService deliveryManService;
 	
 	@Override
 	public void run(String... args) throws Exception {
-		if (userService.userCount() > 0 ) return;
+		if (clientService.clientCount() > 0 ) return;
 		
 		Address addr = new Address();
 		addr.setName("Direccion Nombre");
@@ -41,7 +44,7 @@ public class ApplicationInitializer implements CommandLineRunner {
 		
 		addr.setClient(cli);
 		
-		userService.addNewUser(cli);
+		clientService.addNewClient(cli);
 
 		
 		Address addr2 = new Address();
@@ -64,7 +67,18 @@ public class ApplicationInitializer implements CommandLineRunner {
 		cli2.setUsername("cliente2");
 		
 		addr2.setClient(cli2);
-		userService.addNewUser(cli2);
+		clientService.addNewClient(cli2);
+		
+			
+		DeliveryMan dm = new DeliveryMan();
+		dm.setActive(true);
+		dm.setDateOfBirth( LocalDate.of( 1989 , 12 , 11 ) );
+		dm.setEmail("dm@email.com");
+		dm.setName("Delivery Man Prueba 1");
+		dm.setPassword("dmPass");
+		dm.setUsername("dm1");
+		
+		deliveryManService.addNewDeliveryMan(dm);
 		
 	}
 	

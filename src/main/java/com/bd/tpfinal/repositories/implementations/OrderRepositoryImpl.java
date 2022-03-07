@@ -14,6 +14,8 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
+import com.bd.tpfinal.model.Client;
+import com.bd.tpfinal.model.Client_;
 import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.model.DeliveryMan_;
 import com.bd.tpfinal.model.Order;
@@ -23,9 +25,25 @@ import com.bd.tpfinal.repositories.interfaces.IOrderRepository;
 public class OrderRepositoryImpl implements IOrderRepository {
 	@PersistenceContext private EntityManager em;
 	
-	public List<Order> getAllPendingOrders(long idDeliveryMan) {
+	public List<Order> getAllPendingOrdersForClient(long idClient) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
+		CriteriaQuery<Order> cq = cb.createQuery(Order.class);
+		Root<Client> root = cq.from(Client.class);
+		Join<Client, Order> orders = root.join(Client_.ORDERS, JoinType.INNER);
+		
+		Predicate id = cb.equal(root.get(Client_.ID), idClient);
+		cq.where(id);
+		
+		cq.select( orders );
+		TypedQuery<Order> typeQuery = em.createQuery(cq);
+		
+		return typeQuery.getResultList();
+	}
+
+	public List<Order> getAllPendingOrdersForDeliveryMan(long idDeliveryMan) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		
 		CriteriaQuery<Order> cq = cb.createQuery(Order.class);
 		Root<DeliveryMan> root = cq.from(DeliveryMan.class);
 		Join<DeliveryMan, Order> orders = root.join(DeliveryMan_.ORDERS_PENDING, JoinType.INNER);
@@ -39,9 +57,32 @@ public class OrderRepositoryImpl implements IOrderRepository {
 		return typeQuery.getResultList();
 	}
 	
-	public Order getNextPendingOrder(long idDeliveryMan) {
+	public Order getNextPendingOrderForClient(long idClient) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
+		CriteriaQuery<Order> cq = cb.createQuery(Order.class);
+		Root<Client> root = cq.from(Client.class);
+		Join<Client, Order> orders = root.join(Client_.ORDERS, JoinType.INNER);
+		
+		Predicate id = cb.equal(root.get(Client_.ID), idClient);
+		cq.where(id);
+		
+		cq.select( orders );
+		
+		TypedQuery<Order> typeQuery = em.createQuery(cq);
+		typeQuery.setMaxResults(1);
+		
+		try {
+			return typeQuery.getSingleResult();
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
+
+	public Order getNextPendingOrderDeliveryMan(long idDeliveryMan) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		
 		CriteriaQuery<Order> cq = cb.createQuery(Order.class);
 		Root<DeliveryMan> root = cq.from(DeliveryMan.class);
 		Join<DeliveryMan, Order> orders = root.join(DeliveryMan_.ORDERS_PENDING, JoinType.INNER);
@@ -54,6 +95,11 @@ public class OrderRepositoryImpl implements IOrderRepository {
 		TypedQuery<Order> typeQuery = em.createQuery(cq);
 		typeQuery.setMaxResults(1);
 		
-		return typeQuery.getSingleResult();
+		try {
+			return typeQuery.getSingleResult();
+		}
+		catch (Exception e) {
+			return null;
+		}
 	}
 }

@@ -20,10 +20,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Supplier {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_supplier")
-    private Long id;
-	
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id_supplier")
+	private Long id;
+
 	private String name;
 
 	private String cuil;
@@ -35,15 +35,23 @@ public class Supplier {
 	private float qualificationOfUsers;
 
 	@JsonIgnore
-	@OneToMany( mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+	@OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Product> products;
 
-	@ManyToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL )
-    @JoinColumn( name = "id_supplier_type" )
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_supplier_type")
 	private SupplierType type;
 
 	
 	public Supplier() {}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -107,5 +115,5 @@ public class Supplier {
 				+ Arrays.toString(coords) + ", qualificationOfUsers=" + qualificationOfUsers + ", products=" + products
 				+ ", type=" + type + "]";
 	}
-	
+
 }

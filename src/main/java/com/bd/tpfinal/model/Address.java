@@ -34,7 +34,7 @@ public class Address {
 
 	private String description;
 
-	@OneToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn( name="id_client" )
 	private Client client;
 

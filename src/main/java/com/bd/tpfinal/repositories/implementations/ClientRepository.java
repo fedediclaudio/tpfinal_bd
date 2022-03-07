@@ -9,6 +9,6 @@ public interface ClientRepository extends JpaRepository<Client, Long>, IClientRe
 
 	// Aca se definen los metodos que van a ser utilizados pero que son implementados por Spring Boot
 	
-	Client getClientById(Long id);
+	Client getClientById(long id);
 	
 }

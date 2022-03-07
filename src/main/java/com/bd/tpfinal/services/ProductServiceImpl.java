@@ -23,23 +23,27 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired SupplierRepository supplierRepository;
 	
 	@Transactional
-	public Product createNewProduct(String name, float price, float weight, String description, long idSupplier, long idProductType) throws Exception {
+	public Product saveProduct(Product product) throws Exception {
+		return productRepository.save(product);
+	}
+	
+	public Product createNewProduct(Product product) throws Exception {
+		if ((product.getName().isBlank()) ||
+			(product.getDescription().isBlank()) ||
+			(product.getPrice() < 0) ||
+			(product.getWeight() < 0)) return null;
+		
 		// Obtengo el Supplier de la BD
-		Supplier supplier = supplierRepository.getSupplierById( idSupplier );
+		Supplier supplier = supplierRepository.getSupplierById( product.getSupplier().getId() );
 		// Si el supplier no existe, retorno null
 		if (supplier == null) return null;
 		
 		// Obtengo el ProductType de la BD
-		ProductType productType = productTypeRepository.getProductTypeById( idProductType );
+		ProductType productType = productTypeRepository.getProductTypeById( product.getType().getId() );
 		// Si el productType no existe, retorno null
 		if (productType == null) return null;
 		
 		// Creo el nuevo Producto
-		Product product = new Product();
-		product.setName( name );
-		product.setPrice( price );
-		product.setWeight( weight );
-		product.setDescription( description );
 		product.setSupplier( supplier );
 		product.setType( productType );
 		HistoricalProductPrice hp = new HistoricalProductPrice( product );

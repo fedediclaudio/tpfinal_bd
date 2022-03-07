@@ -1,8 +1,20 @@
 package com.bd.tpfinal.model.orderStatusTypes;
 
+import java.time.LocalDate;
+
+import javax.persistence.Entity;
+
+import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.OrderStatus;
 
+@Entity
 public class Sent extends OrderStatus {
+	
+	public Sent() {}
+	
+	public Sent(Order order) {
+		super("Sent", LocalDate.now(), order);
+	}
 	
 	@Override
 	public boolean canFinish() {

@@ -20,7 +20,7 @@ import javax.persistence.Version;
 
 import com.bd.tpfinal.model.orderStatusTypes.Cancel;
 import com.bd.tpfinal.model.orderStatusTypes.Pending;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.bd.tpfinal.model.orderStatusTypes.Sent;
 
 @Entity
 @Table(name = "user_order")
@@ -39,27 +39,26 @@ public class Order {
 	@Column(nullable = false)
 	private float totalPrice;
 
-	@OneToOne( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+	@OneToOne( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER )
 	private OrderStatus status;
 
-	@ManyToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+	@ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL )
 	@JoinColumn( name = "id_delivery_man" )
 	private DeliveryMan deliveryMan;
 
-	@ManyToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+	@ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL )
     @JoinColumn( name = "id_client" )
 	private Client client;
 
-	@OneToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn( name="id_address" )
 	private Address address;
 
-	@OneToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn( name="id_qualification" )
 	private Qualification qualification;
 
-	@JsonIgnore
-	@OneToMany( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+	@OneToMany( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER )
 	private List<Item> items;
 	
 	@Version
@@ -71,7 +70,7 @@ public class Order {
 	
 	public Order(Client client) {
 		// Por defecto la orden esta en Pendiente
-		this.setStatus( new Pending() );
+		this.status = new Pending(this);
 		this.dateOfOrder = LocalDate.now();
 		this.client = client;
 		
@@ -181,10 +180,28 @@ public class Order {
 		return false;
 	}
 	
-	
+	//////////////////////////////////////
+	// Cambio de estado de las ordenes  //
+	//////////////////////////////////////
 	public void cancelOrder() throws Exception {
-		this.setStatus( new Cancel() );
+		this.setStatus( new Cancel(this) );
 	}
+
+	public void refuseOrder() throws Exception {
+		this.setStatus( new Cancel(this) );
+	}
+	
+	public void deliverOrder() throws Exception {
+		this.setStatus( new Sent(this) );
+	}
+
+	public void finishOrder() throws Exception {
+		this.setStatus( new Sent(this) );
+	}
+	
+	//////////////////////////////////////
+	// FIN Cambio de estado de las ordenes  //
+	//////////////////////////////////////
 	
 	
 	public void deductClientScore() throws Exception {
@@ -194,8 +211,6 @@ public class Order {
 	public void addClientScore() throws Exception {
 		this.getClient().addScore();
 	}
-	
-	
 	
 	public void setDeliveryManBusyTo(boolean isBusy) {
 		this.getDeliveryMan().setFree(!isBusy);

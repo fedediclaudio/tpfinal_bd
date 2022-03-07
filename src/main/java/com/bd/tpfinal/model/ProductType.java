@@ -1,5 +1,6 @@
 package com.bd.tpfinal.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,20 +18,28 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class ProductType {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_product_type")
-    private Long id;
-    
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id_product_type")
+	private Long id;
 	private String name;
-
 	private String description;
 
 	@JsonIgnore
-	@OneToMany( mappedBy = "type", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+	@OneToMany(mappedBy = "type", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Product> products;
 
 	
-	public ProductType() {}
+	public ProductType() {
+		this.products = new ArrayList<>();
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -61,5 +70,5 @@ public class ProductType {
 		return "ProductType [id=" + id + ", name=" + name + ", description=" + description + ", products=" + products
 				+ "]";
 	}
-	
+
 }

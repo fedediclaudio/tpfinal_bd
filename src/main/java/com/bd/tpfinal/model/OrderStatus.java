@@ -1,6 +1,6 @@
 package com.bd.tpfinal.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,12 +8,15 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Inheritance( strategy = InheritanceType.TABLE_PER_CLASS )
 public abstract class OrderStatus {
 
     @Id
@@ -23,14 +26,22 @@ public abstract class OrderStatus {
     
 	private String name;
 
-	private Date startDate;
+	private LocalDate startDate;
 
 	@JsonIgnore
-    @OneToOne( fetch = FetchType.LAZY, optional = false )
+    @OneToOne( fetch = FetchType.EAGER, optional = false )
     @JoinColumn(name = "order_number", nullable = false)
 	private Order order;
 	
-
+	
+	public OrderStatus() {}
+	
+	public OrderStatus(String name, LocalDate startDate, Order order) {
+		this.name = name;
+		this.startDate = startDate;
+		this.order = order;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -39,11 +50,11 @@ public abstract class OrderStatus {
 		this.name = name;
 	}
 
-	public Date getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 

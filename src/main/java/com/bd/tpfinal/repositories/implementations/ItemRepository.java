@@ -9,6 +9,6 @@ public interface ItemRepository extends JpaRepository<Item, Long>, IItemReposito
 
 	// Aca se definen los metodos que van a ser utilizados pero que son implementados por Spring Boot
 	
-	Item getItemById(Long id);
+	Item getItemById(long id);
 	
 }

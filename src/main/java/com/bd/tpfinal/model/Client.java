@@ -35,6 +35,12 @@ public class Client extends User {
 		this.dateOfRegister = dateOfRegister;
 	}
 
+	public Order getOrder(Order order) {
+		int idx = this.orders.indexOf(order);
+		if (idx == -1) return null;
+		return this.orders.get(idx);
+	}
+	
 	public List<Order> getOrders() {
 		return orders;
 	}

@@ -6,7 +6,8 @@ import com.bd.tpfinal.model.HistoricalProductPrice;
 
 public interface IProductRepository {
 	
-	// Los metodos que se vayan a porponerse aca, tienen que estar implementados en su implementacion (ProductRepositoryImpl)
+	// Los metodos que se vayan a porponer aca, tienen que estar implementados en su implementacion (ProductRepositoryImpl)
 	
 	List<HistoricalProductPrice> getHistoricalPricesListOrderByStartDate(long idProduct);
+	
 }

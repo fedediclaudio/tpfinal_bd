@@ -9,6 +9,6 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long>, ISupp
 
 	// Aca se definen los metodos que van a ser utilizados pero que son implementados por Spring Boot
 	
-	Supplier getSupplierById(Long id);
+	Supplier getSupplierById(long id);
 	
 }

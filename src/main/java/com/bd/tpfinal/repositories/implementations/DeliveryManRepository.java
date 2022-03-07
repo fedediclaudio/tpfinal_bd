@@ -9,6 +9,6 @@ public interface DeliveryManRepository extends JpaRepository<DeliveryMan, Long>,
 
 	// Aca se definen los metodos que van a ser utilizados pero que son implementados por Spring Boot
 	
-	DeliveryMan getDeliveryManById(Long id);
+	DeliveryMan getDeliveryManById(long id);
 	
 }

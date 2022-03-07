@@ -1,9 +1,21 @@
 package com.bd.tpfinal.model.orderStatusTypes;
 
+import java.time.LocalDate;
+
+import javax.persistence.Entity;
+
 import com.bd.tpfinal.model.DeliveryMan;
+import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.OrderStatus;
 
+@Entity
 public class Pending extends OrderStatus {
+	
+	public Pending() {}
+	
+	public Pending(Order order) {
+		super("Pending", LocalDate.now(), order);
+	}
 	
 	@Override
 	public boolean canAddItem() {
@@ -31,7 +43,7 @@ public class Pending extends OrderStatus {
 		this.getOrder().setDeliveryMan( deliveryMan );
 		
 		// Se pasa la Orden a estado de Asignado
-		this.getOrder().setStatus( new Assigned() );
+		this.getOrder().setStatus( new Assigned(this.getOrder()) );
 		
 		// Remuevo la orden de la lista de pendientes del DeliveryMan
 		deliveryMan.removePendingOrder( this.getOrder() );
