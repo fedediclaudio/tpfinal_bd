@@ -1,16 +1,25 @@
 package com.bd.tpfinal.controllers;
 
-import com.bd.tpfinal.services.DeliveryService;
+import com.bd.tpfinal.services.DeliveryManService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping(value = "/api")
+@RestController("")
+@RequestMapping(value = "/deliveryMan")
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT ,RequestMethod.DELETE})
-public class DeliveryController {
+public class DeliveryManController
+{
 
-//    @Autowired
-//    private DeliveryService service;
+    private final DeliveryManService deliveryManService;
+    @Autowired
+
+    public DeliveryManController(DeliveryManService deliveryManService)
+    {
+        this.deliveryManService = deliveryManService;
+    }
+
+
+
 
     @GetMapping("/test")
     public String test(){
