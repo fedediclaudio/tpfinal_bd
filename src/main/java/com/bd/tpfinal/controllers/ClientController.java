@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/client")
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
 public class ClientController
 {
     private final ClientService clientService;
@@ -22,7 +23,7 @@ public class ClientController
 
     //@RequestBody: viene en formato de petición web transforma el jason que viene
     // de la petición y lo transforma al objeto Client
-    @PostMapping(value = "/")
+    @PostMapping(value = "/new")
     public void addClient(@RequestBody Client newClient)
     {
         this.clientService.addClient(newClient);
