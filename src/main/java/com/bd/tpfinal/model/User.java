@@ -28,7 +28,7 @@ public abstract class User
     //@JsonProperty("date_of_birth")
     //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     //@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    //@JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     protected Date dateOfBirth;
 
     private boolean scrore;

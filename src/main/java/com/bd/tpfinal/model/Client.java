@@ -19,7 +19,7 @@ public class Client extends User
     //@JsonProperty("date_of_register")
     //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     //@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    //@JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateOfRegister;
 
     //relación uno a muchos con Order

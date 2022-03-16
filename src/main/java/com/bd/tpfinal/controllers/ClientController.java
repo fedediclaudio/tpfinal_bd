@@ -29,6 +29,7 @@ public class ClientController
         this.clientService.addClient(newClient);
     }
 
+    @GetMapping("/all")
     public List<Client> getAll()
     {
         return this.clientService.getAll();
