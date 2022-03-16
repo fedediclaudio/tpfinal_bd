@@ -19,21 +19,10 @@ public class AddressServiceImpl implements AddressService
         this.addressRepository = addressRepository;
     }
 
-    public List<Address> getAAddressList()
-    {
-        return addressRepository.findAll();
-    }
-
     @Override
     public void addAddress(Address newAddress)
     {
         this.addressRepository.save(newAddress);
-    }
-
-    @Override
-    public List<Address> getAnAddressList()
-    {
-        return this.addressRepository.findAll();
     }
 
     @Override

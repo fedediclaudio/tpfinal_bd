@@ -9,7 +9,6 @@ import java.util.List;
 public interface AddressService
 {
     public void addAddress(Address newAddress);
-    public List<Address> getAnAddressList();
     public List<Address> getAll();
 
 }
