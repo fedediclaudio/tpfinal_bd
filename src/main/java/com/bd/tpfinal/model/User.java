@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @MappedSuperclass
@@ -15,6 +17,7 @@ public abstract class User
     @Column(name = "id_user", updatable = false, nullable = false)
     protected Long id; //para que el id lo hereden los hijos, estará bien ??
 
+    @Column(name = "name_user", updatable= false, nullable = false)
     private String name;
 
     private String username;
@@ -28,8 +31,8 @@ public abstract class User
     //@JsonProperty("date_of_birth")
     //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     //@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    protected Date dateOfBirth;
+    //@JsonFormat(pattern = "yyyy-MM-dd")
+    protected LocalDateTime dateOfBirth;
 
     private boolean scrore;
 
@@ -75,12 +78,12 @@ public abstract class User
         this.email = email;
     }
 
-    public Date getDateOfBirth()
+    public LocalDateTime getDateOfBirth()
     {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth)
+    public void setDateOfBirth(LocalDateTime dateOfBirth)
     {
         this.dateOfBirth = dateOfBirth;
     }

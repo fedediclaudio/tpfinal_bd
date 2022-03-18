@@ -30,7 +30,7 @@ public class Address
     // un Client puede tener muchas direcciones
     // estamos del lado de muchos (Client)
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
-    @JoinColumn(name = "id_user", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference //evita bucle infinito al toString
     //como es unidireccional de este lado no se pone nada.
     //al crearse la tabla se agrega automaticamente la columna "id_client"

@@ -9,6 +9,8 @@ import java.util.Date;
 @Table(name = "ordersStatus")
 public abstract class OrderStatus
 {
+    //TODO: solucionar el tema del patrón STATE.
+    //TODO: no persiste subclases de la forma en que lo hice
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -47,7 +49,7 @@ public abstract class OrderStatus
         return false;
     }
 
-      public boolean canAssign()
+    public boolean canAssign()
     {
         return false;
     }
@@ -88,6 +90,8 @@ public abstract class OrderStatus
         throw new Exception("No se puede realizarse esta accion");
     }
 
+    //solamente debería no lanzar exception cuando el estado
+    //es assigned
     public boolean deliver() throws Exception
     {
         throw new Exception("No se puede realizarse esta accion");

@@ -22,7 +22,7 @@ public class AddressController
         this.addressService = addressService;
     }
 
-    @PostMapping(value = "/")
+    @PostMapping(value = "/new")
     public void addAddress(@RequestBody Address newAddress)
     {
         this.addressService.addAddress(newAddress);

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -19,8 +21,8 @@ public class Client extends User
     //@JsonProperty("date_of_register")
     //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     //@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date dateOfRegister;
+    //@JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime dateOfRegister;
 
     //relación uno a muchos con Order
     //Lado Uno
@@ -34,12 +36,12 @@ public class Client extends User
     private List<Address> addresses;
 
 
-    public Date getDateOfRegister()
+    public LocalDateTime getDateOfRegister()
     {
         return dateOfRegister;
     }
 
-    public void setDateOfRegister(Date dateOfRegister)
+    public void setDateOfRegister(LocalDateTime dateOfRegister)
     {
         this.dateOfRegister = dateOfRegister;
     }
