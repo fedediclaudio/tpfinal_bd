@@ -21,7 +21,7 @@ public class OrderServiceImpl implements OrderService
     @Override
     public void addOrder(Order newOrder)
     {
-
+        this.orderRepository.save(newOrder);
     }
 
     @Override

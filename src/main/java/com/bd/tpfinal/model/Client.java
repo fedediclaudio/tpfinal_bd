@@ -11,18 +11,14 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="clients")
+@Table(name="client")
 public class Client extends User
 {
     //hereda el campo id de User
 
-    @Column(name = "date_of_register", updatable = false, nullable = false)
-    //@Temporal(TemporalType.DATE)
-    //@JsonProperty("date_of_register")
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    //@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    //@JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime dateOfRegister;
+    @Column(name = "date_of_register_client")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
+    private Date dateOfRegister;
 
     //relación uno a muchos con Order
     //Lado Uno
@@ -32,16 +28,15 @@ public class Client extends User
 
     //relación uno a muchos, unidireccional
     //estamos del lado de uno
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = false)
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private List<Address> addresses;
 
-
-    public LocalDateTime getDateOfRegister()
+    public Date getDateOfRegister()
     {
         return dateOfRegister;
     }
 
-    public void setDateOfRegister(LocalDateTime dateOfRegister)
+    public void setDateOfRegister(Date dateOfRegister)
     {
         this.dateOfRegister = dateOfRegister;
     }

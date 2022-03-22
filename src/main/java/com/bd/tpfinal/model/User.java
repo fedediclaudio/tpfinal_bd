@@ -20,22 +20,23 @@ public abstract class User
     @Column(name = "name_user", updatable= false, nullable = false)
     private String name;
 
+    @Column(name = "username_user", updatable= false, nullable = false)
     private String username;
 
+    @Column(name = "password_user", updatable= false, nullable = false)
     private String password;
 
+    @Column(name = "email_user", updatable= false)
     private String email;
 
-    @Column(name = "date_of_birth", updatable = false, nullable = false)
-    //@Temporal(TemporalType.DATE)
-    //@JsonProperty("date_of_birth")
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    //@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    //@JsonFormat(pattern = "yyyy-MM-dd")
-    protected LocalDateTime dateOfBirth;
+    @Column(name = "date_of_birth_user", updatable = false)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
+    protected Date dateOfBirth;
 
+    @Column(name = "scrore_user")
     private boolean scrore;
 
+    @Column(name = "score")
     private int score;
 
     public String getName()
@@ -78,12 +79,12 @@ public abstract class User
         this.email = email;
     }
 
-    public LocalDateTime getDateOfBirth()
+    public Date getDateOfBirth()
     {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDateTime dateOfBirth)
+    public void setDateOfBirth(Date dateOfBirth)
     {
         this.dateOfBirth = dateOfBirth;
     }

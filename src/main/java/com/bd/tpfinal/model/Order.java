@@ -33,19 +33,24 @@ public class Order
     @JsonBackReference //evita bucle infinito al toString
     private DeliveryMan deliveryMan;
 
+
+
     //relación muchos a uno con Client
     //lado muchos
     //@JoinColumn: especificar un nombre de columna de clave externa. La clave del otro lado
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
-    @JoinColumn(name = "client_id", nullable = false)
-    @JsonBackReference //evita bucle infinito al toString
+    @JoinColumn(name = "client_id")
+    //@JsonBackReference //evita bucle infinito al toString
     private Client client;
+
+
 
     //en el UML este campo se llama DeliveryAddress, tal vez se deba cambiar
     //many to one con Address. Puede haber muchas Order para un Address
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
-    @JoinColumn(name = "id_address", nullable = false) //nombre del atributo clave del otro lado
-    @JsonBackReference //evita bucle infinito al toString
+    //@JoinColumn(name = "id_address", nullable = false) //nombre del atributo clave del otro lado
+    @JoinColumn(name = "address_id")
+    //@JsonBackReference //evita bucle infinito al toString
     private Address address;
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

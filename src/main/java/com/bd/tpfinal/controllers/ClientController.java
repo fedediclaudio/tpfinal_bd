@@ -3,14 +3,12 @@ package com.bd.tpfinal.controllers;
 import com.bd.tpfinal.model.Client;
 import com.bd.tpfinal.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/client")
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
 public class ClientController
 {
     private final ClientService clientService;
