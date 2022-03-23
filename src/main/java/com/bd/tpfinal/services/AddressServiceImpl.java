@@ -31,10 +31,11 @@ public class AddressServiceImpl implements AddressService
         return addressRepository.findAll();
     }
 
-
-
-
-
+    @Override
+    public List<Address> getAllByIdUser(Long idUser)
+    {
+        return this.addressRepository.findByIdUser(idUser);
+    }
 
 
 }

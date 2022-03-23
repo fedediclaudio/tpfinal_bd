@@ -10,5 +10,6 @@ public interface AddressService
 {
     public void addAddress(Address newAddress);
     public List<Address> getAll();
+    public List<Address> getAllByIdUser(Long idUser);
 
 }

@@ -19,16 +19,12 @@ public class OrderController
         this.orderService = orderService;
     }
 
+    ///////     POST
+
     @PostMapping(value = "/new")
     public void addOrder(@RequestBody Order newOrder)
     {
         this.orderService.addOrder(newOrder);
-    }
-
-    @GetMapping("/all")
-    public List<Order> getAll()
-    {
-        return this.orderService.getAll();
     }
 
     //anda bien
@@ -37,5 +33,13 @@ public class OrderController
     {
         //return newOrder.getNumber();
         return 1;
+    }
+
+    ///////     GET
+
+    @GetMapping("/all")
+    public List<Order> getAll()
+    {
+        return this.orderService.getAll();
     }
 }

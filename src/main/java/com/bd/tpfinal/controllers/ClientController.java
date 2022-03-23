@@ -1,5 +1,6 @@
 package com.bd.tpfinal.controllers;
 
+import com.bd.tpfinal.model.Address;
 import com.bd.tpfinal.model.Client;
 import com.bd.tpfinal.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;

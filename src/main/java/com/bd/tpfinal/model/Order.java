@@ -1,6 +1,8 @@
 package com.bd.tpfinal.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,8 +17,9 @@ public class Order
     @Column(name = "id_order")
     private Long id;
 
-    private int number;  //tal vez esto pueda ser el id, pero todavía no se para que sirve
+    private int number;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
     private Date dateOfOrder;
 
     private String comments;
@@ -30,7 +33,7 @@ public class Order
     //@JoinColumn: especificar un nombre de columna de clave externa
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
     @JoinColumn(name = "deliveryMan_id")
-    @JsonBackReference //evita bucle infinito al toString.
+    @JsonIgnore //evita bucle infinito al toString.
     private DeliveryMan deliveryMan;
 
     //relación muchos a uno con Client
@@ -38,7 +41,7 @@ public class Order
     //@JoinColumn: especificar un nombre de columna de clave externa. La clave del otro lado
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
     @JoinColumn(name = "client_id")
-    //@JsonBackReference //evita bucle infinito al toString
+    @JsonIgnore
     private Client client;
 
     //en el UML este campo se llama DeliveryAddress, tal vez se deba cambiar
@@ -63,7 +66,6 @@ public class Order
     //mantener la relación
     private List<Item> items;
 
-    //TODO: completar este constructor
     //solamente puse lo relativo a patrón STATE
     public Order()
     {
