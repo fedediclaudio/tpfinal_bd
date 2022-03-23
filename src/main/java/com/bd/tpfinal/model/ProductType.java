@@ -22,6 +22,10 @@ public class ProductType
     @OneToMany(mappedBy = "type",  cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 
+    public ProductType()
+    {
+    }
+
     public String getName()
     {
         return name;

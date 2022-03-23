@@ -30,6 +30,9 @@ public class DeliveryMan extends User
             orphanRemoval = true)
     private List<Order> ordersPending;
 
+    public DeliveryMan()
+    {
+    }
 
     public int getNumberOfSuccessOrders()
     {

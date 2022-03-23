@@ -24,6 +24,10 @@ public class SupplierType
             orphanRemoval = true)
     private List<Supplier> suppliers;
 
+    public SupplierType()
+    {
+    }
+
     public String getName()
     {
         return name;

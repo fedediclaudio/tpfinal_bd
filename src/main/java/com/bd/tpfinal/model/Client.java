@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +28,10 @@ public class Client extends User
     //estamos del lado de uno
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private List<Address> addresses;
+
+    public Client()
+    {
+    }
 
     public Date getDateOfRegister()
     {

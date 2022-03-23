@@ -1,15 +1,17 @@
 package com.bd.tpfinal.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-
 import java.util.List;
 
 @Entity
 @Table(name="address")
-//todo atributo es persistente a menos que se lo declare transient
-
+/**
+ * Dirección/es del Client.
+ * Se elige una para vincular con el pedido (Order)
+ * Algunos campos se completan al crear la dirección y otros luego.
+ */
 public class Address
 {
     @Id
@@ -17,6 +19,9 @@ public class Address
     @Column(name = "id_address")
     private Long id;
 
+    //como no se para que se usa este parámetro
+    //lo interpreto como un identificador de dirección
+    //por ejemplo: "casa", "trabajo", "oficina", etc.
     private String name;
 
     private String address;
@@ -28,22 +33,31 @@ public class Address
     private String description;
 
     // un Client puede tener muchas direcciones
-    // estamos del lado de muchos (Client)
+    // estamos del lado de muchos.
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference //evita bucle infinito al toString
+    @JoinColumn(name = "user_id")
+   // @JsonBackReference //evita bucle infinito al toString
     //como es unidireccional de este lado no se pone nada.
-    //al crearse la tabla se agrega automaticamente la columna "id_client"
-    //que esta especificada del lado del Client en la @OneToMany
     //@Column(name = "client")
+    @JsonIgnore
     private Client client;
 
-    //private List<Order> ordersPending;
+    //ordenes recien creadas, estado inicial pending.
+    //al entregarse la orden o al cancelarse
+    //se saca de esta lista.
+    //Se carga al elegir la dirección del Client.
+    @OneToMany(mappedBy = "address")
+    private List<Order> ordersPending;
 
     //relación uno a muchos con Order. Lado UNO
+    //tabla principal de la relación.
     // mappedBy: nombre del atributo del otro (muchos) lado que referencia a este lado (uno)
-    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "address")
     private List<Order> orders;
+
+    public Address()
+    {
+    }
 
     public String getName()
     {

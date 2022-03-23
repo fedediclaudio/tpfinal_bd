@@ -1,12 +1,8 @@
 package com.bd.tpfinal.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @MappedSuperclass
@@ -14,30 +10,39 @@ public abstract class User
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_user", updatable = false, nullable = false)
+    @Column(name = "id_user")
     protected Long id; //para que el id lo hereden los hijos, estará bien ??
 
-    @Column(name = "name_user", updatable= false, nullable = false)
-    private String name;
+    @Column(name = "name")
+    protected String name;
 
-    @Column(name = "username_user", updatable= false, nullable = false)
+    @Column(name = "username", updatable= false, nullable = false)
     private String username;
 
-    @Column(name = "password_user", updatable= false, nullable = false)
+    @Column(name = "password", updatable= false, nullable = false)
     private String password;
 
-    @Column(name = "email_user", updatable= false)
+    @Column(name = "email", updatable= false)
     private String email;
 
     @Column(name = "date_of_birth_user", updatable = false)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
     protected Date dateOfBirth;
 
-    @Column(name = "scrore_user")
-    private boolean scrore;
+    @Column(name = "active_user")
+    private boolean active;
 
     @Column(name = "score")
     private int score;
+
+    public User()
+    {
+    }
+
+    public Long getId()
+    {
+        return id;
+    }
 
     public String getName()
     {
@@ -89,14 +94,14 @@ public abstract class User
         this.dateOfBirth = dateOfBirth;
     }
 
-    public boolean isScrore()
+    public boolean isActive()
     {
-        return scrore;
+        return active;
     }
 
-    public void setScrore(boolean scrore)
+    public void setActive(boolean active)
     {
-        this.scrore = scrore;
+        this.active = active;
     }
 
     public int getScore()

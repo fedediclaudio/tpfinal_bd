@@ -25,6 +25,10 @@ public class Item
     //Product es el padre de la asociación
     private Product product;
 
+    public Item()
+    {
+    }
+
     public int getQuantity()
     {
         return quantity;

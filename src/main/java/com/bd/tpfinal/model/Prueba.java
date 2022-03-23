@@ -21,6 +21,10 @@ public class Prueba
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
     private Date cumple;
 
+    public Prueba()
+    {
+    }
+
     public String getName()
     {
         return name;

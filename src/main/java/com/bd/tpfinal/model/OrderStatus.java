@@ -24,6 +24,10 @@ public abstract class OrderStatus
     @OneToOne(fetch = FetchType.LAZY)
     private Order order;
 
+    public OrderStatus()
+    {
+    }
+
     public String getName()
     {
         return name;

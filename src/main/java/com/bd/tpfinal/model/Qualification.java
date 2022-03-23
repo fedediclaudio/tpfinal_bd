@@ -19,6 +19,10 @@ public class Qualification
     @OneToOne(fetch = FetchType.LAZY)
     private Order order;
 
+    public Qualification()
+    {
+    }
+
     public float getScore()
     {
         return score;

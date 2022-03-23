@@ -22,6 +22,10 @@ public class HistoricalProductPrice
     @JoinColumn(name = "id_product", nullable = false) //nombre del atributo clave del otro lado
     private Product product;
 
+    public HistoricalProductPrice()
+    {
+    }
+
     public float getPrice()
     {
         return price;

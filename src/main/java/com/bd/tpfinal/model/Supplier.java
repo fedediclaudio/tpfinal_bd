@@ -36,6 +36,10 @@ public class Supplier
     @JsonBackReference //evita bucle infinito al toString
     private SupplierType type;
 
+    public Supplier()
+    {
+    }
+
     public String getName()
     {
         return name;
