@@ -14,7 +14,7 @@ public class Order
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_order")
+    @Column(name = "id_order", nullable = false, unique = true)
     private Long id;
 
     private int number;
