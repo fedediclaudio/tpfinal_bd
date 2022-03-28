@@ -1,0 +1,48 @@
+version: "3.9"
+services:
+  database-mysql:
+    platform: linux/x86_64
+    image: mysql:8
+    hostname: "isl-db"
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: tpfinaldb
+      MYSQL_USER: djangouser
+      MYSQL_PASSWORD: django123
+      MYSQL_ROOT_PASSWORD: root123
+    volumes:
+      - dbdata:/var/lib/mysql
+    # Make other containers not start until this one finishes starting
+    healthcheck:
+      test: ["CMD-SHELL", 'mysqladmin ping']
+      interval: 10s
+      timeout: 2s
+      retries: 10
+  web_app:
+    build: "./tpfinal"
+    entrypoint: /entrypoint.sh
+    command: >
+      sh -c "python3 manage.py runserver 0.0.0.0:8081"
+    depends_on:
+      database-mysql:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    restart: "on-failure"
+  swagger-ui:
+    # image: swaggerapi/swagger-ui
+    # platform: linux/amd64
+    image: pentusha/swagger-ui-crossbuild
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    volumes:
+      - ./doc/openapi.yml:/openapi.yml
+    environment:
+      SWAGGER_JSON: /openapi.yml
+
+volumes:
+  dbdata:
+    driver: local

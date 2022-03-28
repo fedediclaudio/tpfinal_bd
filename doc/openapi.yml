@@ -1,0 +1,1696 @@
+openapi: '3.0.2'
+info:
+  title: Trabajo final de Bases de Datos
+  version: '1.0'
+servers:
+  - url: http://127.0.0.1:8081/api
+components:
+  schemas:
+    address-request-body:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        coordX:
+          type: number
+          format: float64
+        coordY:
+          type: number
+          format: float64
+        description:
+          type: string
+          nullable: true
+        client:
+          type: number
+    address-response:
+      type: object
+      description: Respuestas que contienen direcciones
+      allOf:
+        - properties:
+            id:
+              type: integer
+        - $ref: "#/components/schemas/address-request-body"
+    user-request-body:
+      type: object
+      required:
+        - name
+        - username
+        - password
+        - email
+        - date_of_birth
+      properties:
+        name:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        date_of_birth:
+          type: string
+    client-response:
+      type: object
+      description: Respuestas que contienen usuarios
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        date_of_birth:
+          type: string
+        active:
+          type: boolean
+        score:
+          type: integer
+        date_of_register:
+          type: string
+          format: 'YYYY-MM-DD'
+    order-request-body:
+      type: object
+      description: Contenido esperado para requests de crear órdenes
+      properties:
+        delivery_address:
+          type: integer
+        client:
+          type: integer
+    order-response:
+      type: object
+      description: Respuestas que contienen órdenes
+      properties:
+        number:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/items"
+        rating:
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/rating"
+        status:
+          $ref: "#/components/schemas/status"
+        date_of_order:
+          type: string
+          format: date-time
+        comments:
+          type: string
+          nullable: true
+        total_price:
+          type: number
+          format: float64
+        delivery_address:
+          type: integer
+        delivery_man:
+          type: integer
+          nullable: true
+        client:
+          type: integer
+    status:
+      properties:
+        current_status:
+          type: string
+        start_date:
+          type: string
+          format: date-time
+    rating:
+      properties:
+        id:
+          type: integer
+        score:
+          type: integer
+        commentary:
+          type: string
+          nullable: true
+        order:
+          type: integer
+    rating-request-body:
+      properties:
+        score:
+          type: integer
+        commentary:
+          type: string
+          nullable: true
+    items:
+      properties:
+        id:
+          type: integer
+        quantity:
+          type: integer
+        description:
+          type: string
+        product:
+          type: integer
+        order:
+          type: integer
+    product-request-body:
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+          format: float64
+        weight:
+          type: number
+          format: float64
+        description:
+          type: string
+        supplier:
+          type: integer
+        type:
+          type: array
+          items:
+            type: integer
+    product:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        price:
+          type: number
+          format: float64
+        weight:
+          type: number
+          format: float64
+        description:
+          type: string
+        supplier:
+          type: integer
+        type:
+          type: array
+          items:
+            type: integer
+    product-price-history:
+      properties:
+        price:
+          type: number
+          format: float64
+        start_date:
+          type: string
+          format: date-time
+        product:
+          type: integer
+    product-or-supplier-type-request-body:
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    product-or-supplier-type:
+      allOf:
+        - properties:
+            id:
+              type: integer
+        - $ref: "#/components/schemas/product-or-supplier-type-request-body"
+    supplier-request-body:
+      type: object
+      properties:
+        name:
+          type: string
+        cuil:
+          type: string
+        address:
+          type: string
+        coordX:
+          type: number
+          format: float64
+        coordY:
+          type: number
+          format: float64
+        type:
+          type: array
+          items:
+            type: integer
+    supplier:
+      allOf:
+        - properties:
+            id:
+              type: integer
+        - $ref: "#/components/schemas/supplier-request-body"
+        - properties:
+            rating:
+              type: number
+              format: float64
+    generic-error:
+      type: object
+      properties:
+        status:
+          type: string
+          default: "error"
+        message:
+          type: string
+    generic-success:
+      type: object
+      properties:
+        status:
+          type: string
+          default: "success"
+        message:
+          type: string
+          
+paths:
+  /address/:
+    get:
+      summary: Obtener todas las direcciones.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/address-response'
+      tags:
+        - Direcciones
+    post:
+      summary: Crear una nueva dirección.
+      requestBody:
+        description: Los datos de la dirección a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/address-request-body'
+      responses:
+        '201':
+          description: Dirección creada
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/address-response'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Direcciones
+  /address/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id de la direccion con la cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    get:
+      summary: Obtener una dirección por ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/address-response'
+        '404':
+          description: Direccion no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Direcciones
+    put:
+      summary: Modificar una dirección por ID.
+      requestBody:
+        description: Los datos de la dirección a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/address-request-body'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/address-response'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '404':
+          description: Direccion no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Direcciones
+    delete:
+      summary: Eliminar una dirección por ID.
+      responses:
+        '204':
+          description: Dirección eliminada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-success'
+        '404':
+          description: Direccion no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Direcciones
+  /client/:
+    get:
+      summary: Obtener la información de todos los clientes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/client-response'
+      tags:
+        - Clientes
+    post:
+      summary: Crear una nuevo cliente.
+      requestBody:
+        description: Los datos del cliente a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user-request-body'
+      responses:
+        '201':
+          description: Cliente creado
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/client-response'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Clientes
+  /client/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id del cliente con el cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    get:
+      summary: Obtener un cliente por ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/client-response'
+        '404':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Clientes
+    put:
+      summary: Modificar un cliente por ID.
+      requestBody:
+        description: Los datos del cliente
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user-request-body'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/client-response'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '404':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Clientes
+    delete:
+      summary: Eliminar un cliente por ID.
+      responses:
+        '204':
+          description: Cliente eliminado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-success'
+        '404':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Clientes
+  /delivery-man/:
+    get:
+      summary: Obtener la información de todos los repartidores
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/client-response'
+      tags:
+        - Repartidores
+    post:
+      summary: Crear una nuevo repartidor
+      requestBody:
+        description: Los datos del repartidor a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user-request-body'
+      responses:
+        '201':
+          description: Repartidor creado
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/client-response'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Repartidores
+  /delivery-man/highest-rated:
+    get:
+      summary: Obtener los 10 repartidores mejor valorados
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/client-response'
+      tags:
+        - Repartidores
+  /delivery-man/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id del repartidor con el cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    get:
+      summary: Obtener un repartidor por ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/client-response'
+        '404':
+          description: Direccion no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Repartidores
+    put:
+      summary: Modificar un repartidor por ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/client-response'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '404':
+          description: Direccion no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Repartidores
+    delete:
+      summary: Eliminar un repartidor por ID.
+      responses:
+        '204':
+          description: Dirección eliminada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-success'
+        '404':
+          description: Direccion no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Repartidores
+  /order/:
+    get:
+      summary: Obtener la información de todas las órdenes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/order-response'
+      tags:
+        - Órdenes
+    post:
+      summary: Crear una nueva orden
+      requestBody:
+        description: Los datos de la orden a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/order-request-body'
+      responses:
+        '201':
+          description: Repartidor creado
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/order-response'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Órdenes
+  /order/most-expensive:
+    get:
+      summary: Obtener la orden más cara de un día determinado
+      parameters:
+        - in: query
+          name: date
+          required: true
+          schema:
+            type: string
+            format: 'YYYY-MM-DD'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order-response'
+        '204':
+          description: OK - no hay órdenes para esa fecha
+        '400':
+          description: Fecha con formato incorrecto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Órdenes
+  /order/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id de la orden con la cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    get:
+      summary: Obtener una orden por ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order-response'
+        '404':
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Órdenes
+    delete:
+      summary: Eliminar una orden por ID.
+      responses:
+        '204':
+          description: Orden eliminada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-success'
+        '404':
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Órdenes
+  /order/{id}/add-rating:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id de la orden con la cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    post:
+      summary: Agregar una calificación a una orden
+      requestBody:
+        description: Los datos de la orden a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/rating-request-body'
+      responses:
+        '201':
+          description: Calificación agregada
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/rating'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '404':
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '409':
+          description: No se puede calificar la orden dado su estado actual
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Órdenes/Modificar orden
+  /order/{id}/add-item:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id de la orden con la cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    post:
+      summary: Agregar un item a una orden
+      requestBody:
+        description: Los datos de la orden a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/rating-request-body'
+      responses:
+        '201':
+          description: Item agregado
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/rating'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '404':
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '409':
+          description: No se pueden agregar items a la orden dado su estado actual
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Órdenes/Modificar orden
+  /order/{id}/assign:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id de la orden con la cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    put:
+      summary: Asigna la orden a algún repartidor libre
+      responses:
+        '200':
+          description: Orden asignada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-success'
+        '400':
+          description: La orden no puede ser asignada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '404':
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '409':
+          description: No hay repartidores disponibles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Órdenes/Modificar orden
+  /order/{id}/cancel:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id de la orden con la cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    put:
+      summary: Cancela la orden a pedido del cliente
+      responses:
+        '200':
+          description: Orden cancelada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-success'
+        '400':
+          description: La orden no puede ser cancelada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '404':
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Órdenes/Modificar orden
+  /order/{id}/refuse:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id de la orden con la cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    put:
+      summary: Rechaza la orden a pedido del repartidor
+      responses:
+        '200':
+          description: Orden rechazada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-success'
+        '400':
+          description: La orden no puede ser rechazada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '404':
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Órdenes/Modificar orden
+  /order/{id}/send:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id de la orden con la cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    put:
+      summary: Acepta la orden y el proveedor la entrega al repartidor
+      responses:
+        '200':
+          description: Orden enviada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-success'
+        '400':
+          description: La orden no puede ser enviada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '404':
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Órdenes/Modificar orden
+  /order/{id}/deliver:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id de la orden con la cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    put:
+      summary: El repartidor entrega la orden al cliente, finalizando la orden
+      responses:
+        '200':
+          description: Orden entregada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-success'
+        '400':
+          description: La orden no puede ser entregada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '404':
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Órdenes/Modificar orden
+  /product/:
+    get:
+      summary: Obtener la información de todos los productos
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/product'
+      tags:
+        - Productos
+    post:
+      summary: Crear un nuevo producto
+      requestBody:
+        description: Los datos del producto a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product-request-body'
+      responses:
+        '201':
+          description: Producto creado
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/product'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Productos
+  /product/average-price:
+    get:
+      summary: Obtener el precio promedio de los productos por tipo, para todos los tipos
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    type:
+                      type: 'integer'
+                    avg_price:
+                      type: number
+      tags:
+        - Productos
+  /product/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id del producto con el cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    get:
+      summary: Obtener un producto por ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+        '404':
+          description: Producto no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Productos
+    put:
+      summary: Modificar un producto por ID.
+      requestBody:
+        description: Los datos del producto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product-request-body'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/product'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '404':
+          description: Prodcuto no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Productos
+    delete:
+      summary: Eliminar un producto por ID.
+      responses:
+        '204':
+          description: Prodcuto eliminado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-success'
+        '404':
+          description: Prodcuto no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Productos
+  /product/{id}/historic-prices:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id del producto con el cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    get:
+      summary: Obtiene los precios históricos de un producto dado por su ID
+      description: |
+        Obtiene los precios históricos de un producto dado por su ID entre dos fechas.
+        La fecha de final NO es incluída en la respuesta, por lo tanto debe ser
+        una fecha posterior (NO igual) a la fecha de inicio.
+      parameters:
+        - in: query
+          name: start_date
+          required: false
+          description: |
+            Fecha de inicio de la cual buscar (incluye la fecha indicada).
+            De no usarse este parámetro, se usa la fecha de hoy
+          schema:
+            type: string
+            format: 'YYYY-MM-DD'
+        - in: query
+          name: end_date
+          required: false
+          description: |
+            Fecha de fin de la cual buscar (NO incluye la fecha indicada).
+            De no usarse este parámetro, se usa la fecha de hoy
+          schema:
+            type: string
+            format: 'YYYY-MM-DD'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/product-price-history'
+        '204':
+          description: OK - no hay información para las fechas introducidas
+        '404':
+          description: Producto no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Productos
+  /product-type/:
+    get:
+      summary: Obtener la información de todos los tipos de productos
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/product-or-supplier-type'
+      tags:
+        - Tipos de producto
+    post:
+      summary: Crear un nuevo tipo de producto
+      requestBody:
+        description: Los datos del tipo de producto a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product-or-supplier-type-request-body'
+      responses:
+        '201':
+          description: Tipo de producto creado
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/product-or-supplier-type'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Tipos de producto
+  /product-type/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id del tipo de producto con el cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    get:
+      summary: Obtener un tipo de producto por ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product-or-supplier-type'
+        '404':
+          description: Tipo de producto no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Tipos de producto
+    put:
+      summary: Modificar un tipo de producto por ID.
+      requestBody:
+        description: Los datos del tipo de producto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product-or-supplier-type-request-body'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/product'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '404':
+          description: Tipo de producto no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Tipos de producto
+    delete:
+      summary: Eliminar un tipo de producto por ID.
+      responses:
+        '204':
+          description: Tipo de producto eliminado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-success'
+        '404':
+          description: Tipo de producto no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Tipos de producto
+  /supplier-type/:
+    get:
+      summary: Obtener la información de todos los tipos de proveedores
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/product-or-supplier-type'
+      tags:
+        - Tipos de proveedor
+    post:
+      summary: Crear un nuevo tipo de proveedor
+      requestBody:
+        description: Los datos del tipo de proveedores a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product-or-supplier-type-request-body'
+      responses:
+        '201':
+          description: Tipo de proveedor creado
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/product-or-supplier-type'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Tipos de proveedor
+  /supplier-type/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id del tipo de proveedor con el cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    get:
+      summary: Obtener un tipo de proveedor por ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product-or-supplier-type'
+        '404':
+          description: Tipo de producto no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Tipos de proveedor
+    put:
+      summary: Modificar un tipo de proveedor por ID.
+      requestBody:
+        description: Los datos del tipo de proveedor
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product-or-supplier-type-request-body'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/product'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '404':
+          description: Tipo de proveedor no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Tipos de proveedor
+    delete:
+      summary: Eliminar un tipo de proveedor por ID.
+      responses:
+        '204':
+          description: Tipo de proveedor eliminado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-success'
+        '404':
+          description: Tipo de proveedor no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Tipos de proveedor
+  /supplier/:
+    get:
+      summary: Obtener la información de todos los proveedores
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/supplier'
+      tags:
+        - Proveedores
+    post:
+      summary: Crear un nuevo proveedor
+      requestBody:
+        description: Los datos del proveedor a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/supplier-request-body'
+      responses:
+        '201':
+          description: Proveedor creado
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/supplier'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Proveedores
+  /supplier/by-type:
+    get:
+      summary: Obtener la información de todos los proveedores de un tipo determinado
+      parameters:
+        - in: query
+          name: type
+          required: true
+          description: |
+            ID del tipo de proveedor a buscar
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/supplier'
+      tags:
+        - Proveedores
+  /supplier/all-types:
+    get:
+      summary: Obtener la información de los proveedores que ofrezcan productos de todos los tipos
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+      tags:
+        - Proveedores
+  /supplier/highest-order-count:
+    get:
+      summary: Obtener los 10 proveedores con más órdenes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/supplier'
+      tags:
+        - Proveedores
+  /supplier/with-lowest-rating:
+    get:
+      summary: Obtener los proveedores que hayan recibido la calificación más baja
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    lowest_rating_count:
+                      type: number
+                      description: Cantidad de órdenes con la calificación más baja
+      tags:
+        - Proveedores
+  /supplier/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id del proveedor con el cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    get:
+      summary: Obtener un proveedor por ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/supplier'
+        '404':
+          description: Proveedor no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Proveedores
+    put:
+      summary: Modificar un proveedor por ID.
+      requestBody:
+        description: Los datos del proveedor
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/supplier-request-body'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    default: "success"
+                  data:
+                    $ref: '#/components/schemas/supplier'
+        '400':
+          description: Datos incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+        '404':
+          description: Prodcuto no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Proveedores
+    delete:
+      summary: Eliminar un proveedor por ID.
+      responses:
+        '204':
+          description: Proveedor eliminado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-success'
+        '404':
+          description: Proveedor no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Proveedores
+  /supplier/{id}/products:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id del proveedor con el cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    get:
+      summary: Obtener todos los productos de un proveedor dado por ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/product'
+        '404':
+          description: Proveedor no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Proveedores
+  /supplier/{id}/order-with-most-products:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: El id del proveedor con el cual operar
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+    get:
+      summary: Obtener las órdenes de mayor cantidad de productios para un proveedor
+      description: |
+        Obtiene las 5 ordenes con mayor cantidad de productos para un proveedor dado.
+        Se determina la cantidad de productos como la suma de las cantidades de cada
+        producto individual.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/product'
+        '404':
+          description: Proveedor no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic-error'
+      tags:
+        - Proveedores
+  
