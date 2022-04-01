@@ -7,12 +7,17 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="tpfinal" />
+        <module name="tpfinal_bd" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="tpfinal_bd" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="tpfinal" options="-parameters" />
+      <module name="tpfinal_bd" options="-parameters" />
     </option>
   </component>
 </project>
