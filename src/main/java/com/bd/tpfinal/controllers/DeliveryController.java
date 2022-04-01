@@ -14,7 +14,7 @@ public class DeliveryController {
 
     @GetMapping("/test")
     public String test(){
-        return "OK!";
+        return "OK!!!!";
     }
 
     /*
