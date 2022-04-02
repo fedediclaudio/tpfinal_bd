@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Inheritance( strategy = InheritanceType.TABLE_PER_CLASS )
+@Inheritance( strategy = InheritanceType.SINGLE_TABLE )
 public abstract class OrderStatus {
 
     @Id
@@ -83,6 +83,10 @@ public abstract class OrderStatus {
 	}
 
 	public boolean canChangeAddress() {
+		return false;
+	}
+	
+	public boolean canRate() {
 		return false;
 	}
 	

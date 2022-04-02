@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import com.bd.tpfinal.model.orderStatusTypes.Cancel;
+import com.bd.tpfinal.model.orderStatusTypes.Delivered;
 import com.bd.tpfinal.model.orderStatusTypes.Pending;
 import com.bd.tpfinal.model.orderStatusTypes.Sent;
 
@@ -39,7 +40,7 @@ public class Order {
 	@Column(nullable = false)
 	private float totalPrice;
 
-	@OneToOne( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+	@OneToOne( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private OrderStatus status;
 
 	@ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL )
@@ -173,8 +174,8 @@ public class Order {
 	/////////////////////////
 	
 	public boolean addItem(Item item) throws Exception {
-		if (this.getStatus().canAddItem()) {
-			this.getItems().add(item);
+		if (this.status.canAddItem()) {
+			this.items.add(item);
 			return true;
 		}
 		return false;
@@ -184,19 +185,19 @@ public class Order {
 	// Cambio de estado de las ordenes  //
 	//////////////////////////////////////
 	public void cancelOrder() throws Exception {
-		this.setStatus( new Cancel(this) );
+		this.status = new Cancel(this);
 	}
 
 	public void refuseOrder() throws Exception {
-		this.setStatus( new Cancel(this) );
+		this.status = new Cancel(this);
 	}
 	
 	public void deliverOrder() throws Exception {
-		this.setStatus( new Sent(this) );
+		this.status = new Sent(this);
 	}
 
 	public void finishOrder() throws Exception {
-		this.setStatus( new Sent(this) );
+		this.status = new Delivered(this);
 	}
 	
 	//////////////////////////////////////
@@ -205,22 +206,22 @@ public class Order {
 	
 	
 	public void deductClientScore() throws Exception {
-		this.getClient().deductScore();
+		this.client.deductScore();
 	}
 	
 	public void addClientScore() throws Exception {
-		this.getClient().addScore();
+		this.client.addScore();
 	}
 	
 	public void setDeliveryManBusyTo(boolean isBusy) {
-		this.getDeliveryMan().setFree(!isBusy);
+		this.deliveryMan.setFree(!isBusy);
 	}
 	
 	public void deductDeliveryManScore() throws Exception {
-		this.getDeliveryMan().deductScore();
+		this.deliveryMan.deductScore();
 	}
 	
 	public void addDeliveryManScore() throws Exception {
-		this.getDeliveryMan().addScore();
+		this.deliveryMan.addScore();
 	}
 }

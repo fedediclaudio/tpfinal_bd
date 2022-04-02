@@ -19,55 +19,76 @@ import com.bd.tpfinal.model.Client_;
 import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.model.DeliveryMan_;
 import com.bd.tpfinal.model.Order;
+import com.bd.tpfinal.model.OrderStatus;
+import com.bd.tpfinal.model.OrderStatus_;
+import com.bd.tpfinal.model.Order_;
 import com.bd.tpfinal.repositories.interfaces.IOrderRepository;
 
 @Repository
 public class OrderRepositoryImpl implements IOrderRepository {
 	@PersistenceContext private EntityManager em;
 	
-	public List<Order> getAllPendingOrdersForClient(long idClient) {
+	private CriteriaQuery<Order> getBasicOrderForClientFilter(long idClient, String status) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
 		CriteriaQuery<Order> cq = cb.createQuery(Order.class);
 		Root<Client> root = cq.from(Client.class);
 		Join<Client, Order> orders = root.join(Client_.ORDERS, JoinType.INNER);
+		Join<Order, OrderStatus> ordersStatus = orders.join(Order_.STATUS, JoinType.INNER);
 		
 		Predicate id = cb.equal(root.get(Client_.ID), idClient);
-		cq.where(id);
+		if (status != null) {
+			Predicate statusFilter = cb.equal(ordersStatus.get(OrderStatus_.NAME), status);
+			cq.where(id, statusFilter);
+		}
+		else
+			cq.where(id);	
 		
 		cq.select( orders );
-		TypedQuery<Order> typeQuery = em.createQuery(cq);
 		
-		return typeQuery.getResultList();
+		return cq;
 	}
-
-	public List<Order> getAllPendingOrdersForDeliveryMan(long idDeliveryMan) {
+	
+	private CriteriaQuery<Order> getBasicOrderForDeliveryManFilter(long idDeliveryMan, String status) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		
 		CriteriaQuery<Order> cq = cb.createQuery(Order.class);
 		Root<DeliveryMan> root = cq.from(DeliveryMan.class);
 		Join<DeliveryMan, Order> orders = root.join(DeliveryMan_.ORDERS_PENDING, JoinType.INNER);
+		Join<Order, OrderStatus> ordersStatus = orders.join(Order_.STATUS, JoinType.INNER);
 		
 		Predicate id = cb.equal(root.get(DeliveryMan_.ID), idDeliveryMan);
-		cq.where(id);
+		if (status != null) {
+			Predicate statusFilter = cb.equal(ordersStatus.get(OrderStatus_.NAME), status);
+			cq.where(id, statusFilter);
+		}
+		else
+			cq.where(id);
 		
 		cq.select( orders );
+		
+		return cq;
+	}
+	
+	@Override
+	public List<Order> getAllOrdersForClient(long idClient, String status) {
+		CriteriaQuery<Order> cq = getBasicOrderForClientFilter(idClient, status);
+		TypedQuery<Order> typeQuery = em.createQuery(cq);
+		
+		return typeQuery.getResultList();
+	}
+
+	@Override
+	public List<Order> getAllOrdersForDeliveryMan(long idDeliveryMan, String status) {
+		CriteriaQuery<Order> cq = getBasicOrderForDeliveryManFilter(idDeliveryMan, status);
 		TypedQuery<Order> typeQuery = em.createQuery(cq);
 		
 		return typeQuery.getResultList();
 	}
 	
-	public Order getNextPendingOrderForClient(long idClient) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-
-		CriteriaQuery<Order> cq = cb.createQuery(Order.class);
-		Root<Client> root = cq.from(Client.class);
-		Join<Client, Order> orders = root.join(Client_.ORDERS, JoinType.INNER);
-		
-		Predicate id = cb.equal(root.get(Client_.ID), idClient);
-		cq.where(id);
-		
-		cq.select( orders );
+	@Override
+	public Order getNextOrderForClient(long idClient, String status) {
+		CriteriaQuery<Order> cq = getBasicOrderForClientFilter(idClient, status);
 		
 		TypedQuery<Order> typeQuery = em.createQuery(cq);
 		typeQuery.setMaxResults(1);
@@ -80,18 +101,9 @@ public class OrderRepositoryImpl implements IOrderRepository {
 		}
 	}
 
-	public Order getNextPendingOrderDeliveryMan(long idDeliveryMan) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		
-		CriteriaQuery<Order> cq = cb.createQuery(Order.class);
-		Root<DeliveryMan> root = cq.from(DeliveryMan.class);
-		Join<DeliveryMan, Order> orders = root.join(DeliveryMan_.ORDERS_PENDING, JoinType.INNER);
-		
-		Predicate id = cb.equal(root.get(DeliveryMan_.ID), idDeliveryMan);
-		cq.where(id);
-		
-		cq.select( orders );
-		
+	@Override
+	public Order getNextOrderDeliveryMan(long idDeliveryMan, String status) {
+		CriteriaQuery<Order> cq = getBasicOrderForDeliveryManFilter(idDeliveryMan, status);
 		TypedQuery<Order> typeQuery = em.createQuery(cq);
 		typeQuery.setMaxResults(1);
 		

@@ -45,6 +45,15 @@ public class Address {
 	
 	public Address() {}
 
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -107,4 +116,12 @@ public class Address {
 				+ ", coords=" + Arrays.toString(coords) + ", description=" + description + ", orders=" + orders + "]";
 	}
 	
+	public boolean isValid() {
+		if (name.isBlank()) return false;
+		if (address.isBlank()) return false;
+		if ((coords == null) || (coords.length != 2)) return false;
+		if (description.isBlank()) return false;
+		if (client.getId() < 1) return false;
+		return true;
+	}
 }

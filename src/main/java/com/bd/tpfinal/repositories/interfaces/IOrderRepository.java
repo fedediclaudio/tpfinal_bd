@@ -8,9 +8,9 @@ public interface IOrderRepository {
 	
 	// Los metodos que se vayan a porponer aca, tienen que estar implementados en su implementacion (OrderRepositoryImpl)
 	
-	List<Order> getAllPendingOrdersForClient(long idClient);
-	List<Order> getAllPendingOrdersForDeliveryMan(long idDeliveryMan);
-	Order getNextPendingOrderForClient(long idClient);
-	Order getNextPendingOrderDeliveryMan(long idDeliveryMan);
+	List<Order> getAllOrdersForClient(long idClient, String status);
+	List<Order> getAllOrdersForDeliveryMan(long idDeliveryMan, String status);
+	Order getNextOrderForClient(long idClient, String status);
+	Order getNextOrderDeliveryMan(long idDeliveryMan, String status);
 	
 }

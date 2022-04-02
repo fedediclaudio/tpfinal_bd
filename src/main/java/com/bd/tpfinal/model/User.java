@@ -11,6 +11,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 /* 
 SINGLE_TABLE - Single table per class hierarchy
@@ -68,6 +70,7 @@ public abstract class User {
 	@Column(length = 80, unique = true, nullable = false)
 	private String email;
 
+	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate dateOfBirth;
 
 	private boolean active;
@@ -145,6 +148,17 @@ public abstract class User {
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", username=" + username + ", password=" + password + ", email="
 				+ email + ", dateOfBirth=" + dateOfBirth + ", active=" + active + ", score=" + score + "]";
+	}
+	
+	public boolean isValid() {
+		if (name.isBlank()) return false;
+		if (username.isBlank()) return false;
+		if (password .isBlank()) return false;
+		if (email.isBlank()) return false;
+		if (dateOfBirth.isAfter( LocalDate.now() )) return false;
+		if (score < 0) return false;
+		
+		return true;
 	}
 	
 }

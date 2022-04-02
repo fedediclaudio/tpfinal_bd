@@ -2,6 +2,7 @@ package com.bd.tpfinal.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,18 @@ public class OrderController {
 			e.printStackTrace();
 			return -1;
 		}
+    }
+	
+	@GetMapping("/get")
+    public Order getOrder( @RequestParam(name = "orderNumber") int orderNumber ) {
+		Order order = null;
+		try {
+			order = orderService.getOrder(orderNumber);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return order;
     }
 	
 	@PutMapping("/assignAddress")
@@ -71,6 +84,19 @@ public class OrderController {
     public boolean confirmOrder( @RequestParam(name = "orderNumber") int orderNumber ) {
 		try {
 			return orderService.confirmOrder(orderNumber);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+    }
+	
+	@PutMapping("/setQualification")
+    public boolean setQualification( @RequestParam(name = "orderNumber") int orderNumber, 
+    								 @RequestParam(name = "score") int score, 
+    								 @RequestParam(name = "comment") String comment) {
+		try {
+			return orderService.setQualification(orderNumber, score, comment);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

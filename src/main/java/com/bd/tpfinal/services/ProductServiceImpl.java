@@ -33,15 +33,35 @@ public class ProductServiceImpl implements ProductService {
 			(product.getPrice() < 0) ||
 			(product.getWeight() < 0)) return null;
 		
+		// Corroboro que el Supplier haya sido proveido
+		if (product.getSupplier() == null) {
+			System.out.println("Supplier no provisto");
+			return null;
+		}
+
+		// Corroboro que el ProductType haya sido proveido
+		if (product.getType() == null) {
+			System.out.println("ProductType no provisto");
+			return null;
+		}
+		
 		// Obtengo el Supplier de la BD
 		Supplier supplier = supplierRepository.getSupplierById( product.getSupplier().getId() );
 		// Si el supplier no existe, retorno null
-		if (supplier == null) return null;
+		if (supplier == null) {
+			System.out.println("El Supplier no existe");
+			return null;
+		}
 		
 		// Obtengo el ProductType de la BD
 		ProductType productType = productTypeRepository.getProductTypeById( product.getType().getId() );
 		// Si el productType no existe, retorno null
-		if (productType == null) return null;
+		if (productType == null) {
+			System.out.println("El ProductType no existe");
+			return null;
+		}
+		
+		
 		
 		// Creo el nuevo Producto
 		product.setSupplier( supplier );
@@ -59,7 +79,10 @@ public class ProductServiceImpl implements ProductService {
 		// Obtengo el Product de la BD
 		Product product = productRepository.getProductById( idProduct );
 		// Si el Product no existe, retorno false
-		if (product == null) return false;
+		if (product == null) {
+			System.out.println("El Producto no existe");
+			return false;
+		}
 		
 		List<HistoricalProductPrice> historical = product.getPrices();
 		

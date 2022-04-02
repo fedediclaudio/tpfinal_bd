@@ -9,15 +9,17 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class DeliveryMan extends User {
     
-	private int numberOfSuccessOrders;
+	private int numberOfSuccessOrders = 0;
 
-	private boolean free;
+	private boolean free = true;
 
+	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate dateOfAdmission;
 
 	@JsonIgnore
@@ -90,4 +92,12 @@ public class DeliveryMan extends User {
 		this.setScore(actualScore + 1);
 	}
 	
+	public boolean isValid() {
+		if (!super.isValid()) return false;
+		
+		if (numberOfSuccessOrders < 0) return false;
+		if (dateOfAdmission.isAfter( LocalDate.now() )) return false;
+		
+		return true;
+	}
 }

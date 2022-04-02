@@ -15,4 +15,9 @@ public class Delivered extends OrderStatus {
 	public Delivered(Order order) {
 		super("Delivered", LocalDate.now(), order);
 	}
+	
+	@Override
+	public boolean canRate() {
+		return true;
+	}
 }

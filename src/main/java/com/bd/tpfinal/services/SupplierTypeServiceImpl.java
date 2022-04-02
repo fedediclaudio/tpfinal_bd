@@ -29,7 +29,10 @@ public class SupplierTypeServiceImpl implements SupplierTypeService {
 		SupplierType supplierTypeDB = supplierTypeRepository.getSupplierTypeByName(supplierType.getName());
 		
 		// Si el SupplierType existe, retorno null, ya que estaría como duplicado
-		if (supplierTypeDB != null) return null;
+		if (supplierTypeDB != null) {
+			System.out.println("El SupplierType no existe");
+			return null;
+		}
 		
 		// Inicializo el ID
 		supplierType.setId(null);

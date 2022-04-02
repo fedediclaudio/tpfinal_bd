@@ -59,10 +59,6 @@ public class Pending extends OrderStatus {
 		// Configuro que fue cancelada por el usuario
 		((Cancel)this.getOrder().getStatus()).setCancelledByClient(true);
 		
-		// Remuevo la orden de la lista de pendientes del DeliveryMan
-		DeliveryMan dM = this.getOrder().getDeliveryMan();
-		dM.removePendingOrder( this.getOrder() );
-		
 		return true;
 	}
 

@@ -29,7 +29,10 @@ public class ProductTypeServiceImpl implements ProductTypeService {
 		ProductType productTypeDB = productTypeRepository.getProductTypeByName(productType.getName());
 		
 		// Si el ProductoType existe, retorno null, ya que estaría como duplicado
-		if (productTypeDB != null) return null;
+		if (productTypeDB != null) {
+			System.out.println("El ProductType no existe");
+			return null;
+		}
 		
 		// Inicializo los atributos
 		productType.setId(null);

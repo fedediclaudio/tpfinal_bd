@@ -30,6 +30,9 @@ public class Sent extends OrderStatus {
 		// Configuro al DeliveryMan como libre
 		this.getOrder().setDeliveryManBusyTo(false);
 		
+		// Se pasa la Orden a estado de Entregado
+		this.getOrder().setStatus( new Delivered( this.getOrder()) );
+						
 		return true;
 	}
 	

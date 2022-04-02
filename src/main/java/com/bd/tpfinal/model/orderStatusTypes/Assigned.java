@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import javax.persistence.Entity;
 
+import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.OrderStatus;
 
@@ -70,6 +71,12 @@ public class Assigned extends OrderStatus {
 		this.getOrder().cancelOrder();
 		// Configuro que fue cancelada por el usuario
 		((Cancel)this.getOrder().getStatus()).setCancelledByClient(true);
+		
+
+		// Remuevo la orden de la lista de pendientes del DeliveryMan
+		DeliveryMan dM = this.getOrder().getDeliveryMan();
+		if (dM != null)
+			dM.removePendingOrder( this.getOrder() );
 		
 		return true;
 	}

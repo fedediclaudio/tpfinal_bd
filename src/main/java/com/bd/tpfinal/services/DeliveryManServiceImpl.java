@@ -1,5 +1,6 @@
 package com.bd.tpfinal.services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -23,6 +24,13 @@ public class DeliveryManServiceImpl implements DeliveryManService {
 	}
 
 	public DeliveryMan addNewDeliveryMan(DeliveryMan deliveryMan) throws Exception {
+		deliveryMan.setDateOfAdmission( LocalDate.now() );
+		// Valido que el DeliveryMan sea valido
+		if (!deliveryMan.isValid()) {
+			System.out.println("El DeliveryMan no es valido, corrobore los datos enviados");
+			return null;
+		}
+		
 		// Hay que hacer todas las validaciones previas al guardado!!
 		deliveryMan = saveDeliveryMan( deliveryMan );
 		
@@ -40,12 +48,12 @@ public class DeliveryManServiceImpl implements DeliveryManService {
 	
 	public List<Order> getAllPendingOrders(long idDeliveryMan) throws Exception {
 		// Retorno todas las ordenes pendientes del DeliveryMan
-		return orderRepository.getAllPendingOrdersForDeliveryMan(idDeliveryMan);
+		return orderRepository.getAllOrdersForDeliveryMan(idDeliveryMan, null);
 	}
 	
 	public Order getNextPendingOrder(long idDeliveryMan) throws Exception {
 		// Retorno la siguiente orden pendiente del DeliveryMan
-		return orderRepository.getNextPendingOrderDeliveryMan(idDeliveryMan);
+		return orderRepository.getNextOrderDeliveryMan(idDeliveryMan, "Assigned");
 	}
 	
 	@Transactional
@@ -53,17 +61,36 @@ public class DeliveryManServiceImpl implements DeliveryManService {
 		// Obtengo el DeliveryMan
 		DeliveryMan dm = deliveryManRepository.getDeliveryManById( idDeliveryMan );
 		
+		// Si el DeliveryMan no existe, retorno false
+		if (dm ==  null) {
+			System.out.println("La DeliveryMan no existe");
+			return false;
+		}
+		
 		// Verifico que este activo y libre, retorno false en caso contrario
-		if ((!dm.isActive()) || (!dm.isFree())) return false;
+		if (!dm.isActive()) {
+			System.out.println("El DeliveryMan no esta activo");	
+			return false;
+		}
+		if (!dm.isFree()) {
+			System.out.println("El DeliveryMan no esta libre");	
+			return false;
+		}
  		
 		// Obtengo la siguiente orden pendiente
-		Order order = orderRepository.getNextPendingOrderDeliveryMan(idDeliveryMan);
+		Order order = orderRepository.getNextOrderDeliveryMan(idDeliveryMan, "Assigned");
 		
 		// Verifico que haya alguna Orden por enviar
-		if (order == null) return false;
+		if (order ==  null) {
+			System.out.println("La orden no existe");
+			return false;
+		}
 		
 		// Verifico si se puede despachar, retorno false en caso contrario
-		if (!order.getStatus().canDeliver()) return false;
+		if (!order.getStatus().canDeliver()) {
+			System.out.println("La orden no se puede despachar");
+			return false;
+		}
 		
 		// Despacho la orden
 		order.getStatus().deliver();
@@ -78,17 +105,33 @@ public class DeliveryManServiceImpl implements DeliveryManService {
 	public boolean refuseNextPendingOrder(long idDeliveryMan) throws Exception {
 		// Obtengo el DeliveryMan
 		DeliveryMan dm = deliveryManRepository.getDeliveryManById( idDeliveryMan );
+		
+		// Si el DeliveryMan no existe, retorno false
+		if (dm ==  null) {
+			System.out.println("La DeliveryMan no existe");
+			return false;
+		}
+				
 		// Verifico que este activo y libre, retorno false en caso contrario
-		if ((!dm.isActive()) || (!dm.isFree())) return false;
+		if ((!dm.isActive()) || (!dm.isFree())) {
+			System.out.println("El DeliveryMan no esta activo o libre");	
+			return false;
+		}
  		
 		// Obtengo la siguiente orden pendiente
-		Order order = orderRepository.getNextPendingOrderDeliveryMan(idDeliveryMan);
+		Order order = orderRepository.getNextOrderDeliveryMan(idDeliveryMan, "Assigned");
 		
 		// Verifico que haya alguna Orden para refutar
-		if (order == null) return false;
+		if (order ==  null) {
+			System.out.println("La orden no existe");
+			return false;
+		}
 		
 		// Verifico si se puede cancelar, retorno false en caso contrario
-		if (!order.getStatus().canRefuse()) return false;
+		if (!order.getStatus().canRefuse()) {
+			System.out.println("La orden no se puede cancelar");
+			return false;
+		}
 				
 		// Deniego la orden
 		order.getStatus().refuse();
@@ -103,17 +146,33 @@ public class DeliveryManServiceImpl implements DeliveryManService {
 	public boolean finishActualOrder(long idDeliveryMan) throws Exception {
 		// Obtengo el DeliveryMan
 		DeliveryMan dm = deliveryManRepository.getDeliveryManById( idDeliveryMan );
-		// Verifico que este activo, retorno false en caso contrario
-		if (!dm.isActive()) return false;
 		
-		// Obtengo la siguiente orden pendiente
-		Order order = orderRepository.getNextPendingOrderDeliveryMan(idDeliveryMan);
+		// Si el DeliveryMan no existe, retorno false
+		if (dm ==  null) {
+			System.out.println("La DeliveryMan no existe");
+			return false;
+		}
+				
+		// Verifico que este activo, retorno false en caso contrario
+		if (!dm.isActive()) {
+			System.out.println("El DeliveryMan no esta activo");	
+			return false;
+		}
+		
+		// Obtengo la siguiente orden Actual
+		Order order = orderRepository.getNextOrderDeliveryMan(idDeliveryMan, "Sent");
 		
 		// Verifico que haya alguna Orden para finalizar
-		if (order == null) return false;
+		if (order ==  null) {
+			System.out.println("La orden no existe");
+			return false;
+		}
 				
 		// Verifico si se puede terminar, retorno false en caso contrario
-		if (!order.getStatus().canFinish()) return false;
+		if (!order.getStatus().canFinish()) {
+			System.out.println("La orden no se puede terminar");
+			return false;
+		}
 		
 		// Termino la orden
 		order.getStatus().finish();

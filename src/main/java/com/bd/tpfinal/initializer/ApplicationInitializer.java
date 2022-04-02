@@ -47,29 +47,29 @@ public class ApplicationInitializer implements CommandLineRunner {
 		clientService.addNewClient(cli);
 
 		
-		Address addr2 = new Address();
-		addr2.setName("Direccion Nombre Cli 2");
-		addr2.setAddress("1 y 115");
-		addr2.setApartment(null);
-		addr2.setCoords( new float[]{ 30, 55 } );
-		addr2.setDescription("Segunda direccion");
+		addr = new Address();
+		addr.setName("Direccion Nombre Cli 2");
+		addr.setAddress("1 y 115");
+		addr.setApartment(null);
+		addr.setCoords( new float[]{ 30, 55 } );
+		addr.setDescription("Segunda direccion");
 		addressList = new ArrayList<Address>();
-		addressList.add(addr2);
+		addressList.add(addr);
 		
-		Client cli2 = new Client();
-		cli2.setActive(false);
-		cli2.setAddresses( addressList );
-		cli2.setDateOfBirth( LocalDate.of( 1983 , 5 , 20 ) );
-		cli2.setDateOfRegister( LocalDate.now() );
-		cli2.setEmail("dos@email.com");
-		cli2.setName("Cliente Prueba 2");
-		cli2.setPassword("unaPasssss");
-		cli2.setUsername("cliente2");
+		cli = new Client();
+		cli.setActive(false);
+		cli.setAddresses( addressList );
+		cli.setDateOfBirth( LocalDate.of( 1983 , 5 , 20 ) );
+		cli.setDateOfRegister( LocalDate.now() );
+		cli.setEmail("dos@email.com");
+		cli.setName("Cliente Prueba 2");
+		cli.setPassword("unaPasssss");
+		cli.setUsername("cliente2");
 		
-		addr2.setClient(cli2);
-		clientService.addNewClient(cli2);
+		addr.setClient(cli);
+		clientService.addNewClient(cli);
 		
-			
+		
 		DeliveryMan dm = new DeliveryMan();
 		dm.setActive(true);
 		dm.setDateOfBirth( LocalDate.of( 1989 , 12 , 11 ) );

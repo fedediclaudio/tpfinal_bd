@@ -8,11 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Client extends User {
     
+	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate dateOfRegister;
 	
 	@JsonIgnore
@@ -64,10 +66,18 @@ public class Client extends User {
 	public void setAddresses(List<Address> addresses) {
 		this.addresses = addresses;
 	}
+	
+	public void addAddress(Address address) {
+		addresses.add(address);
+	}
+	
+	public boolean hasAddress(Address address) {
+		return addresses.contains(address);
+	}
 
 	@Override
 	public String toString() {
-		return "Client [dateOfRegister=" + dateOfRegister + ", orders=" + orders + ", addresses=" + addresses + "]";
+		return super.toString() + " Client [dateOfRegister=" + dateOfRegister + ", orders=" + orders + ", addresses=" + addresses + "]";
 	}
 	
 	public void deductScore() throws Exception {
@@ -78,6 +88,14 @@ public class Client extends User {
 	public void addScore() throws Exception {
 		int actualScore = this.getScore();
 		this.setScore(actualScore + 1);
+	}
+	
+	public boolean isValid() {
+		if (!super.isValid()) return false;
+		
+		if (dateOfRegister.isAfter( LocalDate.now() )) return false;
+		
+		return true;
 	}
 	
 }

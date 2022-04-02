@@ -13,6 +13,7 @@ import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.model.Item;
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.Product;
+import com.bd.tpfinal.model.Qualification;
 import com.bd.tpfinal.repositories.implementations.AddressRepository;
 import com.bd.tpfinal.repositories.implementations.ClientRepository;
 import com.bd.tpfinal.repositories.implementations.DeliveryManRepository;
@@ -35,15 +36,31 @@ public class OrderServiceImpl implements OrderService {
 		return clientRepository.save(client);
 	}
 	
+	public Order getOrder(int orderNumber) throws Exception {
+		// Obtengo la orden de la BD
+		Order order = orderRepository.getOrderByNumber( orderNumber );
+		// Si la orden no existe, retorno false
+		if (order ==  null) {
+			System.out.println("La orden no existe");
+		}
+		return order;
+	}
+	
 	public Order createOrder(long idClient) throws Exception {
 		// Obtengo el cliente de la BD
 		Client client = clientRepository.getClientById( idClient );
 		
 		// Si el cliente no existe, retorno null
-		if (client ==  null) return null;
+		if (client ==  null) {
+			System.out.println("El cliente no existe");
+			return null;
+		}
 		
 		// Verifico que el cliente este activo
-		if (!client.isActive()) return null;
+		if (!client.isActive()) {
+			System.out.println("El cliente no está activo");
+			return null;
+		}
 		
 		// Creo la nueva orden
 		Order order = new Order( client );
@@ -65,14 +82,28 @@ public class OrderServiceImpl implements OrderService {
 		// Obtengo la orden de la BD
 		Order order = orderRepository.getOrderByNumber( orderNumber );
 		// Si la orden no existe, retorno false
-		if (order ==  null) return false;
+		if (order ==  null) {
+			System.out.println("La orden no existe");
+			return false;
+		}
 		
 		// Verifico que se pueda cambiar la direccion (debe estar en Pendiente o Asignada)
-		if (!order.getStatus().canChangeAddress()) return false;
+		if (!order.getStatus().canChangeAddress()) {
+			System.out.println("No se puede cambiar la direccion, la orden debe estar en Pendiente o Asignada");
+			return false;
+		}
 		
 		// Obtengo la direccion de la BD
 		Address address = addressRepository.getAddressById( idAddress ); 
-		if (address == null) return false;
+		if (address == null) {
+			System.out.println("La direccion no existe");
+			return false;
+		}
+		
+		if (!order.getClient().hasAddress(address)) {
+			System.out.println("La direccion no le pertenece a usuario");
+			return false;
+		}
 		
 		// Actualizo la direccion en la orden
 		order.setAddress( address );
@@ -88,15 +119,24 @@ public class OrderServiceImpl implements OrderService {
 		// Obtengo la orden de la BD
 		Order order = orderRepository.getOrderByNumber( orderNumber );
 		// Si la orden no existe, retorno false
-		if (order ==  null) return false;
+		if (order ==  null) {
+			System.out.println("La orden no existe");
+			return false;
+		}
 		
 		// Verifico si el estado actual de la orden permite agregar items
-		if (!order.getStatus().canAddItem()) return false;
+		if (!order.getStatus().canAddItem()) {
+			System.out.println("No se puede agregar items a la orden");
+			return false;
+		}
 		
 		// Obtengo el producto de la BD
 		Product product = productRepository.getProductById( idProduct );
 		// Si el producto no existe, retorno false
-		if (product == null) return false;
+		if (product == null) {
+			System.out.println("El producto no existe");
+			return false;
+		}
 		
 		// Creo el nuevo item
 		Item item = new Item();
@@ -124,11 +164,23 @@ public class OrderServiceImpl implements OrderService {
 		// Obtengo la orden de la BD		
 		Order order = orderRepository.getOrderByNumber( orderNumber );
 		
+		// Si la orden no existe, retorno false
+		if (order ==  null) {
+			System.out.println("La orden no existe");
+			return false;
+		}
+		
 		// Si no se puede cancelar, retorno falso
-		if (!order.getStatus().canCancel()) return false;
+		if (!order.getStatus().canCancel()) {
+			System.out.println("No se puede cancelar la orden");
+			return false;
+		}
 		
 		// Intento cancelar la orden
-		if (!order.getStatus().cancel()) return false;
+		if (!order.getStatus().cancel()) {
+			System.out.println("No se pudo cancelar la orden");	
+			return false;
+		}
 		
 		orderRepository.save( order );
 		
@@ -154,8 +206,17 @@ public class OrderServiceImpl implements OrderService {
 		// Obtengo la orden de la BD
 		Order order = orderRepository.getOrderByNumber( orderNumber );
 		
+		// Si la orden no existe, retorno false
+		if (order ==  null) {
+			System.out.println("La orden no existe");
+			return false;
+		}
+				
 		// Si la orden no se puede aignar, retorno en falso
-		if (!order.getStatus().canAssign()) return false;
+		if (!order.getStatus().canAssign()) {
+			System.out.println("La orden no se puede asignar");
+			return false;
+		}
 		
 		// Obtengo la lista de DeliveryMan libres de la BD
 		List<DeliveryMan> dmList = deliveryManRepository.getFreeDeliveryManList();
@@ -168,7 +229,10 @@ public class OrderServiceImpl implements OrderService {
 		DeliveryMan deliveryMan = chooseDeliveryMan(dmList);
 		
 		// Asigna el deliveryMan a la orden
-		if (!order.getStatus().assign(deliveryMan)) return false;
+		if (!order.getStatus().assign(deliveryMan)) {
+			System.out.println("La orden no se pudo asignar");
+			return false;
+		}
 		
 		// Grabo la ordn
 		orderRepository.save( order );
@@ -176,4 +240,43 @@ public class OrderServiceImpl implements OrderService {
 		return true;
 	}
 	
+	@Transactional
+	public boolean setQualification(int orderNumber, int score, String comment) throws Exception {
+		// Obtengo la orden de la BD
+		Order order = orderRepository.getOrderByNumber( orderNumber );
+		
+		// Si la orden no existe, retorno false
+		if (order ==  null) {
+			System.out.println("La orden no existe");
+			return false;
+		}
+				
+		// Si la orden no se puede calificar, retorno en falso
+		if (!order.getStatus().canRate()) {
+			System.out.println("La orden no se puede calificar");
+			return false;
+		}
+		
+		if (order.getQualification() != null) {
+			System.out.println("La orden ya fue calificada");
+			return false;	
+		}
+		
+		if ((score < 0) || (score > 5)) {
+			System.out.println("La calificacion debe ser entre 0 y 5");
+			return false;	
+		}
+		
+		Qualification qualification = new Qualification();
+		qualification.setCommentary(comment);
+		qualification.setOrder(order);
+		qualification.setScore(score);
+		
+		order.setQualification(qualification);
+		
+		// Grabo la ordn
+		orderRepository.save( order );
+		
+		return true;		
+	}
 }

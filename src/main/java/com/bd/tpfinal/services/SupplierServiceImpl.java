@@ -34,7 +34,11 @@ public class SupplierServiceImpl implements SupplierService {
 		SupplierType supplierType = supplierTypeRepository.getSupplierTypeById(supplier.getType().getId());
 		
 		// Si el SupplierType no existe, retorno null
-		if (supplierType == null) return null;
+		if (supplierType == null) {
+			System.out.println("El SupplierType no existe");
+			return null;
+		}
+		
 		// Lo sobreescribo para que el supplier tenga la referencia de la BD
 		supplier.setType(supplierType);
 		
