@@ -34,10 +34,15 @@ public class Supplier
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
     @JoinColumn(name = "id_supplierType", nullable = false)
     @JsonBackReference //evita bucle infinito al toString
-    private SupplierType type;
+    private SupplierType supplierType;
 
     public Supplier()
     {
+    }
+
+    public Long getId()
+    {
+        return id;
     }
 
     public String getName()
@@ -100,13 +105,13 @@ public class Supplier
         this.products = products;
     }
 
-    public SupplierType getType()
+    public SupplierType getSupplierType()
     {
-        return type;
+        return supplierType;
     }
 
-    public void setType(SupplierType type)
+    public void setSupplierType(SupplierType supplierType)
     {
-        this.type = type;
+        this.supplierType = supplierType;
     }
 }

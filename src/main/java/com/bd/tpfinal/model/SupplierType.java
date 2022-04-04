@@ -19,13 +19,18 @@ public class SupplierType
     //relacion uno a muchos con Supplier. Bidireccional (req 6)
     //type es el nombre del atributo que del otro lado
     //referencia a este lado
-    @OneToMany(mappedBy = "type",
+    @OneToMany(mappedBy = "supplierType",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private List<Supplier> suppliers;
 
     public SupplierType()
     {
+    }
+
+    public Long getId()
+    {
+        return id;
     }
 
     public String getName()

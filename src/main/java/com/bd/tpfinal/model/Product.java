@@ -1,6 +1,7 @@
 package com.bd.tpfinal.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
@@ -33,7 +34,7 @@ public class Product
     //@JoinColumn: especificar un nombre de columna de clave externa. La clave del otro lado
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
     @JoinColumn(name = "id_productType", nullable = false) //nombre del atributo clave del otro lado
-    @JsonBackReference //evita bucle infinito al toString
+    @JsonIgnore
     private ProductType type;
 
     //one to many con HistoricalProductPrice. Bidireccional
@@ -42,6 +43,11 @@ public class Product
 
     public Product()
     {
+    }
+
+    public Long getId()
+    {
+        return id;
     }
 
     public String getName()

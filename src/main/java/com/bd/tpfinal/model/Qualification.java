@@ -23,6 +23,11 @@ public class Qualification
     {
     }
 
+    public Long getId()
+    {
+        return id;
+    }
+
     public float getScore()
     {
         return score;

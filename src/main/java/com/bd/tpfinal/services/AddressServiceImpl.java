@@ -32,9 +32,9 @@ public class AddressServiceImpl implements AddressService
     }
 
     @Override
-    public List<Address> getAllByIdUser(Long idUser)
+    public List<Address> getAllByIdUser(Long id)
     {
-        return this.addressRepository.findByIdUser(idUser);
+        return this.addressRepository.findByIdUser(id);
     }
 
 

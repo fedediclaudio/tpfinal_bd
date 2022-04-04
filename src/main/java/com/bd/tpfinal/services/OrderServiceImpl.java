@@ -27,7 +27,7 @@ public class OrderServiceImpl implements OrderService
     @Override
     public List<Order> getAll()
     {
-        return null;
+        return this.orderRepository.findAll();
     }
 
     @Override

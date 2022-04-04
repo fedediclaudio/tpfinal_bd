@@ -52,6 +52,7 @@ public class Order
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
     //@JoinColumn(name = "address_id", nullable = false)
     @JoinColumn(name = "address_id")
+    @JsonIgnore
     private Address address;
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -66,6 +67,10 @@ public class Order
     //mantener la relación
     private List<Item> items;
 
+    public Long getId()
+    {
+        return id;
+    }
     //solamente puse lo relativo a patrón STATE
     public Order()
     {

@@ -26,6 +26,11 @@ public class HistoricalProductPrice
     {
     }
 
+    public Long getId()
+    {
+        return id;
+    }
+
     public float getPrice()
     {
         return price;

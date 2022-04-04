@@ -35,10 +35,10 @@ public class AddressController
         return this.addressService.getAll();
     }
 
-    @GetMapping("/{id_user}")
-    public List<Address> getAddressByIdUser(Long idUser)
+    @GetMapping("/id/{id}")
+    public List<Address> getAddressByIdUser(@PathVariable Long id)
     {
-        return this.addressService.getAllByIdUser(idUser);
+        return this.addressService.getAllByIdUser(id);
     }
 
 
