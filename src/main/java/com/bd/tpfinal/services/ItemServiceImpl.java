@@ -16,8 +16,6 @@ public class ItemServiceImpl implements ItemService
         this.itemRepository = itemRepository;
     }
 
-
-
     @Override
     public void addItem(Item newItem)
     {

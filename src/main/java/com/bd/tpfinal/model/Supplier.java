@@ -1,6 +1,7 @@
 package com.bd.tpfinal.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
@@ -32,8 +33,8 @@ public class Supplier
 
     //relacion bidireccional muchos a uno.
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
-    @JoinColumn(name = "id_supplierType", nullable = false)
-    @JsonBackReference //evita bucle infinito al toString
+    @JoinColumn(name = "supplierType_column")
+    @JsonIgnore //evita bucle infinito al toString
     private SupplierType supplierType;
 
     public Supplier()

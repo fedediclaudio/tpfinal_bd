@@ -41,11 +41,12 @@ public class ClientServiceImpl implements ClientService
         return clientRepository.findAll();
     }
 
+    //TODO:revisar esto
     @Override
     public Client getClient(String username, String password)
     {
         //return this.clientRepository.get;
-        return null;
+        return (Client) this.clientRepository.findAll();
     }
 
     @Override

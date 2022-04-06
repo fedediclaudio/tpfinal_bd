@@ -20,8 +20,7 @@ public class SupplierType
     //type es el nombre del atributo que del otro lado
     //referencia a este lado
     @OneToMany(mappedBy = "supplierType",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+            cascade = CascadeType.ALL)
     private List<Supplier> suppliers;
 
     public SupplierType()

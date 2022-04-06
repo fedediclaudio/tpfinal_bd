@@ -31,6 +31,7 @@ public class ClientController
     }
 
     /////     GET
+
     @GetMapping("/all")
     public List<Client> getAll()
     {
@@ -43,11 +44,10 @@ public class ClientController
         return this.clientService.getClientByName(name);
     }
 
+    //TODO: Ver esto de Optional
     @GetMapping("/id/{id}")
     public Optional<Client> getClientById(@PathVariable Long id)
     {
         return this.clientService.getClientById(id);
     }
-
-    //agregar un item a una orden ya creada
 }

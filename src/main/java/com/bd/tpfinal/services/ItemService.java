@@ -6,4 +6,6 @@ public interface ItemService
 {
     public void addItem(Item newItem);
 
+    //TODO: completar este ItemService con más servicios
+
 }
