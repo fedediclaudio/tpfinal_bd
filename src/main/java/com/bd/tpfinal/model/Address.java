@@ -35,11 +35,9 @@ public class Address
     // un Client puede tener muchas direcciones
     // estamos del lado de muchos.
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
-    @JoinColumn(name = "user_id")
-   // @JsonBackReference //evita bucle infinito al toString
-    //como es unidireccional de este lado no se pone nada.
-    //@Column(name = "client")
-    @JsonIgnore
+    @JoinColumn(name = "client_id")
+    //@JoinColumn(name = "id_user")
+    //@JsonIgnore
     private Client client;
 
     //ordenes recien creadas, estado inicial pending.

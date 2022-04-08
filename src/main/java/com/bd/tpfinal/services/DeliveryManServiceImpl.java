@@ -2,11 +2,12 @@ package com.bd.tpfinal.services;
 
 import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.repositories.DeliveryManRepository;
-import com.bd.tpfinal.repositories.EjemploRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class DeliveryManServiceImpl implements DeliveryManService
 {
@@ -27,5 +28,11 @@ public class DeliveryManServiceImpl implements DeliveryManService
     public List<DeliveryMan> getAll()
     {
         return this.deliveryManRepository.findAll();
+    }
+
+    @Override
+    public Optional<DeliveryMan> getById(Long id)
+    {
+        return this.deliveryManRepository.findById(id);
     }
 }

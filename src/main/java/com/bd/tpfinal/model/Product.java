@@ -39,6 +39,7 @@ public class Product
 
     //one to many con HistoricalProductPrice. Bidireccional
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<HistoricalProductPrice> prices;
 
     public Product()

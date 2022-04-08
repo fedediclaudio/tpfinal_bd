@@ -1,9 +1,7 @@
 package com.bd.tpfinal.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.format.annotation.DateTimeFormat;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +24,10 @@ public class Client extends User
 
     //relación uno a muchos, unidireccional
     //estamos del lado de uno
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    //Si le pongo LAZY el postman no me muestra las direcciones cuando pido los Client
+    // @OneToMany(mappedBy = "client", fetch = FetchType.LAZY cascade = {CascadeType.ALL})
+    @JsonIgnore
     private List<Address> addresses;
 
     public Client()

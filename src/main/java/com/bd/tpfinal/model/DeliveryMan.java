@@ -1,5 +1,8 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.*;
 import java.util.Date;
@@ -21,6 +24,8 @@ public class DeliveryMan extends User
 
     private boolean free;
 
+    @Column(name = "date_of_Admission_DeliveryMan")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
     private Date dateOfAdmission;
 
     //relación uno a muchos con Order. Lado UNO
@@ -28,6 +33,7 @@ public class DeliveryMan extends User
     @OneToMany(mappedBy = "deliveryMan",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
+    @JsonIgnore
     private List<Order> ordersPending;
 
     public DeliveryMan()

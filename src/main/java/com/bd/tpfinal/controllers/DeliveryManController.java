@@ -1,12 +1,12 @@
 package com.bd.tpfinal.controllers;
 
-import com.bd.tpfinal.model.Client;
 import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.services.DeliveryManService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/deliveryMan")
@@ -20,6 +20,7 @@ public class DeliveryManController
     {
         this.deliveryManService = deliveryManService;
     }
+    //////  POST
 
     @PostMapping(value="/new")
     public void addDeliveryMan(@RequestBody DeliveryMan newDeliveryMan)
@@ -27,19 +28,17 @@ public class DeliveryManController
         this.deliveryManService.addDeliveryMan(newDeliveryMan);
     }
 
+    //////  GET
+
     @GetMapping("/all")
     public List<DeliveryMan> getAll()
     {
         return this.deliveryManService.getAll();
     }
 
-    @GetMapping("/test")
-    public String test(){
-        return "OK!";
+    @GetMapping("/id/{id}")
+    public Optional<DeliveryMan> getById(@PathVariable Long id)
+    {
+        return this.deliveryManService.getById(id);
     }
-
-    /*
-    *       Controllador de la aplicacion, aqui se definen los endpoints
-     */
-
 }

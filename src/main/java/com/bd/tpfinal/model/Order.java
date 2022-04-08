@@ -33,7 +33,7 @@ public class Order
     //@JoinColumn: especificar un nombre de columna de clave externa
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
     @JoinColumn(name = "deliveryMan_id")
-    @JsonIgnore //evita bucle infinito al toString.
+    //@JsonIgnore //evita bucle infinito al toString.
     private DeliveryMan deliveryMan;
 
     //relación muchos a uno con Client
