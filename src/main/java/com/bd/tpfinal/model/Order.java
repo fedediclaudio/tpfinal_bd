@@ -1,29 +1,43 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-public class Order {
-
+@Entity
+@Table(name="orders")
+public class Order extends PersistentEntity {
+    @Column(unique=true)
     private int number;
-
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dateOfOrder;
 
     private String comments;
 
     private float totalPrice;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private OrderStatus status;
-
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private DeliveryMan deliveryMan;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @NotNull
     private Client client;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @NotNull
     private Address address;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Qualification qualification;
 
-    private List<Item> items;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinTable(name="order_items",
+            joinColumns=@JoinColumn(name="order_id"),
+            inverseJoinColumns=@JoinColumn(name="item_id"))
+    private List<Item> items = new ArrayList<>();
 
     public int getNumber() {
         return number;

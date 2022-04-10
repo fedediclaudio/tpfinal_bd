@@ -1,15 +1,19 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
-
-public class HistoricalProductPrice {
+@Entity
+@Table(name = "historical_product_prices")
+public class HistoricalProductPrice extends PersistentEntity{
 
     private float price;
-
+    @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
-
+    @Temporal(TemporalType.TIMESTAMP)
     private Date finishDate;
-
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @NotNull
     private Product product;
 
     public float getPrice() {

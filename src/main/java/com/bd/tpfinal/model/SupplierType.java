@@ -1,14 +1,21 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
-
-public class SupplierType {
+@Entity
+@Table(name = "supplier_types")
+public class SupplierType extends PersistentEntity{
 
     private String name;
 
     private String description;
 
-    private List<Supplier> suppliers;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "supplier_types_supplier",
+            joinColumns = { @JoinColumn(name = "supplier_id") },
+            inverseJoinColumns = { @JoinColumn(name = "supplier_type_id") })
+    private List<Supplier> suppliers = new ArrayList<>();
 
     public String getName() {
         return name;

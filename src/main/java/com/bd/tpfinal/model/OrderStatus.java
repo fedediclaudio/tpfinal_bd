@@ -1,13 +1,17 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
 import java.util.Date;
 
-public abstract class OrderStatus {
+@Entity
+@Table(name = "order_status")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class OrderStatus extends PersistentEntity {
 
     private String name;
-
+    @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
-
+    @OneToOne(fetch = FetchType.EAGER)
     private Order order;
 
     public String getName() {
@@ -68,5 +72,9 @@ public abstract class OrderStatus {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public void setName(){
+        this.setName("name");
     }
 }

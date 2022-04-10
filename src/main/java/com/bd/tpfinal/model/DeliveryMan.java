@@ -1,16 +1,18 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-
+@Entity
+@DiscriminatorValue("DELIVERY_MAN")
 public class DeliveryMan extends User{
 
     private int numberOfSuccessOrders;
 
     private boolean free;
-
+    @Temporal(TemporalType.DATE)
     private Date dateOfAdmission;
-
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Order> ordersPending;
 
     public int getNumberOfSuccessOrders() {

@@ -1,8 +1,13 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Product {
+@Entity
+@Table(name = "products")
+public class Product extends PersistentEntity {
 
     private String name;
 
@@ -11,12 +16,16 @@ public class Product {
     private float weight;
 
     private String description;
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    @NotNull
     private Supplier supplier;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @NotNull
     private ProductType type;
 
-    private List<HistoricalProductPrice> prices;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<HistoricalProductPrice> prices = new ArrayList<>();
 
     public String getName() {
         return name;

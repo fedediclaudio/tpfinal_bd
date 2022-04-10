@@ -1,8 +1,12 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public class Address {
+@Entity
+@Table(name = "addresses")
+public class Address extends PersistentEntity {
 
     private String name;
 
@@ -13,9 +17,11 @@ public class Address {
     private float[] coords;
 
     private String description;
-
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @NotNull
     private Client client;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = false)
     private List<Order> orders;
 
     public String getName() {

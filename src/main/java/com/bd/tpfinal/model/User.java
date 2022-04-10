@@ -1,8 +1,11 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
 import java.util.Date;
-
-public abstract class User {
+@Entity
+@Table(name = "users")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class User extends PersistentEntity {
 
     private String name;
 
@@ -11,7 +14,7 @@ public abstract class User {
     private String password;
 
     private String email;
-
+    @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
     private boolean scrore;

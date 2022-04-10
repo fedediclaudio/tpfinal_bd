@@ -1,8 +1,12 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
-
-public class Supplier {
+@Entity
+@Table(name = "suppliers")
+public class Supplier extends PersistentEntity{
 
     private String name;
 
@@ -14,8 +18,14 @@ public class Supplier {
 
     private float qualificationOfUsers;
 
-    private List<Product> products;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name="supplier_products",
+            joinColumns=@JoinColumn(name="supplier_id"),
+            inverseJoinColumns=@JoinColumn(name="product_id"))
+    private List<Product> products = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @NotNull
     private SupplierType type;
 
     public String getName() {

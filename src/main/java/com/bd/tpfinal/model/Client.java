@@ -1,15 +1,18 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+@Entity
+@DiscriminatorValue("CLIENT")
 public class Client extends User{
 
     private Date dateOfRegister;
-
-    private List<Order> orders;
-
-    private List<Address> addresses;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Address> addresses = new ArrayList<>();
 
     public Date getDateOfRegister() {
         return dateOfRegister;
@@ -19,6 +22,9 @@ public class Client extends User{
         this.dateOfRegister = dateOfRegister;
     }
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinTable(name="client_orders", joinColumns=@JoinColumn(name="client_id"),
+            inverseJoinColumns=@JoinColumn(name="order_id"))
     public List<Order> getOrders() {
         return orders;
     }

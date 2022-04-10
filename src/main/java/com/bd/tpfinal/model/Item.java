@@ -1,13 +1,20 @@
 package com.bd.tpfinal.model;
 
-public class Item {
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+@Entity
+@Table(name = "items")
+public class Item extends PersistentEntity{
 
     private int quantity;
 
     private String description;
-
+    @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
+    @NotNull
     private Order order;
-
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @NotNull
     private Product product;
 
     public int getQuantity() {
