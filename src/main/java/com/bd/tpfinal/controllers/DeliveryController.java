@@ -1,24 +1,20 @@
 package com.bd.tpfinal.controllers;
 
-import com.bd.tpfinal.services.DeliveryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.bd.tpfinal.dtos.response.DeliveryResponseDto;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/delivery")
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT ,RequestMethod.DELETE})
 public class DeliveryController {
 
-//    @Autowired
-//    private DeliveryService service;
+    //TODO implementar las siguientes acciones:
+    //Obtener los 10 repartidores con mayor puntaje
 
-    @GetMapping("/test")
-    public String test(){
-        return "OK!";
+
+    @GetMapping("/best_ranked")
+    public ResponseEntity<DeliveryResponseDto> maxScore(){
+        return null;
     }
-
-    /*
-    *       Controllador de la aplicacion, aqui se definen los endpoints
-     */
-
 }
