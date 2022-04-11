@@ -67,14 +67,14 @@ public class Order
     //mantener la relación
     private List<Item> items;
 
-    public Long getId()
-    {
-        return id;
-    }
     //solamente puse lo relativo a patrón STATE
     public Order()
     {
         setStatus(new Pending(this));
+    }
+    public Long getId()
+    {
+        return id;
     }
 
     public int getNumber()
@@ -169,11 +169,16 @@ public class Order
 
     public OrderStatus getStatus()
     {
+
         return status;
     }
 
+    /**
+     * esto sirve para recuperar el objeto hijo de OrderStatus al despersistir.
+     * @param status
+     */
     public void setStatus(OrderStatus status)
     {
-        this.status = status;
+        this.status = Status_Factory.getInstance(status.getOrder_status_enum(), this);
     }
 }

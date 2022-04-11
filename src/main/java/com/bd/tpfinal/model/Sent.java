@@ -3,11 +3,12 @@ package com.bd.tpfinal.model;
 public class Sent extends OrderStatus
 {
 
-    private Order order;
+    //private Order order;
 
     public Sent(Order order)
     {
-        this.order = order;
+        super.setOrder(order);
+        super.setOrder_status_enum(Order_Status_Enum.SENT);
     }
 
     @Override
@@ -39,11 +40,11 @@ public class Sent extends OrderStatus
     @Override
     public boolean finish()
     {
-        this.order.setStatus(new Delivered(order));
-        int scoreCliente = this.order.getClient().getScore() + 1;
-        this.order.getClient().setScore(scoreCliente);
-        int scoreDeliveryMan = this.order.getDeliveryMan().getScore() + 1;
-        this.order.getDeliveryMan().setScore(scoreDeliveryMan);
+        super.getOrder().setStatus(new Delivered(super.getOrder()));
+        int scoreCliente = super.getOrder().getClient().getScore() + 1;
+        super.getOrder().getClient().setScore(scoreCliente);
+        int scoreDeliveryMan = super.getOrder().getDeliveryMan().getScore() + 1;
+        super.getOrder().getDeliveryMan().setScore(scoreDeliveryMan);
         return true;
     }
 }

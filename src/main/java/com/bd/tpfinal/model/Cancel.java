@@ -2,13 +2,15 @@ package com.bd.tpfinal.model;
 
 public class Cancel extends OrderStatus
 {
-    private Order order;
+    //private Order order;
 
     private boolean cancelledByClient;
 
     public Cancel(Order order)
     {
-        this.order = order;
+        //this.order = order;
+        super.setOrder(order);
+        super.setOrder_status_enum(Order_Status_Enum.CANCELLED);
     }
 
     @Override

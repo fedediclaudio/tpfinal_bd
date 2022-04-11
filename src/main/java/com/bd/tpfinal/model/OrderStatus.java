@@ -24,6 +24,15 @@ public abstract class OrderStatus
     @OneToOne(fetch = FetchType.LAZY)
     private Order order;
 
+
+    ////// AGREGADO
+    //public static enum Status {PENDING, ASSIGNED, CANCELLED, SENT, DELIVERED};
+    //public static Order_Status order_status
+    @Enumerated(EnumType.STRING)
+    protected Order_Status_Enum order_status_enum;
+    //////  FIN AGREGADO
+
+
     public OrderStatus()
     {
     }
@@ -46,6 +55,16 @@ public abstract class OrderStatus
     public Date getStartDate()
     {
         return startDate;
+    }
+
+    public Order_Status_Enum getOrder_status_enum()
+    {
+        return order_status_enum;
+    }
+
+    public void setOrder_status_enum(Order_Status_Enum order_status_enum)
+    {
+        this.order_status_enum = order_status_enum;
     }
 
     public void setStartDate(Date startDate)
@@ -110,6 +129,9 @@ public abstract class OrderStatus
     {
         throw new Exception("No se puede realizarse esta accion");
     }
+
+
+
 
     public boolean finish() throws Exception
     {

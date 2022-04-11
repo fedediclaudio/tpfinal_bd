@@ -2,11 +2,13 @@ package com.bd.tpfinal.model;
 
 public class Assigned extends OrderStatus
 {
-    private Order order;
+    //private Order order;
 
     public Assigned(Order order)
     {
-        this.order = order;
+        super.setOrder(order);
+        //this.order = order;
+        super.setOrder_status_enum(Order_Status_Enum.ASSIGNED);
     }
 
     @Override
@@ -20,11 +22,11 @@ public class Assigned extends OrderStatus
     @Override
     public boolean cancel()
     {
-        Cancel cancel = new Cancel(order);
+        Cancel cancel = new Cancel(super.getOrder());
         cancel.setCancelledByClient(true);
-        this.order.setStatus(cancel);
-        int score_cliente = this.order.getClient().getScore() - 1;
-        this.order.getClient().setScore(score_cliente);
+        super.getOrder().setStatus(cancel);
+        int score_cliente = super.getOrder().getClient().getScore() - 1;
+        super.getOrder().getClient().setScore(score_cliente);
         return true;
     }
 
@@ -43,11 +45,11 @@ public class Assigned extends OrderStatus
         //TODO: no entiendo para que sirve canRefuse()
         if (canRefuse())
         {
-            Cancel cancel = new Cancel(order);
+            Cancel cancel = new Cancel(super.getOrder());
             cancel.setCancelledByClient(false);
-            this.order.setStatus(new Cancel(order));
-            int score = this.order.getDeliveryMan().getScore();
-            this.order.getDeliveryMan().setScore(score -2);
+            super.getOrder().setStatus(new Cancel(super.getOrder()));
+            int score = super.getOrder().getDeliveryMan().getScore();
+            super.getOrder().getDeliveryMan().setScore(score -2);
             rta = true;
         }
         return rta;
@@ -61,7 +63,7 @@ public class Assigned extends OrderStatus
     @Override
     public boolean deliver()
     {
-        this.order.setStatus(new Sent(order));
+        super.getOrder().setStatus(new Sent(super.getOrder()));
         return true;
     }
 }

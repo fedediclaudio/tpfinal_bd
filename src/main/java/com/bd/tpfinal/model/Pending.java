@@ -4,11 +4,13 @@ import java.util.List;
 
 public class Pending extends OrderStatus
 {
-    private Order order;
+    //private Order order;
 
     public Pending(Order order)
     {
-        this.order = order;
+        super.setOrder_status_enum(Order_Status_Enum.PENDING);
+        //this.order = order;
+        super.setOrder(order);
     }
 
     /**
@@ -20,8 +22,8 @@ public class Pending extends OrderStatus
     @Override
     public boolean assign(DeliveryMan deliveryMan)
     {
-        order.setStatus(new Assigned(order));
-        this.order.setDeliveryMan(deliveryMan);
+        super.getOrder().setStatus(new Assigned(super.getOrder()));
+        super.getOrder().setDeliveryMan(deliveryMan);
         return true;
     }
 
@@ -38,9 +40,9 @@ public class Pending extends OrderStatus
         //TODO: ojo con canCancel() para mi no sirve
         if(canCancel())
         {
-            Cancel cancel = new Cancel(order);
+            Cancel cancel = new Cancel(super.getOrder());
             cancel.setCancelledByClient(true);
-            this.order.setStatus(cancel);
+            super.getOrder().setStatus(cancel);
             rta = true;
         }
         return rta;
