@@ -3,10 +3,10 @@ package com.bd.tpfinal.controllers;
 import com.bd.tpfinal.model.Item;
 import com.bd.tpfinal.services.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/item")
@@ -27,5 +27,19 @@ public class ItemController
     public void addItem(@RequestBody Item newItem)
     {
         this.itemService.addItem(newItem);
+    }
+
+    //////  GET
+
+    @GetMapping("/all")
+    public List<Item> getAll()
+    {
+        return this.itemService.getAll();
+    }
+
+    @GetMapping("/id/{id}")
+    public Optional<Item> getItemById(@PathVariable Long id)
+    {
+        return this.itemService.getItemById(id);
     }
 }

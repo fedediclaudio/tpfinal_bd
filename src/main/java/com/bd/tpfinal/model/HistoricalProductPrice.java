@@ -1,5 +1,7 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 @Entity
@@ -13,8 +15,12 @@ public class HistoricalProductPrice
 
     private float price;
 
+    @Column(name = "startDate")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
     private Date startDate;
 
+    @Column(name = "finishDate")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
     private Date finishDate;
 
     //Many to One con Product. Bidireccional

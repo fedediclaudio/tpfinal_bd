@@ -34,7 +34,6 @@ public class Product
     //@JoinColumn: especificar un nombre de columna de clave externa. La clave del otro lado
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
     @JoinColumn(name = "id_productType", nullable = false) //nombre del atributo clave del otro lado
-    @JsonIgnore
     private ProductType type;
 
     //one to many con HistoricalProductPrice. Bidireccional

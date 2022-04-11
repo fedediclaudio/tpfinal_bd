@@ -1,5 +1,7 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class ProductType
     //lado uno
     // mappedBy: nombre del atributo del otro (muchos) lado que referencia a este lado (uno)
     @OneToMany(mappedBy = "type",  cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Product> products;
 
     public ProductType()

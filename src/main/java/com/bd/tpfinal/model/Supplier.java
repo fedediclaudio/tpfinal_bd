@@ -29,6 +29,7 @@ public class Supplier
     //relación uno a muchos con Order. Lado UNO
     // mappedBy: nombre del atributo del otro (muchos) lado que referencia a este lado (uno)
     @OneToMany(mappedBy = "supplier",  cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Product> products;
 
     //relacion bidireccional muchos a uno.
