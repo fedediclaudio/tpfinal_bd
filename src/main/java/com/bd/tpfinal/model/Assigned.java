@@ -1,14 +1,22 @@
 package com.bd.tpfinal.model;
 
+import java.util.Date;
+
 public class Assigned extends OrderStatus
 {
     //private Order order;
 
-    public Assigned(Order order)
+    public Assigned(Order order, String name, Date start_date)
     {
-        super.setOrder(order);
+        //super.setOrder(order);
         //this.order = order;
+        //super.setOrder_status_enum(Order_Status_Enum.ASSIGNED);
+
         super.setOrder_status_enum(Order_Status_Enum.ASSIGNED);
+        //this.order = order;
+        super.setOrder(order);
+        super.setName(name);
+        super.setStartDate(start_date);
     }
 
     @Override
@@ -27,6 +35,13 @@ public class Assigned extends OrderStatus
         super.getOrder().setStatus(cancel);
         int score_cliente = super.getOrder().getClient().getScore() - 1;
         super.getOrder().getClient().setScore(score_cliente);
+        return true;
+
+        Date start_date = new Date();
+        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.ASSIGNED, super.getOrder(),"assign",start_date);
+        //super.getOrder().setStatus(new Assigned(super.getOrder()));
+        super.getOrder().setStatus(orderStatus);
+        super.getOrder().setDeliveryMan(deliveryMan);
         return true;
     }
 

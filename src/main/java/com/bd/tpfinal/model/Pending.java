@@ -1,16 +1,21 @@
 package com.bd.tpfinal.model;
 
+import java.util.Date;
 import java.util.List;
 
 public class Pending extends OrderStatus
 {
     //private Order order;
 
-    public Pending(Order order)
+    public Pending(Order order, String name, Date start_date)
     {
+        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.PENDING, super.getOrder(),"pending",start_date);
+
         super.setOrder_status_enum(Order_Status_Enum.PENDING);
         //this.order = order;
         super.setOrder(order);
+        super.setName(name);
+        super.setStartDate(start_date);
     }
 
     /**
@@ -22,7 +27,10 @@ public class Pending extends OrderStatus
     @Override
     public boolean assign(DeliveryMan deliveryMan)
     {
-        super.getOrder().setStatus(new Assigned(super.getOrder()));
+        Date start_date = new Date();
+        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.ASSIGNED, super.getOrder(),"assign",start_date);
+        //super.getOrder().setStatus(new Assigned(super.getOrder()));
+        super.getOrder().setStatus(orderStatus);
         super.getOrder().setDeliveryMan(deliveryMan);
         return true;
     }
@@ -32,20 +40,31 @@ public class Pending extends OrderStatus
      * puede ser cancelado por el cliente en cualquier momento,
      * llevándolo a un estado de cancelado (Cancelled).
      * @return
+     *
+     * @Override
+     *     public boolean cancel()
+     *     {
+     *         boolean rta = false;
+     *         //TODO: ojo con canCancel() para mi no sirve
+     *         if(canCancel())
+     *         {
+     *             Cancel cancel = new Cancel(super.getOrder());
+     *             cancel.setCancelledByClient(true);
+     *             super.getOrder().setStatus(cancel);
+     *             rta = true;
+     *         }
+     *         return rta;
+     *     }
      */
     @Override
     public boolean cancel()
     {
-        boolean rta = false;
-        //TODO: ojo con canCancel() para mi no sirve
-        if(canCancel())
-        {
-            Cancel cancel = new Cancel(super.getOrder());
-            cancel.setCancelledByClient(true);
-            super.getOrder().setStatus(cancel);
-            rta = true;
-        }
-        return rta;
+        //TODO: ver eso de canCancel()
+        Date start_date = new Date();
+        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.CANCELLED, super.getOrder(),"cancelled",start_date);
+        super.getOrder().setStatus(orderStatus);
+        return true;
+
     }
 
     /**
@@ -53,7 +72,7 @@ public class Pending extends OrderStatus
      * @param newItem
      * @return
      */
-    //TODO: no verifica repetición de items
+    //TODO: esto esta mal, debe hacerse desde el controller
     @Override
     public boolean addItem(Item newItem)
     {
