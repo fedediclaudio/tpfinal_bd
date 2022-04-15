@@ -1,22 +1,22 @@
 package com.bd.tpfinal.proxy.repositories.impl;
 
+import com.bd.tpfinal.dtos.common.ChangeOrderStatusDto;
 import com.bd.tpfinal.dtos.common.ItemDto;
 import com.bd.tpfinal.dtos.common.OrderDto;
+import com.bd.tpfinal.enums.OrderStatusAction;
+import com.bd.tpfinal.exceptions.parameters.ParameterErrorException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.mappers.client.ClientMapper;
 import com.bd.tpfinal.mappers.item.ItemMapper;
 import com.bd.tpfinal.mappers.orders.OrderMapper;
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.proxy.repositories.OrderRepositoryProxy;
-import com.bd.tpfinal.repositories.ClientRepository;
-import com.bd.tpfinal.repositories.OrderRepository;
-import com.bd.tpfinal.repositories.ProductRepository;
-
+import com.bd.tpfinal.proxy.repositories.command.*;
+import com.bd.tpfinal.repositories.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+
 
 public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
 
@@ -25,22 +25,39 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     private final ClientRepository clientRepository;
 
     private final ProductRepository productRepository;
+    private final DeliveryManRepository deliveryManRepository;
+    private final SupplierRepository supplierRepository;
+
     private final OrderMapper orderMapper;
 
     private final ClientMapper clientMapper;
     private final ItemMapper itemMapper;
 
+    private final Map<OrderStatusAction, ChangeStatusCommand> changeStatusMap = new HashMap<>();
+
     public OrderRepositoryProxyImpl(OrderMapper orderMapper,
                                     OrderRepository orderRepository,
                                     ClientRepository clientRepository,
-                                    ProductRepository productRepository, ClientMapper clientMapper,
+                                    ProductRepository productRepository,
+                                    DeliveryManRepository deliveryManRepository,
+                                    SupplierRepository supplierRepository, ClientMapper clientMapper,
                                     ItemMapper itemMapper) {
         this.orderMapper = orderMapper;
         this.orderRepository = orderRepository;
         this.clientRepository = clientRepository;
         this.productRepository = productRepository;
+        this.deliveryManRepository = deliveryManRepository;
+        this.supplierRepository = supplierRepository;
         this.clientMapper = clientMapper;
         this.itemMapper = itemMapper;
+
+
+        changeStatusMap.put(OrderStatusAction.FINISH, new FinishCommand(orderRepository, deliveryManRepository, orderMapper));
+        changeStatusMap.put(OrderStatusAction.CANCEL, new CancelCommand(orderRepository, deliveryManRepository, orderMapper));
+        changeStatusMap.put(OrderStatusAction.DELIVER, new DeliverCommand(orderRepository, deliveryManRepository, orderMapper));
+        changeStatusMap.put(OrderStatusAction.ASSIGN, new AssignCommand(orderRepository, deliveryManRepository, orderMapper));
+        changeStatusMap.put(OrderStatusAction.REFUSE, new RefuseCommand(orderRepository, deliveryManRepository, orderMapper));
+
     }
 
     @Override
@@ -139,9 +156,10 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
         Item item = new Item();
         item.setOrder(order);
         item.setProduct(product);
-        item.setQuantity(item.getQuantity());
+        item.setQuantity(itemDto.getQuantity());
         item.setDescription(product.getName());
         order.getItems().add(item);
+        order.setTotalPrice(order.getTotalPrice() + (item.getQuantity() * item.getProduct().getPrice()));
         order = orderRepository.save(order);
 
         return createOrderDto(order, order.getClient(), order.getItems());
@@ -154,7 +172,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
         Order order = orderRepository.findMaxTotalPriceBetweenDates(strFrom, strTo);
         if (order == null)
             return new OrderDto();
-        return orderMapper.toOrderDto(order);
+        return createOrderDto(order, order.getClient(), order.getItems());
     }
 
     @Override
@@ -167,6 +185,16 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
         order.setQualification(qualif);
         qualif.setOrder(order);
         orderRepository.save(order);
+
+        Set<Supplier> suppliers = order.getItems().parallelStream().map(i -> i.getProduct().getSupplier()).collect(Collectors.toSet());
+
+        suppliers.forEach(supplier -> {
+            Set<Order> ordersForSupplier = orderRepository.findByStatus_nameAndQualificationIsNotNullAndItems_product_supplier("DELIVERED", supplier);
+            Double average = ordersForSupplier.stream().mapToDouble(o -> o.getQualification().getScore()).average().getAsDouble();
+            supplier.setQualificationOfUsers(average.floatValue());
+            supplierRepository.save(supplier);
+        });
+
         return orderMapper.toOrderDto(order);
     }
 
@@ -174,6 +202,18 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     public OrderDto getOrdersWithMaximumProductsBySupplier(String supplierId) throws PersistenceEntityException {
         Order order = orderRepository.findOrderWithMaxProductsBySupplier(Long.parseLong(supplierId));
         return createOrderDto(order, order.getClient(), order.getItems());
+    }
+
+    @Override
+    public OrderDto changeOrderStatus(ChangeOrderStatusDto request) throws PersistenceEntityException, ParameterErrorException {
+        Order order = orderRepository.findById(Long.parseLong(request.getOrderId()))
+                .orElseThrow(() -> new PersistenceEntityException("Order with id " + request.getOrderId() + " not found."));
+
+        ChangeStatusCommand changeStatusCommand = changeStatusMap.get(request.getStatus());
+
+        OrderDto orderDto = changeStatusCommand.execute(request);
+
+        return orderDto;
     }
 
     private OrderDto createOrderDto(Order order, Client client){
@@ -188,4 +228,6 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
         dto.setItems(order.getItems().stream().map(itemMapper::toItemDto).collect(Collectors.toList()));
         return dto;
     }
+
+
 }

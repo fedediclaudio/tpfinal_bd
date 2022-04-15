@@ -1,7 +1,10 @@
 package com.bd.tpfinal.proxy.repositories;
 
+import com.bd.tpfinal.dtos.common.ChangeOrderStatusDto;
 import com.bd.tpfinal.dtos.common.ItemDto;
 import com.bd.tpfinal.dtos.common.OrderDto;
+import com.bd.tpfinal.enums.OrderStatusAction;
+import com.bd.tpfinal.exceptions.parameters.ParameterErrorException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 
 import java.util.Date;
@@ -29,7 +32,9 @@ public interface OrderRepositoryProxy {
 
     OrderDto findMaxTotalPriceBetweenDates(Date from, Date to);
 
-    OrderDto qualifyOrder(String orderId, Float qualification, String qualificationMessage) throws PersistenceEntityException;
+    OrderDto qualifyOrder(String orderId, Float qualification, String qualificationMessage) throws PersistenceEntityException, ParameterErrorException;
 
     OrderDto getOrdersWithMaximumProductsBySupplier(String supplierId) throws PersistenceEntityException;
+
+    OrderDto changeOrderStatus(ChangeOrderStatusDto request) throws PersistenceEntityException, ParameterErrorException;
 }
