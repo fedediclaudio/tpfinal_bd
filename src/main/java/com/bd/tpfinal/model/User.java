@@ -21,6 +21,9 @@ public abstract class User extends PersistentEntity {
 
     private int score;
 
+    @Version
+    private Long version;
+
     public String getName() {
         return name;
     }
@@ -75,5 +78,13 @@ public abstract class User extends PersistentEntity {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

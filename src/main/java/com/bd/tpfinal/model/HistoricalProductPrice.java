@@ -16,6 +16,9 @@ public class HistoricalProductPrice extends PersistentEntity{
     @NotNull
     private Product product;
 
+    @Version
+    private Long version;
+
     public float getPrice() {
         return price;
     }
@@ -46,5 +49,13 @@ public class HistoricalProductPrice extends PersistentEntity{
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

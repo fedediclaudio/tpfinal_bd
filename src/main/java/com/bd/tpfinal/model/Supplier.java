@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
+@DiscriminatorValue("SUPPLIER")
 @Table(name = "suppliers")
 public class Supplier extends PersistentEntity{
 
@@ -18,7 +19,7 @@ public class Supplier extends PersistentEntity{
 
     private float qualificationOfUsers;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name="supplier_products",
             joinColumns=@JoinColumn(name="supplier_id"),
             inverseJoinColumns=@JoinColumn(name="product_id"))
@@ -27,6 +28,23 @@ public class Supplier extends PersistentEntity{
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @NotNull
     private SupplierType type;
+
+    @Version
+    private Long version;
+
+    public Supplier(){
+
+    }
+
+    public Supplier(Long id, String name, String cuil, String address, float[] coords, float qualificationOfUsers, SupplierType type) {
+        setId(id);
+        this.name = name;
+        this.cuil = cuil;
+        this.address = address;
+        this.coords = coords;
+        this.qualificationOfUsers = qualificationOfUsers;
+        this.type = type;
+    }
 
     public String getName() {
         return name;
@@ -82,5 +100,13 @@ public class Supplier extends PersistentEntity{
 
     public void setType(SupplierType type) {
         this.type = type;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

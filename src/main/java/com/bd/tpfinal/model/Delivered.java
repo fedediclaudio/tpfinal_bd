@@ -8,8 +8,12 @@ import javax.persistence.InheritanceType;
 @DiscriminatorValue("DELIVERED")
 public class Delivered extends OrderStatus{
 
+    public Delivered() {
+        setName("DELIVERED");
+    }
+
     @Override
     public void setName(String name) {
-        super.setName("DELIVERED");
+        super.setName(name);
     }
 }

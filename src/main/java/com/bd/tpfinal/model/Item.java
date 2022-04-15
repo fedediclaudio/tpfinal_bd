@@ -13,9 +13,12 @@ public class Item extends PersistentEntity{
     @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
     @NotNull
     private Order order;
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.MERGE)
     private Product product;
+
+    @Version
+    private Long version;
+
 
     public int getQuantity() {
         return quantity;
@@ -47,5 +50,13 @@ public class Item extends PersistentEntity{
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

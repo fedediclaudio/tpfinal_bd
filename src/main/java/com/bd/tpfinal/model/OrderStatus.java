@@ -10,7 +10,7 @@ public abstract class OrderStatus extends PersistentEntity {
 
     private String name;
     @Temporal(TemporalType.TIMESTAMP)
-    private Date startDate;
+    private Date startDate = new Date();
     @OneToOne(fetch = FetchType.EAGER)
     private Order order;
 

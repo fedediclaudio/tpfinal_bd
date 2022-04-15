@@ -8,7 +8,9 @@ import javax.persistence.InheritanceType;
 @Entity
 @DiscriminatorValue("CANCELLED")
 public class Cancel extends OrderStatus {
-
+    public Cancel() {
+        setName("CANCELLED");
+    }
     private boolean cancelledByClient;
 
     public boolean isCancelledByClient() {
@@ -21,6 +23,6 @@ public class Cancel extends OrderStatus {
 
     @Override
     public void setName(String name) {
-        super.setName("CANCELLED");
+        super.setName(name);
     }
 }

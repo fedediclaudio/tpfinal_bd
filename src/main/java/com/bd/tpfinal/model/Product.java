@@ -16,7 +16,7 @@ public class Product extends PersistentEntity {
     private float weight;
 
     private String description;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER )
     @NotNull
     private Supplier supplier;
 
@@ -26,6 +26,11 @@ public class Product extends PersistentEntity {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<HistoricalProductPrice> prices = new ArrayList<>();
+
+    private Boolean active = true;
+
+    @Version
+    private Long version;
 
     public String getName() {
         return name;
@@ -81,5 +86,21 @@ public class Product extends PersistentEntity {
 
     public void setPrices(List<HistoricalProductPrice> prices) {
         this.prices = prices;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

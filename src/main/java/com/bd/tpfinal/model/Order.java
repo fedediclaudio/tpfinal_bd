@@ -17,9 +17,9 @@ public class Order extends PersistentEntity {
 
     private float totalPrice;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, orphanRemoval = true)
     private OrderStatus status;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private DeliveryMan deliveryMan;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -38,6 +38,9 @@ public class Order extends PersistentEntity {
             joinColumns=@JoinColumn(name="order_id"),
             inverseJoinColumns=@JoinColumn(name="item_id"))
     private List<Item> items = new ArrayList<>();
+
+    @Version
+    private Long version;
 
     public int getNumber() {
         return number;
@@ -117,5 +120,13 @@ public class Order extends PersistentEntity {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

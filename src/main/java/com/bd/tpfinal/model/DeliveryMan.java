@@ -9,10 +9,10 @@ public class DeliveryMan extends User{
 
     private int numberOfSuccessOrders;
 
-    private boolean free;
+    private boolean free = true;
     @Temporal(TemporalType.DATE)
     private Date dateOfAdmission;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<Order> ordersPending;
 
     public int getNumberOfSuccessOrders() {
