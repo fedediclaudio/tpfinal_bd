@@ -1,13 +1,14 @@
 package com.bd.tpfinal.repositories;
 
 import com.bd.tpfinal.model.Order;
+import com.bd.tpfinal.model.Supplier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
@@ -19,10 +20,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             value = "SELECT * FROM orders o WHERE o.date_of_order BETWEEN :from AND :to ORDER BY o.total_price DESC LIMIT 1")
     Order findMaxTotalPriceBetweenDates(@Param("from") String from, @Param("to")  String to);
 
-//    @Query(nativeQuery = true,
-//            value = "SELECT o.* FROM suppliers s INNER JOIN products p on(s.id = p.supplier_id) " +
-//                    "INNER JOIN items i on(p.id = i.product_id) " +
-//                    "WHERE s.id = :supplier_id")
     @Query(nativeQuery = true,
             value =
     "SELECT o.* FROM orders o WHERE id = (SELECT order_id FROM ( " +
@@ -33,4 +30,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "WHERE s.id=:supplier_id GROUP BY s.id, order_id ORDER BY cant DESC LIMIT 1) selected_order)")
     Order findOrderWithMaxProductsBySupplier(@Param("supplier_id") Long supplierId);
 
+    List<Order> findByStatus_nameAndItems_product_supplier(String status, Supplier supplier);
+
+    Set<Order> findByStatus_nameAndQualificationIsNotNullAndItems_product_supplier(String delivered, Supplier supplier);
 }
