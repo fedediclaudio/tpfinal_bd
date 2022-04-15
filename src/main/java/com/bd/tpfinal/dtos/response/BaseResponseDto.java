@@ -1,8 +1,12 @@
 package com.bd.tpfinal.dtos.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public abstract class BaseResponseDto<T> {
-    private String message;
     private ResponseStatus status = ResponseStatus.OK;
+    private String message;
     private T data;
 
     public String getMessage() {
