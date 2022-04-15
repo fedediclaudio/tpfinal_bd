@@ -4,7 +4,7 @@ import com.bd.tpfinal.dtos.common.SupplierDto;
 import com.bd.tpfinal.dtos.common.SupplierWithOrdersCountDto;
 import com.bd.tpfinal.dtos.response.BaseResponseDto;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
-import com.bd.tpfinal.dtos.response.SupplierResponseDto;
+import com.bd.tpfinal.dtos.response.suppliers.SupplierResponseDto;
 import com.bd.tpfinal.dtos.response.suppliers.ListSupplierResponseDto;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.proxy.repositories.SupplierRepositoryProxy;

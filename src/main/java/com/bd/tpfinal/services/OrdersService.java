@@ -1,20 +1,20 @@
 package com.bd.tpfinal.services;
 
+import com.bd.tpfinal.dtos.common.ChangeOrderStatusDto;
 import com.bd.tpfinal.dtos.request.ItemRequestDto;
 import com.bd.tpfinal.dtos.request.OrderRequestDto;
 import com.bd.tpfinal.dtos.response.BaseResponseDto;
+import com.bd.tpfinal.enums.OrderStatusAction;
 
 import java.util.Date;
 
 public interface OrdersService {
 
-//    ListOrderResponseDto getOrders(SearchFilterRequestDto searchFilterRequestDto);
     BaseResponseDto addItemToOrder(String orderId, ItemRequestDto itemDto);
     BaseResponseDto getMaximumPriceOrderByDate(Date date);
     BaseResponseDto getOrdersWithMaximumProductsBySupplier(String supplierId);
     BaseResponseDto qualifyOrder(String orderId, Float qualification, String qualificationMessage);
-    BaseResponseDto confirmOrder(String orderId);
-
+    BaseResponseDto changeOrderStatus(ChangeOrderStatusDto changeOrderStatusDto);
 
     BaseResponseDto create(String clientId, String addressId, String comments);
 

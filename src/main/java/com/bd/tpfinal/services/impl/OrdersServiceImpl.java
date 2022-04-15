@@ -1,16 +1,14 @@
 package com.bd.tpfinal.services.impl;
 
 
-import com.bd.tpfinal.dtos.common.AddressDto;
-import com.bd.tpfinal.dtos.common.ClientDto;
-import com.bd.tpfinal.dtos.common.ItemDto;
-import com.bd.tpfinal.dtos.common.OrderDto;
+import com.bd.tpfinal.dtos.common.*;
 import com.bd.tpfinal.dtos.request.ItemRequestDto;
 import com.bd.tpfinal.dtos.request.OrderRequestDto;
 import com.bd.tpfinal.dtos.response.BaseResponseDto;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.orders.ListOrderResponseDto;
 import com.bd.tpfinal.dtos.response.orders.SingleOrderResponseDto;
+import com.bd.tpfinal.exceptions.parameters.ParameterErrorException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.proxy.repositories.ClientRepositoryProxy;
 import com.bd.tpfinal.proxy.repositories.OrderRepositoryProxy;
@@ -90,13 +88,25 @@ public class OrdersServiceImpl implements OrdersService {
         } catch (PersistenceEntityException e) {
             response.setStatus(ResponseStatus.ERROR);
             response.setMessage(e.getMessage());
+        } catch (ParameterErrorException e) {
+            throw new RuntimeException(e);
         }
         return response;
     }
 
     @Override
-    public BaseResponseDto confirmOrder(String orderId) {
-        return null;
+    public BaseResponseDto changeOrderStatus(ChangeOrderStatusDto changeOrderStatusDto) {
+        SingleOrderResponseDto response = new SingleOrderResponseDto();
+        try {
+            OrderDto orderDto = orderRepository.changeOrderStatus(changeOrderStatusDto) ;
+        } catch (PersistenceEntityException e) {
+            response.setStatus(ResponseStatus.ERROR);
+            response.setMessage(e.getMessage());
+        } catch (ParameterErrorException e) {
+            response.setStatus(ResponseStatus.ERROR);
+            response.setMessage(e.getMessage());
+        }
+        return response;
     }
 
     @Override
