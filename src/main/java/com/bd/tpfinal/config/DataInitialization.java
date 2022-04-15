@@ -16,7 +16,6 @@ public class DataInitialization implements ApplicationRunner {
     private final ClientRepository clientRepository;
     private final SupplierTypeRepository supplierTypeRepository;
     private final ProductTypeRepository productTypeRepository;
-
     private final ProductRepository productRepository;
     private final HistoricalProductPriceRepository historicalProductPriceRepository;
     private final ItemRepository itemRepository;
@@ -28,6 +27,7 @@ public class DataInitialization implements ApplicationRunner {
     private List<Product> products = new ArrayList<>();
 
     private Random random = new Random();
+    private final DeliveryManRepository deliveryManRepository;
 
     public DataInitialization(OrderRepository orderRepository,
                               SupplierRepository supplierRepository,
@@ -36,7 +36,7 @@ public class DataInitialization implements ApplicationRunner {
                               ProductTypeRepository productTypeRepository,
                               ProductRepository productRepository,
                               HistoricalProductPriceRepository historicalProductPriceRepository,
-                              ItemRepository itemRepository) {
+                              ItemRepository itemRepository, DeliveryManRepository deliveryManRepository) {
         this.orderRepository = orderRepository;
         this.supplierRepository = supplierRepository;
         this.clientRepository = clientRepository;
@@ -45,16 +45,21 @@ public class DataInitialization implements ApplicationRunner {
         this.productRepository = productRepository;
         this.historicalProductPriceRepository = historicalProductPriceRepository;
         this.itemRepository = itemRepository;
+        this.deliveryManRepository = deliveryManRepository;
     }
 
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-//        generateClients();
-//        generateSuppliers();
-//        generateProducts();
-//        generateOrders();
-//        addItemsToOrders();
+        if (orderRepository.count() == 0) {
+            generateClients();
+            generateSuppliers();
+            generateProducts();
+            generateOrders();
+            addItemsToOrders();
+            generateSupplierWithAllProductTypes();
+            generateDeliveryMen();
+        }
     }
 
     private void generateOrders(){
@@ -113,7 +118,6 @@ public class DataInitialization implements ApplicationRunner {
             supplier.setType(supplierType);
             supplierType.getSuppliers().add(supplier);
             supplier = supplierRepository.save(supplier);
-//            supplierTypeRepository.save(supplierType);
 
             suppliers.add(supplier);
         }
@@ -177,6 +181,67 @@ public class DataInitialization implements ApplicationRunner {
             }
             orderRepository.save(order);
 
+        }
+    }
+
+    public void generateSupplierWithAllProductTypes(){
+
+        Supplier supplier = new Supplier();
+        supplier.setName("Company with all product types");
+        supplier.setCuil(30 + "-" + (20000000 + random.nextInt(20000000)) + "-" + random.nextInt(9));
+
+        SupplierType supplierType = supplierTypeRepository.findById(1l).get();
+        supplier.setType(supplierType);
+        supplier = supplierRepository.save(supplier);
+        suppliers.add(supplier);
+
+        int supLength = suppliers.size();
+        int npLength = Datasets.PRODUCT_NAME_PARTS.length;
+
+        productTypes = productTypeRepository.findAll();
+
+        for (ProductType type: productTypes){
+
+            float price = (float)Math.random() * random.nextInt(1000);
+            String name = Datasets.PRODUCT_NAME_PARTS[random.nextInt(npLength)] + Datasets.PRODUCT_NAME_PARTS[random.nextInt(npLength)] +
+                    Datasets.PRODUCT_NAME_PARTS[random.nextInt(npLength)];
+            int pti = random.nextInt(productTypes.size());
+
+            Product product = new Product();
+            product.setName(name);
+            product.setType(type);
+            product.setPrice(price);
+
+            HistoricalProductPrice historicalPrice = new HistoricalProductPrice();
+            historicalPrice.setPrice(price);
+            historicalPrice.setStartDate(new Date());
+            historicalPrice.setProduct(product);
+
+            product.getPrices().add(historicalPrice);
+
+
+            product.setSupplier(supplier);
+            supplier.getProducts().add(product);
+
+            product = productRepository.save(product);
+            supplierRepository.save(supplier);
+            products.add(product);
+        }
+
+        supplierRepository.save(supplier);
+    }
+
+    public void generateDeliveryMen(){
+        for (int i = 0; i < 10; i++){
+            DeliveryMan deliveryMan = new DeliveryMan();
+            deliveryMan.setName(Datasets.LASTNAMES[random.nextInt(Datasets.LASTNAMES.length)] + " " + Datasets.Names[random.nextInt(Datasets.Names.length)]);
+            deliveryMan.setDateOfAdmission(new Date());
+            deliveryMan.setEmail(deliveryMan.getName().toLowerCase(Locale.ROOT).replace(" ","")+"@gmail.com");
+            deliveryMan.setPassword(deliveryMan.getName().toLowerCase(Locale.ROOT).replace("a","4"));
+            deliveryMan.setUsername(deliveryMan.getName().toLowerCase(Locale.ROOT).replace(" ","_"));
+            deliveryMan.setNumberOfSuccessOrders(0);
+            deliveryMan.setDateOfBirth(new Date());
+            deliveryManRepository.save(deliveryMan);
         }
     }
 }
