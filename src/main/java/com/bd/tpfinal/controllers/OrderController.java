@@ -1,11 +1,11 @@
 package com.bd.tpfinal.controllers;
 
+import com.bd.tpfinal.dtos.common.ChangeOrderStatusDto;
 import com.bd.tpfinal.dtos.request.ItemRequestDto;
 import com.bd.tpfinal.dtos.response.BaseResponseDto;
-import com.bd.tpfinal.dtos.response.orders.ListOrderResponseDto;
 import com.bd.tpfinal.dtos.response.orders.SingleOrderResponseDto;
+import com.bd.tpfinal.enums.OrderStatusAction;
 import com.bd.tpfinal.services.OrdersService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +19,11 @@ import java.util.Date;
 public class OrderController extends BaseController {
 
     //TODO implementar las siguientes acciones:
-    //Agregar un item a una orden ya creada
-    //Confirmar un pedido
+    //Agregar un item a una orden ya creada *
+    //Confirmar un pedido *
     //Agregar una calificacion a una orden ya completada (tambien actualizar la calif. del proveedor)
-    //Obtener las ordenes con mas productos de un proveedor especifico
-    //Obtener la orden de mayor precio total de un dia dado
+    //Obtener las ordenes con mas productos de un proveedor especifico *
+    //Obtener la orden de mayor precio total de un dia dado *
 
     private final OrdersService ordersService;
 
@@ -33,7 +33,7 @@ public class OrderController extends BaseController {
 
     @GetMapping("")
     public ResponseEntity<BaseResponseDto> retrieve(@RequestParam(value = "status", required = false) String status,
-                                                         @RequestParam(value = "number", required = false) Integer number){
+                                                    @RequestParam(value = "number", required = false) Integer number){
         BaseResponseDto response = ordersService.retrieve(status, number);
         return new ResponseEntity<BaseResponseDto>(response, responseStatus(response));
     }
@@ -53,27 +53,28 @@ public class OrderController extends BaseController {
     }
 
     @PutMapping("/{order_id}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponseDto> addItem(@PathVariable("order_id") String orderId, @RequestBody ItemRequestDto itemRequestDto){
         BaseResponseDto response = ordersService.addItemToOrder(orderId, itemRequestDto);
         return new ResponseEntity<BaseResponseDto>(response, responseStatus(response));
     }
 
+    @PatchMapping("/{order_id}/{order_status}")
+    public ResponseEntity<BaseResponseDto> changeOrderStatus(@PathVariable("order_id") String orderId,
+                                                             @PathVariable("order_status") String orderStatus,
+                                                             @RequestParam(value = "cancelled_by_client", required = false) Boolean canceledByClient){
+        ChangeOrderStatusDto request = new ChangeOrderStatusDto(orderId, orderStatus.toUpperCase());
+        request.setCanceledByClient(canceledByClient);
+
+        BaseResponseDto response = ordersService.changeOrderStatus(request);
+        return new ResponseEntity<BaseResponseDto>(response, responseStatus(response));
+    }
+
     @PatchMapping("/{order_id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponseDto> update(@PathVariable("order_id") String orderId,
-                                                       @RequestParam(name = "confirm", required = false) Boolean confirm,
-                                                       @RequestParam(name = "qualification_message", required = false) String qualificationMessage,
-                                                       @RequestParam(name = "qualification", required = false) Float qualification){
+    public ResponseEntity<BaseResponseDto> qualify(@PathVariable("order_id") String orderId,
+                                                   @RequestParam(name = "qualification", required = true) Float qualification,
+                                                   @RequestParam(name = "qualification_message", required = false) String qualificationMessage) {
         BaseResponseDto response = new SingleOrderResponseDto();
-        if (qualification != null)
-            response = ordersService.qualifyOrder(orderId, qualification, qualificationMessage);
-        else if (confirm != null && confirm)
-            response = ordersService.confirmOrder(orderId);
-        else {
-            response.setStatus(com.bd.tpfinal.dtos.response.ResponseStatus.ERROR);
-            response.setMessage("Order not updated");
-        }
+        response = ordersService.qualifyOrder(orderId, qualification, qualificationMessage);
         return new ResponseEntity<BaseResponseDto>(response, responseStatus(response));
     }
 
@@ -91,7 +92,6 @@ public class OrderController extends BaseController {
     }
 
     @GetMapping("/{supplier_id}/max_supplier_products")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponseDto> maxSupplierProducts(@PathVariable(name = "supplier_id") String supplierId){
         BaseResponseDto response = ordersService.getOrdersWithMaximumProductsBySupplier(supplierId);
         return new ResponseEntity<>(response,responseStatus(response));

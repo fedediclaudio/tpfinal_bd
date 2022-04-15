@@ -1,6 +1,6 @@
 package com.bd.tpfinal.controllers;
 
-import com.bd.tpfinal.dtos.response.DeliveryResponseDto;
+import com.bd.tpfinal.dtos.response.delivery.DeliveryResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

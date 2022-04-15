@@ -2,7 +2,7 @@ package com.bd.tpfinal.controllers;
 
 import com.bd.tpfinal.dtos.request.ProductRequestDto;
 import com.bd.tpfinal.dtos.response.BaseResponseDto;
-import com.bd.tpfinal.dtos.response.ProductResponseDto;
+import com.bd.tpfinal.dtos.response.products.ProductResponseDto;
 import com.bd.tpfinal.services.ProductsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
