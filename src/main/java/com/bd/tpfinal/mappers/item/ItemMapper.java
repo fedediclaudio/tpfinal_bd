@@ -14,6 +14,7 @@ public interface ItemMapper {
             @Mapping(source="product.id", target = "productId"),
             @Mapping(source="product.name", target = "productName"),
             @Mapping(source="quantity", target = "quantity"),
+            @Mapping(source="product.price", target = "price"),
 
     })
     ItemDto toItemDto(Item item);
