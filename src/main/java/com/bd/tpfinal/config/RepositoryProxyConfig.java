@@ -40,9 +40,8 @@ public class RepositoryProxyConfig {
 
     @Bean
     public ProductRepositoryProxy getProductRespositoryProxy(ProductRepository productRepository,
-                                                             HistoricalProductPriceRepository historicalProductPriceRepository,
                                                              ProductMapper productMapper){
-        return new ProductRepositoryProxyImpl(productRepository, historicalProductPriceRepository, productMapper);
+        return new ProductRepositoryProxyImpl(productRepository, productMapper);
     }
 
     @Bean
