@@ -9,13 +9,10 @@ public class Pending extends OrderStatus
 
     public Pending(Order order, String name, Date start_date)
     {
-        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.PENDING, super.getOrder(),"pending",start_date);
-
-        super.setOrder_status_enum(Order_Status_Enum.PENDING);
-        //this.order = order;
-        super.setOrder(order);
-        super.setName(name);
-        super.setStartDate(start_date);
+        setName(name);
+        setStartDate(start_date);
+        setOrder(order);
+        //setOrder_status_enum(Order_Status_Enum.PENDING);
     }
 
     /**
@@ -29,8 +26,7 @@ public class Pending extends OrderStatus
     {
         Date start_date = new Date();
         OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.ASSIGNED, super.getOrder(),"assign",start_date);
-        //super.getOrder().setStatus(new Assigned(super.getOrder()));
-        super.getOrder().setStatus(orderStatus);
+        getOrder().setStatus(orderStatus);
         super.getOrder().setDeliveryMan(deliveryMan);
         return true;
     }
@@ -64,7 +60,6 @@ public class Pending extends OrderStatus
         OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.CANCELLED, super.getOrder(),"cancelled",start_date);
         super.getOrder().setStatus(orderStatus);
         return true;
-
     }
 
     /**

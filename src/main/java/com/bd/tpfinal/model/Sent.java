@@ -1,14 +1,17 @@
 package com.bd.tpfinal.model;
 
+import java.util.Date;
+
 public class Sent extends OrderStatus
 {
 
     //private Order order;
 
-    public Sent(Order order)
+    public Sent(Order order, String name, Date start_date)
     {
         super.setOrder(order);
-        super.setOrder_status_enum(Order_Status_Enum.SENT);
+        super.setName(name);
+        super.setStartDate(start_date);
     }
 
     @Override
@@ -40,7 +43,9 @@ public class Sent extends OrderStatus
     @Override
     public boolean finish()
     {
-        super.getOrder().setStatus(new Delivered(super.getOrder()));
+        Date start_date = new Date();
+        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.DELIVERED, super.getOrder(),"delivered",start_date);
+        super.getOrder().setStatus(orderStatus);
         int scoreCliente = super.getOrder().getClient().getScore() + 1;
         super.getOrder().getClient().setScore(scoreCliente);
         int scoreDeliveryMan = super.getOrder().getDeliveryMan().getScore() + 1;

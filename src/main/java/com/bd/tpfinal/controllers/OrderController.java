@@ -1,7 +1,5 @@
 package com.bd.tpfinal.controllers;
 
-import com.bd.tpfinal.model.Address;
-import com.bd.tpfinal.model.Client;
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.services.AddressService;
 import com.bd.tpfinal.services.OrderService;
@@ -9,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/order")
@@ -62,5 +61,17 @@ public class OrderController
     public List<Order> getAll()
     {
         return this.orderService.getAll();
+    }
+
+    @GetMapping("/id/{id}")
+    public Optional<Order> getById(@PathVariable Long id)
+    {
+        return this.orderService.getById(id);
+    }
+
+    @GetMapping("/number/{number}")
+    public Order getByNumber(@PathVariable int number)
+    {
+        return this.orderService.getByNumber(number);
     }
 }

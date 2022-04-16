@@ -8,15 +8,10 @@ public class Assigned extends OrderStatus
 
     public Assigned(Order order, String name, Date start_date)
     {
-        //super.setOrder(order);
-        //this.order = order;
-        //super.setOrder_status_enum(Order_Status_Enum.ASSIGNED);
-
-        super.setOrder_status_enum(Order_Status_Enum.ASSIGNED);
-        //this.order = order;
         super.setOrder(order);
         super.setName(name);
         super.setStartDate(start_date);
+        setOrder_status_enum(Order_Status_Enum.ASSIGNED);
     }
 
     @Override
@@ -30,18 +25,10 @@ public class Assigned extends OrderStatus
     @Override
     public boolean cancel()
     {
-        Cancel cancel = new Cancel(super.getOrder());
-        cancel.setCancelledByClient(true);
-        super.getOrder().setStatus(cancel);
-        int score_cliente = super.getOrder().getClient().getScore() - 1;
-        super.getOrder().getClient().setScore(score_cliente);
-        return true;
-
+        //TODO: ver eso de canCancel()
         Date start_date = new Date();
-        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.ASSIGNED, super.getOrder(),"assign",start_date);
-        //super.getOrder().setStatus(new Assigned(super.getOrder()));
+        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.CANCELLED, super.getOrder(),"cancelled",start_date);
         super.getOrder().setStatus(orderStatus);
-        super.getOrder().setDeliveryMan(deliveryMan);
         return true;
     }
 
@@ -60,9 +47,10 @@ public class Assigned extends OrderStatus
         //TODO: no entiendo para que sirve canRefuse()
         if (canRefuse())
         {
-            Cancel cancel = new Cancel(super.getOrder());
-            cancel.setCancelledByClient(false);
-            super.getOrder().setStatus(new Cancel(super.getOrder()));
+            //Cancel cancel = new Cancel(super.getOrder());
+            Date start_date = new Date();
+            OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.CANCELLED, super.getOrder(),"cancelled",start_date);
+            super.getOrder().setStatus(orderStatus);
             int score = super.getOrder().getDeliveryMan().getScore();
             super.getOrder().getDeliveryMan().setScore(score -2);
             rta = true;
@@ -78,7 +66,9 @@ public class Assigned extends OrderStatus
     @Override
     public boolean deliver()
     {
-        super.getOrder().setStatus(new Sent(super.getOrder()));
+        Date start_date = new Date();
+        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.DELIVERED, super.getOrder(),"delivered",start_date);
+        super.getOrder().setStatus(orderStatus);
         return true;
     }
 }

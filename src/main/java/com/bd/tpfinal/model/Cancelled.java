@@ -1,16 +1,19 @@
 package com.bd.tpfinal.model;
 
-public class Cancel extends OrderStatus
+import java.util.Date;
+
+public class Cancelled extends OrderStatus
 {
     //private Order order;
 
     private boolean cancelledByClient;
 
-    public Cancel(Order order)
+    public Cancelled(Order order, String name, Date start_date)
     {
-        //this.order = order;
         super.setOrder(order);
-        super.setOrder_status_enum(Order_Status_Enum.CANCELLED);
+        super.setName(name);
+        super.setStartDate(start_date);
+        setOrder_status_enum(Order_Status_Enum.CANCELLED);
     }
 
     @Override

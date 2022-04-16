@@ -26,7 +26,11 @@ public class Order
 
     private float totalPrice;
 
-    @OneToOne(mappedBy = "order", cascade=CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    //@OneToOne(mappedBy = "order", cascade=CascadeType.ALL)
+    //@OneToOne(cascade=CascadeType.ALL)
+    //@PrimaryKeyJoinColumn
+    @OneToOne
+    @JoinColumn(name = "order_status_id", updatable = false, nullable = false)
     private OrderStatus status; //acá hay un Patrón State
 
     //relación muchos a uno con DeliveryMan
@@ -60,7 +64,7 @@ public class Order
 
     //relación uno a muchos
     //@OneToMany(cascade = CascadeType.ALL)
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = {}, orphanRemoval = false)
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = {}, orphanRemoval = false)
 
     //@JoinColumn(name = "order_id")
     //"order_id" es el nombre de la columna de tabla items que se agrega para
@@ -70,7 +74,8 @@ public class Order
     //solamente puse lo relativo a patrón STATE
     public Order()
     {
-        setStatus(new Pending(this));
+        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.PENDING, this,"pending",getDateOfOrder());
+        setStatus(orderStatus);
     }
     public Long getId()
     {
@@ -167,18 +172,21 @@ public class Order
         this.items = items;
     }
 
-    public OrderStatus getStatus()
-    {
-
-        return status;
-    }
-
+    //TODO: revisar esto.
     /**
      * esto sirve para recuperar el objeto hijo de OrderStatus al despersistir.
      * @param status
      */
+    public OrderStatus getStatus()
+    {
+        //return Status_Factory.getInstanceByEnum(status);
+        //return status;
+        return Status_Factory.getInstanceByOrderStatus(status);
+    }
+
+
     public void setStatus(OrderStatus status)
     {
-        this.status = Status_Factory.getInstance(status.getOrder_status_enum(), this);
+        this.status = status;
     }
 }

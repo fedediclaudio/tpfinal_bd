@@ -2,12 +2,16 @@ package com.bd.tpfinal.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "ordersStatus")
-public abstract class OrderStatus
+//public abstract class OrderStatus
+public class OrderStatus
 {
     //TODO: solucionar el tema del patrón STATE.
     //TODO: no persiste subclases de la forma en que lo hice
@@ -17,11 +21,14 @@ public abstract class OrderStatus
 
     private String name;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
     private Date startDate;
 
-    @JoinColumn(name = "order_id")
+    //@JoinColumn(name = "order_id")
     //"order_id" es la columna de la tabla ordersStatus que tiene la clave foranea
-    @OneToOne(fetch = FetchType.LAZY)
+    //@OneToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToOne(mappedBy = "status", cascade = CascadeType.ALL)
     private Order order;
 
 
@@ -129,9 +136,6 @@ public abstract class OrderStatus
     {
         throw new Exception("No se puede realizarse esta accion");
     }
-
-
-
 
     public boolean finish() throws Exception
     {
