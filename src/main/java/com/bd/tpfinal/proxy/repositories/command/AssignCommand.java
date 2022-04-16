@@ -11,6 +11,7 @@ import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.repositories.DeliveryManRepository;
 import com.bd.tpfinal.repositories.OrderRepository;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.Optional;
 
@@ -21,6 +22,7 @@ public class AssignCommand extends ChangeStatusCommand{
     }
 
     @Override
+    @Transactional
     public OrderDto execute(ChangeOrderStatusDto request) throws PersistenceEntityException {
         Order order = getOrder(request);
 

@@ -11,6 +11,7 @@ import com.bd.tpfinal.repositories.DeliveryManRepository;
 import com.bd.tpfinal.repositories.OrderRepository;
 import org.apache.commons.lang3.ObjectUtils;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 
 public class CancelCommand extends ChangeStatusCommand {
@@ -20,6 +21,7 @@ public class CancelCommand extends ChangeStatusCommand {
     }
 
     @Override
+    @Transactional
     public OrderDto execute(ChangeOrderStatusDto request) throws PersistenceEntityException {
         Order order = getOrder(request);
 

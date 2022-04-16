@@ -10,6 +10,7 @@ import com.bd.tpfinal.model.Sent;
 import com.bd.tpfinal.repositories.DeliveryManRepository;
 import com.bd.tpfinal.repositories.OrderRepository;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 
 public class DeliverCommand extends ChangeStatusCommand {
@@ -19,6 +20,7 @@ public class DeliverCommand extends ChangeStatusCommand {
     }
 
     @Override
+    @Transactional
     public OrderDto execute(ChangeOrderStatusDto request) throws PersistenceEntityException {
         Order order = getOrder(request);
 

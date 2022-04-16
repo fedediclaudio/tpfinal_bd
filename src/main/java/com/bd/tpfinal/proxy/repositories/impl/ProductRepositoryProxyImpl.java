@@ -18,15 +18,11 @@ import java.util.stream.Collectors;
 public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
 
     private final ProductRepository productRepository;
-    private final HistoricalProductPriceRepository historicalProductPriceRepository;
-
     private final ProductMapper productMapper;
 
     public ProductRepositoryProxyImpl(ProductRepository productRepository,
-                                      HistoricalProductPriceRepository historicalProductPriceRepository,
                                       ProductMapper productMapper) {
         this.productRepository = productRepository;
-        this.historicalProductPriceRepository = historicalProductPriceRepository;
         this.productMapper = productMapper;
     }
 

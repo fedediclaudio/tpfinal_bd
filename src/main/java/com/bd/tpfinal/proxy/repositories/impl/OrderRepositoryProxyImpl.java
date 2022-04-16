@@ -13,6 +13,8 @@ import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.proxy.repositories.OrderRepositoryProxy;
 import com.bd.tpfinal.proxy.repositories.command.*;
 import com.bd.tpfinal.repositories.*;
+
+import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -85,6 +87,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     }
 
     @Override
+    @Transactional
     public OrderDto save(OrderDto orderDto) throws PersistenceEntityException {
         Optional<Order> orderOp = orderRepository.findById(Long.parseLong(orderDto.getId()));
         Order order = orderOp.orElseThrow(() -> new PersistenceEntityException("Order with id " + orderDto.getId() + " not found."));
@@ -97,6 +100,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     }
 
     @Override
+    @Transactional
     public OrderDto create(String clientId, OrderDto orderDto) throws PersistenceEntityException {
         Optional<Client> optionalClient = clientRepository.findById(Long.parseLong(clientId));
         if (!optionalClient.isPresent())
@@ -143,6 +147,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     }
 
     @Override
+    @Transactional
     public OrderDto addItem(ItemDto itemDto) throws PersistenceEntityException {
         long orderId = Long.parseLong(itemDto.getOrderId());
         long productId = Long.parseLong(itemDto.getProductId());
@@ -176,6 +181,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     }
 
     @Override
+    @Transactional    
     public OrderDto qualifyOrder(String orderId, Float qualification, String qualificationMessage) throws PersistenceEntityException {
         Order order = orderRepository.findById(Long.parseLong(orderId))
                 .orElseThrow(() -> new PersistenceEntityException("Order with id " + orderId + " not found."));
@@ -205,6 +211,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     }
 
     @Override
+    @Transactional
     public OrderDto changeOrderStatus(ChangeOrderStatusDto request) throws PersistenceEntityException, ParameterErrorException {
         Order order = orderRepository.findById(Long.parseLong(request.getOrderId()))
                 .orElseThrow(() -> new PersistenceEntityException("Order with id " + request.getOrderId() + " not found."));

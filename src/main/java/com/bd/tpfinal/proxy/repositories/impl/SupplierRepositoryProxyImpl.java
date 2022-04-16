@@ -14,6 +14,7 @@ import com.bd.tpfinal.repositories.ProductTypeRepository;
 import com.bd.tpfinal.repositories.SupplierRepository;
 import com.bd.tpfinal.repositories.SupplierWithOrdersCountRepository;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -89,6 +90,7 @@ public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
     }
 
     @Override
+    @Transactional
     public SupplierDto delete(String supplierId, String productId) throws PersistenceEntityException {
         Supplier supplier = supplierRepository.findById(Long.parseLong(supplierId))
                 .orElseThrow(() -> new PersistenceEntityException("Can't find supplier with id " + supplierId));
