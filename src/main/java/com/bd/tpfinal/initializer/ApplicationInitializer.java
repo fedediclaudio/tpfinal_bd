@@ -19,6 +19,10 @@ public class ApplicationInitializer implements CommandLineRunner {
 	@Autowired ClientService clientService;
 	@Autowired DeliveryManService deliveryManService;
 	
+	////////
+	// URL Swagger: http://localhost:8081/swagger-ui/index.html
+	////////
+	
 	@Override
 	public void run(String... args) throws Exception {
 		if (clientService.clientCount() > 0 ) return;
