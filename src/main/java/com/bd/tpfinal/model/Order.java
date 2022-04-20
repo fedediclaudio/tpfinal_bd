@@ -1,6 +1,5 @@
 package com.bd.tpfinal.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,23 +14,20 @@ public class Order
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_order", nullable = false, unique = true)
-    private Long id;
-
-    private int number;
+    private Long number;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
+    @Column(nullable = false, updatable = false)
     private Date dateOfOrder;
 
+    @Column(length = 500)
     private String comments;
 
+    @Column(nullable = false)
     private float totalPrice;
 
-    //@OneToOne(mappedBy = "order", cascade=CascadeType.ALL)
-    //@OneToOne(cascade=CascadeType.ALL)
-    //@PrimaryKeyJoinColumn
-    @OneToOne
-    @JoinColumn(name = "order_status_id", updatable = false, nullable = false)
-    private OrderStatus status; //acá hay un Patrón State
+    @Embedded
+    private OrderStatus orderStatus; //acá hay un Patrón State
 
     //relación muchos a uno con DeliveryMan
     //@JoinColumn: especificar un nombre de columna de clave externa
@@ -40,12 +36,8 @@ public class Order
     //@JsonIgnore //evita bucle infinito al toString.
     private DeliveryMan deliveryMan;
 
-    //relación muchos a uno con Client
-    //lado muchos
-    //@JoinColumn: especificar un nombre de columna de clave externa. La clave del otro lado
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {})
-    @JoinColumn(name = "client_id")
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
     //en el UML este campo se llama DeliveryAddress, tal vez se deba cambiar
@@ -74,9 +66,23 @@ public class Order
     //solamente puse lo relativo a patrón STATE
     public Order()
     {
-        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.PENDING, this,"pending",getDateOfOrder());
-        setStatus(orderStatus);
+
     }
+
+    public Order(int number, Date dateOfOrder, String comments, float totalPrice, Client client, Address address)
+    {
+        this.number = number;
+        this.dateOfOrder = dateOfOrder;
+        this.comments = comments;
+        this.totalPrice = totalPrice;
+        this.deliveryMan = null;
+        this.client = client;
+        this.address = address;
+        this.qualification = null;
+        this.items = null;
+        this.orderStatus = new Pending(this,this.getDateOfOrder());
+    }
+
     public Long getId()
     {
         return id;
@@ -172,21 +178,38 @@ public class Order
         this.items = items;
     }
 
-    //TODO: revisar esto.
-    /**
-     * esto sirve para recuperar el objeto hijo de OrderStatus al despersistir.
-     * @param status
-     */
-    public OrderStatus getStatus()
+    public OrderStatus getOrderStatus()
     {
         //return Status_Factory.getInstanceByEnum(status);
-        //return status;
-        return Status_Factory.getInstanceByOrderStatus(status);
+        return orderStatus;
+        //return Status_Factory.getInstanceByOrderStatus(status);
     }
 
 
-    public void setStatus(OrderStatus status)
+    public void setOrderStatus(OrderStatus orderStatus)
     {
-        this.status = status;
+        this.orderStatus = orderStatus;
+    }
+
+    public void setStatusByName()
+    {
+        switch (orderStatus.getName())
+        {
+            case "Pending":
+                this.setOrderStatus(new Pending(this, this.orderStatus.getStartDate()));
+                break;
+            case "Assigned":
+                this.setOrderStatus(new Assigned(this, this.orderStatus.getStartDate()));
+                break;
+            case "Sent":
+                this.setOrderStatus(new Sent(this, this.orderStatus.getStartDate()));
+                break;
+            case "Delivered":
+                this.setOrderStatus(new Delivered(this, this.orderStatus.getStartDate()));
+                break;
+            case "Cancelled":
+                this.setOrderStatus(new Cancelled(this, this.orderStatus.getStartDate()));
+                break;
+        }
     }
 }

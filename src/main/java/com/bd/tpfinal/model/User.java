@@ -39,6 +39,17 @@ public abstract class User
     {
     }
 
+    public User(String name, String username, String password, String email, Date dateOfBirth)
+    {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.dateOfBirth = dateOfBirth;
+        this.active = true;
+        this.score = 0;
+    }
+
     public Long getId()
     {
         return id;

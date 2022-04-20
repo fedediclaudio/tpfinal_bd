@@ -1,17 +1,25 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 import java.util.Date;
 import java.util.List;
-
+//@Entity
+//@DiscriminatorValue("Pending")
+@Embeddable
 public class Pending extends OrderStatus
 {
     //private Order order;
 
-    public Pending(Order order, String name, Date start_date)
+    public Pending()
     {
-        setName(name);
-        setStartDate(start_date);
-        setOrder(order);
+
+    }
+
+    public Pending(Order order, Date start_date)
+    {
+        super(order, "Pending", start_date);
         //setOrder_status_enum(Order_Status_Enum.PENDING);
     }
 
@@ -26,7 +34,7 @@ public class Pending extends OrderStatus
     {
         Date start_date = new Date();
         OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.ASSIGNED, super.getOrder(),"assign",start_date);
-        getOrder().setStatus(orderStatus);
+        getOrder().setOrderStatus(orderStatus);
         super.getOrder().setDeliveryMan(deliveryMan);
         return true;
     }
@@ -58,7 +66,7 @@ public class Pending extends OrderStatus
         //TODO: ver eso de canCancel()
         Date start_date = new Date();
         OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.CANCELLED, super.getOrder(),"cancelled",start_date);
-        super.getOrder().setStatus(orderStatus);
+        super.getOrder().setOrderStatus(orderStatus);
         return true;
     }
 

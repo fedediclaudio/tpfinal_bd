@@ -1,17 +1,18 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.Embeddable;
 import java.util.Date;
-
+//@Entity
+//@DiscriminatorValue("Assigned")
+@Embeddable
 public class Assigned extends OrderStatus
 {
     //private Order order;
 
-    public Assigned(Order order, String name, Date start_date)
+    public Assigned(Order order, Date start_date)
     {
-        super.setOrder(order);
-        super.setName(name);
-        super.setStartDate(start_date);
-        setOrder_status_enum(Order_Status_Enum.ASSIGNED);
+        super(order, "Assigned", start_date);
+       // setOrder_status_enum(Order_Status_Enum.ASSIGNED);
     }
 
     @Override
@@ -28,7 +29,7 @@ public class Assigned extends OrderStatus
         //TODO: ver eso de canCancel()
         Date start_date = new Date();
         OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.CANCELLED, super.getOrder(),"cancelled",start_date);
-        super.getOrder().setStatus(orderStatus);
+        super.getOrder().setOrderStatus(orderStatus);
         return true;
     }
 
@@ -50,7 +51,7 @@ public class Assigned extends OrderStatus
             //Cancel cancel = new Cancel(super.getOrder());
             Date start_date = new Date();
             OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.CANCELLED, super.getOrder(),"cancelled",start_date);
-            super.getOrder().setStatus(orderStatus);
+            super.getOrder().setOrderStatus(orderStatus);
             int score = super.getOrder().getDeliveryMan().getScore();
             super.getOrder().getDeliveryMan().setScore(score -2);
             rta = true;
@@ -68,7 +69,7 @@ public class Assigned extends OrderStatus
     {
         Date start_date = new Date();
         OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.DELIVERED, super.getOrder(),"delivered",start_date);
-        super.getOrder().setStatus(orderStatus);
+        super.getOrder().setOrderStatus(orderStatus);
         return true;
     }
 }

@@ -1,17 +1,20 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 import java.util.Date;
-
+//@Entity
+//@DiscriminatorValue("Sent")
+@Embeddable
 public class Sent extends OrderStatus
 {
 
     //private Order order;
 
-    public Sent(Order order, String name, Date start_date)
+    public Sent(Order order, Date start_date)
     {
-        super.setOrder(order);
-        super.setName(name);
-        super.setStartDate(start_date);
+        super(order,"Sent" ,start_date);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class Sent extends OrderStatus
     {
         Date start_date = new Date();
         OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.DELIVERED, super.getOrder(),"delivered",start_date);
-        super.getOrder().setStatus(orderStatus);
+        super.getOrder().setOrderStatus(orderStatus);
         int scoreCliente = super.getOrder().getClient().getScore() + 1;
         super.getOrder().getClient().setScore(scoreCliente);
         int scoreDeliveryMan = super.getOrder().getDeliveryMan().getScore() + 1;

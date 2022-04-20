@@ -1,52 +1,44 @@
 package com.bd.tpfinal.model;
-
-
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 
-@Entity
-@Table(name = "ordersStatus")
-//public abstract class OrderStatus
+//@Entity
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@DiscriminatorColumn(name = "OrderStatus_Type")
+//@Table(name = "ordersStatus")
+@Embeddable
 public class OrderStatus
 {
-    //TODO: solucionar el tema del patrón STATE.
-    //TODO: no persiste subclases de la forma en que lo hice
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "state")
+    protected String name;
 
-    private String name;
-
+    @Column(name = "state_start_date")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
-    private Date startDate;
+    protected Date startDate;
 
-    //@JoinColumn(name = "order_id")
-    //"order_id" es la columna de la tabla ordersStatus que tiene la clave foranea
-    //@OneToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
-    @OneToOne(mappedBy = "status", cascade = CascadeType.ALL)
-    private Order order;
-
-
-    ////// AGREGADO
-    //public static enum Status {PENDING, ASSIGNED, CANCELLED, SENT, DELIVERED};
-    //public static Order_Status order_status
-    @Enumerated(EnumType.STRING)
-    protected Order_Status_Enum order_status_enum;
-    //////  FIN AGREGADO
-
+    @Transient
+    protected Order order;
 
     public OrderStatus()
     {
     }
 
-    public Long getId()
+    public OrderStatus(Order order, String name, Date startDate)
     {
-        return id;
+        setName(name);
+        setStartDate(startDate);
+        setOrder(order);
+    }
+
+    public OrderStatus(Order order, String name)
+    {
+        this.name = name;
+        this.order = order;
+        this.startDate = Calendar.getInstance().getTime();
     }
 
     public String getName()
@@ -62,16 +54,6 @@ public class OrderStatus
     public Date getStartDate()
     {
         return startDate;
-    }
-
-    public Order_Status_Enum getOrder_status_enum()
-    {
-        return order_status_enum;
-    }
-
-    public void setOrder_status_enum(Order_Status_Enum order_status_enum)
-    {
-        this.order_status_enum = order_status_enum;
     }
 
     public void setStartDate(Date startDate)
