@@ -29,4 +29,10 @@ public class SupplierTypeServiceImpl implements SupplierTypeService
     {
         return this.supplierTypeRepository.findAll();
     }
+
+    @Override
+    public SupplierType getSupplierTypeByName(String name)
+    {
+        return this.supplierTypeRepository.findByName(name);
+    }
 }

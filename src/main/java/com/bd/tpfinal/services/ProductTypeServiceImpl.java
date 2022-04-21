@@ -1,5 +1,6 @@
 package com.bd.tpfinal.services;
 
+import com.bd.tpfinal.model.Product;
 import com.bd.tpfinal.model.ProductType;
 import com.bd.tpfinal.repositories.ProductTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,4 +37,12 @@ public class ProductTypeServiceImpl implements ProductTypeService
     {
         return this.productTypeRepository.findById(id);
     }
+
+    @Override
+    public ProductType getProductTypeByName(String name)
+    {
+        return this.productTypeRepository.findByName(name);
+    }
+
+
 }

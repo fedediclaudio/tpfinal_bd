@@ -12,4 +12,6 @@ public interface ProductService
     public void addProduct(Product newProduct);
     public List<Product> getAll();
     public Optional<Product> getProductById(Long id);
+    public Product getProductByName(String name);
+
 }

@@ -23,7 +23,19 @@ public class Qualification
     {
     }
 
+    public Qualification(Order order)
+    {
+        this.order = order;
+        this.score = 0.0F;
+        this.commentary = "creación de una calificación";
+    }
 
+    public Qualification(float score, String commentary, Order order)
+    {
+        this.score = score;
+        this.commentary = commentary;
+        this.order = order;
+    }
 
     public Long getId()
     {

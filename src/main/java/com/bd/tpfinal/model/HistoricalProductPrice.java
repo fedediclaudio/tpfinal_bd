@@ -32,6 +32,14 @@ public class HistoricalProductPrice
     {
     }
 
+    public HistoricalProductPrice(float price, Date startDate, Date finishDate, Product product)
+    {
+        this.price = price;
+        this.startDate = startDate;
+        this.finishDate = finishDate;
+        this.product = product;
+    }
+
     public Long getId()
     {
         return id;

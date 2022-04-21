@@ -10,5 +10,6 @@ public interface SupplierTypeService
 {
     public void addSupplierType(SupplierType newSupplierType);
     public List<SupplierType> getAll();
+    public SupplierType getSupplierTypeByName(String name);
 
 }

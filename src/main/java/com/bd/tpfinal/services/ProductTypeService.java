@@ -1,5 +1,6 @@
 package com.bd.tpfinal.services;
 
+import com.bd.tpfinal.model.Product;
 import com.bd.tpfinal.model.ProductType;
 import org.springframework.stereotype.Service;
 
@@ -13,4 +14,5 @@ public interface ProductTypeService
     public void addProductType(ProductType newProductType);
     public List<ProductType> getAll();
     public Optional<ProductType> getProductTypeById(Long id);
+    public ProductType getProductTypeByName(String name);
 }
