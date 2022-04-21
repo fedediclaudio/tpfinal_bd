@@ -25,9 +25,16 @@ public class ClientServiceImpl implements ClientService
         this.clientRepository = clientRepository;
     }
 
+    /**
+     * solamente agrega un nuevo cliente cuando tiene un username diferente
+     * No permito repetir username
+     * @param newClient
+     */
     public void addClient(Client newClient)
     {
-        clientRepository.save(newClient);
+        Client buscado = getClientByName(newClient.getUsername());
+        if(buscado == null)
+            clientRepository.save(newClient);
     }
 
     public List<Client> getAClientList()
@@ -50,7 +57,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public List<Client> getClientByName(String name)
+    public Client getClientByName(String name)
     {
         return this.clientRepository.findByName(name);
     }

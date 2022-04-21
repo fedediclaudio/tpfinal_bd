@@ -102,7 +102,11 @@ class TpfinalApplicationTests {
 	@Test
 	public void testCreationOrder()
 	{
-		Order or
+		Date dateOfOrder = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
+		Client cliente = (Client) this.clientService.getClientByName("Cliente1");
+		Address address = cliente.getAddresses().get(0);
+		Order orden = new Order(dateOfOrder, "comentario Orden 1", 0.0F, cliente,address );
+		this.orderService.addOrder(orden);
 
 	}
 

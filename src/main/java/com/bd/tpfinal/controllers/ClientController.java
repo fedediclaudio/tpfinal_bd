@@ -39,7 +39,7 @@ public class ClientController
     }
 
     @GetMapping("/name/{name}")
-    public List<Client> getAllByName(@PathVariable String name)
+    public Client getAllByName(@PathVariable String name)
     {
         return this.clientService.getClientByName(name);
     }

@@ -14,7 +14,7 @@ public interface ClientRepository extends JpaRepository<Client, Long>
 {
 
    //@Query(value= "Select * from Client where name = ?1", nativeQuery = true)
-   List<Client> findByName(@Param("name") String name);
+   Client findByName(@Param("name") String name);
 
     //métodos que ofrece CrudRepository:
     // https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html

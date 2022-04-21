@@ -14,6 +14,6 @@ public interface ClientService
     public List<Client> getAClientList();
     public List<Client> getAll();
     public Client getClient(String username, String password);
-    public List<Client> getClientByName(String name);
+    public Client getClientByName(String name);
     public Optional<Client> getClientById(Long id);
 }
