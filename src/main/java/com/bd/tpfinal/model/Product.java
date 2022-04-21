@@ -37,8 +37,7 @@ public class Product
     @JoinColumn(name = "id_productType", nullable = false) //nombre del atributo clave del otro lado
     private ProductType type;
 
-    //one to many con HistoricalProductPrice. Bidireccional
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<HistoricalProductPrice> prices;
 

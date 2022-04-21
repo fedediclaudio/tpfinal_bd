@@ -37,7 +37,7 @@ public class SupplierServiceImpl implements SupplierService
     }
 
     @Override
-    public Supplier getSupplierByName(String name)
+    public List<Supplier> getSupplierByName(String name)
     {
         return this.supplierRepository.findByName(name);
     }

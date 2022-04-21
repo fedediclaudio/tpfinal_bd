@@ -19,9 +19,16 @@ public class SupplierTypeServiceImpl implements SupplierTypeService
     }
 
     @Override
+    /**
+     * No adminte un nuevo SupplierType con nombre ya usado.
+     * Lo ignora y no lo salva.
+     */
     public void addSupplierType(SupplierType newSupplierType)
     {
-        this.supplierTypeRepository.save(newSupplierType);
+        String name = newSupplierType.getName();
+        SupplierType buscado = getSupplierTypeByName(name);
+        if(buscado==null)
+            this.supplierTypeRepository.save(newSupplierType);
     }
 
     @Override

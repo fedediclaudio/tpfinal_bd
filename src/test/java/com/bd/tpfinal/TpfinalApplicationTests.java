@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 @SpringBootTest
@@ -75,14 +76,17 @@ class TpfinalApplicationTests {
 		float qual = 0.0F;
 		SupplierType supplierType = this.supplierTypeService.getSupplierTypeByName("supplierType1");
 		Supplier supplier1 = new Supplier("supplier1", "20123456784", "San Juan 123", coords, qual, supplierType);
+		this.supplierService.addSupplier(supplier1);
 	}
 
 	@Test
 	void testCreacionProduct()
 	{
 		ProductType productType = this.productTypeService.getProductTypeByName("ProductoTipo1");
-		Supplier supplier = this.supplierService.getSupplierByName("supplier1");
-		Product product1 = new Product("producto1", 25.8F, 12.0F, "descripcion producto 1", supplier, productType);
+		List<Supplier> suppliers = this.supplierService.getSupplierByName("supplier1");
+		Supplier unSupplier = suppliers.get(0);
+		Product product1 = new Product("producto1", 25.8F, 12.0F, "descripcion producto 1", unSupplier, productType);
+		this.productService.addProduct(product1);
 	}
 
 	@Test
@@ -93,6 +97,13 @@ class TpfinalApplicationTests {
 		Product product = this.productService.getProductByName("producto1");
 		HistoricalProductPrice hpp = new HistoricalProductPrice(123.00F,startDate, finishDate, product);
 		this.historicalProductPriceService.addHistoricalProductPrice(hpp);
+	}
+
+	@Test
+	public void testCreationOrder()
+	{
+		Order or
+
 	}
 
 	@Test

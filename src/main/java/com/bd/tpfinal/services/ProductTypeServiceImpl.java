@@ -23,7 +23,13 @@ public class ProductTypeServiceImpl implements ProductTypeService
     @Override
     public void addProductType(ProductType newProductType)
     {
-        this.productTypeRepository.save(newProductType);
+        String name = newProductType.getName();
+        ProductType buscado = getProductTypeByName(name);
+        if(buscado == null)
+        {
+            this.productTypeRepository.save(newProductType);
+        }
+
     }
 
     @Override

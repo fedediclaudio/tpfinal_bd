@@ -23,8 +23,13 @@ public class HistoricalProductPrice
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
     private Date finishDate;
 
-    //Many to One con Product. Bidireccional
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {})
+     /**
+     * CascadeType.MERGE: si no uso esta opción da un error->detached entity passed to persist
+     * Es util en los casos en los que sabemos que al modificar la entidad principal sus
+     * secundarias también han de ser modificadas porque se han creado en el mismo momento.
+     * Por ejemplo, si al modificar un Usuario también hemos modificado su Direccion.
+     */
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "id_product", nullable = false) //nombre del atributo clave del otro lado
     private Product product;
 
