@@ -13,7 +13,7 @@ public class Order
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_order", nullable = false, unique = true)
+    @Column(name = "id_order", unique = true, updatable = false)
     private Long number;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
@@ -33,11 +33,10 @@ public class Order
     //@JoinColumn: especificar un nombre de columna de clave externa
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
     @JoinColumn(name = "deliveryMan_id")
-    //@JsonIgnore //evita bucle infinito al toString.
     private DeliveryMan deliveryMan;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "id_client", nullable = false)
+    @JoinColumn(name = "id_user", nullable = false)
     private Client client;
 
     //en el UML este campo se llama DeliveryAddress, tal vez se deba cambiar
@@ -66,12 +65,11 @@ public class Order
     //solamente puse lo relativo a patrón STATE
     public Order()
     {
-
+        this.orderStatus = new Pending(this,this.getDateOfOrder());
     }
 
-    public Order(int number, Date dateOfOrder, String comments, float totalPrice, Client client, Address address)
+    public Order(Date dateOfOrder, String comments, float totalPrice, Client client, Address address)
     {
-        this.number = number;
         this.dateOfOrder = dateOfOrder;
         this.comments = comments;
         this.totalPrice = totalPrice;
@@ -80,22 +78,12 @@ public class Order
         this.address = address;
         this.qualification = null;
         this.items = null;
-        this.orderStatus = new Pending(this,this.getDateOfOrder());
+        this.orderStatus = new Pending(this,dateOfOrder);
     }
 
-    public Long getId()
-    {
-        return id;
-    }
-
-    public int getNumber()
+    public Long getNumber()
     {
         return number;
-    }
-
-    public void setNumber(int number)
-    {
-        this.number = number;
     }
 
     public Date getDateOfOrder()
@@ -185,7 +173,6 @@ public class Order
         //return Status_Factory.getInstanceByOrderStatus(status);
     }
 
-
     public void setOrderStatus(OrderStatus orderStatus)
     {
         this.orderStatus = orderStatus;
@@ -212,4 +199,5 @@ public class Order
                 break;
         }
     }
+
 }

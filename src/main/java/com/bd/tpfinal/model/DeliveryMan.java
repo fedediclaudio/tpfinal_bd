@@ -40,6 +40,14 @@ public class DeliveryMan extends User
     {
     }
 
+    public DeliveryMan(String name, String username, String password, String email, Date dateOfBirth, boolean free, Date dateOfAdmission)
+    {
+        super(name, username, password, email, dateOfBirth);
+        this.numberOfSuccessOrders = 0;
+        this.free = free;
+        this.dateOfAdmission = dateOfAdmission;
+    }
+
     public int getNumberOfSuccessOrders()
     {
         return numberOfSuccessOrders;

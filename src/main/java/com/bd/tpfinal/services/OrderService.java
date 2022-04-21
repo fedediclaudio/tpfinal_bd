@@ -9,7 +9,7 @@ import java.util.Optional;
 @Service
 public interface OrderService
 {
-    public void addOrder(Order newOrder);
+    public Order addOrder(Order newOrder);
     public List<Order> getAll();
     public Optional<Order> getById(Long id);
     public Order getByNumber(int number);

@@ -3,6 +3,7 @@ package com.bd.tpfinal.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,13 @@ public class ProductType
 
     public ProductType()
     {
+    }
+
+    public ProductType(String name, String description)
+    {
+        this.name = name;
+        this.description = description;
+        this.products = new ArrayList<Product>();
     }
 
     public Long getId()

@@ -15,7 +15,7 @@ public class Client extends User
 {
     //hereda el campo id de User
 
-    @Column(name = "date_of_register_client", updatable = false, nullable = false)
+    @Column(name = "date_of_register_client")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "es_AR")
     private Date dateOfRegister;
 
@@ -23,7 +23,7 @@ public class Client extends User
     //Lado Uno
     // mappedBy: nombre del atributo del otro (muchos) lado que referencia a este lado (uno)
     @JsonIgnore
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     private List<Order> orders;
 
     //relación uno a muchos, unidireccional
@@ -34,16 +34,21 @@ public class Client extends User
     @JsonIgnore
     private List<Address> addresses;
 
-    public Client()
+    //bloque de inicialización
     {
+        this.orders = new ArrayList<Order>();
+        this.addresses = new ArrayList<Address>();
+        this.dateOfRegister = new Date();
+        System.out.println("date date: "+dateOfRegister);
     }
+
+    public Client(){ }
 
     public Client(String name, String username, String password, String email, Date dateOfBirth)
     {
         super(name, username, password, email, dateOfBirth);
-        this.dateOfRegister = Calendar.getInstance().getTime();
-        this.orders = new ArrayList<>();
-        this.addresses = new ArrayList<>();
+
+
     }
 
     public Date getDateOfRegister()
@@ -56,6 +61,11 @@ public class Client extends User
         this.dateOfRegister = dateOfRegister;
     }
 
+    public List<Address> getAddresses()
+    {
+        return addresses;
+    }
+
     public List<Order> getOrders()
     {
         return orders;
@@ -66,13 +76,8 @@ public class Client extends User
         this.orders = orders;
     }
 
-    public List<Address> getAddresses()
+    public void addOrder(Order order)
     {
-        return addresses;
-    }
-
-    public void setAddresses(List<Address> addresses)
-    {
-        this.addresses = addresses;
+        this.orders.add(order);
     }
 }

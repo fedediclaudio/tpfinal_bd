@@ -1,6 +1,7 @@
 package com.bd.tpfinal.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,13 @@ public class SupplierType
 
     public SupplierType()
     {
+    }
+
+    public SupplierType(String name, String description)
+    {
+        this.name = name;
+        this.description = description;
+        this.suppliers = new ArrayList<Supplier>();
     }
 
     public Long getId()

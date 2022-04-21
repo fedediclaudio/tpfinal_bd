@@ -1,7 +1,7 @@
 package com.bd.tpfinal.services;
 
+import com.bd.tpfinal.model.Client;
 import com.bd.tpfinal.model.Order;
-import com.bd.tpfinal.model.OrderStatus;
 import com.bd.tpfinal.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,15 +21,11 @@ public class OrderServiceImpl implements OrderService
     }
 
     @Override
-    public void addOrder(Order newOrder)
+    public Order addOrder(Order newOrder)
     {
-        //creo un status PENDING
-        //Creo la orden y le asigno el status anterior
-        //OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.PENDING,newOrder,"pending",newOrder.getDateOfOrder());
-        // this.orderStatusRepository.save(orderStatus);
-        // newOrder.setStatus(orderStatus);
-        //this.orderStatusRepository.save(newOrder.getStatus());
+        newOrder.getClient().addOrder(newOrder);
         this.orderRepository.save(newOrder);
+        return newOrder;
     }
 
     @Override
@@ -50,6 +46,7 @@ public class OrderServiceImpl implements OrderService
         Order order_aux;
         Optional<Order> order_aux_optional = this.orderRepository.findById(id);
         order_aux = order_aux_optional.get();
+        order_aux.setStatusByName();
         //OrderStatus orderStatus_aux = this.orderStatusRepository.findByOrder(id);
         //order_aux.setOrderStatus(orderStatus_aux);
         return Optional.of(order_aux);

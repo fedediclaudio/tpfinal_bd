@@ -28,9 +28,9 @@ public class OrderController
     //TODO: necesito validar desde el repositorio que la id de Address pasada en la newOrder pertenece al id del Client
     //por ahora intento desde acá.
     @PostMapping(value = "/new")
-    public void addOrder(@RequestBody Order newOrder)
+    public Order addOrder(@RequestBody Order newOrder)
     {
-        this.orderService.addOrder(newOrder);
+        return this.orderService.addOrder(newOrder);
     }
     //public void addOrder(@RequestBody Order newOrder) throws AddressEquivocadaException
     //{

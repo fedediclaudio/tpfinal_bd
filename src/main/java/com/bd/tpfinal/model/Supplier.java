@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -40,6 +41,17 @@ public class Supplier
 
     public Supplier()
     {
+    }
+
+    public Supplier(String name, String cuil, String address, float[] coords, float qualificationOfUsers, SupplierType supplierType)
+    {
+        this.name = name;
+        this.cuil = cuil;
+        this.address = address;
+        this.coords = coords;
+        this.qualificationOfUsers = qualificationOfUsers;
+        this.supplierType = supplierType;
+        this.products = new ArrayList<Product>();
     }
 
     public Long getId()
