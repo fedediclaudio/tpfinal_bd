@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("orders")
@@ -62,7 +63,10 @@ public class OrderController extends BaseController {
     public ResponseEntity<BaseResponseDto> changeOrderStatus(@PathVariable("order_id") String orderId,
                                                              @PathVariable("order_status") String orderStatus,
                                                              @RequestParam(value = "cancelled_by_client", required = false) Boolean canceledByClient){
-        ChangeOrderStatusDto request = new ChangeOrderStatusDto(orderId, orderStatus.toUpperCase());
+        ChangeOrderStatusDto request = ChangeOrderStatusDto.builder()
+                .orderId(orderId)
+                .status(OrderStatusAction.valueOf(orderStatus.toUpperCase()))
+                .build();
         request.setCanceledByClient(canceledByClient);
 
         BaseResponseDto response = ordersService.changeOrderStatus(request);

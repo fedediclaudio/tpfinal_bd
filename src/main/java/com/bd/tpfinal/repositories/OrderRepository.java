@@ -33,4 +33,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByStatus_nameAndItems_product_supplier(String status, Supplier supplier);
 
     Set<Order> findByStatus_nameAndQualificationIsNotNullAndItems_product_supplier(String delivered, Supplier supplier);
+
+    @Query("FROM Order o LEFT JOIN o.items i WHERE o.id = :id")
+    Optional<Order> findByIdWithItems(@Param("id") Long id);
 }

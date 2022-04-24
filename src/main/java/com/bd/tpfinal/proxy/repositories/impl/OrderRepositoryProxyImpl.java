@@ -176,7 +176,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
         String strTo = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(to);
         Order order = orderRepository.findMaxTotalPriceBetweenDates(strFrom, strTo);
         if (order == null)
-            return new OrderDto();
+            return OrderDto.builder().build();
         return createOrderDto(order, order.getClient(), order.getItems());
     }
 
