@@ -4,10 +4,10 @@ package com.bd.tpfinal.services.impl;
 import com.bd.tpfinal.dtos.common.*;
 import com.bd.tpfinal.dtos.request.items.CreateItemRequest;
 import com.bd.tpfinal.dtos.request.orders.CreateOrderRequest;
-import com.bd.tpfinal.dtos.response.BaseResponseDto;
+import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.orders.ListOrderResponse;
-import com.bd.tpfinal.dtos.response.orders.SingleOrderResponseDto;
+import com.bd.tpfinal.dtos.response.orders.SingleOrderResponse;
 import com.bd.tpfinal.exceptions.parameters.ParameterErrorException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.proxy.repositories.ClientRepositoryProxy;
@@ -34,8 +34,8 @@ public class OrdersServiceImpl implements OrdersService {
 
 
     @Override
-    public BaseResponseDto addItemToOrder(String orderId, CreateItemRequest createItemRequest) {
-        SingleOrderResponseDto response = new SingleOrderResponseDto();
+    public BaseResponse addItemToOrder(String orderId, CreateItemRequest createItemRequest) {
+        BaseResponse response = new SingleOrderResponse();
         try {
             ItemDto itemDto = ItemDto.builder()
                     .orderId(orderId)
@@ -55,7 +55,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public BaseResponseDto getMaximumPriceOrderByDate(Date date) {
+    public BaseResponse getMaximumPriceOrderByDate(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -68,15 +68,15 @@ public class OrdersServiceImpl implements OrdersService {
         Date to = cal.getTime();
 
         OrderDto orderDto = orderRepository.findMaxTotalPriceBetweenDates(from, to);
-        SingleOrderResponseDto response = new SingleOrderResponseDto();
+        BaseResponse response = new SingleOrderResponse();
         response.setMessage("Order with maximum price of date '" + new SimpleDateFormat("yyyy-MM-dd").format(date) + "'");
         response.setData(orderDto);
         return response;
     }
 
     @Override
-    public BaseResponseDto getOrdersWithMaximumProductsBySupplier(String supplierId) {
-        SingleOrderResponseDto response = new SingleOrderResponseDto();
+    public BaseResponse getOrdersWithMaximumProductsBySupplier(String supplierId) {
+        BaseResponse response = new SingleOrderResponse();
         try {
             OrderDto orderDto = orderRepository.getOrdersWithMaximumProductsBySupplier(supplierId);
             response.setData(orderDto);
@@ -89,8 +89,8 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public BaseResponseDto qualifyOrder(String orderId, Float qualification, String qualificationMessage) {
-        SingleOrderResponseDto response = new SingleOrderResponseDto();
+    public BaseResponse qualifyOrder(String orderId, Float qualification, String qualificationMessage) {
+        BaseResponse response = new SingleOrderResponse();
         try {
             OrderDto orderDto = orderRepository.qualifyOrder(orderId, qualification, qualificationMessage);
             response.setData(orderDto);
@@ -105,8 +105,8 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public BaseResponseDto changeOrderStatus(ChangeOrderStatusDto changeOrderStatusDto) {
-        SingleOrderResponseDto response = new SingleOrderResponseDto();
+    public BaseResponse changeOrderStatus(ChangeOrderStatusDto changeOrderStatusDto) {
+        BaseResponse response = new SingleOrderResponse();
         try {
             OrderDto orderDto = orderRepository.changeOrderStatus(changeOrderStatusDto) ;
             response.setData(orderDto);
@@ -122,8 +122,8 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public BaseResponseDto create(String clientId, String addressId, String comments) {
-        SingleOrderResponseDto response = new SingleOrderResponseDto();
+    public BaseResponse create(String clientId, String addressId, String comments) {
+        BaseResponse response = new SingleOrderResponse();
         try {
              ClientDto clientDto = clientRepository.findById(clientId);
              OrderDto orderDto = OrderDto.builder().build();
@@ -142,8 +142,8 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public BaseResponseDto update(String orderId, CreateOrderRequest orderRequest) {
-        SingleOrderResponseDto response = new SingleOrderResponseDto();
+    public BaseResponse update(String orderId, CreateOrderRequest orderRequest) {
+        BaseResponse response = new SingleOrderResponse();
         try {
             OrderDto orderDto = orderRepository.findById(orderId);
         } catch (PersistenceEntityException e) {
@@ -158,8 +158,8 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public BaseResponseDto retrieve(String orderId) {
-        BaseResponseDto response = new SingleOrderResponseDto();
+    public BaseResponse retrieve(String orderId) {
+        BaseResponse response = new SingleOrderResponse();
         try {
             OrderDto order = orderRepository.findById(orderId);
             response.setData(order);
@@ -172,15 +172,15 @@ public class OrdersServiceImpl implements OrdersService {
         return response;
     }
     @Override
-    public BaseResponseDto retrieve(String status, Integer number) {
-        BaseResponseDto response;
+    public BaseResponse retrieve(String status, Integer number) {
+        BaseResponse response;
         if (status != null) {
             List orders = orderRepository.findByStatusName(status);
             response = new ListOrderResponse();
             response.setData(orders);
             response.setMessage("Orders with status '" + status);
         }else if (number != null && number > 0) {
-            response = new SingleOrderResponseDto();
+            response = new SingleOrderResponse();
             try {
                 OrderDto order = orderRepository.findByNumber(number);
                 response.setData(order);

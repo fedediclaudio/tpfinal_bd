@@ -1,7 +1,7 @@
 package com.bd.tpfinal.controllers;
 
 import com.bd.tpfinal.dtos.request.delivery.CreateDeliveryManRequest;
-import com.bd.tpfinal.dtos.response.BaseResponseDto;
+import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.services.DeliveryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +21,8 @@ public class DeliveryController extends  BaseController{
     }
 
     @GetMapping
-    public ResponseEntity<BaseResponseDto> getDeliveryMen(@RequestParam(value = "best_ranked", required = false) Boolean bestRanked){
-        BaseResponseDto response = null;
+    public ResponseEntity<BaseResponse> getDeliveryMen(@RequestParam(value = "best_ranked", required = false) Boolean bestRanked){
+        BaseResponse response = null;
         if (bestRanked == null || !bestRanked){
             response = deliveryService.findAll();
         }else{
@@ -33,8 +33,8 @@ public class DeliveryController extends  BaseController{
 
 
     @PostMapping
-    public ResponseEntity<BaseResponseDto> create(@RequestBody CreateDeliveryManRequest createDeliveryManRequest){
-        BaseResponseDto response = null;
+    public ResponseEntity<BaseResponse> create(@RequestBody CreateDeliveryManRequest createDeliveryManRequest){
+        BaseResponse response = null;
         response = deliveryService.createDeliveryMan(createDeliveryManRequest);
         return new ResponseEntity<>(response, responseStatus(response));
     }

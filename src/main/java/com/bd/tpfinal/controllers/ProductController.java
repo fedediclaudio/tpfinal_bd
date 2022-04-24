@@ -1,7 +1,7 @@
 package com.bd.tpfinal.controllers;
 
 import com.bd.tpfinal.dtos.request.products.CreateProductRequest;
-import com.bd.tpfinal.dtos.response.BaseResponseDto;
+import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.services.ProductsService;
 import org.springframework.http.ResponseEntity;
@@ -26,35 +26,35 @@ public class ProductController extends BaseController {
     }
 
     @GetMapping
-    public ResponseEntity<BaseResponseDto> getProducts(@RequestParam(value = "supplier_id", required = false) String supplierId){
-        BaseResponseDto response;
+    public ResponseEntity<BaseResponse> getProducts(@RequestParam(value = "supplier_id", required = false) String supplierId){
+        BaseResponse response;
         if (supplierId == null || supplierId.isEmpty()){
             response = productsService.retrieve();
         } else {
             response = productsService.getProductsWithProductTypeBySupplier(supplierId);
         }
-        return new ResponseEntity<BaseResponseDto>(response, responseStatus(response));
+        return new ResponseEntity<BaseResponse>(response, responseStatus(response));
     }
 
     @PutMapping("/{product_id}")
-    public ResponseEntity<BaseResponseDto> update(@PathVariable("product_id") String productId, @RequestBody CreateProductRequest createProductRequest){
-        BaseResponseDto response = productsService.update(productId, createProductRequest);
-        return new ResponseEntity<BaseResponseDto>(response, responseStatus(response));
+    public ResponseEntity<BaseResponse> update(@PathVariable("product_id") String productId, @RequestBody CreateProductRequest createProductRequest){
+        BaseResponse response = productsService.update(productId, createProductRequest);
+        return new ResponseEntity<BaseResponse>(response, responseStatus(response));
     }
 
     @GetMapping("/average")
-    public ResponseEntity<BaseResponseDto> productsAveragePrice(){
-        BaseResponseDto response = productsService.getAverageProductPriceByProductType();
-        return new ResponseEntity<BaseResponseDto>(response, responseStatus(response));
+    public ResponseEntity<BaseResponse> productsAveragePrice(){
+        BaseResponse response = productsService.getAverageProductPriceByProductType();
+        return new ResponseEntity<BaseResponse>(response, responseStatus(response));
     }
 
     @GetMapping("/{product_id}/prices_between_dates")
-    public ResponseEntity<BaseResponseDto> productPriceBetweenDates(@PathVariable(value = "product_id", required = true) String productId,
-                                                                       @RequestParam(value = "from_date", required = true) String fromDate,
-                                                                       @RequestParam(value = "to_date", required = true) String toDate) {
+    public ResponseEntity<BaseResponse> productPriceBetweenDates(@PathVariable(value = "product_id", required = true) String productId,
+                                                                 @RequestParam(value = "from_date", required = true) String fromDate,
+                                                                 @RequestParam(value = "to_date", required = true) String toDate) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        BaseResponseDto response = null;
+        BaseResponse response = null;
         try {
             response = productsService.getProductPriceBetweenDates(productId, sdf.parse(fromDate), sdf.parse(toDate));
         } catch (ParseException e) {
@@ -66,8 +66,8 @@ public class ProductController extends BaseController {
     }
 
     @PostMapping("/{supplier_id}")
-    public ResponseEntity<BaseResponseDto> create(@PathVariable("supplier_id") String supplierId, @RequestBody CreateProductRequest createProductRequest){
-        BaseResponseDto response = productsService.create(supplierId, createProductRequest);
-        return new ResponseEntity<BaseResponseDto>(response, responseStatus(response));
+    public ResponseEntity<BaseResponse> create(@PathVariable("supplier_id") String supplierId, @RequestBody CreateProductRequest createProductRequest){
+        BaseResponse response = productsService.create(supplierId, createProductRequest);
+        return new ResponseEntity<BaseResponse>(response, responseStatus(response));
     }
 }

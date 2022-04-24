@@ -1,7 +1,6 @@
 package com.bd.tpfinal.dtos.response.orders;
 
-import com.bd.tpfinal.dtos.common.OrderDto;
-import com.bd.tpfinal.dtos.response.BaseResponseDto;
+import com.bd.tpfinal.dtos.response.BaseResponse;
 
-public class SingleOrderResponse extends BaseResponseDto {
+public class SingleOrderResponse extends BaseResponse {
 }

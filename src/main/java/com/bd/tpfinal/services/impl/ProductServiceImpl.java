@@ -3,10 +3,10 @@ package com.bd.tpfinal.services.impl;
 import com.bd.tpfinal.dtos.common.AverageProductTypeDto;
 import com.bd.tpfinal.dtos.common.ProductDto;
 import com.bd.tpfinal.dtos.request.products.CreateProductRequest;
-import com.bd.tpfinal.dtos.response.BaseResponseDto;
+import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.products.ListProductResponse;
-import com.bd.tpfinal.dtos.response.products.SingleProductResponseDto;
+import com.bd.tpfinal.dtos.response.products.SingleProductResponse;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.proxy.repositories.ProductRepositoryProxy;
 import com.bd.tpfinal.services.ProductsService;
@@ -25,8 +25,8 @@ public class ProductServiceImpl implements ProductsService {
     }
 
     @Override
-    public BaseResponseDto update(String productId, CreateProductRequest createProductRequest) {
-        SingleProductResponseDto response = new SingleProductResponseDto();
+    public BaseResponse update(String productId, CreateProductRequest createProductRequest) {
+        SingleProductResponse response = new SingleProductResponse();
         try {
             ProductDto productDto = productRepositoryProxy.update(productId,
                     createProductRequest.getName(),
@@ -44,7 +44,7 @@ public class ProductServiceImpl implements ProductsService {
     }
 
     @Override
-    public BaseResponseDto getProductsWithProductTypeBySupplier(String supplierId) {
+    public BaseResponse getProductsWithProductTypeBySupplier(String supplierId) {
         ListProductResponse response = new ListProductResponse();
         List<ProductDto> products = productRepositoryProxy.findBySupplierId(supplierId);
         response.setMessage("Products from supplier id: " + supplierId);
@@ -53,17 +53,17 @@ public class ProductServiceImpl implements ProductsService {
     }
 
     @Override
-    public BaseResponseDto getAverageProductPriceByProductType() {
+    public BaseResponse getAverageProductPriceByProductType() {
         List<AverageProductTypeDto> products = productRepositoryProxy.getAveragePriceProductTypes();
-        BaseResponseDto response = new ListProductResponse();
+        BaseResponse response = new ListProductResponse();
         response.setMessage("Average price by product types.");
         response.setData(products);
         return response;
     }
 
     @Override
-    public BaseResponseDto create(String supplierId, CreateProductRequest product) {
-        SingleProductResponseDto response = new SingleProductResponseDto();
+    public BaseResponse create(String supplierId, CreateProductRequest product) {
+        SingleProductResponse response = new SingleProductResponse();
         ProductDto dto = ProductDto.builder()
                 .productName(product.getName())
                 .productDescription(product.getDescription())
@@ -85,8 +85,8 @@ public class ProductServiceImpl implements ProductsService {
     }
 
     @Override
-    public BaseResponseDto<ProductDto> delete(String productId) {
-        SingleProductResponseDto response = new SingleProductResponseDto();
+    public BaseResponse<ProductDto> delete(String productId) {
+        SingleProductResponse response = new SingleProductResponse();
         try {
             productRepositoryProxy.delete(productId);
             response.setMessage("Product deleted.");
@@ -98,7 +98,7 @@ public class ProductServiceImpl implements ProductsService {
     }
 
     @Override
-    public BaseResponseDto retrieve() {
+    public BaseResponse retrieve() {
         ListProductResponse response = new ListProductResponse();
         response.setMessage("Active products found.");
         List<ProductDto> products = productRepositoryProxy.findAllActiveProducts();
@@ -107,8 +107,8 @@ public class ProductServiceImpl implements ProductsService {
     }
 
     @Override
-    public BaseResponseDto retrieve(String productId) {
-        SingleProductResponseDto response = new SingleProductResponseDto();
+    public BaseResponse retrieve(String productId) {
+        SingleProductResponse response = new SingleProductResponse();
         ProductDto product = null;
         try {
             product = productRepositoryProxy.findById(productId);
@@ -122,9 +122,9 @@ public class ProductServiceImpl implements ProductsService {
     }
 
     @Override
-    public BaseResponseDto getProductPriceBetweenDates(String productId, Date fromDate, Date toDate) {
+    public BaseResponse getProductPriceBetweenDates(String productId, Date fromDate, Date toDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        SingleProductResponseDto response = new SingleProductResponseDto();
+        SingleProductResponse response = new SingleProductResponse();
         try {
             ProductDto productDto =  productRepositoryProxy.findByIdWithPricesBetweenDates(productId, fromDate, toDate);
             response.setData(productDto);

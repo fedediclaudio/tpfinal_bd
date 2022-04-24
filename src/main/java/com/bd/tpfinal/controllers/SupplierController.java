@@ -1,6 +1,6 @@
 package com.bd.tpfinal.controllers;
 
-import com.bd.tpfinal.dtos.response.BaseResponseDto;
+import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.services.SuppliersService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,34 +23,34 @@ public class SupplierController extends BaseController{
     }
 
     @GetMapping
-    public ResponseEntity<BaseResponseDto> retrieve(@RequestParam(value = "supplier_type", required = false) String supplierType,
-                                                    @RequestParam(value = "product_type", required = false) String productType,
-                                                    @RequestParam(value = "qualification_over", required = false) Float qualification){
-        BaseResponseDto response = supplierService.retrieve(supplierType, productType, qualification);
-        return new ResponseEntity<BaseResponseDto>(response, responseStatus(response));
+    public ResponseEntity<BaseResponse> retrieve(@RequestParam(value = "supplier_type", required = false) String supplierType,
+                                                 @RequestParam(value = "product_type", required = false) String productType,
+                                                 @RequestParam(value = "qualification_over", required = false) Float qualification){
+        BaseResponse response = supplierService.retrieve(supplierType, productType, qualification);
+        return new ResponseEntity<BaseResponse>(response, responseStatus(response));
     }
 
     @GetMapping("/qualified")
-    public ResponseEntity<BaseResponseDto> qualification(){
-        BaseResponseDto response = supplierService.getSupplierWithOneOrMoreStars();
+    public ResponseEntity<BaseResponse> qualification(){
+        BaseResponse response = supplierService.getSupplierWithOneOrMoreStars();
         return new ResponseEntity<>(response, responseStatus(response));
     }
 
     @GetMapping("/all_product_types")
-    public ResponseEntity<BaseResponseDto> withAllProductTypes(){
-        BaseResponseDto response = supplierService.findSuppliersWithAllProductTypes();
+    public ResponseEntity<BaseResponse> withAllProductTypes(){
+        BaseResponse response = supplierService.findSuppliersWithAllProductTypes();
         return new ResponseEntity<>(response, responseStatus(response));
     }
 
     @GetMapping("/ten_more_orders")
-    public ResponseEntity<BaseResponseDto> with10OrdersAtLeast(){
-        BaseResponseDto response = supplierService.getSupppliersWithAtLeast10DeliveredOrders();
+    public ResponseEntity<BaseResponse> with10OrdersAtLeast(){
+        BaseResponse response = supplierService.getSupppliersWithAtLeast10DeliveredOrders();
         return new ResponseEntity<>(response, responseStatus(response));
     }
 
     @DeleteMapping("/{supplier_id}/{product_id}")
-    public ResponseEntity<BaseResponseDto> deleteProduct(@PathVariable("supplier_id") String supplierId,@PathVariable("product_id") String product_id) {
-        BaseResponseDto response = supplierService.deleteSuppliersProduct(supplierId, product_id);
+    public ResponseEntity<BaseResponse> deleteProduct(@PathVariable("supplier_id") String supplierId, @PathVariable("product_id") String product_id) {
+        BaseResponse response = supplierService.deleteSuppliersProduct(supplierId, product_id);
         return new ResponseEntity(response, responseStatus(response));
     }
 

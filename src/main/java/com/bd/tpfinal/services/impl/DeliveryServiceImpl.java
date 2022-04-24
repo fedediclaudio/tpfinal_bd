@@ -2,7 +2,7 @@ package com.bd.tpfinal.services.impl;
 
 import com.bd.tpfinal.dtos.common.DeliveryManDto;
 import com.bd.tpfinal.dtos.request.delivery.CreateDeliveryManRequest;
-import com.bd.tpfinal.dtos.response.BaseResponseDto;
+import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.delivery.ListDeliveryResponse;
 import com.bd.tpfinal.dtos.response.delivery.SingleDeliveryManResponse;
@@ -24,7 +24,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    public BaseResponseDto getMostScoredDeliveryMen() {
+    public BaseResponse getMostScoredDeliveryMen() {
         ListDeliveryResponse response = new ListDeliveryResponse();
         List<DeliveryManDto> data = deliveryMenRepositoryProxy.findMostScoredDeliveryMen();
         response.setData(data);
@@ -33,7 +33,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    public BaseResponseDto findAll() {
+    public BaseResponse findAll() {
         ListDeliveryResponse response = new ListDeliveryResponse();
         List<DeliveryManDto> data = deliveryMenRepositoryProxy.findAll();
         response.setData(data);
@@ -42,7 +42,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    public BaseResponseDto createDeliveryMan(CreateDeliveryManRequest createDeliveryManRequest) {
+    public BaseResponse createDeliveryMan(CreateDeliveryManRequest createDeliveryManRequest) {
         SingleDeliveryManResponse response = new SingleDeliveryManResponse();
 
         DeliveryManDto deliveryManDto = DeliveryManDto.builder()

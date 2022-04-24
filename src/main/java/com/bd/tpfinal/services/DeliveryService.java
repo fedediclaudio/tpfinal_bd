@@ -1,12 +1,12 @@
 package com.bd.tpfinal.services;
 
 import com.bd.tpfinal.dtos.request.delivery.CreateDeliveryManRequest;
-import com.bd.tpfinal.dtos.response.BaseResponseDto;
+import com.bd.tpfinal.dtos.response.BaseResponse;
 
 public interface DeliveryService {
-    BaseResponseDto getMostScoredDeliveryMen();
+    BaseResponse getMostScoredDeliveryMen();
 
-    BaseResponseDto findAll();
+    BaseResponse findAll();
 
-    BaseResponseDto createDeliveryMan(CreateDeliveryManRequest createDeliveryManRequest);
+    BaseResponse createDeliveryMan(CreateDeliveryManRequest createDeliveryManRequest);
 }

@@ -2,7 +2,7 @@ package com.bd.tpfinal.services.impl;
 
 import com.bd.tpfinal.dtos.common.SupplierDto;
 import com.bd.tpfinal.dtos.common.SupplierWithOrdersCountDto;
-import com.bd.tpfinal.dtos.response.BaseResponseDto;
+import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.suppliers.SupplierResponse;
 import com.bd.tpfinal.dtos.response.suppliers.ListSupplierResponse;
@@ -23,7 +23,7 @@ public class SuppliersServiceImpl implements SuppliersService {
     }
 
     @Override
-    public BaseResponseDto getSupppliersWithAtLeast10DeliveredOrders() {
+    public BaseResponse getSupppliersWithAtLeast10DeliveredOrders() {
         ListSupplierResponse response = new ListSupplierResponse();
         List<SupplierWithOrdersCountDto> suppliers = supplierRepositoryProxy.findSuppliersWith10OrdersAtLeast();
         response.setMessage("Suppliers with at least 10 delivered orders.");
@@ -32,7 +32,7 @@ public class SuppliersServiceImpl implements SuppliersService {
     }
 
     @Override
-    public BaseResponseDto deleteSuppliersProduct(String productId, String supplierId) {
+    public BaseResponse deleteSuppliersProduct(String productId, String supplierId) {
         SupplierResponse response = new SupplierResponse();
         try {
             SupplierDto supplierDto = supplierRepositoryProxy.delete(productId, supplierId);
@@ -47,7 +47,7 @@ public class SuppliersServiceImpl implements SuppliersService {
     }
 
     @Override
-    public BaseResponseDto retrieve(String supplierType, String productType, Float qualification) {
+    public BaseResponse retrieve(String supplierType, String productType, Float qualification) {
         ListSupplierResponse response = new ListSupplierResponse();
         List<SupplierDto> suppliers = supplierRepositoryProxy.findSuppliers(supplierType, productType, qualification);
         response.setData(suppliers);
@@ -56,7 +56,7 @@ public class SuppliersServiceImpl implements SuppliersService {
     }
 
     @Override
-    public BaseResponseDto getSupplierWithOneOrMoreStars() {
+    public BaseResponse getSupplierWithOneOrMoreStars() {
         ListSupplierResponse response = new ListSupplierResponse();
         List<SupplierDto> suppliers = supplierRepositoryProxy.findByQualificationOfUsersGreaterThanEqual(1f);
         response.setData(suppliers);
@@ -65,7 +65,7 @@ public class SuppliersServiceImpl implements SuppliersService {
     }
 
     @Override
-    public BaseResponseDto findSuppliersWithAllProductTypes() {
+    public BaseResponse findSuppliersWithAllProductTypes() {
         ListSupplierResponse response = new ListSupplierResponse();
         response.setMessage("Suppliers with all product types");
         List<SupplierDto> suppliers = supplierRepositoryProxy.findSuppliersWithAllProductTypes();

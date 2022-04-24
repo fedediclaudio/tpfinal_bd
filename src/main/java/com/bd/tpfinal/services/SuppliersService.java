@@ -1,17 +1,17 @@
 package com.bd.tpfinal.services;
 
-import com.bd.tpfinal.dtos.response.BaseResponseDto;
+import com.bd.tpfinal.dtos.response.BaseResponse;
 
 public interface SuppliersService {
 
-    BaseResponseDto getSupppliersWithAtLeast10DeliveredOrders();
+    BaseResponse getSupppliersWithAtLeast10DeliveredOrders();
 
-    BaseResponseDto deleteSuppliersProduct(String productId, String supplierId);
+    BaseResponse deleteSuppliersProduct(String productId, String supplierId);
 
-    BaseResponseDto retrieve(String supplierType, String productType, Float qualification);
+    BaseResponse retrieve(String supplierType, String productType, Float qualification);
 
-    BaseResponseDto getSupplierWithOneOrMoreStars();
+    BaseResponse getSupplierWithOneOrMoreStars();
 
-    BaseResponseDto findSuppliersWithAllProductTypes();
+    BaseResponse findSuppliersWithAllProductTypes();
 
 }

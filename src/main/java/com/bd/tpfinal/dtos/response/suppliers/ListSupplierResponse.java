@@ -1,6 +1,6 @@
 package com.bd.tpfinal.dtos.response.suppliers;
 
-import com.bd.tpfinal.dtos.response.ListBaseResponseDto;
+import com.bd.tpfinal.dtos.response.ListBaseResponse;
 
-public class ListSupplierResponse extends ListBaseResponseDto {
+public class ListSupplierResponse extends ListBaseResponse {
 }
