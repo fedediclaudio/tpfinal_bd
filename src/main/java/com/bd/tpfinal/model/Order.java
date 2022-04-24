@@ -129,4 +129,9 @@ public class Order extends PersistentEntity {
     public void setVersion(Long version) {
         this.version = version;
     }
+
+    public void addItem(Item item) {
+        this.items.size();
+        this.items.add(item);
+    }
 }

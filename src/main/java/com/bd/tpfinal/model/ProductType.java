@@ -16,6 +16,8 @@ public class ProductType extends PersistentEntity{
             inverseJoinColumns=@JoinColumn(name="product_type_id"))
     private List<Product> products = new ArrayList<>();
 
+    @Version
+    private Long version;
     public String getName() {
         return name;
     }
@@ -38,5 +40,20 @@ public class ProductType extends PersistentEntity{
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    public void addProduct(Product product){
+        if (products == null)
+            products = new ArrayList<>();
+        products.add(product);
+        product.setType(this);
     }
 }

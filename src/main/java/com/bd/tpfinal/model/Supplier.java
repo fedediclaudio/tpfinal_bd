@@ -109,4 +109,8 @@ public class Supplier extends PersistentEntity{
     public void setVersion(Long version) {
         this.version = version;
     }
+    public void addProduct(Product product){
+        products.size();
+        products.add(product);
+    }
 }

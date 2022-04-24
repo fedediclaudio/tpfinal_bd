@@ -9,9 +9,9 @@ import java.util.List;
 public class Client extends User{
 
     private Date dateOfRegister;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
 
     public Date getDateOfRegister() {
@@ -39,5 +39,20 @@ public class Client extends User{
 
     public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
+    }
+
+    public void addOrder(Order order) {
+        this.getOrders().size();
+        this.orders.add(order);
+    }
+
+    public void addAddress(Address address) {
+        this.addresses.size();
+        this.addresses.add(address);
+    }
+
+    public Address getAddress(int i) {
+        addresses.size();
+        return addresses.get(i);
     }
 }

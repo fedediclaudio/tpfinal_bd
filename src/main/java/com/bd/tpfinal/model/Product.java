@@ -24,7 +24,7 @@ public class Product extends PersistentEntity {
     @NotNull
     private ProductType type;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<HistoricalProductPrice> prices = new ArrayList<>();
 
     private Boolean active = true;
@@ -102,5 +102,10 @@ public class Product extends PersistentEntity {
 
     public void setVersion(Long version) {
         this.version = version;
+    }
+
+    public void addPrice(HistoricalProductPrice historicalPrice) {
+        prices.size();
+        prices.add(historicalPrice);
     }
 }
