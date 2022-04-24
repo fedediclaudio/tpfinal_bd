@@ -26,6 +26,7 @@ public class SuppliersServiceImpl implements SuppliersService {
     public BaseResponseDto getSupppliersWithAtLeast10DeliveredOrders() {
         ListSupplierResponseDto response = new ListSupplierResponseDto();
         List<SupplierWithOrdersCountDto> suppliers = supplierRepositoryProxy.findSuppliersWith10OrdersAtLeast();
+        response.setMessage("Suppliers with at least 10 delivered orders.");
         response.setData(suppliers);
         return response;
     }
@@ -36,7 +37,7 @@ public class SuppliersServiceImpl implements SuppliersService {
         try {
             SupplierDto supplierDto = supplierRepositoryProxy.delete(productId, supplierId);
             response.setData(supplierDto);
-            response.setMessage("Product was removed");
+            response.setMessage("Product id '" + productId + "'was removed from supplier id " + supplierId);
         } catch (PersistenceEntityException e) {
             response.setMessage(e.getMessage());
             response.setStatus(ResponseStatus.ERROR);
@@ -50,6 +51,7 @@ public class SuppliersServiceImpl implements SuppliersService {
         ListSupplierResponseDto response = new ListSupplierResponseDto();
         List<SupplierDto> suppliers = supplierRepositoryProxy.findSuppliers(supplierType, productType, qualification);
         response.setData(suppliers);
+        response.setMessage("Suppliers found.");
         return response;
     }
 
@@ -58,6 +60,7 @@ public class SuppliersServiceImpl implements SuppliersService {
         ListSupplierResponseDto response = new ListSupplierResponseDto();
         List<SupplierDto> suppliers = supplierRepositoryProxy.findByQualificationOfUsersGreaterThanEqual(1f);
         response.setData(suppliers);
+        response.setMessage("Suppliers with one or more stars.");
         return response;
     }
 
