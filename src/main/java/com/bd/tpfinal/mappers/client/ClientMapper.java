@@ -12,4 +12,7 @@ public interface ClientMapper {
             @Mapping(source = "id", target = "id")
     })
     ClientDto toClientDto(Client client);
+
+
+    Client toClient(ClientDto clientDto);
 }
