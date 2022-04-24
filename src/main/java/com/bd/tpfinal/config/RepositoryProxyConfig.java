@@ -1,18 +1,13 @@
 package com.bd.tpfinal.config;
 
 import com.bd.tpfinal.mappers.client.ClientMapper;
+import com.bd.tpfinal.mappers.delivery.DeliveryManMapper;
 import com.bd.tpfinal.mappers.item.ItemMapper;
 import com.bd.tpfinal.mappers.orders.OrderMapper;
 import com.bd.tpfinal.mappers.product.ProductMapper;
 import com.bd.tpfinal.mappers.suppplier.SupplierMapper;
-import com.bd.tpfinal.proxy.repositories.ClientRepositoryProxy;
-import com.bd.tpfinal.proxy.repositories.OrderRepositoryProxy;
-import com.bd.tpfinal.proxy.repositories.ProductRepositoryProxy;
-import com.bd.tpfinal.proxy.repositories.SupplierRepositoryProxy;
-import com.bd.tpfinal.proxy.repositories.impl.ClientRepositoryProxyImpl;
-import com.bd.tpfinal.proxy.repositories.impl.OrderRepositoryProxyImpl;
-import com.bd.tpfinal.proxy.repositories.impl.ProductRepositoryProxyImpl;
-import com.bd.tpfinal.proxy.repositories.impl.SupplierRepositoryProxyImpl;
+import com.bd.tpfinal.proxy.repositories.*;
+import com.bd.tpfinal.proxy.repositories.impl.*;
 import com.bd.tpfinal.repositories.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,8 +35,9 @@ public class RepositoryProxyConfig {
 
     @Bean
     public ProductRepositoryProxy getProductRespositoryProxy(ProductRepository productRepository,
-                                                             ProductMapper productMapper){
-        return new ProductRepositoryProxyImpl(productRepository, productMapper);
+                                                             ProductMapper productMapper, SupplierRepository supplierRepository,
+                                                             ProductTypeRepository productTypeRepository){
+        return new ProductRepositoryProxyImpl(productRepository, productMapper, supplierRepository, productTypeRepository);
     }
 
     @Bean
@@ -53,5 +49,10 @@ public class RepositoryProxyConfig {
                                                               SupplierWithOrdersCountRepository supplierWithOrdersCountRepository){
         return new SupplierRepositoryProxyImpl(supplierRepository, productTypeRepository, productRepository, supplierMapper,
                 productMapper, supplierWithOrdersCountRepository);
+    }
+
+    @Bean
+    public DeliveryMenRepositoryProxy getDeliveryMenRepositoryProxy(DeliveryManRepository deliveryManRepository, DeliveryManMapper deliveryManMapper){
+        return new DeliveryMenRepositoryProxyImpl(deliveryManRepository, deliveryManMapper);
     }
 }
