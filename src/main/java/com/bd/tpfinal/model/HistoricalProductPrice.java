@@ -12,7 +12,7 @@ public class HistoricalProductPrice extends PersistentEntity{
     private Date startDate;
     @Temporal(TemporalType.TIMESTAMP)
     private Date finishDate;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.PERSIST)
     @NotNull
     private Product product;
 

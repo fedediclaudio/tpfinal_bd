@@ -2,12 +2,15 @@ package com.bd.tpfinal.controllers;
 
 import com.bd.tpfinal.dtos.request.ProductRequestDto;
 import com.bd.tpfinal.dtos.response.BaseResponseDto;
+import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.products.ProductResponseDto;
 import com.bd.tpfinal.services.ProductsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
@@ -49,11 +52,20 @@ public class ProductController extends BaseController {
     }
 
     @GetMapping("/{product_id}/prices_between_dates")
-    public ResponseEntity<ProductResponseDto> productPriceBetweenDates(@PathVariable("product_id") String productId,
-                                                                       @RequestParam(value = "from_date")Date fromDate,
-                                                                       @RequestParam(value = "to_date") Date toDate) {
-        //TODO implement
-        return null;
+    public ResponseEntity<BaseResponseDto> productPriceBetweenDates(@PathVariable(value = "product_id", required = true) String productId,
+                                                                       @RequestParam(value = "from_date", required = true) String fromDate,
+                                                                       @RequestParam(value = "to_date", required = true) String toDate) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        BaseResponseDto response = null;
+        try {
+            response = productsService.getProductPriceBetweenDates(productId, sdf.parse(fromDate), sdf.parse(toDate));
+        } catch (ParseException e) {
+            response.setMessage("Error converting dates");
+            response.setStatus(ResponseStatus.ERROR);
+        }
+
+        return new ResponseEntity<>(response, responseStatus(response));
     }
 
     @PostMapping("/{supplier_id}")

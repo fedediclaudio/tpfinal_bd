@@ -81,6 +81,7 @@ public class Product extends PersistentEntity {
     }
 
     public List<HistoricalProductPrice> getPrices() {
+        this.prices.size();
         return prices;
     }
 
@@ -107,5 +108,6 @@ public class Product extends PersistentEntity {
     public void addPrice(HistoricalProductPrice historicalPrice) {
         prices.size();
         prices.add(historicalPrice);
+        this.price = historicalPrice.getPrice();
     }
 }

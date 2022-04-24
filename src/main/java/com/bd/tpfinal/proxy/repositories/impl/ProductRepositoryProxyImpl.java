@@ -9,13 +9,13 @@ import com.bd.tpfinal.model.Product;
 import com.bd.tpfinal.model.ProductType;
 import com.bd.tpfinal.model.Supplier;
 import com.bd.tpfinal.proxy.repositories.ProductRepositoryProxy;
+import com.bd.tpfinal.repositories.HistoricalProductPriceRepository;
 import com.bd.tpfinal.repositories.ProductRepository;
 import com.bd.tpfinal.repositories.ProductTypeRepository;
 import com.bd.tpfinal.repositories.SupplierRepository;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.PersistenceException;
-import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,14 +28,17 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
     private final SupplierRepository supplierRepository;
 
     private final ProductTypeRepository productTypeRepository;
+    private final HistoricalProductPriceRepository historicalProductPriceRepository;
 
     public ProductRepositoryProxyImpl(ProductRepository productRepository,
                                       ProductMapper productMapper, SupplierRepository supplierRepository,
-                                      ProductTypeRepository productTypeRepository) {
+                                      ProductTypeRepository productTypeRepository,
+                                      HistoricalProductPriceRepository historicalProductPriceRepository) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
         this.supplierRepository = supplierRepository;
         this.productTypeRepository = productTypeRepository;
+        this.historicalProductPriceRepository = historicalProductPriceRepository;
     }
 
     @Override
@@ -78,13 +81,15 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
                     .filter(p -> ObjectUtils.isEmpty(p.getFinishDate()))
                     .findFirst()
                     .get();
-            historicalProductPrice.setFinishDate(new Date());
+            if (historicalProductPrice != null)
+                historicalProductPrice.setFinishDate(new Date());
+
             HistoricalProductPrice newHistoricalProductPrice = new HistoricalProductPrice();
             newHistoricalProductPrice.setProduct(product);
             newHistoricalProductPrice.setPrice(price);
             newHistoricalProductPrice.setStartDate(new Date());
-            product.getPrices().add(newHistoricalProductPrice);
-            product.setPrice(price);
+            newHistoricalProductPrice = historicalProductPriceRepository.save(newHistoricalProductPrice);
+            product.addPrice(newHistoricalProductPrice);
         }
         productRepository.save(product);
         return productMapper.toProductDto(product);
@@ -130,5 +135,12 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
         product = productRepository.save(product);
         return productMapper.toProductDto(product);
 
+    }
+
+    @Override
+    public ProductDto findByIdWithPricesBetweenDates(String productId, Date fromDate, Date toDate) throws PersistenceEntityException {
+        Product product = productRepository.findByIdWithPricesBetweenDates(Long.parseLong(productId), fromDate, toDate)
+                .orElseThrow(() -> new PersistenceEntityException("Can't find product with id: " + productId + " or the parameters date range is wrong."));
+        return productMapper.toProductDtoWithPrices(product);
     }
 }

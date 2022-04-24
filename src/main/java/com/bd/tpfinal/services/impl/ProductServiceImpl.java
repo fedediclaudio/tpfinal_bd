@@ -12,6 +12,8 @@ import com.bd.tpfinal.proxy.repositories.ProductRepositoryProxy;
 import com.bd.tpfinal.services.ProductsService;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductsService {
@@ -116,6 +118,21 @@ public class ProductServiceImpl implements ProductsService {
             response.setMessage(e.getMessage());
         }
         response.setData(product);
+        return response;
+    }
+
+    @Override
+    public BaseResponseDto getProductPriceBetweenDates(String productId, Date fromDate, Date toDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SingleProductResponseDto response = new SingleProductResponseDto();
+        try {
+            ProductDto productDto =  productRepositoryProxy.findByIdWithPricesBetweenDates(productId, fromDate, toDate);
+            response.setData(productDto);
+            response.setMessage("Product id:" + productId + "with prices between dates [" + sdf.format(fromDate) + ", " + sdf.format(toDate) + "]");
+        } catch (PersistenceEntityException e) {
+            response.setMessage(e.getMessage());
+            response.setStatus(ResponseStatus.ERROR);
+        }
         return response;
     }
 }

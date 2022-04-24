@@ -2,10 +2,15 @@ package com.bd.tpfinal.dtos.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
+@AllArgsConstructor
+@Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ProductDto {
     @JsonProperty("product_id")
@@ -25,19 +30,21 @@ public class ProductDto {
     private float weight;
     @JsonProperty("product_description")
     private String productDescription;
+    private List<HistoricalPriceDto> prices;
 
-    @Builder
-    public ProductDto(String productId, String productName, String productDescription,
-                      String supplierId, String supplierName, String productTypeId, String productType, float price, float weight) {
-        this.productId = productId;
-        this.productName = productName;
-        this.productDescription = productDescription;
-        this.supplierId = supplierId;
-        this.supplierName = supplierName;
-        this.productType = productType;
-        this.productTypeId = productTypeId;
-        this.price = price;
-        this.weight = weight;
-    }
+
+//    @Builder
+//    public ProductDto(String productId, String productName, String productDescription,
+//                      String supplierId, String supplierName, String productTypeId, String productType, float price, float weight) {
+//        this.productId = productId;
+//        this.productName = productName;
+//        this.productDescription = productDescription;
+//        this.supplierId = supplierId;
+//        this.supplierName = supplierName;
+//        this.productType = productType;
+//        this.productTypeId = productTypeId;
+//        this.price = price;
+//        this.weight = weight;
+//    }
 
 }
