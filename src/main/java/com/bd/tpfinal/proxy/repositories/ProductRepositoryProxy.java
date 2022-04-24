@@ -14,4 +14,10 @@ public interface ProductRepositoryProxy {
     List<AverageProductTypeDto> getAveragePriceProductTypes();
 
     ProductDto update(String productId, String name, String description, Float weight, Float price, Boolean active) throws PersistenceEntityException;
+
+    ProductDto findById(String id) throws PersistenceEntityException;
+
+    void delete(String productId) throws PersistenceEntityException;
+
+    ProductDto create(ProductDto dto) throws PersistenceEntityException;
 }

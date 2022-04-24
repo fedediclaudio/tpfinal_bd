@@ -12,10 +12,13 @@ public interface ProductMapper {
     @Mappings({
             @Mapping(source = "id", target="productId"),
             @Mapping(source = "name", target="productName"),
+            @Mapping(source = "description", target="productDescription"),
             @Mapping(source = "supplier.id", target="supplierId"),
             @Mapping(source = "supplier.name", target="supplierName"),
             @Mapping(source = "type.name", target="productType"),
-            @Mapping(source = "price", target="price")
+            @Mapping(source = "type.id", target="productTypeId"),
+            @Mapping(source = "price", target="price"),
+            @Mapping(source = "weight", target = "weight")
     })
     ProductDto toProductDto(Product product);
 }

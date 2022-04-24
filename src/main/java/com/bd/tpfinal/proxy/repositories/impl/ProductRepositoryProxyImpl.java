@@ -6,11 +6,16 @@ import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.mappers.product.ProductMapper;
 import com.bd.tpfinal.model.HistoricalProductPrice;
 import com.bd.tpfinal.model.Product;
+import com.bd.tpfinal.model.ProductType;
+import com.bd.tpfinal.model.Supplier;
 import com.bd.tpfinal.proxy.repositories.ProductRepositoryProxy;
-import com.bd.tpfinal.repositories.HistoricalProductPriceRepository;
 import com.bd.tpfinal.repositories.ProductRepository;
+import com.bd.tpfinal.repositories.ProductTypeRepository;
+import com.bd.tpfinal.repositories.SupplierRepository;
 import org.springframework.util.ObjectUtils;
 
+import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,10 +25,17 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
+    private final SupplierRepository supplierRepository;
+
+    private final ProductTypeRepository productTypeRepository;
+
     public ProductRepositoryProxyImpl(ProductRepository productRepository,
-                                      ProductMapper productMapper) {
+                                      ProductMapper productMapper, SupplierRepository supplierRepository,
+                                      ProductTypeRepository productTypeRepository) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
+        this.supplierRepository = supplierRepository;
+        this.productTypeRepository = productTypeRepository;
     }
 
     @Override
@@ -76,5 +88,47 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
         }
         productRepository.save(product);
         return productMapper.toProductDto(product);
+    }
+
+    @Override
+    public ProductDto findById(String id) throws PersistenceEntityException {
+        Product product = productRepository.findById(Long.parseLong(id)).orElseThrow(()-> new PersistenceEntityException("Can't find product by id: "+id));
+        return productMapper.toProductDto(product);
+    }
+
+    @Override
+    public void delete(String productId) throws PersistenceEntityException {
+        Product product = productRepository.findById(Long.parseLong(productId)).orElseThrow(() -> new PersistenceEntityException("Can't find product by id: " + productId));
+        product.setActive(false);
+        productRepository.save(product);
+    }
+
+    @Override
+    public ProductDto create(ProductDto dto) throws PersistenceEntityException {
+        Supplier supplier = supplierRepository.findById(Long.parseLong(dto.getSupplierId()))
+                .orElseThrow(()->new PersistenceEntityException("Can't find supplier with id " + dto.getSupplierId()));
+
+        ProductType productType = productTypeRepository.findById(Long.parseLong(dto.getProductTypeId()))
+                .orElseThrow(() -> new PersistenceException("Can't find product type with id '" + dto.getProductTypeId() + "'"));
+
+        Product product = new Product();
+        product.setActive(true);
+        product.setPrice(dto.getPrice());
+        product.setWeight(dto.getWeight());
+        product.setName(dto.getProductName());
+        product.setType(productType);
+        supplier.getProducts().add(product);
+        product.setDescription(dto.getProductDescription());
+
+        HistoricalProductPrice productPrice = new HistoricalProductPrice();
+        productPrice.setProduct(product);
+        productPrice.setPrice(dto.getPrice());
+        productPrice.setStartDate(new Date());
+
+        product.setSupplier(supplier);
+        product.getPrices().add(productPrice);
+        product = productRepository.save(product);
+        return productMapper.toProductDto(product);
+
     }
 }

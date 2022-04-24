@@ -26,7 +26,6 @@ public class ProductController extends BaseController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponseDto> getProducts(@RequestParam(value = "supplier_id", required = false) String supplierId){
         BaseResponseDto response;
         if (supplierId == null || supplierId.isEmpty()){
@@ -38,25 +37,28 @@ public class ProductController extends BaseController {
     }
 
     @PutMapping("/{product_id}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponseDto> update(@PathVariable("product_id") String productId, @RequestBody ProductRequestDto productRequestDto){
         BaseResponseDto response = productsService.update(productId, productRequestDto);
         return new ResponseEntity<BaseResponseDto>(response, responseStatus(response));
     }
 
     @GetMapping("/average")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponseDto> productsAveragePrice(){
         BaseResponseDto response = productsService.getAverageProductPriceByProductType();
         return new ResponseEntity<BaseResponseDto>(response, responseStatus(response));
     }
 
     @GetMapping("/{product_id}/prices_between_dates")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ProductResponseDto> productPriceBetweenDates(@PathVariable("product_id") String productId,
                                                                        @RequestParam(value = "from_date")Date fromDate,
                                                                        @RequestParam(value = "to_date") Date toDate) {
         //TODO implement
         return null;
+    }
+
+    @PostMapping("/{supplier_id}")
+    public ResponseEntity<BaseResponseDto> create(@PathVariable("supplier_id") String supplierId, @RequestBody ProductRequestDto productRequestDto){
+        BaseResponseDto response = productsService.create(supplierId, productRequestDto);
+        return new ResponseEntity<BaseResponseDto>(response, responseStatus(response));
     }
 }
