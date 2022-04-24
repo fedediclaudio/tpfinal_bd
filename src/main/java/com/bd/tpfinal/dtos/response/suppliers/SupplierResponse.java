@@ -3,6 +3,6 @@ package com.bd.tpfinal.dtos.response.suppliers;
 
 import com.bd.tpfinal.dtos.response.BaseResponseDto;
 
-public class SupplierResponseDto extends BaseResponseDto {
+public class SupplierResponse extends BaseResponseDto {
 
 }

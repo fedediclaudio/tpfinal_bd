@@ -1,19 +1,14 @@
-package com.bd.tpfinal.dtos.request;
+package com.bd.tpfinal.dtos.request.items;
 
-import com.bd.tpfinal.model.Order;
-import com.bd.tpfinal.model.Product;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
-
-public class ItemRequestDto {
+public class CreateItemRequest {
     private int quantity;
     private String description;
+    @JsonProperty("product_id")
     private String productId;
 
-    public ItemRequestDto(String productId, int quantity) {
+    public CreateItemRequest(String productId, int quantity) {
         this.quantity = quantity;
         this.productId = productId;
     }

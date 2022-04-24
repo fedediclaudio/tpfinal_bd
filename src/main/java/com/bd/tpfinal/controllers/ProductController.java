@@ -1,17 +1,14 @@
 package com.bd.tpfinal.controllers;
 
-import com.bd.tpfinal.dtos.request.ProductRequestDto;
+import com.bd.tpfinal.dtos.request.products.CreateProductRequest;
 import com.bd.tpfinal.dtos.response.BaseResponseDto;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
-import com.bd.tpfinal.dtos.response.products.ProductResponseDto;
 import com.bd.tpfinal.services.ProductsService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @RestController
 @RequestMapping("products")
@@ -40,8 +37,8 @@ public class ProductController extends BaseController {
     }
 
     @PutMapping("/{product_id}")
-    public ResponseEntity<BaseResponseDto> update(@PathVariable("product_id") String productId, @RequestBody ProductRequestDto productRequestDto){
-        BaseResponseDto response = productsService.update(productId, productRequestDto);
+    public ResponseEntity<BaseResponseDto> update(@PathVariable("product_id") String productId, @RequestBody CreateProductRequest createProductRequest){
+        BaseResponseDto response = productsService.update(productId, createProductRequest);
         return new ResponseEntity<BaseResponseDto>(response, responseStatus(response));
     }
 
@@ -69,8 +66,8 @@ public class ProductController extends BaseController {
     }
 
     @PostMapping("/{supplier_id}")
-    public ResponseEntity<BaseResponseDto> create(@PathVariable("supplier_id") String supplierId, @RequestBody ProductRequestDto productRequestDto){
-        BaseResponseDto response = productsService.create(supplierId, productRequestDto);
+    public ResponseEntity<BaseResponseDto> create(@PathVariable("supplier_id") String supplierId, @RequestBody CreateProductRequest createProductRequest){
+        BaseResponseDto response = productsService.create(supplierId, createProductRequest);
         return new ResponseEntity<BaseResponseDto>(response, responseStatus(response));
     }
 }

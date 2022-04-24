@@ -1,6 +1,6 @@
 package com.bd.tpfinal.controllers;
 
-import com.bd.tpfinal.dtos.request.DeliveryManRequestDto;
+import com.bd.tpfinal.dtos.request.delivery.CreateDeliveryManRequest;
 import com.bd.tpfinal.dtos.response.BaseResponseDto;
 import com.bd.tpfinal.services.DeliveryService;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +33,9 @@ public class DeliveryController extends  BaseController{
 
 
     @PostMapping
-    public ResponseEntity<BaseResponseDto> addDeliveryMen(@RequestBody DeliveryManRequestDto deliveryManRequestDto){
+    public ResponseEntity<BaseResponseDto> create(@RequestBody CreateDeliveryManRequest createDeliveryManRequest){
         BaseResponseDto response = null;
-        response = deliveryService.createDeliveryMan(deliveryManRequestDto);
+        response = deliveryService.createDeliveryMan(createDeliveryManRequest);
         return new ResponseEntity<>(response, responseStatus(response));
     }
 }

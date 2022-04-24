@@ -1,11 +1,11 @@
 package com.bd.tpfinal.services.impl;
 
 import com.bd.tpfinal.dtos.common.DeliveryManDto;
-import com.bd.tpfinal.dtos.request.DeliveryManRequestDto;
+import com.bd.tpfinal.dtos.request.delivery.CreateDeliveryManRequest;
 import com.bd.tpfinal.dtos.response.BaseResponseDto;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
-import com.bd.tpfinal.dtos.response.delivery.ListDeliveryResponseDto;
-import com.bd.tpfinal.dtos.response.delivery.SingleDeliveryManResponseDto;
+import com.bd.tpfinal.dtos.response.delivery.ListDeliveryResponse;
+import com.bd.tpfinal.dtos.response.delivery.SingleDeliveryManResponse;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.proxy.repositories.DeliveryMenRepositoryProxy;
 import com.bd.tpfinal.services.DeliveryService;
@@ -25,7 +25,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public BaseResponseDto getMostScoredDeliveryMen() {
-        ListDeliveryResponseDto response = new ListDeliveryResponseDto();
+        ListDeliveryResponse response = new ListDeliveryResponse();
         List<DeliveryManDto> data = deliveryMenRepositoryProxy.findMostScoredDeliveryMen();
         response.setData(data);
         response.setMessage("10 most success delivery men.");
@@ -34,7 +34,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public BaseResponseDto findAll() {
-        ListDeliveryResponseDto response = new ListDeliveryResponseDto();
+        ListDeliveryResponse response = new ListDeliveryResponse();
         List<DeliveryManDto> data = deliveryMenRepositoryProxy.findAll();
         response.setData(data);
         response.setMessage("All delivery men.");
@@ -42,17 +42,17 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    public BaseResponseDto createDeliveryMan(DeliveryManRequestDto deliveryManRequestDto) {
-        SingleDeliveryManResponseDto response = new SingleDeliveryManResponseDto();
+    public BaseResponseDto createDeliveryMan(CreateDeliveryManRequest createDeliveryManRequest) {
+        SingleDeliveryManResponse response = new SingleDeliveryManResponse();
 
         DeliveryManDto deliveryManDto = DeliveryManDto.builder()
                 .free(true)
                 .dateOfAdmission(new Date())
                 .numberOfSuccessOrders(0)
-                .name(deliveryManRequestDto.getName())
-                .username(deliveryManRequestDto.getUsername())
-                .password(deliveryManRequestDto.getPassword())
-                .email(deliveryManRequestDto.getEmail())
+                .name(createDeliveryManRequest.getName())
+                .username(createDeliveryManRequest.getUsername())
+                .password(createDeliveryManRequest.getPassword())
+                .email(createDeliveryManRequest.getEmail())
                 .build();
 
         try {

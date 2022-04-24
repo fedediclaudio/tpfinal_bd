@@ -2,11 +2,11 @@ package com.bd.tpfinal.services.impl;
 
 
 import com.bd.tpfinal.dtos.common.*;
-import com.bd.tpfinal.dtos.request.ItemRequestDto;
-import com.bd.tpfinal.dtos.request.OrderRequestDto;
+import com.bd.tpfinal.dtos.request.items.CreateItemRequest;
+import com.bd.tpfinal.dtos.request.orders.CreateOrderRequest;
 import com.bd.tpfinal.dtos.response.BaseResponseDto;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
-import com.bd.tpfinal.dtos.response.orders.ListOrderResponseDto;
+import com.bd.tpfinal.dtos.response.orders.ListOrderResponse;
 import com.bd.tpfinal.dtos.response.orders.SingleOrderResponseDto;
 import com.bd.tpfinal.exceptions.parameters.ParameterErrorException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
@@ -34,13 +34,13 @@ public class OrdersServiceImpl implements OrdersService {
 
 
     @Override
-    public BaseResponseDto addItemToOrder(String orderId, ItemRequestDto itemRequestDto) {
+    public BaseResponseDto addItemToOrder(String orderId, CreateItemRequest createItemRequest) {
         SingleOrderResponseDto response = new SingleOrderResponseDto();
         try {
             ItemDto itemDto = ItemDto.builder()
                     .orderId(orderId)
-                    .productId(itemRequestDto.getProductId())
-                    .quantity(itemRequestDto.getQuantity())
+                    .productId(createItemRequest.getProductId())
+                    .quantity(createItemRequest.getQuantity())
                     .build();
 
             OrderDto orderDto = orderRepository.addItem(itemDto);
@@ -142,7 +142,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public BaseResponseDto update(String orderId, OrderRequestDto orderRequest) {
+    public BaseResponseDto update(String orderId, CreateOrderRequest orderRequest) {
         SingleOrderResponseDto response = new SingleOrderResponseDto();
         try {
             OrderDto orderDto = orderRepository.findById(orderId);
@@ -176,7 +176,7 @@ public class OrdersServiceImpl implements OrdersService {
         BaseResponseDto response;
         if (status != null) {
             List orders = orderRepository.findByStatusName(status);
-            response = new ListOrderResponseDto();
+            response = new ListOrderResponse();
             response.setData(orders);
             response.setMessage("Orders with status '" + status);
         }else if (number != null && number > 0) {
@@ -191,7 +191,7 @@ public class OrdersServiceImpl implements OrdersService {
                 response.setStatus(ResponseStatus.ERROR);
             }
         }  else {
-                response = new ListOrderResponseDto();
+                response = new ListOrderResponse();
                 response.setData(orderRepository.findAll());
                 response.setMessage("Orders list.");
         }

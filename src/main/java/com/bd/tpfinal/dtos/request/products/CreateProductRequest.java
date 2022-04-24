@@ -1,8 +1,8 @@
-package com.bd.tpfinal.dtos.request;
+package com.bd.tpfinal.dtos.request.products;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ProductRequestDto {
+public class CreateProductRequest {
     private String name;
     private Float price;
     private Float weight;

@@ -1,7 +1,7 @@
 package com.bd.tpfinal.controllers;
 
 import com.bd.tpfinal.dtos.common.ChangeOrderStatusDto;
-import com.bd.tpfinal.dtos.request.ItemRequestDto;
+import com.bd.tpfinal.dtos.request.items.CreateItemRequest;
 import com.bd.tpfinal.dtos.response.BaseResponseDto;
 import com.bd.tpfinal.dtos.response.orders.SingleOrderResponseDto;
 import com.bd.tpfinal.enums.OrderStatusAction;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 @RestController
 @RequestMapping("orders")
@@ -54,8 +53,8 @@ public class OrderController extends BaseController {
     }
 
     @PutMapping("/{order_id}")
-    public ResponseEntity<BaseResponseDto> addItem(@PathVariable("order_id") String orderId, @RequestBody ItemRequestDto itemRequestDto){
-        BaseResponseDto response = ordersService.addItemToOrder(orderId, itemRequestDto);
+    public ResponseEntity<BaseResponseDto> addItem(@PathVariable("order_id") String orderId, @RequestBody CreateItemRequest createItemRequest){
+        BaseResponseDto response = ordersService.addItemToOrder(orderId, createItemRequest);
         return new ResponseEntity<BaseResponseDto>(response, responseStatus(response));
     }
 

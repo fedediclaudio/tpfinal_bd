@@ -1,10 +1,9 @@
-package com.bd.tpfinal.dtos.response.orders;
+package com.bd.tpfinal.dtos.response.items;
 
 import com.bd.tpfinal.dtos.response.BaseResponseDto;
 import com.bd.tpfinal.dtos.response.ListBaseResponseDto;
 
 import java.util.List;
 
-public class ListOrderResponseDto extends ListBaseResponseDto {
-
+public class ListItemResponse extends ListBaseResponseDto {
 }

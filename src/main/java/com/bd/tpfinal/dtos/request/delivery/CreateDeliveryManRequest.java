@@ -1,8 +1,8 @@
-package com.bd.tpfinal.dtos.request;
+package com.bd.tpfinal.dtos.request.delivery;
 
 import javax.validation.constraints.Email;
 
-public class DeliveryManRequestDto {
+public class CreateDeliveryManRequest {
     private String name;
     private String username;
     private String password;
