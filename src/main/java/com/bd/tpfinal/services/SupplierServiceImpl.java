@@ -54,5 +54,9 @@ public class SupplierServiceImpl implements SupplierService {
 	public List<Supplier> getSupplierList() throws Exception {
 		return supplierRepository.findAll();
 	}
+
+	public List<Supplier> getSupplierListFromType(long idSupplierType) throws Exception {
+		return supplierRepository.getSupplierListFromType(idSupplierType);
+	}
 	
 }

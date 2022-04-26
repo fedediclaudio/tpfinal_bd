@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bd.tpfinal.model.Supplier;
@@ -42,4 +43,15 @@ public class SupplierController {
 			return null;
 		}
     }
+
+	@GetMapping("/listOfType")
+	public List<Supplier> getSupplierListFromType(@RequestParam(required = true, name = "idSupplierType") long idSupplierType) {
+		try {
+			return supplierService.getSupplierListFromType(idSupplierType);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
