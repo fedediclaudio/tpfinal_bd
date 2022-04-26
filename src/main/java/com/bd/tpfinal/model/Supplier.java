@@ -33,7 +33,10 @@ public class Supplier {
 	private float[] coords;
 
 	private float qualificationOfUsers;
-
+	
+	@JsonIgnore
+	private int totalQualifications;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Product> products;
@@ -43,7 +46,10 @@ public class Supplier {
 	private SupplierType type;
 
 	
-	public Supplier() {}
+	public Supplier() {
+		qualificationOfUsers = 0;
+		totalQualifications = 0;
+	}
 
 	public Long getId() {
 		return id;
@@ -93,6 +99,13 @@ public class Supplier {
 		this.qualificationOfUsers = qualificationOfUsers;
 	}
 
+	public void addQualification(float userQualification) {
+		float qualifications = this.qualificationOfUsers * this.totalQualifications;
+		this.totalQualifications++;
+		
+		this.qualificationOfUsers = (qualifications + userQualification) * this.totalQualifications; 
+	}
+	
 	public List<Product> getProducts() {
 		return products;
 	}
@@ -108,7 +121,7 @@ public class Supplier {
 	public void setType(SupplierType type) {
 		this.type = type;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Supplier [id=" + id + ", name=" + name + ", cuil=" + cuil + ", address=" + address + ", coords="

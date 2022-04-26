@@ -33,11 +33,11 @@ public class Product {
 
 	private String description;
 
-	@ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL )
+	@ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.PERSIST )
     @JoinColumn( name = "id_supplier" )
 	private Supplier supplier;
 
-	@OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@JoinColumn( name="id_type" )
 	private ProductType type;
 
@@ -45,9 +45,12 @@ public class Product {
 	@OneToMany( mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
 	private List<HistoricalProductPrice> prices;
 
+	private boolean productDeleted; 
+	
 	
 	public Product() {
 		this.prices = new ArrayList<>();
+		this.productDeleted = false;
 	}
 
 	public Long getId() {
@@ -117,11 +120,20 @@ public class Product {
 	public void addHistoricalPrice(HistoricalProductPrice historical) {
 		this.prices.add(historical);
 	}
-	
+
+	public boolean isProductDeleted() {
+		return productDeleted;
+	}
+
+	public void setProductDeleted(boolean productDeleted) {
+		this.productDeleted = productDeleted;
+	}
+
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", price=" + price + ", weight=" + weight + ", description="
-				+ description + ", supplier=" + supplier + ", type=" + type + ", prices=" + prices + "]";
+				+ description + ", supplier=" + supplier + ", type=" + type + ", prices=" + prices + ", productDeleted="
+				+ productDeleted + "]";
 	}
 	
 }

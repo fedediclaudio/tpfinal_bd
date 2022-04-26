@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,7 +25,7 @@ public class ProductController {
 	@Autowired ProductService productService;
 	
 	@PostMapping("/create")
-    public long createProduct( @RequestBody Product product) {
+    public long createProduct(@RequestBody Product product) {
 		try {
 			product = productService.createNewProduct(product);
 			return (product != null) ? product.getId() : -1;
@@ -35,10 +36,32 @@ public class ProductController {
 		}
     }
 	
+	@PutMapping("/updateProduct")
+	public boolean updateProduct(@RequestBody Product product) {
+		try {
+			return productService.updateProduct(product);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	@PutMapping("/changePrice")
 	public boolean changeProductPrice(@RequestParam(name = "idProduct") long idProduct, @RequestParam(name = "newPrice") float newPrice) {
 		try {
 			return productService.changeProductPrice(idProduct, newPrice);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	@DeleteMapping("/deleteProduct")
+	public boolean deleteProduct(@RequestParam(name = "idProduct") long idProduct) {
+		try {
+			return productService.deleteProduct(idProduct);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

@@ -75,12 +75,68 @@ public class ProductServiceImpl implements ProductService {
 		return product;
 	}
 	
+	@Transactional
+	public boolean updateProduct(Product product) throws Exception {
+		if ((product.getId() < 0) ||
+			(product.getName().isBlank()) ||
+			(product.getDescription().isBlank()) ||
+			(product.getPrice() < 0) ||
+			(product.getWeight() < 0)) return false;
+
+		// Corroboro que el producto exista
+		Product dbProducto = productRepository.getProductById( product.getId() );
+		if (dbProducto == null) {
+			System.out.println("El producto no existe");
+			return false;
+		}
+		if (dbProducto.isProductDeleted()) {
+			System.out.println("El producto ya no esta a la disponible para la venta");
+			return false;
+		}
+		
+		// Actualizo el Producto
+		dbProducto.setName( product.getName() );
+		dbProducto.setPrice( product.getPrice() );
+		dbProducto.setDescription( product.getDescription() );
+		dbProducto.setWeight( product.getWeight() );
+		
+		// Grabo el producto 
+		productRepository.save(dbProducto);
+		
+		return true;
+	}
+	
+	@Transactional
+	public boolean deleteProduct(long idProduct) throws Exception {
+		// Obtengo el Product de la BD
+		Product product = productRepository.getProductById( idProduct );
+		// Si el Product no existe, retorno false
+		if (product == null) {
+			System.out.println("El Producto no existe");
+			return false;
+		}
+		if (product.isProductDeleted()) {
+			System.out.println("El producto ya no esta a la disponible para la venta");
+			return false;
+		}
+		
+		// Borro el producto
+		product.setProductDeleted(true);
+		productRepository.save(product);
+		
+		return true;
+	}
+	
 	public boolean changeProductPrice(long idProduct, float newPrice) throws Exception {
 		// Obtengo el Product de la BD
 		Product product = productRepository.getProductById( idProduct );
 		// Si el Product no existe, retorno false
 		if (product == null) {
 			System.out.println("El Producto no existe");
+			return false;
+		}
+		if (product.isProductDeleted()) {
+			System.out.println("El producto ya no esta a la disponible para la venta");
 			return false;
 		}
 		

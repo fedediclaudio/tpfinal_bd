@@ -137,6 +137,10 @@ public class OrderServiceImpl implements OrderService {
 			System.out.println("El producto no existe");
 			return false;
 		}
+		if (product.isProductDeleted()) {
+			System.out.println("El producto ya no esta a la disponible para la venta");
+			return false;
+		}
 		
 		// Creo el nuevo item
 		Item item = new Item();
@@ -272,7 +276,7 @@ public class OrderServiceImpl implements OrderService {
 		qualification.setOrder(order);
 		qualification.setScore(score);
 		
-		order.setQualification(qualification);
+		order.addQualification(qualification);
 		
 		// Grabo la ordn
 		orderRepository.save( order );

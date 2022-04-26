@@ -25,6 +25,7 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	public Client addNewClient(Client client) throws Exception {
+		client.setId(null);
 		client.setDateOfRegister( LocalDate.now() );
 		// Valido que el cliente sea valido
 		if (!client.isValid()) {

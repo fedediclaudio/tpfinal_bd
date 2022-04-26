@@ -144,6 +144,12 @@ public class Order {
 	public void setQualification(Qualification qualification) {
 		this.qualification = qualification;
 	}
+	
+	public void addQualification(Qualification qualification) {
+		this.qualification = qualification;
+		
+		this.items.forEach( i -> i.getProduct().getSupplier().addQualification( qualification.getScore() ) );
+	}
 
 	public List<Item> getItems() {
 		return items;
