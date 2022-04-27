@@ -1,9 +1,14 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+@Entity
 public class DeliveryMan extends User{
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     private int numberOfSuccessOrders;
 
@@ -11,7 +16,16 @@ public class DeliveryMan extends User{
 
     private Date dateOfAdmission;
 
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Order> ordersPending;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public int getNumberOfSuccessOrders() {
         return numberOfSuccessOrders;

@@ -1,8 +1,13 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
 public class Supplier {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     private String name;
 
@@ -14,9 +19,23 @@ public class Supplier {
 
     private float qualificationOfUsers;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="supplier_id", referencedColumnName = "id")
     private List<Product> products;
 
+/*
+    @OneToMany
+    @JoinColumn(name = "type_id", referencedColumnName = "id")
     private SupplierType type;
+*/
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -66,11 +85,11 @@ public class Supplier {
         this.products = products;
     }
 
-    public SupplierType getType() {
+  /*  public SupplierType getType() {
         return type;
     }
 
     public void setType(SupplierType type) {
         this.type = type;
-    }
+    }*/
 }

@@ -1,8 +1,13 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
 public class Product {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     private String name;
 
@@ -12,11 +17,24 @@ public class Product {
 
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
+    @ManyToOne
+    @JoinColumn(name = "type_id")
     private ProductType type;
 
+    @OneToMany
     private List<HistoricalProductPrice> prices;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

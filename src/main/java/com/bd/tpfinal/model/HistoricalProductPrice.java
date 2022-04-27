@@ -1,8 +1,12 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
 import java.util.Date;
-
+@Entity
 public class HistoricalProductPrice {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     private float price;
 
@@ -10,7 +14,17 @@ public class HistoricalProductPrice {
 
     private Date finishDate;
 
+    @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public float getPrice() {
         return price;
