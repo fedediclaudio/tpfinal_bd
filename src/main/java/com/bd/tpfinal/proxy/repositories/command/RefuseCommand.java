@@ -13,7 +13,7 @@ import com.bd.tpfinal.repositories.OrderRepository;
 import javax.transaction.Transactional;
 import java.util.Date;
 
-public class RefuseCommand extends ChangeStatusCommand{
+public class RefuseCommand extends ChangeStatusCommand {
 
     public RefuseCommand(OrderRepository orderRepository, DeliveryManRepository deliveryManRepository, OrderMapper orderMapper) {
         super(orderRepository, deliveryManRepository, orderMapper);

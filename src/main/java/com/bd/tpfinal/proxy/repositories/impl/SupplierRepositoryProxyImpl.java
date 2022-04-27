@@ -3,6 +3,7 @@ package com.bd.tpfinal.proxy.repositories.impl;
 import com.bd.tpfinal.dtos.common.SupplierDto;
 import com.bd.tpfinal.dtos.common.SupplierWithOrdersCountDto;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
+import com.bd.tpfinal.helpers.IdConvertionHelper;
 import com.bd.tpfinal.mappers.product.ProductMapper;
 import com.bd.tpfinal.mappers.suppplier.SupplierMapper;
 import com.bd.tpfinal.model.Product;
@@ -92,10 +93,10 @@ public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
     @Override
     @Transactional
     public SupplierDto delete(String supplierId, String productId) throws PersistenceEntityException {
-        Supplier supplier = supplierRepository.findById(Long.parseLong(supplierId))
+        Supplier supplier = supplierRepository.findById(IdConvertionHelper.convert(supplierId))
                 .orElseThrow(() -> new PersistenceEntityException("Can't find supplier with id " + supplierId));
 
-        Product product = supplier.getProducts().stream().filter(p -> p.getId().compareTo(Long.parseLong(productId))==0).findFirst()
+        Product product = supplier.getProducts().stream().filter(p -> p.getId().compareTo(IdConvertionHelper.convert(productId))==0).findFirst()
                 .orElseThrow(() -> new PersistenceEntityException("Can't find product with id " + productId +" for supplier id " +supplierId));
 
         boolean remove = supplier.getProducts().remove(product);

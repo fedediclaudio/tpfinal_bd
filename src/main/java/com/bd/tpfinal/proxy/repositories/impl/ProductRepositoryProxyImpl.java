@@ -3,6 +3,7 @@ package com.bd.tpfinal.proxy.repositories.impl;
 import com.bd.tpfinal.dtos.common.AverageProductTypeDto;
 import com.bd.tpfinal.dtos.common.ProductDto;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
+import com.bd.tpfinal.helpers.IdConvertionHelper;
 import com.bd.tpfinal.mappers.product.ProductMapper;
 import com.bd.tpfinal.model.HistoricalProductPrice;
 import com.bd.tpfinal.model.Product;
@@ -43,7 +44,7 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
 
     @Override
     public List<ProductDto> findBySupplierId(String supplierId) {
-        List<Product> products = productRepository.findBySupplier_idAndActive(Long.parseLong(supplierId), true);
+        List<Product> products = productRepository.findBySupplier_idAndActive(IdConvertionHelper.convert(supplierId), true);
         return products.parallelStream().map(product -> productMapper.toProductDto(product)).collect(Collectors.toList());
     }
 
@@ -65,7 +66,7 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
     @Override
     public ProductDto update(String productId, String name, String description, Float weight, Float price, Boolean active) throws PersistenceEntityException {
         Product product = productRepository
-                .findById(Long.parseLong(productId))
+                .findById(IdConvertionHelper.convert(productId))
                 .orElseThrow(() -> new PersistenceEntityException("Product with id " + productId + " not found."));
         if (!ObjectUtils.isEmpty(name))
             product.setName(name);
@@ -97,23 +98,23 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
 
     @Override
     public ProductDto findById(String id) throws PersistenceEntityException {
-        Product product = productRepository.findById(Long.parseLong(id)).orElseThrow(()-> new PersistenceEntityException("Can't find product by id: "+id));
+        Product product = productRepository.findById(IdConvertionHelper.convert(id)).orElseThrow(()-> new PersistenceEntityException("Can't find product by id: "+id));
         return productMapper.toProductDto(product);
     }
 
     @Override
     public void delete(String productId) throws PersistenceEntityException {
-        Product product = productRepository.findById(Long.parseLong(productId)).orElseThrow(() -> new PersistenceEntityException("Can't find product by id: " + productId));
+        Product product = productRepository.findById(IdConvertionHelper.convert(productId)).orElseThrow(() -> new PersistenceEntityException("Can't find product by id: " + productId));
         product.setActive(false);
         productRepository.save(product);
     }
 
     @Override
     public ProductDto create(ProductDto dto) throws PersistenceEntityException {
-        Supplier supplier = supplierRepository.findById(Long.parseLong(dto.getSupplierId()))
+        Supplier supplier = supplierRepository.findById(IdConvertionHelper.convert(dto.getSupplierId()))
                 .orElseThrow(()->new PersistenceEntityException("Can't find supplier with id " + dto.getSupplierId()));
 
-        ProductType productType = productTypeRepository.findById(Long.parseLong(dto.getProductTypeId()))
+        ProductType productType = productTypeRepository.findById(IdConvertionHelper.convert(dto.getProductTypeId()))
                 .orElseThrow(() -> new PersistenceException("Can't find product type with id '" + dto.getProductTypeId() + "'"));
 
         Product product = new Product();
@@ -139,7 +140,7 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
 
     @Override
     public ProductDto findByIdWithPricesBetweenDates(String productId, Date fromDate, Date toDate) throws PersistenceEntityException {
-        Product product = productRepository.findByIdWithPricesBetweenDates(Long.parseLong(productId), fromDate, toDate)
+        Product product = productRepository.findByIdWithPricesBetweenDates(IdConvertionHelper.convert(productId), fromDate, toDate)
                 .orElseThrow(() -> new PersistenceEntityException("Can't find product with id: " + productId + " or the parameters date range is wrong."));
         return productMapper.toProductDtoWithPrices(product);
     }

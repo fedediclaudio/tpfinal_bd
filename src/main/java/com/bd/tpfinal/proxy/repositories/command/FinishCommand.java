@@ -15,7 +15,7 @@ import com.bd.tpfinal.repositories.OrderRepository;
 import javax.transaction.Transactional;
 import java.util.Date;
 
-public class FinishCommand extends ChangeStatusCommand{
+public class FinishCommand extends ChangeStatusCommand {
 
     public FinishCommand(OrderRepository orderRepository,
                          DeliveryManRepository deliveryManRepository,
