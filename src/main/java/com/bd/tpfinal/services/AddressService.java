@@ -8,7 +8,7 @@ import java.util.List;
 @Service
 public interface AddressService
 {
-    public void addAddress(Address newAddress);
+    public void newAddress(Address newAddress);
     public List<Address> getAll();
     public List<Address> getAllByIdUser(Long idUser);
 }

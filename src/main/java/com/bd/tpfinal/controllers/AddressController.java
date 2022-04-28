@@ -24,7 +24,7 @@ public class AddressController
     @PostMapping(value = "/new")
     public void addAddress(@RequestBody Address newAddress)
     {
-        this.addressService.addAddress(newAddress);
+        this.addressService.newAddress(newAddress);
     }
 
     ////    GET

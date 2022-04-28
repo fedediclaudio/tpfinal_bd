@@ -20,7 +20,7 @@ public class AddressServiceImpl implements AddressService
     }
 
     @Override
-    public void addAddress(Address newAddress)
+    public void newAddress(Address newAddress)
     {
         this.addressRepository.save(newAddress);
     }

@@ -25,7 +25,7 @@ public class DeliveryManController
     @PostMapping(value="/new")
     public void addDeliveryMan(@RequestBody DeliveryMan newDeliveryMan)
     {
-        this.deliveryManService.addDeliveryMan(newDeliveryMan);
+        this.deliveryManService.newDeliveryMan(newDeliveryMan);
     }
 
     //////  GET

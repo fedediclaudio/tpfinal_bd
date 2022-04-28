@@ -20,7 +20,7 @@ public class HistoricalProductPriceServiceImpl implements HistoricalProductPrice
     }
 
     @Override
-    public void addHistoricalProductPrice(HistoricalProductPrice newHistoricalProductPrice)
+    public void newHistoricalProductPrice(HistoricalProductPrice newHistoricalProductPrice)
     {
         this.historicalProductPriceRepository.save(newHistoricalProductPrice);
     }

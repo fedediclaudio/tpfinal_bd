@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface SupplierTypeRepository extends JpaRepository<SupplierType, Long>
 {
-    SupplierType findByName(@Param("name") String name);
+    List <SupplierType> findByName(@Param("name") String name);
 }

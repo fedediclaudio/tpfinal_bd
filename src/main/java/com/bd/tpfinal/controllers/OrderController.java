@@ -30,9 +30,9 @@ public class OrderController
     @PostMapping(value = "/new")
     public Order addOrder(@RequestBody Order newOrder)
     {
-        return this.orderService.addOrder(newOrder);
+        return this.orderService.newOrder(newOrder);
     }
-    //public void addOrder(@RequestBody Order newOrder) throws AddressEquivocadaException
+    //public void newOrder(@RequestBody Order newOrder) throws AddressEquivocadaException
     //{
     //    Order order = newOrder;
     //    Address address_of_order = order.getAddress();Client client_of_order = order.getClient();
@@ -41,7 +41,7 @@ public class OrderController
     //    List<Address> addresses_of_client = this.addressService.getAllByIdUser(idClient);
 
     //    if(addresses_of_client.contains(address_of_order))
-    //        this.orderService.addOrder(newOrder);
+    //        this.orderService.newOrder(newOrder);
     //    else
     //        throw new AddressEquivocadaException(address_of_order);
 
@@ -70,7 +70,7 @@ public class OrderController
     }
 
     @GetMapping("/number/{number}")
-    public Order getByNumber(@PathVariable int number)
+    public Order getByNumber(@PathVariable Long number)
     {
         return this.orderService.getByNumber(number);
     }

@@ -25,7 +25,7 @@ public class ProductController
     @PostMapping(value = "/new")
     public void addProduct(@RequestBody Product newProduct)
     {
-        this.productService.addProduct(newProduct);
+        this.productService.newProduct(newProduct);
     }
 
     //////  GET

@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ItemService
 {
-    public void addItem(Item newItem);
+    public void newItem(Item newItem);
     public List<Item> getAll();
     public Optional<Item> getItemById(Long id);
 

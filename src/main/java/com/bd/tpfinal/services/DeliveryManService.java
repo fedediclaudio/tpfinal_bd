@@ -7,7 +7,8 @@ import java.util.Optional;
 
 public interface DeliveryManService
 {
-    public void addDeliveryMan(DeliveryMan newDeliveryMan);
+    public void newDeliveryMan(DeliveryMan newDeliveryMan);
     public List<DeliveryMan> getAll();
     public Optional<DeliveryMan> getById(Long id);
-}
+    public List<DeliveryMan> getAllDeliveryManFree();
+ }

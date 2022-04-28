@@ -57,6 +57,25 @@ public class Address
     {
     }
 
+    public Address(String name, String address, String apartment, float[] coords, String description)
+    {
+        this.name = name;
+        this.address = address;
+        this.apartment = apartment;
+        this.coords = coords;
+        this.description = description;
+    }
+
+    public Address(String name, String address, String apartment, float[] coords, String description, Client client)
+    {
+        this.name = name;
+        this.address = address;
+        this.apartment = apartment;
+        this.coords = coords;
+        this.description = description;
+        this.client = client;
+    }
+
     public Long getId()
     {
         return id;

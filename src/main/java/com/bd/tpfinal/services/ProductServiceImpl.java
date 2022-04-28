@@ -20,7 +20,7 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void addProduct(Product newProduct)
+    public void newProduct(Product newProduct)
     {
         this.productRepository.save(newProduct);
     }
@@ -40,7 +40,11 @@ public class ProductServiceImpl implements ProductService
     @Override
     public Product getProductByName(String name)
     {
-        return this.productRepository.findByName(name);
+        Product producto = null;
+        List<Product> productos = this.productRepository.findByName(name);
+        if (productos!= null)
+            producto = productos.get(0);
+        return producto;
     }
 
 }

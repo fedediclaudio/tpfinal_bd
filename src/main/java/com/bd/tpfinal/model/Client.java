@@ -47,8 +47,12 @@ public class Client extends User
     public Client(String name, String username, String password, String email, Date dateOfBirth)
     {
         super(name, username, password, email, dateOfBirth);
+    }
 
-
+    public Client(String name, String username, String password, String email, Date dateOfBirth, List<Address> addresses)
+    {
+        super(name, username, password, email, dateOfBirth);
+        this.addresses = addresses;
     }
 
     public Date getDateOfRegister()

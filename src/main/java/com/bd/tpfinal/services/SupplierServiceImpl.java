@@ -19,7 +19,7 @@ public class SupplierServiceImpl implements SupplierService
     }
 
     @Override
-    public void addSupplier(Supplier newSupplier)
+    public void newSupplier(Supplier newSupplier)
     {
         this.supplierRepository.save(newSupplier);
     }

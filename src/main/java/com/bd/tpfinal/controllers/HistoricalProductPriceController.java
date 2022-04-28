@@ -24,7 +24,7 @@ public class HistoricalProductPriceController
     @PostMapping(value = "/new")
     public void addHistoricalProductPrice(@RequestBody HistoricalProductPrice newHistoricalProductPrice)
     {
-        this.historicalProductPriceService.addHistoricalProductPrice(newHistoricalProductPrice);
+        this.historicalProductPriceService.newHistoricalProductPrice(newHistoricalProductPrice);
     }
 
     //////  GET

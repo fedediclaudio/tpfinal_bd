@@ -24,7 +24,7 @@ public class SupplierController
     @PostMapping(value = "/new")
     public void addSupplier(@RequestBody Supplier newSupplier)
     {
-        this.supplierService.addSupplier(newSupplier);
+        this.supplierService.newSupplier(newSupplier);
     }
 
     //////  GET

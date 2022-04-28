@@ -20,7 +20,7 @@ public class ItemServiceImpl implements ItemService
     }
 
     @Override
-    public void addItem(Item newItem)
+    public void newItem(Item newItem)
     {
         this.itemRepository.save(newItem);
     }

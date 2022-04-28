@@ -1,7 +1,8 @@
 package com.bd.tpfinal.services;
 
-import com.bd.tpfinal.model.Client;
+import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.model.Order;
+import com.bd.tpfinal.repositories.DeliveryManRepository;
 import com.bd.tpfinal.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,15 +14,17 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService
 {
     private final OrderRepository orderRepository;
+    private final DeliveryManRepository deliveryManRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository)
+    public OrderServiceImpl(OrderRepository orderRepository, DeliveryManRepository deliveryManRepository)
     {
         this.orderRepository = orderRepository;
+        this.deliveryManRepository = deliveryManRepository;
     }
 
     @Override
-    public Order addOrder(Order newOrder)
+    public Order newOrder(Order newOrder)
     {
         newOrder.getClient().addOrder(newOrder);
         this.orderRepository.save(newOrder);
@@ -52,13 +55,30 @@ public class OrderServiceImpl implements OrderService
         return Optional.of(order_aux);
     }
 
+    /**
+     * retorna un objeto Order de acuerdo al valor de su atributo "number", que es el id.
+     * @param number
+     * @return
+     */
     @Override
-    public Order getByNumber(int number)
+    public Order getByNumber(Long number)
     {
         Order order_aux = this.orderRepository.findByNumber(number);
         //OrderStatus orderStatus_aux = this.orderStatusRepository.findByOrder(order_aux.getId());
         //order_aux.setOrderStatus(orderStatus_aux);
         order_aux.setStatusByName();
         return order_aux;
+    }
+
+    @Override
+    public boolean assignOrderToDeliveryMan(Order orden, DeliveryMan dm)
+    {
+        boolean rta = false;
+        //List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
+        orden.setDeliveryMan(dm);
+        this.orderRepository.save(orden);
+
+        return rta;
+
     }
 }

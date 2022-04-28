@@ -21,7 +21,7 @@ public class ProductTypeServiceImpl implements ProductTypeService
     }
 
     @Override
-    public void addProductType(ProductType newProductType)
+    public void newProductType(ProductType newProductType)
     {
         String name = newProductType.getName();
         ProductType buscado = getProductTypeByName(name);

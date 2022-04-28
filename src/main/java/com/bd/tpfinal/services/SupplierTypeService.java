@@ -8,7 +8,7 @@ import java.util.List;
 @Service
 public interface SupplierTypeService
 {
-    public void addSupplierType(SupplierType newSupplierType);
+    public void newSupplierType(SupplierType newSupplierType);
     public List<SupplierType> getAll();
     public SupplierType getSupplierTypeByName(String name);
 

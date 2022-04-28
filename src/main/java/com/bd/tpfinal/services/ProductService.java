@@ -9,7 +9,7 @@ import java.util.Optional;
 @Service
 public interface ProductService
 {
-    public void addProduct(Product newProduct);
+    public void newProduct(Product newProduct);
     public List<Product> getAll();
     public Optional<Product> getProductById(Long id);
     public Product getProductByName(String name);

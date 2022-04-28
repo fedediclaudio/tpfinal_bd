@@ -30,7 +30,7 @@ public class ClientServiceImpl implements ClientService
      * No permito repetir username
      * @param newClient
      */
-    public void addClient(Client newClient)
+    public void newClient(Client newClient)
     {
         Client buscado = getClientByName(newClient.getUsername());
         if(buscado == null)
@@ -57,9 +57,18 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
+    /**
+     * retorna el primer cliente con el "name"
+     */
     public Client getClientByName(String name)
     {
-        return this.clientRepository.findByName(name);
+        Client cliente = null;
+        List<Client> clientes = this.clientRepository.findByName(name);
+        if(!clientes.isEmpty())
+        {
+            cliente = clientes.get(0);
+        }
+        return cliente;
     }
 
     @Override

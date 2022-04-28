@@ -34,6 +34,7 @@ public class Pending extends OrderStatus
     {
         Date start_date = new Date();
         OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.ASSIGNED, super.getOrder(),"assign",start_date);
+        //OrderStatus orderStatus = new Pending()
         getOrder().setOrderStatus(orderStatus);
         super.getOrder().setDeliveryMan(deliveryMan);
         return true;

@@ -10,13 +10,14 @@ import java.util.Date;
 //@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 //@DiscriminatorColumn(name = "OrderStatus_Type")
 //@Table(name = "ordersStatus")
+//@Embeddable  para declarar que una clase será incrustada por otras entidades.
 @Embeddable
 public class OrderStatus
 {
-    @Column(name = "state")
+    //@Column(name = "state_name")
     protected String name;
 
-    @Column(name = "state_start_date")
+    //@Column(name = "state_start_date")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
     protected Date startDate;
 

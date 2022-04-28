@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface ProductTypeService
 {
-    public void addProductType(ProductType newProductType);
+    public void newProductType(ProductType newProductType);
     public List<ProductType> getAll();
     public Optional<ProductType> getProductTypeById(Long id);
     public ProductType getProductTypeByName(String name);

@@ -26,7 +26,7 @@ public class ItemController
     @PostMapping(value = "/new")
     public void addItem(@RequestBody Item newItem)
     {
-        this.itemService.addItem(newItem);
+        this.itemService.newItem(newItem);
     }
 
     //////  GET

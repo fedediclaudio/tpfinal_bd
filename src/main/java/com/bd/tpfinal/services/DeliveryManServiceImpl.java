@@ -19,7 +19,7 @@ public class DeliveryManServiceImpl implements DeliveryManService
     }
 
     @Override
-    public void addDeliveryMan(DeliveryMan newDeliveryMan)
+    public void newDeliveryMan(DeliveryMan newDeliveryMan)
     {
         this.deliveryManRepository.save(newDeliveryMan);
     }
@@ -34,5 +34,11 @@ public class DeliveryManServiceImpl implements DeliveryManService
     public Optional<DeliveryMan> getById(Long id)
     {
         return this.deliveryManRepository.findById(id);
+    }
+
+    @Override
+    public List<DeliveryMan> getAllDeliveryManFree()
+    {
+        return this.deliveryManRepository.findAllFree();
     }
 }

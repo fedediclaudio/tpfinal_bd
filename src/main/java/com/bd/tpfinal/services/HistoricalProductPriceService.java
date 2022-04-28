@@ -8,7 +8,7 @@ import java.util.List;
 @Service
 public interface HistoricalProductPriceService
 {
-    public void addHistoricalProductPrice(HistoricalProductPrice newHistoricalProductPrice);
+    public void newHistoricalProductPrice(HistoricalProductPrice newHistoricalProductPrice);
     public List<HistoricalProductPrice> getAll(Long productPriceId);
     public HistoricalProductPrice getById(Long id);
 }

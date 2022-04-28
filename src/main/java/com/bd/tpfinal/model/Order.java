@@ -26,12 +26,18 @@ public class Order
     @Column(nullable = false)
     private float totalPrice;
 
+    //https://www.baeldung.com/jpa-embedded-embeddable
+    // @Embedded se usa para incrustar un tipo en otra entidad.
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name="name", column = @Column(name = "state_name")),
+            @AttributeOverride(name = "startDate", column=@Column(name="state_start_date"))
+    })
     private OrderStatus orderStatus; //acá hay un Patrón State
 
     //relación muchos a uno con DeliveryMan
     //@JoinColumn: especificar un nombre de columna de clave externa
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "deliveryMan_id")
     private DeliveryMan deliveryMan;
 
@@ -56,10 +62,10 @@ public class Order
     //relación uno a muchos
     //@OneToMany(cascade = CascadeType.ALL)
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = {}, orphanRemoval = false)
-
     //@JoinColumn(name = "order_id")
     //"order_id" es el nombre de la columna de tabla items que se agrega para
     //mantener la relación
+    //@JsonIgnore
     private List<Item> items;
 
     //solamente puse lo relativo a patrón STATE
@@ -121,9 +127,21 @@ public class Order
         return deliveryMan;
     }
 
+    /**
+     * Solamente puede asignar un repartidor si el estado es pending.
+     * @param deliveryMan
+     */
     public void setDeliveryMan(DeliveryMan deliveryMan)
     {
-        this.deliveryMan = deliveryMan;
+        //this.deliveryMan = deliveryMan;
+        try
+        {
+            this.getOrderStatus().assign(deliveryMan);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public Client getClient()
@@ -178,9 +196,12 @@ public class Order
         this.orderStatus = orderStatus;
     }
 
+    /**
+     * establece el objeto hijo de OrderStatus
+     */
     public void setStatusByName()
     {
-        switch (orderStatus.getName())
+        switch (this.getOrderStatus().getName())
         {
             case "Pending":
                 this.setOrderStatus(new Pending(this, this.orderStatus.getStartDate()));
