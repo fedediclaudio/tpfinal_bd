@@ -70,6 +70,11 @@ public class Client extends User
         return addresses;
     }
 
+    public void setAddresses(List<Address> addresses)
+    {
+        this.addresses = addresses;
+    }
+
     public List<Order> getOrders()
     {
         return orders;

@@ -6,9 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long>
 {
     //@Query(value = "SELECT o FROM Order o WHERE o.order.number = :number")
     Order findByNumber(@Param("number") Long number);
+
+    //@Query(value = "SELECT * FROM Order")
+    List<Order> findAll();
 }

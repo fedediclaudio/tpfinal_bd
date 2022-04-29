@@ -26,7 +26,7 @@ public class OrderServiceImpl implements OrderService
     @Override
     public Order newOrder(Order newOrder)
     {
-        newOrder.getClient().addOrder(newOrder);
+        //newOrder.getClient().addOrder(newOrder);
         this.orderRepository.save(newOrder);
         return newOrder;
     }
@@ -34,7 +34,15 @@ public class OrderServiceImpl implements OrderService
     @Override
     public List<Order> getAll()
     {
-        return this.orderRepository.findAll();
+        List<Order> orders =  this.orderRepository.findAll();
+       // int cantidad = orders.size();
+      //  int i = 0;
+     //   for (i=0; i< cantidad; i++)
+    //    {
+   //         System.out.println("++++++"+orders.get(i).getOrderStatus().getName());
+      //      orders.get(i).setStatusByName();
+      //  }
+        return orders;
     }
 
     /**
@@ -64,8 +72,6 @@ public class OrderServiceImpl implements OrderService
     public Order getByNumber(Long number)
     {
         Order order_aux = this.orderRepository.findByNumber(number);
-        //OrderStatus orderStatus_aux = this.orderStatusRepository.findByOrder(order_aux.getId());
-        //order_aux.setOrderStatus(orderStatus_aux);
         order_aux.setStatusByName();
         return order_aux;
     }

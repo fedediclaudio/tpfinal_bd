@@ -14,6 +14,7 @@ import java.util.Date;
 @Embeddable
 public class OrderStatus
 {
+
     //@Column(name = "state_name")
     protected String name;
 
@@ -21,7 +22,10 @@ public class OrderStatus
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
     protected Date startDate;
 
-    @Transient
+    //@Transient
+    @OneToOne
+    @JoinColumn(name = "order_number")
+    //@JsonIgnore
     protected Order order;
 
     public OrderStatus()

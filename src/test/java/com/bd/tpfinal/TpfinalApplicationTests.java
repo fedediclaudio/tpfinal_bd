@@ -131,6 +131,8 @@ class TpfinalApplicationTests
         Supplier unSupplier = suppliers.get(0);
         Product product1 = new Product("producto1", 25.8F, 12.0F, "descripcion producto 1", unSupplier, productType);
         this.productService.newProduct(product1);
+        Product product2 = new Product("producto2", 25.8F, 12.0F, "descripcion producto 2", unSupplier, productType);
+        this.productService.newProduct(product2);
 
 		Date startDate = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
 		Date finishDate = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
@@ -145,6 +147,9 @@ class TpfinalApplicationTests
 		new_PRODUCT_CreacionProduct();
 	}
 
+    /**
+     * asigna
+     */
     public void new_ORDER_CreationOrder()
     {
         Client client1 = new Client("Cliente1", "usuarioCliente1", "passCliente1", "email@email.com", new Date());
@@ -153,15 +158,19 @@ class TpfinalApplicationTests
         List<Address> addressList = new ArrayList<Address>();
         addressList.add(newAddress1);
         addressList.add(newAddress2);
-        //Client client1 = new Client("Cliente1", "usuarioCliente1", "passCliente1", "email@email.com", new Date(), addressList);
+        client1.setAddresses(addressList);
         this.clientService.newClient(client1);
-        this.addressService.newAddress(newAddress1);
-        this.addressService.newAddress(newAddress2);
         Date dateOfOrder = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
-        //Client cliente = (Client) this.clientService.getClientByName("Cliente1");
-        //Address address = client1.getAddresses().get(0);
-        Order orden = new Order(dateOfOrder, "comentario Orden 1", 0.0F, client1, newAddress1);
-        this.orderService.newOrder(orden);
+        Client cliente = (Client) this.clientService.getClientByName("Cliente1");
+        Address address = client1.getAddresses().get(0);
+        Order orden = new Order(dateOfOrder, "comentario Orden 1", 0.0F, cliente, address);
+        Order ordenbis = this.orderService.newOrder(orden);
+        OrderStatus os = ordenbis.getOrderStatus();
+        Long number = ordenbis.getNumber();
+        ordenbis = this.orderService.getByNumber(number);
+        System.out.println("-----------------order status name otra vez: " + ordenbis.getOrderStatus().getName());
+
+
     }
 
     @Test
@@ -177,60 +186,30 @@ class TpfinalApplicationTests
     public void test_ORDER_agregar_Item_a_Order_Creada()
     {
         new_ORDER_CreationOrder();
-
         List<Order> ordenes = this.orderService.getAll();
         Order orden_buscada = ordenes.get(0);
-        orden_buscada.setStatusByName();
-
+        //orden_buscada.setStatusByName();
         new_PRODUCT_CreacionProduct();
-
 		Product producto_buscado = this.productService.getProductByName("producto1");
-
         Item item = new Item(3, "descripcion item", orden_buscada, producto_buscado);
         this.itemService.newItem(item);
+        Product producto_buscado_2 = this.productService.getProductByName("producto2");
+        Item item2 = new Item(2, "descripción item 2", orden_buscada, producto_buscado_2);
+        this.itemService.newItem(item2);
     }
-
-	/**
-	 * 2) Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
-	 */
-	@Test
-	public void test_Confirmar_Pedido()
-	{
-		//Creación de la Orden (pedido)
-		//Similar a agregar un ítem a una orden ya creada.
-		new_ORDER_CreationOrder();
-		List<Order> ordenes = this.orderService.getAll();
-		Order orden_buscada = ordenes.get(0);
-		orden_buscada.setStatusByName();//se establece el objeto status
-		new_PRODUCT_CreacionProduct();
-		Product producto_buscado = this.productService.getProductByName("producto1");
-		Item item = new Item(3, "descripcion item", orden_buscada, producto_buscado);
-		this.itemService.newItem(item);
-
-		//Alta de un DeliveryMan
-		newDeliveryMan("delivery1", "usuario1", "pass1", "delivery1@email.com", new Date(), true, new Date());
-		newDeliveryMan("delivery2", "usuario2", "pass2", "delivery2@email.com", new Date(), true, new Date());
-
-		//ASIGNACION
-		//1 se busca el primer repartidor libre y se asigna
-		List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
-		DeliveryMan deliveryManFree = deliveryMEN.get(0);
-		orden_buscada.setDeliveryMan(deliveryManFree);
-		this.orderService.newOrder(orden_buscada);
-	}
 
     /**
      * 2) Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
      */
     @Test
-    public void test_Confirmar_Pedido_2()
+    public void test_Confirmar_Pedido()
     {
         //Creación de la Orden (pedido)
         //Similar a agregar un ítem a una orden ya creada.
         new_ORDER_CreationOrder();
-        List<Order> ordenes = this.orderService.getAll();
+        List<Order> ordenes = this.orderService.getAll();//esto establece status en el OrderServiceImpl
         Order orden_buscada = ordenes.get(0);
-        orden_buscada.setStatusByName();//se establece el objeto status
+        //orden_buscada.setStatusByName();//se establece el objeto status
         new_PRODUCT_CreacionProduct();
         Product producto_buscado = this.productService.getProductByName("producto1");
         Item item = new Item(3, "descripcion item", orden_buscada, producto_buscado);
@@ -244,6 +223,7 @@ class TpfinalApplicationTests
         //1 se busca el primer repartidor libre y se asigna
         List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
         DeliveryMan deliveryManFree = deliveryMEN.get(0);
+
         boolean rta=this.orderService.assignOrderToDeliveryMan(orden_buscada, deliveryManFree);
     }
 

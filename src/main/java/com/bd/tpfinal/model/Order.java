@@ -13,7 +13,7 @@ public class Order
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_order", unique = true, updatable = false)
+    @Column(name = "number_id_order", unique = true, updatable = false)
     private Long number;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
@@ -29,10 +29,6 @@ public class Order
     //https://www.baeldung.com/jpa-embedded-embeddable
     // @Embedded se usa para incrustar un tipo en otra entidad.
     @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name="name", column = @Column(name = "state_name")),
-            @AttributeOverride(name = "startDate", column=@Column(name="state_start_date"))
-    })
     private OrderStatus orderStatus; //acá hay un Patrón State
 
     //relación muchos a uno con DeliveryMan
@@ -136,7 +132,7 @@ public class Order
         //this.deliveryMan = deliveryMan;
         try
         {
-            this.getOrderStatus().assign(deliveryMan);
+            this.orderStatus.assign(deliveryMan);
         }
         catch (Exception e)
         {
@@ -201,7 +197,7 @@ public class Order
      */
     public void setStatusByName()
     {
-        switch (this.getOrderStatus().getName())
+        switch (orderStatus.getName())
         {
             case "Pending":
                 this.setOrderStatus(new Pending(this, this.orderStatus.getStartDate()));
