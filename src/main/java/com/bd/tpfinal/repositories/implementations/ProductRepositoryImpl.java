@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 import com.bd.tpfinal.model.HistoricalProductPrice;
 import com.bd.tpfinal.model.Product;
 import com.bd.tpfinal.model.Product_;
+import com.bd.tpfinal.model.Supplier;
+import com.bd.tpfinal.model.Supplier_;
 import com.bd.tpfinal.repositories.interfaces.IProductRepository;
 
 @Repository
@@ -34,5 +36,20 @@ public class ProductRepositoryImpl implements IProductRepository {
 		TypedQuery<HistoricalProductPrice> typeQuery = em.createQuery(cq);
 		
 		return typeQuery.getResultList();
+	}
+	
+	public List<Product> getProductsFromSupplier(long idSupplier) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		Join<Product, Supplier> supplier = root.join(Product_.SUPPLIER);
+		
+		cq.where( cb.equal(supplier.get(Supplier_.ID), idSupplier) );
+		
+		cq.select( root );
+		TypedQuery<Product> typeQuery = em.createQuery(cq);
+		
+		return typeQuery.getResultList();	
 	}
 }

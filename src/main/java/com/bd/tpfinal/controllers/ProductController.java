@@ -90,4 +90,15 @@ public class ProductController {
 			return null;
 		}
     }
+	
+	@GetMapping("/getProductsFromSupplier")
+	public List<Product> getProductsFromSupplier( @RequestParam(name = "idSupplier") long idSupplier) {
+		try {
+			return productService.getProductsFromSupplier(idSupplier);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

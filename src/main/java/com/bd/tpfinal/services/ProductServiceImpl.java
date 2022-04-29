@@ -166,4 +166,9 @@ public class ProductServiceImpl implements ProductService {
 	public List<HistoricalProductPrice> getHistoricalPricesFromProduct(long idProduct) throws Exception {
 		return productRepository.getHistoricalPricesListOrderByStartDate( idProduct );
 	}
+	
+	public List<Product> getProductsFromSupplier(long idSupplier) throws Exception {
+		return productRepository.getProductsFromSupplier(idSupplier);
+	}
+	
 }

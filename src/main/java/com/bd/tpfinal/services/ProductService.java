@@ -13,5 +13,6 @@ public interface ProductService {
 	boolean deleteProduct(long idProduct) throws Exception;
 	List<Product> getProductList() throws Exception;
 	List<HistoricalProductPrice> getHistoricalPricesFromProduct(long idProduct) throws Exception;
+	List<Product> getProductsFromSupplier(long idSupplier) throws Exception;
 	
 }
