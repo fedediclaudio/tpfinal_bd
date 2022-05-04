@@ -1,5 +1,7 @@
 package com.bd.tpfinal.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +44,18 @@ public class OrderController {
 		}
 		return order;
     }
+	
+	@GetMapping("/getOrdersFromSupplier")
+	public List<Order> getOrdersFromSupplier(@RequestParam(name = "idSupplier") long idSupplier){
+		List<Order> orders = null;
+		try {
+			orders = orderService.getOrdersFromSupplier(idSupplier);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return orders;
+	}
 	
 	@PutMapping("/assignAddress")
     public boolean assignAddressToOrder( @RequestParam(name = "orderNumber") int orderNumber,

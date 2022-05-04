@@ -283,4 +283,8 @@ public class OrderServiceImpl implements OrderService {
 		
 		return true;		
 	}
+	
+	public List<Order> getOrdersFromSupplier(long idSupplier) throws Exception {
+		return orderRepository.getOrdersFromSupplier(idSupplier);
+	}
 }

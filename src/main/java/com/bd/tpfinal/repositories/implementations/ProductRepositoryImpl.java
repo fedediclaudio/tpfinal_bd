@@ -50,6 +50,6 @@ public class ProductRepositoryImpl implements IProductRepository {
 		cq.select( root );
 		TypedQuery<Product> typeQuery = em.createQuery(cq);
 		
-		return typeQuery.getResultList();	
+		return typeQuery.getResultList();
 	}
 }

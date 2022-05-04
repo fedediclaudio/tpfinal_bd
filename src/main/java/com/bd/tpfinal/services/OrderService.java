@@ -1,5 +1,7 @@
 package com.bd.tpfinal.services;
 
+import java.util.List;
+
 import com.bd.tpfinal.model.Order;
 
 public interface OrderService {
@@ -11,5 +13,5 @@ public interface OrderService {
 	boolean cancel(int orderNumber) throws Exception;
 	boolean confirmOrder(int orderNumber) throws Exception;
 	boolean setQualification(int orderNumber, int score, String comment) throws Exception;
-	
+	List<Order> getOrdersFromSupplier(long idSupplier) throws Exception;
 }
