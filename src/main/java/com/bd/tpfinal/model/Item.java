@@ -1,24 +1,20 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "items")
 public class Item extends PersistentEntity{
 
     private int quantity;
 
     private String description;
-    @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
     @NotNull
+    @Transient
     private Order order;
-    @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.MERGE)
     private Product product;
-
-    @Version
-    private Long version;
-
 
     public int getQuantity() {
         return quantity;
@@ -52,11 +48,4 @@ public class Item extends PersistentEntity{
         this.product = product;
     }
 
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
 }

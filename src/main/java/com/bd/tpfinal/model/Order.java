@@ -1,52 +1,45 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-@Entity
-@Table(name="orders")
+@Document(collection = "orders")
 public class Order extends PersistentEntity {
-    @Column(unique=true)
-    private int number;
-    @Temporal(TemporalType.TIMESTAMP)
+    private Integer number = (int) Math.random() * 10000;
+    @JsonProperty("date_of_order")
     private Date dateOfOrder;
 
     private String comments;
-
+    @JsonProperty("total_price")
     private float totalPrice;
 
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, orphanRemoval = true)
     private OrderStatus status;
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JsonProperty("delivery_man")
     private DeliveryMan deliveryMan;
 
-    @ManyToOne(fetch = FetchType.EAGER)
     @NotNull
     private Client client;
 
-    @OneToOne(fetch = FetchType.EAGER)
     @NotNull
     private Address address;
-
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Qualification qualification;
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinTable(name="order_items",
-            joinColumns=@JoinColumn(name="order_id"),
-            inverseJoinColumns=@JoinColumn(name="item_id"))
     private List<Item> items = new ArrayList<>();
 
     @Version
     private Long version;
 
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 
@@ -130,8 +123,7 @@ public class Order extends PersistentEntity {
         this.version = version;
     }
 
-    public void addItem(Item item) {
-        this.items.size();
+    public void add(Item item) {
         this.items.add(item);
     }
 }

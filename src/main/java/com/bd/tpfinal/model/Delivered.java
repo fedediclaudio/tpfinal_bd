@@ -1,11 +1,7 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-@Entity
-@DiscriminatorValue("DELIVERED")
+import org.springframework.data.mongodb.core.mapping.Document;
+
 public class Delivered extends OrderStatus{
 
     public Delivered() {

@@ -1,11 +1,13 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.List;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "addresses")
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class Address extends PersistentEntity {
 
     private String name;
@@ -17,12 +19,12 @@ public class Address extends PersistentEntity {
     private float[] coords;
 
     private String description;
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @NotNull
+
+    @Transient
     private Client client;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = false)
-    private List<Order> orders;
+    @DBRef(lazy = true)
+    private List<Order> orders = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -79,4 +81,5 @@ public class Address extends PersistentEntity {
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
+
 }

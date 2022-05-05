@@ -1,20 +1,17 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.*;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.ArrayList;
 import java.util.List;
-@Entity
-@Table(name = "supplier_types")
+@Document
 public class SupplierType extends PersistentEntity{
 
     private String name;
 
     private String description;
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "supplier_types_supplier",
-            joinColumns = { @JoinColumn(name = "supplier_id") },
-            inverseJoinColumns = { @JoinColumn(name = "supplier_type_id") })
+    @DBRef(lazy = true)
     private List<Supplier> suppliers = new ArrayList<>();
 
     public String getName() {

@@ -1,16 +1,15 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@DiscriminatorValue("CANCELLED")
+
 public class Cancel extends OrderStatus {
     public Cancel() {
         setName("CANCELLED");
     }
+
+    @JsonProperty("cancelled_by_client")
     private boolean cancelledByClient;
 
     public boolean isCancelledByClient() {

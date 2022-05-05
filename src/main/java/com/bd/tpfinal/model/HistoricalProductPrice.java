@@ -1,23 +1,21 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Date;
-@Entity
-@Table(name = "historical_product_prices")
-public class HistoricalProductPrice extends PersistentEntity{
+public class HistoricalProductPrice extends PersistentEntity {
 
     private float price;
-    @Temporal(TemporalType.TIMESTAMP)
+    @JsonProperty("start_date")
     private Date startDate;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date finishDate;
-    @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.PERSIST)
-    @NotNull
-    private Product product;
 
-    @Version
-    private Long version;
+    @JsonProperty("finish_date")
+    private Date finishDate;
+    @Transient
+    private Product product;
 
     public float getPrice() {
         return price;
@@ -51,11 +49,4 @@ public class HistoricalProductPrice extends PersistentEntity{
         this.product = product;
     }
 
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
 }

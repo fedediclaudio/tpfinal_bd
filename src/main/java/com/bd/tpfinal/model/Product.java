@@ -1,12 +1,14 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "products")
+@Document(collection = "products")
 public class Product extends PersistentEntity {
 
     private String name;
@@ -16,20 +18,17 @@ public class Product extends PersistentEntity {
     private float weight;
 
     private String description;
-    @ManyToOne(fetch = FetchType.EAGER )
     @NotNull
     private Supplier supplier;
 
-    @ManyToOne(fetch = FetchType.EAGER)
     @NotNull
+    @JsonProperty("product_type")
     private ProductType type;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<HistoricalProductPrice> prices = new ArrayList<>();
 
     private Boolean active = true;
 
-    @Version
     private Long version;
 
     public String getName() {

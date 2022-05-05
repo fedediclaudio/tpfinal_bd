@@ -1,12 +1,7 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@DiscriminatorValue("SENT")
 public class Sent extends OrderStatus{
     public Sent() {
         setName("SENT");

@@ -1,17 +1,17 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-@Entity
-@DiscriminatorValue("CLIENT")
-public class Client extends User{
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.*;
+
+@Document(collection = "clients")
+public class Client extends User {
 
     private Date dateOfRegister;
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
+    @DBRef(lazy = true)
     private List<Order> orders = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
+
     private List<Address> addresses = new ArrayList<>();
 
     public Date getDateOfRegister() {
@@ -22,10 +22,7 @@ public class Client extends User{
         this.dateOfRegister = dateOfRegister;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinTable(name="client_orders", joinColumns=@JoinColumn(name="client_id"),
-            inverseJoinColumns=@JoinColumn(name="order_id"))
-    public List<Order> getOrders() {
+    public Collection<Order> getOrders() {
         return orders;
     }
 
@@ -33,7 +30,7 @@ public class Client extends User{
         this.orders = orders;
     }
 
-    public List<Address> getAddresses() {
+    public Collection<Address> getAddresses() {
         return addresses;
     }
 

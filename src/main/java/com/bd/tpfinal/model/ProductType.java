@@ -1,22 +1,21 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.ArrayList;
 import java.util.List;
-@Entity
-@Table(name = "product_types")
+@Document
 public class ProductType extends PersistentEntity{
 
     private String name;
 
     private String description;
-    @ManyToMany(cascade= CascadeType.ALL)
-    @JoinTable(name="products_products_types",
-            joinColumns=@JoinColumn(name="product_id"),
-            inverseJoinColumns=@JoinColumn(name="product_type_id"))
+
+    @DBRef(lazy = true)
     private List<Product> products = new ArrayList<>();
 
-    @Version
     private Long version;
     public String getName() {
         return name;
@@ -51,9 +50,7 @@ public class ProductType extends PersistentEntity{
     }
 
     public void addProduct(Product product){
-        if (products == null)
-            products = new ArrayList<>();
+        products.size();
         products.add(product);
-        product.setType(this);
     }
 }

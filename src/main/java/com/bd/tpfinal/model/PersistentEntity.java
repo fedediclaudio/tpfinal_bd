@@ -1,20 +1,21 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import org.springframework.data.annotation.Id;
 
-@MappedSuperclass
+import java.io.Serializable;
+import java.util.UUID;
+
+
 public abstract class PersistentEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id = String.valueOf(UUID.randomUUID());
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 }

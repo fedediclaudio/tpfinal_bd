@@ -1,10 +1,11 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Date;
-@Entity
-@Table(name = "users")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+
 public abstract class User extends PersistentEntity {
 
     private String name;
@@ -14,13 +15,12 @@ public abstract class User extends PersistentEntity {
     private String password;
 
     private String email;
-    @Temporal(TemporalType.DATE)
+    @JsonProperty("date_of_birth")
     private Date dateOfBirth;
 
     private boolean scrore;
 
     private int score;
-
     @Version
     private Long version;
 

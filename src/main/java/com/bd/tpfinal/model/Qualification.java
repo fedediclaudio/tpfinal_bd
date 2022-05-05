@@ -1,20 +1,17 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "qualifications")
-public class Qualification extends PersistentEntity{
+public class Qualification extends PersistentEntity {
 
     private float score;
 
     private String commentary;
-    @OneToOne(fetch = FetchType.EAGER, optional = false)
-    @NotNull
+    @Transient
     private Order order;
 
     public float getScore() {

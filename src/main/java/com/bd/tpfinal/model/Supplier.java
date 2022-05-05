@@ -1,12 +1,14 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+
 import java.util.ArrayList;
 import java.util.List;
-@Entity
-@DiscriminatorValue("SUPPLIER")
-@Table(name = "suppliers")
+@Document(collection = "suppliers")
 public class Supplier extends PersistentEntity{
 
     private String name;
@@ -16,19 +18,13 @@ public class Supplier extends PersistentEntity{
     private String address;
 
     private float[] coords;
-
+    @JsonProperty("qualification_of_users")
     private float qualificationOfUsers;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinTable(name="supplier_products",
-            joinColumns=@JoinColumn(name="supplier_id"),
-            inverseJoinColumns=@JoinColumn(name="product_id"))
+    @DBRef(lazy = true)
     private List<Product> products = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @NotNull
     private SupplierType type;
-
     @Version
     private Long version;
 
@@ -36,7 +32,7 @@ public class Supplier extends PersistentEntity{
 
     }
 
-    public Supplier(Long id, String name, String cuil, String address, float[] coords, float qualificationOfUsers, SupplierType type) {
+    public Supplier(String id, String name, String cuil, String address, float[] coords, float qualificationOfUsers, SupplierType type) {
         setId(id);
         this.name = name;
         this.cuil = cuil;
@@ -109,8 +105,13 @@ public class Supplier extends PersistentEntity{
     public void setVersion(Long version) {
         this.version = version;
     }
-    public void addProduct(Product product){
+    public void add(Product product){
         products.size();
         products.add(product);
+    }
+
+    public void remove(Product product){
+        products.size();
+        products.remove(product);
     }
 }

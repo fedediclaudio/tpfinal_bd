@@ -1,17 +1,18 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Date;
 
-@Entity
-@Table(name = "order_status")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class OrderStatus extends PersistentEntity {
 
     private String name;
-    @Temporal(TemporalType.TIMESTAMP)
+    @JsonProperty("start_date")
     private Date startDate = new Date();
-    @OneToOne(fetch = FetchType.EAGER)
+    @Transient
     private Order order;
 
     public String getName() {

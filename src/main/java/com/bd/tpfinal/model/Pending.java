@@ -1,12 +1,7 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@DiscriminatorValue("PENDING")
 public class Pending extends OrderStatus{
     public Pending() {
         setName("PENDING");
