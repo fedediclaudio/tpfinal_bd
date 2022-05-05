@@ -28,8 +28,8 @@ public class Assigned extends OrderStatus
     {
         //TODO: ver eso de canCancel()
         Date start_date = new Date();
-        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.CANCELLED, super.getOrder(),"cancelled",start_date);
-        super.getOrder().setOrderStatus(orderStatus);
+        //OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.CANCELLED, super.getOrder(),"cancelled",start_date);
+        getOrder().setOrderStatus(new Cancelled(getOrder(), start_date));
         return true;
     }
 
@@ -38,6 +38,7 @@ public class Assigned extends OrderStatus
      * caso el estado pasa a un estado de cancelado (Cancelled),
      * -- un repartidor suma un punto cuando completa una entrega mientras
      * que resta dos puntos cuando rechaza un pedido que le fue asignado.
+     * el DeliveryMan asigando vuelve a estar free
      *
      * @return
      */
@@ -45,18 +46,13 @@ public class Assigned extends OrderStatus
     public boolean refuse()
     {
         boolean rta = false;
-        //TODO: no entiendo para que sirve canRefuse()
-        if (canRefuse())
-        {
-            //Cancel cancel = new Cancel(super.getOrder());
-            Date start_date = new Date();
-            OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.CANCELLED, super.getOrder(),"cancelled",start_date);
-            super.getOrder().setOrderStatus(orderStatus);
-            int score = super.getOrder().getDeliveryMan().getScore();
-            super.getOrder().getDeliveryMan().setScore(score -2);
-            rta = true;
-        }
-        return rta;
+        //TODO: no entiendo para que sirve canRefuse(), si el patron state hace todo
+        Date start_date = new Date();
+        getOrder().setOrderStatus(new Cancelled(getOrder(), start_date));
+        int score = super.getOrder().getDeliveryMan().getScore();
+        super.getOrder().getDeliveryMan().setScore(score -2);
+        super.getOrder().getDeliveryMan().setFree(true);
+        return true;
     }
 
     /**
@@ -68,8 +64,8 @@ public class Assigned extends OrderStatus
     public boolean deliver()
     {
         Date start_date = new Date();
-        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.DELIVERED, super.getOrder(),"delivered",start_date);
-        super.getOrder().setOrderStatus(orderStatus);
+        //OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.DELIVERED, super.getOrder(),"delivered",start_date);
+        super.getOrder().setOrderStatus(new Sent(getOrder(), start_date));
         return true;
     }
 }

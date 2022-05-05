@@ -127,17 +127,39 @@ public class Order
      * Solamente puede asignar un repartidor si el estado es pending.
      * @param deliveryMan
      */
-    public void setDeliveryMan(DeliveryMan deliveryMan)
+    //TODO: tal vez esto deba propagar una exception
+    public void assignDeliveryMan(DeliveryMan deliveryMan)
     {
-        //this.deliveryMan = deliveryMan;
         try
         {
-            this.orderStatus.assign(deliveryMan);
+            this.setStatusByName();
+            System.out.println("STATUS----"+getOrderStatus().getClass().getName());
+            getOrderStatus().assign(deliveryMan);
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
+    }
+
+    //OrderStatus deber ser Assigned para no lanzar exception
+    //el DeliveryMan puede hacer un refuse
+    public void refuse() throws Exception
+    {
+        this.setStatusByName();
+        getOrderStatus().refuse();
+    }
+
+    public void deliver() throws Exception
+    {
+        this.setStatusByName();
+        getOrderStatus().deliver();
+    }
+
+
+    public void setDeliveryMan(DeliveryMan dm)
+    {
+        this.deliveryMan = dm;
     }
 
     public Client getClient()
@@ -182,14 +204,14 @@ public class Order
 
     public OrderStatus getOrderStatus()
     {
-        //return Status_Factory.getInstanceByEnum(status);
+        //setStatusByName();
         return orderStatus;
-        //return Status_Factory.getInstanceByOrderStatus(status);
     }
 
     public void setOrderStatus(OrderStatus orderStatus)
     {
         this.orderStatus = orderStatus;
+        //this.setStatusByName();
     }
 
     /**
@@ -197,6 +219,8 @@ public class Order
      */
     public void setStatusByName()
     {
+        String name = orderStatus.getName();
+        System.out.println("setStatusByName--->nombre del orderStatus: "+ name);
         switch (orderStatus.getName())
         {
             case "Pending":

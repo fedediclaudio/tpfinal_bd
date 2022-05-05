@@ -30,7 +30,7 @@ public class DeliveryMan extends User
 
     //relación uno a muchos con Order. Lado UNO
     // mappedBy: nombre del atributo del otro (muchos) lado que referencia a este lado (uno)
-    @OneToMany(mappedBy = "deliveryMan", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "deliveryMan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Order> ordersPending;
 
@@ -84,5 +84,11 @@ public class DeliveryMan extends User
     public void setOrdersPending(List<Order> ordersPending)
     {
         this.ordersPending = ordersPending;
+    }
+
+
+    public void addOrdenPending(Order newOrder)
+    {
+        this.ordersPending.add(newOrder);
     }
 }

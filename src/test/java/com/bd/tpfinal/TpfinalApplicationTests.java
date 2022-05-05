@@ -2,9 +2,7 @@ package com.bd.tpfinal;
 
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.services.*;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -34,10 +32,9 @@ class TpfinalApplicationTests
     @Autowired
     private OrderService orderService;
     @Autowired
-	private ItemService itemService;
+    private ItemService itemService;
 
 //	private DeliveryService service;
-
 
 
     @Test
@@ -76,16 +73,15 @@ class TpfinalApplicationTests
     @Test
     void test_DELIVERYMAN_CreacionDeliveryMan()
     {
-        newDeliveryMan("delivery1", "usuario1", "pass1", "delivery1@email.com", new Date(), true, new Date());
-		newDeliveryMan("delivery2", "usuario2", "pass2", "delivery2@email.com", new Date(), true, new Date());
-	}
+        new_DELIVERYMAN_CreacionDeliveryMan("delivery1", "usuario1", "pass1", "delivery1@email.com", new Date(), true, new Date());
+        new_DELIVERYMAN_CreacionDeliveryMan("delivery1", "usuario2", "pass2", "delivery2@email.com", new Date(), true, new Date());
+    }
 
-    public void newDeliveryMan(String name, String username, String password, String email, Date dateOfBirth, boolean free, Date dateOfAdmission )
-	{
-		DeliveryMan deliveryMan = new DeliveryMan(name, username,password,email, dateOfBirth, free, dateOfAdmission);
-		this.deliveryManService.newDeliveryMan(deliveryMan);
-	}
-
+    public void new_DELIVERYMAN_CreacionDeliveryMan(String name, String username, String password, String email, Date dateOfBirth, boolean free, Date dateOfAdmission)
+    {
+        DeliveryMan deliveryMan = new DeliveryMan(name, username, password, email, dateOfBirth, free, dateOfAdmission);
+        this.deliveryManService.newDeliveryMan(deliveryMan);
+    }
 
 
     @Test
@@ -101,10 +97,10 @@ class TpfinalApplicationTests
         this.supplierService.newSupplier(supplier1);
     }
 
-	/**
-	 * test
-	 * crea product Type, SupplierType
-	 */
+    /**
+     * test
+     * crea product Type, SupplierType
+     */
 
     void new_PRODUCT_CreacionProduct()
     {
@@ -117,14 +113,14 @@ class TpfinalApplicationTests
         SupplierType supplierType1 = new SupplierType("supplierType1", "Descripcion SupplierType1");
         this.supplierTypeService.newSupplierType(supplierType1);
 
-		float coords[] = new float[2];
-		coords[0] = 1.0F;
-		coords[1] = 2.0F;
-		//por ahora no hay calificación
-		float qual = 0.0F;
-		SupplierType supplierType = this.supplierTypeService.getSupplierTypeByName("supplierType1");
-		Supplier supplier1 = new Supplier("supplier1", "20123456784", "San Juan 123", coords, qual, supplierType);
-		this.supplierService.newSupplier(supplier1);
+        float coords[] = new float[2];
+        coords[0] = 1.0F;
+        coords[1] = 2.0F;
+        //por ahora no hay calificación
+        float qual = 0.0F;
+        SupplierType supplierType = this.supplierTypeService.getSupplierTypeByName("supplierType1");
+        Supplier supplier1 = new Supplier("supplier1", "20123456784", "San Juan 123", coords, qual, supplierType);
+        this.supplierService.newSupplier(supplier1);
 
         ProductType productType = this.productTypeService.getProductTypeByName("ProductoTipo1");
         List<Supplier> suppliers = this.supplierService.getSupplierByName("supplier1");
@@ -134,23 +130,23 @@ class TpfinalApplicationTests
         Product product2 = new Product("producto2", 25.8F, 12.0F, "descripcion producto 2", unSupplier, productType);
         this.productService.newProduct(product2);
 
-		Date startDate = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
-		Date finishDate = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
-		Product product = this.productService.getProductByName("producto1");
-		HistoricalProductPrice hpp = new HistoricalProductPrice(123.00F, startDate, finishDate, product);
-		this.historicalProductPriceService.newHistoricalProductPrice(hpp);
+        Date startDate = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
+        Date finishDate = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
+        Product product = this.productService.getProductByName("producto1");
+        HistoricalProductPrice hpp = new HistoricalProductPrice(123.00F, startDate, finishDate, product);
+        this.historicalProductPriceService.newHistoricalProductPrice(hpp);
     }
 
     @Test
-	void test_PRODUCT_CreacionProduct()
-	{
-		new_PRODUCT_CreacionProduct();
-	}
+    void test_PRODUCT_CreacionProduct()
+    {
+        new_PRODUCT_CreacionProduct();
+    }
 
     /**
      * asigna
      */
-    public void new_ORDER_CreationOrder()
+    public Long new_ORDER_CreationOrder()
     {
         Client client1 = new Client("Cliente1", "usuarioCliente1", "passCliente1", "email@email.com", new Date());
         Address newAddress1 = new Address("Direccion de la casa", "Calle1 Altura1", "Apartment1", new float[]{1F, 2F}, "domicilio particular 1", client1);
@@ -167,35 +163,37 @@ class TpfinalApplicationTests
         Order ordenbis = this.orderService.newOrder(orden);
         OrderStatus os = ordenbis.getOrderStatus();
         Long number = ordenbis.getNumber();
-        ordenbis = this.orderService.getByNumber(number);
-        System.out.println("-----------------order status name otra vez: " + ordenbis.getOrderStatus().getName());
-
+        return number;
 
     }
 
     @Test
-	public void test_ORDER_CreationOrder()
-	{
-		new_ORDER_CreationOrder();
-	}
-
-	/**
-	 * 1) agregar un ítem a una orden ya creada.
-	 */
-	@Test
-    public void test_ORDER_agregar_Item_a_Order_Creada()
+    public void test_ORDER_CreationOrder()
     {
         new_ORDER_CreationOrder();
-        List<Order> ordenes = this.orderService.getAll();
-        Order orden_buscada = ordenes.get(0);
-        //orden_buscada.setStatusByName();
+    }
+
+    public Long new_ORDER_agregar_Item_a_Order_Creada()
+    {
+        Long number = new_ORDER_CreationOrder();//esto crea bien el orderStatus
+        Order orden_buscada = this.orderService.getByNumber(number);
         new_PRODUCT_CreacionProduct();
-		Product producto_buscado = this.productService.getProductByName("producto1");
+        Product producto_buscado = this.productService.getProductByName("producto1");
         Item item = new Item(3, "descripcion item", orden_buscada, producto_buscado);
         this.itemService.newItem(item);
         Product producto_buscado_2 = this.productService.getProductByName("producto2");
         Item item2 = new Item(2, "descripción item 2", orden_buscada, producto_buscado_2);
         this.itemService.newItem(item2);
+        return number;
+    }
+
+    /**
+     * 1) agregar un ítem a una orden ya creada.
+     */
+    @Test
+    public void test_ORDER_agregar_Item_a_Order_Creada()
+    {
+        new_ORDER_agregar_Item_a_Order_Creada();
     }
 
     /**
@@ -204,29 +202,129 @@ class TpfinalApplicationTests
     @Test
     public void test_Confirmar_Pedido()
     {
-        //Creación de la Orden (pedido)
-        //Similar a agregar un ítem a una orden ya creada.
-        new_ORDER_CreationOrder();
-        List<Order> ordenes = this.orderService.getAll();//esto establece status en el OrderServiceImpl
-        Order orden_buscada = ordenes.get(0);
-        //orden_buscada.setStatusByName();//se establece el objeto status
-        new_PRODUCT_CreacionProduct();
-        Product producto_buscado = this.productService.getProductByName("producto1");
-        Item item = new Item(3, "descripcion item", orden_buscada, producto_buscado);
-        this.itemService.newItem(item);
+        Long number_de_ultima_orden = new_ORDER_agregar_Item_a_Order_Creada();
 
         //Alta de un DeliveryMan
-        newDeliveryMan("delivery1", "usuario1", "pass1", "delivery1@email.com", new Date(), true, new Date());
-        newDeliveryMan("delivery2", "usuario2", "pass2", "delivery2@email.com", new Date(), true, new Date());
+        new_DELIVERYMAN_CreacionDeliveryMan("delivery1", "usuario1", "pass1", "delivery1@email.com", new Date(), true, new Date());
+        new_DELIVERYMAN_CreacionDeliveryMan("delivery2", "usuario2", "pass2", "delivery2@email.com", new Date(), true, new Date());
 
         //ASIGNACION
-        //1 se busca el primer repartidor libre y se asigna
+        //1 se busca el primer repartidor libre
         List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
         DeliveryMan deliveryManFree = deliveryMEN.get(0);
+        //asigna el primer repartidor libre encontrado a la orden recien creada.
+        Order orden_buscada = this.orderService.getByNumber(number_de_ultima_orden);
+        orden_buscada.assignDeliveryMan(deliveryManFree);
+        this.orderService.actualizarOrder(orden_buscada);
+        //this.orderService.assignOrderToDeliveryMan(orden_buscada, deliveryManFree);
 
-        boolean rta=this.orderService.assignOrderToDeliveryMan(orden_buscada, deliveryManFree);
+
+        //List<Order> ordenes = this.orderService.getAll();
+        //a los fines de este test busco la primer orden con estado Pending.
+        /*
+        Iterator iter_ordenes = ordenes.iterator();
+                boolean no_encontrada = true;
+        Order orden = null;
+        while (iter_ordenes.hasNext() && no_encontrada)
+        {
+            orden = (Order) iter_ordenes.next();
+            if (orden.getOrderStatus().getName().equals("Pending"))
+                no_encontrada = false;
+        }
+
+        if (orden != null)
+            this.orderService.assignOrderToDeliveryMan(orden, deliveryManFree);
+        else
+            System.out.println("No quedan ordenes pendientes");
+         */
+
     }
 
+    /**
+     * DeliveryMan rechaza una Orden (ya está Assigned)
+     * La Order pasa a Cancelled
+     * El repartidor descuenta puntaje
+     */
+    @Test
+    public void test_DeliveryMan_Rechaza_Order()
+    {
+        Long number_de_ultima_orden = new_ORDER_agregar_Item_a_Order_Creada();
+        //Alta de un DeliveryMan
+        new_DELIVERYMAN_CreacionDeliveryMan("delivery1", "usuario1", "pass1", "delivery1@email.com", new Date(), true, new Date());
+        new_DELIVERYMAN_CreacionDeliveryMan("delivery2", "usuario2", "pass2", "delivery2@email.com", new Date(), true, new Date());
+        //1 se busca el primer repartidor libre
+        List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
+        DeliveryMan deliveryManFree = deliveryMEN.get(0);
+        //asigna el primer repartidor libre encontrado a la orden recien creada.
+        Order orden_buscada = this.orderService.getByNumber(number_de_ultima_orden);
+        orden_buscada.assignDeliveryMan(deliveryManFree);
+        this.orderService.actualizarOrder(orden_buscada);
+        //la orden_buscada está en Assigned.
+        //el deliveryManFree ya no esta free.
+        try
+        {
+            orden_buscada.refuse();
+            this.orderService.actualizarOrder(orden_buscada);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("No sería una Order Assigned");
+        }
+    }
+
+    /**
+     * DeliveryMan acepta Order (estaba en Assigned)
+     * La Order pasa a Sent
+     */
+    @Test
+    public void test_DeliveryMan_acepta_Order()
+    {
+        Long number_de_ultima_orden = new_ORDER_agregar_Item_a_Order_Creada();
+        //Alta de un DeliveryMan
+        new_DELIVERYMAN_CreacionDeliveryMan("delivery1", "usuario1", "pass1", "delivery1@email.com", new Date(), true, new Date());
+        new_DELIVERYMAN_CreacionDeliveryMan("delivery2", "usuario2", "pass2", "delivery2@email.com", new Date(), true, new Date());
+        //1 se busca el primer repartidor libre
+        List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
+        DeliveryMan deliveryManFree = deliveryMEN.get(0);
+        //asigna el primer repartidor libre encontrado a la orden recien creada.
+        Order orden_buscada = this.orderService.getByNumber(number_de_ultima_orden);
+        orden_buscada.assignDeliveryMan(deliveryManFree);
+        this.orderService.actualizarOrder(orden_buscada);
+        //la orden_buscada está en Assigned.
+        //el deliveryManFree ya no esta free.
+        try
+        {
+            orden_buscada.deliver();
+            this.orderService.actualizarOrder(orden_buscada);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("No sería una Order Assigned");
+        }
+    }
+
+    /**
+     * DeliveryMan entrega pedido (Order estaba en Sent)
+     * La Order pasa a Finished
+     * Se actualizan los puntajes
+     */
+
+    /**
+     * Cliente cancela Order (Order en Pending o Assigned)
+     * La Order pasa a Cancelled
+     */
+
+    /**
+     * 3) Añadir una calificación a una orden ya completada.
+     * Tenga en cuenta que deberá actualizar la calificación del proveedor.
+     */
+    @Test
+    public void test_anadirCalificacion_a_Orden_completada()
+    {
+
+    }
 
     @Test
     void prueba()

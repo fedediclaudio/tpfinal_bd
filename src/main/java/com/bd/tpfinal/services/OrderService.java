@@ -15,4 +15,5 @@ public interface OrderService
     public Optional<Order> getById(Long id);
     public Order getByNumber(Long number);
     public boolean assignOrderToDeliveryMan(Order orden, DeliveryMan dm);
+    public Order actualizarOrder(Order orden);
 }

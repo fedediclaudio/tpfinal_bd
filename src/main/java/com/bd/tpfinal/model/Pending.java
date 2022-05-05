@@ -31,10 +31,11 @@ public class Pending extends OrderStatus
     public boolean assign(DeliveryMan deliveryMan)
     {
         Date start_date = new Date();
-        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.ASSIGNED, super.getOrder(),"assign",start_date);
-        //OrderStatus orderStatus = new Pending()
+        //getOrder().setStatusByName();
+        deliveryMan.setFree(false);
+        getOrder().setDeliveryMan(deliveryMan);
+        OrderStatus orderStatus = new Assigned(getOrder(),start_date);
         getOrder().setOrderStatus(orderStatus);
-        super.getOrder().setDeliveryMan(deliveryMan);
         return true;
     }
 

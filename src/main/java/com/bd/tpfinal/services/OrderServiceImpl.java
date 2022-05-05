@@ -35,13 +35,6 @@ public class OrderServiceImpl implements OrderService
     public List<Order> getAll()
     {
         List<Order> orders =  this.orderRepository.findAll();
-       // int cantidad = orders.size();
-      //  int i = 0;
-     //   for (i=0; i< cantidad; i++)
-    //    {
-   //         System.out.println("++++++"+orders.get(i).getOrderStatus().getName());
-      //      orders.get(i).setStatusByName();
-      //  }
         return orders;
     }
 
@@ -80,11 +73,16 @@ public class OrderServiceImpl implements OrderService
     public boolean assignOrderToDeliveryMan(Order orden, DeliveryMan dm)
     {
         boolean rta = false;
-        //List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
-        orden.setDeliveryMan(dm);
+        orden.assignDeliveryMan(dm);
         this.orderRepository.save(orden);
 
         return rta;
 
+    }
+
+    @Override
+    public Order actualizarOrder(Order orden)
+    {
+        return newOrder(orden);
     }
 }
