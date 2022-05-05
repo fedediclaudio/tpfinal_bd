@@ -6,13 +6,13 @@ import com.bd.tpfinal.repositories.*;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Configuration
-@Transactional
+@EnableMongoRepositories(basePackages = "com.bd.tpfinal.repositories")
 public class DataInitialization implements ApplicationRunner {
     private final OrderRepository orderRepository;
     private final SupplierRepository supplierRepository;
@@ -23,11 +23,11 @@ public class DataInitialization implements ApplicationRunner {
     private final HistoricalProductPriceRepository historicalProductPriceRepository;
     private final ItemRepository itemRepository;
 
-    private List<Long> clients = new ArrayList<>();
-    private List<Long> orders = new ArrayList<>();
-    private List<Long> suppliers = new ArrayList<>();
+    private List<String> clients = new ArrayList<>();
+    private List<String> orders = new ArrayList<>();
+    private List<String> suppliers = new ArrayList<>();
     private List<ProductType> productTypes = new ArrayList<>();
-    private List<Long> products = new ArrayList<>();
+    private List<String> products = new ArrayList<>();
 
     private Random random = new Random();
     private final DeliveryManRepository deliveryManRepository;
@@ -54,6 +54,7 @@ public class DataInitialization implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+
         if (orderRepository.count() == 0) {
             generateClients();
             generateSuppliers();
@@ -61,7 +62,7 @@ public class DataInitialization implements ApplicationRunner {
             generateOrders();
             addItemsToOrders();
             generateDeliveryMen();
-            generateSupplierWithAllProductTypes();
+           generateSupplierWithAllProductTypes();
         }
     }
     private void generateOrders(){
@@ -74,16 +75,18 @@ public class DataInitialization implements ApplicationRunner {
             order.setTotalPrice(0f);
             Pending status = new Pending();
             status.setName();
-            status.setOrder(order);
+//            status.setOrder(order);
             order.setStatus(status);
 
             Client client = clientRepository.findById(clients.get(random.nextInt(clients.size()))).get();
-            client.addOrder(order);
 
             order.setClient(client);
             if (client.getAddresses().size() > 0)
                 order.setAddress(client.getAddress(0));
-            orders.add(orderRepository.save(order).getId());
+            order = orderRepository.save(order);
+            clientRepository.save(client);
+            client.addOrder(order);
+            orders.add(order.getId());
         }
     }
 
@@ -104,8 +107,8 @@ public class DataInitialization implements ApplicationRunner {
                 address.setName(client.getName());
                 client.addAddress(address);
             }
-
-            clients.add(clientRepository.save(client).getId());
+            Client save = clientRepository.save(client);
+            clients.add(save.getId());
         }
     }
 
@@ -169,7 +172,7 @@ public class DataInitialization implements ApplicationRunner {
             supplier.getProducts().size();
             type.addProduct(product);
             product.setSupplier(supplier);
-            supplier.addProduct(product);
+            supplier.add(product);
 
             product = productRepository.save(product);
 
@@ -178,7 +181,7 @@ public class DataInitialization implements ApplicationRunner {
 
     }
     public void addItemsToOrders(){
-        for (Long orderId: orders) {
+        for (String orderId: orders) {
             int j = random.nextInt(15) + 1;
             Order order = orderRepository.findById(orderId).get();
             for(int i = 0; i < j; i++){
@@ -189,7 +192,7 @@ public class DataInitialization implements ApplicationRunner {
                 item.setProduct(product);
                 order.setTotalPrice(order.getTotalPrice() + (item.getQuantity() * item.getProduct().getPrice()));
 
-                order.addItem(item);
+                order.add(item);
             }
             orderRepository.save(order);
 
@@ -202,7 +205,7 @@ public class DataInitialization implements ApplicationRunner {
         supplier.setName("Company with all product types");
         supplier.setCuil(30 + "-" + (20000000 + random.nextInt(20000000)) + "-" + random.nextInt(9));
 
-        SupplierType supplierType = supplierTypeRepository.findById(1l).get();
+        SupplierType supplierType = supplierTypeRepository.findAll().stream().findFirst().get();
         supplier.setType(supplierType);
         supplier = supplierRepository.save(supplier);
         suppliers.add(supplier.getId());
@@ -230,7 +233,7 @@ public class DataInitialization implements ApplicationRunner {
             historicalPrice.setProduct(product);
 
             product.addPrice(historicalPrice);
-            supplier.addProduct(product);
+            supplier.add(product);
             product.setSupplier(supplier);
 
             product = productRepository.save(product);
