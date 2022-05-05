@@ -1,9 +1,10 @@
 package com.bd.tpfinal.repositories;
 
 import com.bd.tpfinal.model.Client;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ClientRepository extends JpaRepository<Client, Long> {
+@Repository
+public interface ClientRepository extends MongoRepository<Client, String> {
 
 }

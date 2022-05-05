@@ -1,7 +1,9 @@
 package com.bd.tpfinal.repositories;
 
 import com.bd.tpfinal.model.HistoricalProductPrice;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-public interface HistoricalProductPriceRepository extends JpaRepository<HistoricalProductPrice, Long> {
+@Repository
+public interface HistoricalProductPriceRepository extends MongoRepository<HistoricalProductPrice, String> {
 }
