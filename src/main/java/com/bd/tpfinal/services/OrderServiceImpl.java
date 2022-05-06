@@ -70,19 +70,22 @@ public class OrderServiceImpl implements OrderService
     }
 
     @Override
-    public boolean assignOrderToDeliveryMan(Order orden, DeliveryMan dm)
+    public boolean assignOrderToDeliveryMan(Long orden_id, Long dm_id)
     {
-        boolean rta = false;
-        orden.assignDeliveryMan(dm);
-        this.orderRepository.save(orden);
+        Order orden_buscada = getByNumber(orden_id);
+        boolean rta = true;
+        Optional<DeliveryMan> dm = this.deliveryManRepository.findById(dm_id);
+        orden_buscada.assignDeliveryMan(dm.get());
+        this.orderRepository.save(orden_buscada);
 
         return rta;
 
     }
 
     @Override
-    public Order actualizarOrder(Order orden)
+    public Order actualizarOrder(Order orden_actualizada)
     {
-        return newOrder(orden);
+        this.orderRepository.save(orden_actualizada);
+        return orden_actualizada;
     }
 }

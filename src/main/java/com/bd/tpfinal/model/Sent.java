@@ -47,12 +47,13 @@ public class Sent extends OrderStatus
     public boolean finish()
     {
         Date start_date = new Date();
-        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.DELIVERED, super.getOrder(),"delivered",start_date);
-        super.getOrder().setOrderStatus(orderStatus);
-        int scoreCliente = super.getOrder().getClient().getScore() + 1;
-        super.getOrder().getClient().setScore(scoreCliente);
-        int scoreDeliveryMan = super.getOrder().getDeliveryMan().getScore() + 1;
-        super.getOrder().getDeliveryMan().setScore(scoreDeliveryMan);
+        //OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.DELIVERED, super.getOrder(),"delivered",start_date);
+        getOrder().setOrderStatus(new Delivered(getOrder(), start_date));
+        //super.getOrder().setOrderStatus(orderStatus);
+        int scoreCliente = getOrder().getClient().getScore() + 1;
+        getOrder().getClient().setScore(scoreCliente);
+        int scoreDeliveryMan = getOrder().getDeliveryMan().getScore() + 1;
+        getOrder().getDeliveryMan().setScore(scoreDeliveryMan);
         return true;
     }
 }

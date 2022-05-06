@@ -214,30 +214,9 @@ class TpfinalApplicationTests
         DeliveryMan deliveryManFree = deliveryMEN.get(0);
         //asigna el primer repartidor libre encontrado a la orden recien creada.
         Order orden_buscada = this.orderService.getByNumber(number_de_ultima_orden);
-        orden_buscada.assignDeliveryMan(deliveryManFree);
-        this.orderService.actualizarOrder(orden_buscada);
-        //this.orderService.assignOrderToDeliveryMan(orden_buscada, deliveryManFree);
-
-
-        //List<Order> ordenes = this.orderService.getAll();
-        //a los fines de este test busco la primer orden con estado Pending.
-        /*
-        Iterator iter_ordenes = ordenes.iterator();
-                boolean no_encontrada = true;
-        Order orden = null;
-        while (iter_ordenes.hasNext() && no_encontrada)
-        {
-            orden = (Order) iter_ordenes.next();
-            if (orden.getOrderStatus().getName().equals("Pending"))
-                no_encontrada = false;
-        }
-
-        if (orden != null)
-            this.orderService.assignOrderToDeliveryMan(orden, deliveryManFree);
-        else
-            System.out.println("No quedan ordenes pendientes");
-         */
-
+        //orden_buscada.assignDeliveryMan(deliveryManFree);
+        //this.orderService.actualizarOrder(orden_buscada);
+        this.orderService.assignOrderToDeliveryMan(orden_buscada.getNumber(), deliveryManFree.getId());
     }
 
     /**
@@ -252,7 +231,7 @@ class TpfinalApplicationTests
         //Alta de un DeliveryMan
         new_DELIVERYMAN_CreacionDeliveryMan("delivery1", "usuario1", "pass1", "delivery1@email.com", new Date(), true, new Date());
         new_DELIVERYMAN_CreacionDeliveryMan("delivery2", "usuario2", "pass2", "delivery2@email.com", new Date(), true, new Date());
-        //1 se busca el primer repartidor libre
+        //1 se busca un repartidor libre
         List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
         DeliveryMan deliveryManFree = deliveryMEN.get(0);
         //asigna el primer repartidor libre encontrado a la orden recien creada.
@@ -284,6 +263,7 @@ class TpfinalApplicationTests
         //Alta de un DeliveryMan
         new_DELIVERYMAN_CreacionDeliveryMan("delivery1", "usuario1", "pass1", "delivery1@email.com", new Date(), true, new Date());
         new_DELIVERYMAN_CreacionDeliveryMan("delivery2", "usuario2", "pass2", "delivery2@email.com", new Date(), true, new Date());
+
         //1 se busca el primer repartidor libre
         List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
         DeliveryMan deliveryManFree = deliveryMEN.get(0);
@@ -295,7 +275,7 @@ class TpfinalApplicationTests
         //el deliveryManFree ya no esta free.
         try
         {
-            orden_buscada.deliver();
+            orden_buscada.deliver(); //la orden pasa a SENT
             this.orderService.actualizarOrder(orden_buscada);
         }
         catch (Exception e)
@@ -310,6 +290,49 @@ class TpfinalApplicationTests
      * La Order pasa a Finished
      * Se actualizan los puntajes
      */
+    @Test
+    public void test_DeliveryMan_Finishe_Pedido()
+    {
+        //crea una orden y progresa hasta la aceptación
+        Long number_de_ultima_orden = new_ORDER_agregar_Item_a_Order_Creada();
+        //Alta de un DeliveryMan
+        new_DELIVERYMAN_CreacionDeliveryMan("delivery1", "usuario1", "pass1", "delivery1@email.com", new Date(), true, new Date());
+        new_DELIVERYMAN_CreacionDeliveryMan("delivery2", "usuario2", "pass2", "delivery2@email.com", new Date(), true, new Date());
+        //1 se busca el primer repartidor libre
+        List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
+        DeliveryMan deliveryManFree = deliveryMEN.get(0);
+        //asigna el primer repartidor libre encontrado a la orden recien creada.
+        Order orden_buscada = this.orderService.getByNumber(number_de_ultima_orden);
+        orden_buscada.assignDeliveryMan(deliveryManFree);
+        this.orderService.actualizarOrder(orden_buscada);
+        //la orden_buscada está en Assigned.
+        //el deliveryManFree ya no esta free.
+        try
+        {
+            orden_buscada.deliver(); //la orden pasa a SENT
+            this.orderService.actualizarOrder(orden_buscada);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("No sería una Order Assigned");
+        }
+
+        //ahora viene la parte de finalizar un pedido
+        Order orden_sent = this.orderService.getByNumber(number_de_ultima_orden);
+        try
+        {
+            orden_sent.finish();
+            this.orderService.actualizarOrder(orden_sent);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("No sería una Order Sent");
+        }
+
+    }
 
     /**
      * Cliente cancela Order (Order en Pending o Assigned)

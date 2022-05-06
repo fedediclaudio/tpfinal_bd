@@ -156,6 +156,11 @@ public class Order
         getOrderStatus().deliver();
     }
 
+    public void finish() throws Exception
+    {
+        this.setStatusByName();
+        getOrderStatus().finish();
+    }
 
     public void setDeliveryMan(DeliveryMan dm)
     {
