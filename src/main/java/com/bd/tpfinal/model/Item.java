@@ -1,13 +1,29 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
+
+@Entity
 public class Item {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     private int quantity;
 
     private String description;
-
+    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn( name="id_order" )
     private Order order;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn( name="id_product" )
     private Product product;
 
     public int getQuantity() {

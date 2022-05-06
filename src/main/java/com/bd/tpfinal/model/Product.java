@@ -1,8 +1,12 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
 import java.util.List;
-
+@Entity
 public class Product {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     private String name;
 
@@ -11,12 +15,31 @@ public class Product {
     private float weight;
 
     private String description;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "product_supplier",  joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "supplier_id"))
+   private List<Supplier> supplier;
 
-    private Supplier supplier;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "product_productType",  joinColumns = @JoinColumn(name = "product_id"),
+          inverseJoinColumns = @JoinColumn(name = "productType_id"))
 
-    private ProductType type;
+    private List<ProductType> type;
 
+
+    @OneToMany( mappedBy = "product" )
+    private List<Item> item;
+
+    @OneToMany( mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
     private List<HistoricalProductPrice> prices;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -50,20 +73,29 @@ public class Product {
         this.description = description;
     }
 
-    public Supplier getSupplier() {
+   public List<Supplier> getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(Supplier supplier) {
+    public void setSupplier(List<Supplier> supplier) {
         this.supplier = supplier;
     }
 
-    public ProductType getType() {
+    public List<ProductType> getType() {
         return type;
     }
 
-    public void setType(ProductType type) {
+    public void setType(List<ProductType> type) {
         this.type = type;
+    }
+
+
+    public List<Item> getItem() {
+        return item;
+    }
+
+    public void setItem(List<Item> item) {
+        this.item = item;
     }
 
     public List<HistoricalProductPrice> getPrices() {

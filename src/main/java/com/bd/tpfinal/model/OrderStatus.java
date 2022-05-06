@@ -1,14 +1,27 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
 import java.util.Date;
-
+@Entity
 public abstract class OrderStatus {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     private String name;
 
     private Date startDate;
-
+    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn( name="id_order" )
     private Order order;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

@@ -1,16 +1,29 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
 import java.util.Date;
-
+@Entity
 public class HistoricalProductPrice {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     private float price;
 
     private Date startDate;
 
     private Date finishDate;
-
+    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn( name="id_product" )
     private Product product;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public float getPrice() {
         return price;

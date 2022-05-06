@@ -1,8 +1,12 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
 import java.util.List;
-
+@Entity
 public class Address {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     private String name;
 
@@ -13,10 +17,21 @@ public class Address {
     private float[] coords;
 
     private String description;
-
+    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn( name="id_client" )
     private Client client;
 
+    @OneToMany( mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
     private List<Order> orders;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -58,7 +73,7 @@ public class Address {
         this.description = description;
     }
 
-    public Client getClient() {
+  public Client getClient() {
         return client;
     }
 
