@@ -6,6 +6,7 @@ import com.bd.tpfinal.repositories.ProductTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,7 @@ public class ProductTypeServiceImpl implements ProductTypeService
     }
 
     @Override
+    @Transactional
     public void newProductType(ProductType newProductType)
     {
         String name = newProductType.getName();
@@ -33,18 +35,21 @@ public class ProductTypeServiceImpl implements ProductTypeService
     }
 
     @Override
+    @Transactional
     public List<ProductType> getAll()
     {
         return this.productTypeRepository.findAll();
     }
 
     @Override
+    @Transactional
     public Optional<ProductType> getProductTypeById(Long id)
     {
         return this.productTypeRepository.findById(id);
     }
 
     @Override
+    @Transactional
     public ProductType getProductTypeByName(String name)
     {
         return this.productTypeRepository.findByName(name);

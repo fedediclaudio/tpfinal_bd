@@ -144,7 +144,8 @@ class TpfinalApplicationTests
     }
 
     /**
-     * asigna
+     * Creación de Cliente y Orden
+     * La Order queda en Pending
      */
     public Long new_ORDER_CreationOrder()
     {
@@ -198,6 +199,7 @@ class TpfinalApplicationTests
 
     /**
      * 2) Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
+     * El estado queda en Assigned
      */
     @Test
     public void test_Confirmar_Pedido()
@@ -309,7 +311,7 @@ class TpfinalApplicationTests
         //el deliveryManFree ya no esta free.
         try
         {
-            orden_buscada.deliver(); //la orden pasa a SENT
+            orden_buscada.deliver();//la Order pasa a Sent
             this.orderService.actualizarOrder(orden_buscada);
         }
         catch (Exception e)
@@ -322,7 +324,7 @@ class TpfinalApplicationTests
         Order orden_sent = this.orderService.getByNumber(number_de_ultima_orden);
         try
         {
-            orden_sent.finish();
+            orden_sent.finish();// la Order para a Delivered
             this.orderService.actualizarOrder(orden_sent);
 
         }
@@ -338,6 +340,50 @@ class TpfinalApplicationTests
      * Cliente cancela Order (Order en Pending o Assigned)
      * La Order pasa a Cancelled
      */
+    @Test
+    public void test_Cliente_cancela_orden_Pending()
+    {
+        //se crea una Order con Items.
+        //El estado es Pending
+        Long number_de_ultima_orden = new_ORDER_agregar_Item_a_Order_Creada();
+        try
+        {
+            this.orderService.cancelarOrder(number_de_ultima_orden);
+        }
+        catch(Exception e)
+        {
+            System.out.println("No sería Pending");
+        }
+    }
+
+    @Test
+    public void test_Cliente_cancela_orden_Assigned()
+    {
+        Long number_de_ultima_orden = new_ORDER_agregar_Item_a_Order_Creada();
+
+        //Alta de un DeliveryMan
+        new_DELIVERYMAN_CreacionDeliveryMan("delivery1", "usuario1", "pass1", "delivery1@email.com", new Date(), true, new Date());
+        new_DELIVERYMAN_CreacionDeliveryMan("delivery2", "usuario2", "pass2", "delivery2@email.com", new Date(), true, new Date());
+
+        //ASIGNACION
+        //1 se busca el primer repartidor libre
+        List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
+        DeliveryMan deliveryManFree = deliveryMEN.get(0);
+        //asigna el primer repartidor libre encontrado a la orden recien creada.
+        Order orden_buscada = this.orderService.getByNumber(number_de_ultima_orden);
+        //orden_buscada.assignDeliveryMan(deliveryManFree);
+        //this.orderService.actualizarOrder(orden_buscada);
+        this.orderService.assignOrderToDeliveryMan(orden_buscada.getNumber(), deliveryManFree.getId());
+        //Long number_de_ultima_orden = new_ORDER_agregar_Item_a_Order_Creada();
+        try
+        {
+            this.orderService.cancelarOrder(number_de_ultima_orden);
+        }
+        catch(Exception e)
+        {
+            System.out.println("No sería Assigned");
+        }
+    }
 
     /**
      * 3) Añadir una calificación a una orden ya completada.
@@ -346,6 +392,7 @@ class TpfinalApplicationTests
     @Test
     public void test_anadirCalificacion_a_Orden_completada()
     {
+
 
     }
 

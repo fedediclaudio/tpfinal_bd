@@ -4,6 +4,8 @@ import com.bd.tpfinal.model.HistoricalProductPrice;
 import com.bd.tpfinal.repositories.HistoricalProductPriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static java.util.Objects.isNull;
@@ -20,6 +22,7 @@ public class HistoricalProductPriceServiceImpl implements HistoricalProductPrice
     }
 
     @Override
+    @Transactional
     public void newHistoricalProductPrice(HistoricalProductPrice newHistoricalProductPrice)
     {
         this.historicalProductPriceRepository.save(newHistoricalProductPrice);
@@ -32,6 +35,7 @@ public class HistoricalProductPriceServiceImpl implements HistoricalProductPrice
      * Busca por product.id
      */
     @Override
+    @Transactional
     public List<HistoricalProductPrice> getAll(Long productId)
     {
         List<HistoricalProductPrice> hpp = null;
@@ -47,6 +51,7 @@ public class HistoricalProductPriceServiceImpl implements HistoricalProductPrice
     }
 
     @Override
+    @Transactional
     public HistoricalProductPrice getById(Long id)
     {
         return this.historicalProductPriceRepository.getById(id);

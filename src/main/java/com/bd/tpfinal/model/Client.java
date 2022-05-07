@@ -34,25 +34,29 @@ public class Client extends User
     @JsonIgnore
     private List<Address> addresses;
 
-    //bloque de inicialización
+    public Client()
     {
-        this.orders = new ArrayList<Order>();
-        this.addresses = new ArrayList<Address>();
-        this.dateOfRegister = new Date();
-        System.out.println("date date: "+dateOfRegister);
-    }
 
-    public Client(){ }
+    }
 
     public Client(String name, String username, String password, String email, Date dateOfBirth)
     {
         super(name, username, password, email, dateOfBirth);
+        this.orders = new ArrayList<Order>();
+        this.addresses = new ArrayList<Address>();
+        this.dateOfRegister = new Date();
+        System.out.println("date date: "+dateOfRegister);
+
     }
 
     public Client(String name, String username, String password, String email, Date dateOfBirth, List<Address> addresses)
     {
         super(name, username, password, email, dateOfBirth);
         this.addresses = addresses;
+        this.orders = new ArrayList<Order>();
+        this.addresses = new ArrayList<Address>();
+        this.dateOfRegister = new Date();
+        System.out.println("date date: "+dateOfRegister);
     }
 
     public Date getDateOfRegister()

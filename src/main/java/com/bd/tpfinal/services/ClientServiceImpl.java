@@ -6,6 +6,7 @@ import com.bd.tpfinal.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,8 @@ public class ClientServiceImpl implements ClientService
      * No permito repetir username
      * @param newClient
      */
+    @Override
+    @Transactional
     public void newClient(Client newClient)
     {
         Client buscado = getClientByName(newClient.getUsername());
@@ -37,12 +40,11 @@ public class ClientServiceImpl implements ClientService
             clientRepository.save(newClient);
     }
 
-    public List<Client> getAClientList()
-    {
-        return clientRepository.findAll();
-    }
+
+
 
     @Override
+    @Transactional
     public List<Client> getAll()
     {
         return clientRepository.findAll();
@@ -50,6 +52,7 @@ public class ClientServiceImpl implements ClientService
 
     //TODO:revisar esto
     @Override
+    @Transactional
     public Client getClient(String username, String password)
     {
         //return this.clientRepository.get;
@@ -57,6 +60,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
+    @Transactional
     /**
      * retorna el primer cliente con el "name"
      */
@@ -72,6 +76,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
+    @Transactional
     public Optional<Client> getClientById(Long id)
     {
         return this.clientRepository.findById(id);

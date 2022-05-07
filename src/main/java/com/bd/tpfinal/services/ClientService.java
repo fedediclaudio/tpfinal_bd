@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ClientService
 {
     public void newClient(Client newClient);
-    public List<Client> getAClientList();
+
     public List<Client> getAll();
     public Client getClient(String username, String password);
     public Client getClientByName(String name);

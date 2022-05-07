@@ -65,8 +65,8 @@ public class Pending extends OrderStatus
     {
         //TODO: ver eso de canCancel()
         Date start_date = new Date();
-        OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.CANCELLED, super.getOrder(),"cancelled",start_date);
-        super.getOrder().setOrderStatus(orderStatus);
+        //OrderStatus orderStatus = Status_Factory.getInstance(Order_Status_Enum.CANCELLED, super.getOrder(),"cancelled",start_date);
+        getOrder().setOrderStatus(new Cancelled(getOrder(), start_date));
         return true;
     }
 

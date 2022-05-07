@@ -5,6 +5,7 @@ import com.bd.tpfinal.repositories.DeliveryManRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ public class DeliveryManServiceImpl implements DeliveryManService
     }
 
     @Override
+    @Transactional
     public void newDeliveryMan(DeliveryMan newDeliveryMan)
     {
         this.deliveryManRepository.save(newDeliveryMan);

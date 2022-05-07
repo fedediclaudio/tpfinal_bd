@@ -7,6 +7,7 @@ import com.bd.tpfinal.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ public class OrderServiceImpl implements OrderService
     }
 
     @Override
+    @Transactional
     public Order newOrder(Order newOrder)
     {
         //newOrder.getClient().addOrder(newOrder);
@@ -32,6 +34,7 @@ public class OrderServiceImpl implements OrderService
     }
 
     @Override
+    @Transactional
     public List<Order> getAll()
     {
         List<Order> orders =  this.orderRepository.findAll();
@@ -45,6 +48,7 @@ public class OrderServiceImpl implements OrderService
      * @return
      */
     @Override
+    @Transactional
     public Optional<Order> getById(Long id)
     {
         Order order_aux;
@@ -62,6 +66,7 @@ public class OrderServiceImpl implements OrderService
      * @return
      */
     @Override
+    @Transactional
     public Order getByNumber(Long number)
     {
         Order order_aux = this.orderRepository.findByNumber(number);
@@ -70,22 +75,33 @@ public class OrderServiceImpl implements OrderService
     }
 
     @Override
+    @Transactional
     public boolean assignOrderToDeliveryMan(Long orden_id, Long dm_id)
     {
-        Order orden_buscada = getByNumber(orden_id);
+        Optional<Order> orden_buscada = this.orderRepository.findById(orden_id);
         boolean rta = true;
         Optional<DeliveryMan> dm = this.deliveryManRepository.findById(dm_id);
-        orden_buscada.assignDeliveryMan(dm.get());
-        this.orderRepository.save(orden_buscada);
-
+        orden_buscada.get().assignDeliveryMan(dm.get());
+        this.orderRepository.save(orden_buscada.get());
         return rta;
 
     }
 
     @Override
+    @Transactional
     public Order actualizarOrder(Order orden_actualizada)
     {
         this.orderRepository.save(orden_actualizada);
         return orden_actualizada;
+    }
+
+    @Override
+    @Transactional
+    public void cancelarOrder(Long number) throws Exception
+    {
+        Order orden_buscada = this.orderRepository.findByNumber(number);
+        orden_buscada.setStatusByName();
+        orden_buscada.getOrderStatus().cancel();
+        this.orderRepository.save(orden_buscada);
     }
 }

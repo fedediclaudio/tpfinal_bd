@@ -5,6 +5,7 @@ import com.bd.tpfinal.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,24 +21,28 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
+    @Transactional
     public void newProduct(Product newProduct)
     {
         this.productRepository.save(newProduct);
     }
 
     @Override
+    @Transactional
     public List<Product> getAll()
     {
         return this.productRepository.findAll();
     }
 
     @Override
+    @Transactional
     public Optional<Product> getProductById(Long id)
     {
         return this.productRepository.findById(id);
     }
 
     @Override
+    @Transactional
     public Product getProductByName(String name)
     {
         Product producto = null;

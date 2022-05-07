@@ -16,4 +16,5 @@ public interface OrderService
     public Order getByNumber(Long number);
     public boolean assignOrderToDeliveryMan(Long orden, Long dm);
     public Order actualizarOrder(Order orden);
+    public void cancelarOrder(Long number) throws Exception;
 }
