@@ -23,23 +23,24 @@ public class RefuseCommand extends ChangeStatusCommand {
     @Transactional
     public OrderDto execute(ChangeOrderStatusDto request) throws PersistenceEntityException {
         Order order = getOrder(request);
+        if (order.getStatus().canCancel()) {
+            Cancel cancel = new Cancel();
+            cancel.setCancelledByClient(false);
+            cancel.setStartDate(new Date());
+            cancel.setOrder(order);
+            order.setStatus(cancel);
 
-        Cancel cancel = new Cancel();
-        cancel.setCancelledByClient(false);
-        cancel.setStartDate(new Date());
-        cancel.setOrder(order);
-        order.setStatus(cancel);
+            Qualification qualification = new Qualification();
+            qualification.setOrder(order);
+            qualification.setScore(-2);
+            qualification.setCommentary("Order refused by delivery man.");
 
-        Qualification qualification = new Qualification();
-        qualification.setOrder(order);
-        qualification.setScore(-2);
-        qualification.setCommentary("Order refused by delivery man.");
+            order.setQualification(qualification);
+            order.getDeliveryMan().getOrdersPending().remove(order);
 
-        order.setQualification(qualification);
-        order.getDeliveryMan().getOrdersPending().remove(order);
-
-        order = orderRepository.save(order);
-
+            order = orderRepository.save(order);
+        } else
+            throw new PersistenceEntityException("Can't change order status. Actual order status is "+order.getStatus().getName());
         return orderMapper.toOrderDto(order);
     }
 }

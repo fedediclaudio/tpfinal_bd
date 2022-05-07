@@ -24,13 +24,15 @@ public class DeliverCommand extends ChangeStatusCommand {
     public OrderDto execute(ChangeOrderStatusDto request) throws PersistenceEntityException {
         Order order = getOrder(request);
 
-        Sent sent = new Sent();
-        sent.setStartDate(new Date());
-        sent.setOrder(order);
-        order.setStatus(sent);
+        if (order.getStatus().canDeliver()) {
+            Sent sent = new Sent();
+            sent.setStartDate(new Date());
+            sent.setOrder(order);
+            order.setStatus(sent);
 
-        order = orderRepository.save(order);
-
+            order = orderRepository.save(order);
+        } else
+            throw new PersistenceEntityException("Can't change order status. Actual order status is "+order.getStatus().getName());
         return orderMapper.toOrderDto(order);
     }
 }

@@ -40,7 +40,8 @@ public class FinishCommand extends ChangeStatusCommand {
             order.getClient().setScore(order.getClient().getScore() + 1);
 
             order = orderRepository.save(order);
-        }
+        } else
+            throw new PersistenceEntityException("Can't change order status. Actual order status is "+order.getStatus().getName());
         return orderMapper.toOrderDto(order);
     }
 }

@@ -38,7 +38,8 @@ public class AssignCommand extends ChangeStatusCommand {
             order.setDeliveryMan(deliveryMan);
 
             order = orderRepository.save(order);
-        }
+        } else
+            throw new PersistenceEntityException("Can't change order status. Actual order status is "+order.getStatus().getName());
         return orderMapper.toOrderDto(order);
     }
 }

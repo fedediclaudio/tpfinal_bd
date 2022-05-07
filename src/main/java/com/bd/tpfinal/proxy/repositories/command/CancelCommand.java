@@ -48,7 +48,8 @@ public class CancelCommand extends ChangeStatusCommand {
             order.setQualification(qualification);
 
             order = orderRepository.save(order);
-        }
+        } else
+            throw new PersistenceEntityException("Can't change order status. Actual order status is "+order.getStatus().getName());
         return orderMapper.toOrderDto(order);
     }
 }
