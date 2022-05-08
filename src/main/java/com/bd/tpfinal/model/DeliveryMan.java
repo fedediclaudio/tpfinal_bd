@@ -4,11 +4,8 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 @Entity
+@DiscriminatorValue("DeliveryMan")
 public class DeliveryMan extends User{
-    @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
-
     private int numberOfSuccessOrders;
 
     private boolean free;
@@ -17,14 +14,6 @@ public class DeliveryMan extends User{
 
     @OneToMany( mappedBy = "deliveryMan", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
       private List<Order> ordersPending;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public int getNumberOfSuccessOrders() {
         return numberOfSuccessOrders;

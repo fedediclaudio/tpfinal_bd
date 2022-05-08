@@ -4,24 +4,14 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 @Entity
+@DiscriminatorValue("Cliente")
 public class Client extends User{
-    @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
-
     private Date dateOfRegister;
     @OneToMany( mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
     private List<Order> orders;
     @OneToMany( mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
-   private List<Address> addresses;
+    private List<Address> addresses;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Date getDateOfRegister() {
         return dateOfRegister;

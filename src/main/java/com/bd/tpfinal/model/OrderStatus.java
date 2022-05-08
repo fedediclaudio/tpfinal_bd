@@ -5,6 +5,7 @@ import java.util.Date;
 @Entity
 public abstract class OrderStatus {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 

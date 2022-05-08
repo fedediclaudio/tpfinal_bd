@@ -5,13 +5,14 @@ import javax.persistence.*;
 @Entity
 public class Qualification {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
     private float score;
 
     private String commentary;
-    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne( fetch = FetchType.EAGER)
     @JoinColumn( name="id_order" )
     private Order order;
 

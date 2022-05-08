@@ -5,6 +5,7 @@ import java.util.Date;
 @Entity
 public class HistoricalProductPrice {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -13,7 +14,7 @@ public class HistoricalProductPrice {
     private Date startDate;
 
     private Date finishDate;
-    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne( fetch = FetchType.EAGER)
     @JoinColumn( name="id_product" )
     private Product product;
 

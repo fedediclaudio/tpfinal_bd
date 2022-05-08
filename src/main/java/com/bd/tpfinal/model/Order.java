@@ -25,12 +25,12 @@ public class Order {
     @JoinColumn( name="id_deliveryMan" )
     private DeliveryMan deliveryMan;
 
-    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne( fetch = FetchType.EAGER)
     @JoinColumn( name="id_client" )
     private Client client;
 
 
-    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne( fetch = FetchType.LAZY)
     @JoinColumn( name="id_address" )
     private Address address;
 
@@ -38,7 +38,7 @@ public class Order {
     @JoinColumn( name="id_qualification" )
     private Qualification qualification;
 
-    @OneToMany( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+    @OneToMany( mappedBy = "order", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER )
     private List<Item> items;
 
     public int getNumber() {
@@ -97,14 +97,13 @@ public class Order {
         this.address = address;
     }
 
- public Qualification getQualification() {
+    public Qualification getQualification() {
         return qualification;
     }
 
     public void setQualification(Qualification qualification) {
         this.qualification = qualification;
     }
-
 
     public List<Item> getItems() {
         return items;
@@ -121,6 +120,5 @@ public class Order {
     public void setStatus(OrderStatus status) {
         this.status = status;
     }
-
 }
 
