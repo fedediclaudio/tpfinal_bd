@@ -12,5 +12,5 @@ public interface IDeliveryManRepository {
 	List<DeliveryMan> getFreeDeliveryManList();
 	List<Order> getAllPendingOrders(long idDeliveryMan);
 	Order getNextPendingOrder(long idDeliveryMan);
-
+	List<DeliveryMan> getTopTen();
 }

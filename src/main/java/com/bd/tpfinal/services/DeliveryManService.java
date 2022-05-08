@@ -12,6 +12,7 @@ public interface DeliveryManService {
 	List<DeliveryMan> getAllDeliveryMan() throws Exception;
 	List<Order> getAllPendingOrders(long idDeliveryMan) throws Exception;
 	Order getNextPendingOrder(long idDeliveryMan) throws Exception;
+	List<DeliveryMan> getTopTen() throws Exception;
 	boolean deliverNextPendingOrder(long idDeliveryMan) throws Exception;
 	boolean refuseNextPendingOrder(long idDeliveryMan) throws Exception;
 	boolean finishActualOrder(long idDeliveryMan) throws Exception;

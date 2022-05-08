@@ -69,6 +69,17 @@ public class DeliveryManController {
 		}
     }
     
+    @GetMapping("/getTopTen")
+    public List<DeliveryMan> getTopTen() {
+    	try {
+    		return deliveryManService.getTopTen();
+		}
+    	catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
+    
     @PutMapping("/deliverNextPendingOrder")
     public boolean deliverNextPendingOrder(@RequestParam(required = true, name = "idDeliveryMan") long idDeliveryMan) {
     	try {

@@ -56,6 +56,10 @@ public class DeliveryManServiceImpl implements DeliveryManService {
 		return orderRepository.getNextOrderDeliveryMan(idDeliveryMan, "Assigned");
 	}
 	
+	public List<DeliveryMan> getTopTen() throws Exception {
+		return deliveryManRepository.getTopTen();
+	}
+	
 	@Transactional
 	public boolean deliverNextPendingOrder(long idDeliveryMan) throws Exception {
 		// Obtengo el DeliveryMan

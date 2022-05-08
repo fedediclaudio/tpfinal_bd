@@ -81,4 +81,19 @@ public class DeliveryManRepositoryImpl implements IDeliveryManRepository {
 		return typeQuery.getSingleResult();
 	}
 	
+	public List<DeliveryMan> getTopTen() {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+
+		CriteriaQuery<DeliveryMan> cq = cb.createQuery(DeliveryMan.class);
+		Root<DeliveryMan> root = cq.from(DeliveryMan.class);
+		
+		cq.orderBy( cb.desc( root.get(DeliveryMan_.SCORE) ) );
+		cq.select( root );
+		
+		TypedQuery<DeliveryMan> typeQuery = em.createQuery(cq);
+		typeQuery.setMaxResults(10);
+		
+		return typeQuery.getResultList();
+	}
+	
 }
