@@ -1,5 +1,6 @@
 package com.bd.tpfinal.services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -287,4 +288,9 @@ public class OrderServiceImpl implements OrderService {
 	public List<Order> getOrdersFromSupplier(long idSupplier) throws Exception {
 		return orderRepository.getOrdersFromSupplier(idSupplier);
 	}
+	
+	public Order getHighestPriceOrderOfDate(LocalDate date) throws Exception {
+		return orderRepository.getHighestPriceOrderOfDate(date);
+	}
+	
 }

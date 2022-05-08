@@ -1,5 +1,6 @@
 package com.bd.tpfinal.repositories.implementations;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +27,10 @@ public interface OrderRepository extends JpaRepository<Order, Integer>, IOrderRe
 			+ "LIMIT 10;", 
 		  nativeQuery = true)
 	List<Order> getOrdersFromSupplier(long idSupplier);
+	
+	@Query(value = "SELECT o FROM Order o "
+			+ "WHERE o.dateOfOrder = ?1 "
+			+ "ORDER BY o.totalPrice DESC",
+			countQuery = "1")
+	Order getHighestPriceOrderOfDate(LocalDate date);
 }

@@ -1,8 +1,10 @@
 package com.bd.tpfinal.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,6 +57,20 @@ public class OrderController {
 			e.printStackTrace();
 		}
 		return orders;
+	}
+	
+	@GetMapping("/getHighestPriceOrderOfDate")
+	public Order getOrdersFromSupplier(@RequestParam(name = "date") 
+										@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+										LocalDate date){
+		Order order = null;
+		try {
+			order = orderService.getHighestPriceOrderOfDate(date);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return order;
 	}
 	
 	@PutMapping("/assignAddress")
