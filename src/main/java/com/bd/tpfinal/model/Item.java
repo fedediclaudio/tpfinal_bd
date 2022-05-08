@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 @Entity
 public class Item {
+    //Removido Generated ID y agregado a la order cascade type persist.
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
@@ -22,7 +23,7 @@ public class Item {
     public void setId(Long id) {
         this.id = id;
     }
-    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne( fetch = FetchType.EAGER)
     @JoinColumn( name="id_product" )
     private Product product;
 

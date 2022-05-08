@@ -1,7 +1,5 @@
 package com.bd.tpfinal.controllers;
 
-import com.bd.tpfinal.services.DeliveryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

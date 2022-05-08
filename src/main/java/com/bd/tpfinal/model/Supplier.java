@@ -2,9 +2,11 @@ package com.bd.tpfinal.model;
 
 import javax.persistence.*;
 import java.util.List;
+
 @Entity
 public class Supplier {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -17,10 +19,10 @@ public class Supplier {
     private float[] coords;
 
     private float qualificationOfUsers;
-    @ManyToMany(mappedBy = "supplier" )
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Product> products;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "supplier_supplierType",  joinColumns = @JoinColumn(name = "supplier_id"),
             inverseJoinColumns = @JoinColumn(name = "supplierType_id"))
     private List<SupplierType> type;

@@ -2,9 +2,11 @@ package com.bd.tpfinal.model;
 
 import javax.persistence.*;
 import java.util.List;
+
 @Entity
 public class ProductType {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 

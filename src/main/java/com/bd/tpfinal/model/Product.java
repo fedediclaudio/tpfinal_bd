@@ -2,6 +2,7 @@ package com.bd.tpfinal.model;
 
 import javax.persistence.*;
 import java.util.List;
+
 @Entity
 public class Product {
     @Id
@@ -15,22 +16,19 @@ public class Product {
     private float weight;
 
     private String description;
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "product_supplier",  joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "supplier_id"))
-   private List<Supplier> supplier;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToOne
+    private Supplier supplier;
+
+    @ManyToMany
     @JoinTable(name = "product_productType",  joinColumns = @JoinColumn(name = "product_id"),
           inverseJoinColumns = @JoinColumn(name = "productType_id"))
-
     private List<ProductType> type;
-
 
     @OneToMany( mappedBy = "product" )
     private List<Item> item;
 
-    @OneToMany( mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+    @OneToMany( mappedBy = "product", fetch = FetchType.LAZY )
     private List<HistoricalProductPrice> prices;
 
     public Long getId() {
@@ -73,11 +71,11 @@ public class Product {
         this.description = description;
     }
 
-   public List<Supplier> getSupplier() {
+   public Supplier getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(List<Supplier> supplier) {
+    public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }
 
@@ -88,7 +86,6 @@ public class Product {
     public void setType(List<ProductType> type) {
         this.type = type;
     }
-
 
     public List<Item> getItem() {
         return item;

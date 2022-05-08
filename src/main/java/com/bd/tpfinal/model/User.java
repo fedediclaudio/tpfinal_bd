@@ -1,8 +1,16 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
 import java.util.Date;
-
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="user_type",
+        discriminatorType = DiscriminatorType.STRING)
 public abstract class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     private String name;
 
@@ -14,9 +22,17 @@ public abstract class User {
 
     private Date dateOfBirth;
 
-    private boolean scrore;
-
     private int score;
+
+    private boolean active;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -58,19 +74,19 @@ public abstract class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public boolean isScrore() {
-        return scrore;
-    }
-
-    public void setScrore(boolean scrore) {
-        this.scrore = scrore;
-    }
-
     public int getScore() {
         return score;
     }
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

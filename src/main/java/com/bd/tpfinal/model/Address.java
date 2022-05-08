@@ -5,6 +5,7 @@ import java.util.List;
 @Entity
 public class Address {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -17,13 +18,12 @@ public class Address {
     private float[] coords;
 
     private String description;
-    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne( fetch = FetchType.EAGER)
     @JoinColumn( name="id_client" )
     private Client client;
 
     @OneToMany( mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
     private List<Order> orders;
-
 
     public Long getId() {
         return id;
@@ -73,7 +73,7 @@ public class Address {
         this.description = description;
     }
 
-  public Client getClient() {
+    public Client getClient() {
         return client;
     }
 
