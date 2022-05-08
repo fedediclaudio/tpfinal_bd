@@ -59,4 +59,8 @@ public class SupplierServiceImpl implements SupplierService {
 		return supplierRepository.getSupplierListFromType(idSupplierType);
 	}
 	
+	public List<Supplier> getTopTen() throws Exception {
+		return supplierRepository.getTopTen();
+	}
+	
 }

@@ -9,5 +9,5 @@ public interface SupplierService {
 	Supplier createNewSupplier(Supplier supplier) throws Exception;
 	List<Supplier> getSupplierList() throws Exception;
 	List<Supplier> getSupplierListFromType(long idSupplierType) throws Exception;
-	
+	List<Supplier> getTopTen() throws Exception;
 }

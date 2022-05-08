@@ -54,4 +54,16 @@ public class SupplierController {
 			return null;
 		}
 	}
+	
+	@GetMapping("/getTopTen")
+    public List<Supplier> getTopTen() {
+		try {
+			return supplierService.getTopTen();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
+	
 }

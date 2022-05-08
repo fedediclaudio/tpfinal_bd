@@ -19,4 +19,15 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long>, ISupp
 			nativeQuery = true)
 	List<Supplier> getSupplierListFromType(@Param("id") long id);
 	
+	@Query( value = "SELECT s.* "
+				+ "FROM supplier s, "
+				+ "	(SELECT p.id_supplier, SUM(quantity) suma "
+				+ "	FROM item i"
+				+ "	inner join product p on (i.id_product = p.id_product) "
+				+ "	group by p.id_supplier) as suma "
+				+ "WHERE s.id_supplier = suma.id_supplier "
+				+ "LIMIT 10;", 
+				nativeQuery = true)
+	List<Supplier> getTopTen();
+	
 }
