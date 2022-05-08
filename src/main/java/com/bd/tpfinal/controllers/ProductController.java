@@ -1,8 +1,10 @@
 package com.bd.tpfinal.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -95,6 +97,22 @@ public class ProductController {
 	public List<Product> getProductsFromSupplier( @RequestParam(name = "idSupplier") long idSupplier) {
 		try {
 			return productService.getProductsFromSupplier(idSupplier);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@GetMapping("/getHistoricalPricesBetweenTwoDates")
+	public List<HistoricalProductPrice> getHistoricalPricesBetweenTwoDates( @RequestParam(name = "dateFrom") 
+																			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+																			LocalDate dateFrom,
+																			@RequestParam(name = "dateTo") 
+																			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+																			LocalDate dateTo) {
+		try {
+			return productService.getHistoricalPricesBetweenTwoDates(dateFrom, dateTo);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

@@ -12,6 +12,7 @@ import com.bd.tpfinal.model.HistoricalProductPrice;
 import com.bd.tpfinal.model.Product;
 import com.bd.tpfinal.model.ProductType;
 import com.bd.tpfinal.model.Supplier;
+import com.bd.tpfinal.repositories.implementations.HistoricalProductPriceRepository;
 import com.bd.tpfinal.repositories.implementations.ProductRepository;
 import com.bd.tpfinal.repositories.implementations.ProductTypeRepository;
 import com.bd.tpfinal.repositories.implementations.SupplierRepository;
@@ -19,6 +20,7 @@ import com.bd.tpfinal.repositories.implementations.SupplierRepository;
 @Service
 public class ProductServiceImpl implements ProductService {
 	@Autowired ProductRepository productRepository;
+	@Autowired HistoricalProductPriceRepository historicalProductPriceRepository;
 	@Autowired ProductTypeRepository productTypeRepository;
 	@Autowired SupplierRepository supplierRepository;
 	
@@ -164,11 +166,15 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	public List<HistoricalProductPrice> getHistoricalPricesFromProduct(long idProduct) throws Exception {
-		return productRepository.getHistoricalPricesListOrderByStartDate( idProduct );
+		return historicalProductPriceRepository.getHistoricalPricesListOrderByStartDate( idProduct );
 	}
 	
 	public List<Product> getProductsFromSupplier(long idSupplier) throws Exception {
 		return productRepository.getProductsFromSupplier(idSupplier);
+	}
+	
+	public List<HistoricalProductPrice> getHistoricalPricesBetweenTwoDates(LocalDate dateFrom, LocalDate dateTo) throws Exception {
+		return historicalProductPriceRepository.getHistoricalPricesBetweenTwoDates(dateFrom, dateTo);
 	}
 	
 }
