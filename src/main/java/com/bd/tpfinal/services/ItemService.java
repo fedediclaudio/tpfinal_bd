@@ -10,6 +10,7 @@ public interface ItemService
     public void newItem(Item newItem);
     public List<Item> getAll();
     public Optional<Item> getItemById(Long id);
+    public List<Item> getAllBySupplier(Long id);
 
     //TODO: completar este ItemService con más servicios
 

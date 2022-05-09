@@ -41,5 +41,11 @@ public class ItemServiceImpl implements ItemService
         return this.itemRepository.findById(id);
     }
 
+    @Override
+    public List<Item> getAllBySupplier(Long id)
+    {
+        return this.itemRepository.findBySupplier(id);
+    }
+
 
 }

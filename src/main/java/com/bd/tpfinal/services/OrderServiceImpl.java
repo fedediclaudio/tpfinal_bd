@@ -1,8 +1,10 @@
 package com.bd.tpfinal.services;
 
 import com.bd.tpfinal.model.DeliveryMan;
+import com.bd.tpfinal.model.Item;
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.repositories.DeliveryManRepository;
+import com.bd.tpfinal.repositories.ItemRepository;
 import com.bd.tpfinal.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,12 +17,14 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService
 {
     private final OrderRepository orderRepository;
+    private final ItemRepository itemRepository;
     private final DeliveryManRepository deliveryManRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, DeliveryManRepository deliveryManRepository)
+    public OrderServiceImpl(OrderRepository orderRepository, ItemRepository itemRepository, DeliveryManRepository deliveryManRepository)
     {
         this.orderRepository = orderRepository;
+        this.itemRepository = itemRepository;
         this.deliveryManRepository = deliveryManRepository;
     }
 
@@ -104,4 +108,12 @@ public class OrderServiceImpl implements OrderService
         orden_buscada.getOrderStatus().cancel();
         this.orderRepository.save(orden_buscada);
     }
+
+    @Override
+    public List<Order> getOrderByIdSupplier(Long id)
+    {
+        return this.orderRepository.findBySupplier(id);
+    }
+
+
 }

@@ -52,7 +52,8 @@ public class Order
     @JsonIgnore
     private Address address;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+   // @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+   @Embedded
     private Qualification qualification;
 
     //relación uno a muchos
@@ -78,7 +79,7 @@ public class Order
         this.deliveryMan = null;
         this.client = client;
         this.address = address;
-        this.qualification = null;
+        this.qualification = new Qualification(0.0F, "sin calificación aún",this );
         this.items = null;
         this.orderStatus = new Pending(this,dateOfOrder);
     }

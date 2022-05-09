@@ -1,6 +1,7 @@
 package com.bd.tpfinal.services;
 
 import com.bd.tpfinal.model.DeliveryMan;
+import com.bd.tpfinal.model.Item;
 import com.bd.tpfinal.model.Order;
 import org.springframework.stereotype.Service;
 
@@ -17,4 +18,5 @@ public interface OrderService
     public boolean assignOrderToDeliveryMan(Long orden, Long dm);
     public Order actualizarOrder(Order orden);
     public void cancelarOrder(Long number) throws Exception;
+    public List<Order> getOrderByIdSupplier(Long id);
 }

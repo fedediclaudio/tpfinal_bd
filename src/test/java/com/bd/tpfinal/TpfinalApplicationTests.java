@@ -333,7 +333,6 @@ class TpfinalApplicationTests
             e.printStackTrace();
             System.out.println("No sería una Order Sent");
         }
-
     }
 
     /**
@@ -388,12 +387,84 @@ class TpfinalApplicationTests
     /**
      * 3) Añadir una calificación a una orden ya completada.
      * Tenga en cuenta que deberá actualizar la calificación del proveedor.
+     * ver esto: https://docs.jboss.org/hibernate/orm/3.5/reference/es-ES/html/queryhql.html
      */
     @Test
     public void test_anadirCalificacion_a_Orden_completada()
     {
+        // SE CREA UNA ORDEN Y SE SIGUE EL PROCESO HASTA FINALIZAR LA ENTREGA POR PARTE DEL
+        // DELIVERYMAN
+        //crea una orden y progresa hasta la aceptación
+        Long number_de_ultima_orden = new_ORDER_agregar_Item_a_Order_Creada();
+        //Alta de un DeliveryMan
+        new_DELIVERYMAN_CreacionDeliveryMan("delivery1", "usuario1", "pass1", "delivery1@email.com", new Date(), true, new Date());
+        new_DELIVERYMAN_CreacionDeliveryMan("delivery2", "usuario2", "pass2", "delivery2@email.com", new Date(), true, new Date());
+        //1 se busca el primer repartidor libre
+        List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
+        DeliveryMan deliveryManFree = deliveryMEN.get(0);
+        //asigna el primer repartidor libre encontrado a la orden recien creada.
+        Order orden_buscada = this.orderService.getByNumber(number_de_ultima_orden);
+        orden_buscada.assignDeliveryMan(deliveryManFree);
+        this.orderService.actualizarOrder(orden_buscada);
+        //la orden_buscada está en Assigned.
+        //el deliveryManFree ya no esta free.
+        try
+        {
+            orden_buscada.deliver();//la Order pasa a Sent
+            this.orderService.actualizarOrder(orden_buscada);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("No sería una Order Assigned");
+        }
 
+        //ahora viene la parte de finalizar un pedido
+        Order orden_sent = this.orderService.getByNumber(number_de_ultima_orden);
+        try
+        {
+            orden_sent.finish();// la Order para a Delivered
+            this.orderService.actualizarOrder(orden_sent);
 
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("No sería una Order Sent");
+        }
+        // HASTA ACÁ CREACIÓN DE ORDEN Y ENTREGA
+        // ahora se le agrega la Qualification a la orden
+        Order orden_a_calificar = this.orderService.getByNumber(number_de_ultima_orden);
+        Qualification qua = new Qualification(4.0F, "comentario1",orden_a_calificar );
+        orden_a_calificar.setQualification(qua);
+        this.orderService.actualizarOrder(orden_a_calificar);
+        //Calificación de los proveedores, un proveedor por cada Item.
+        //calificación, la cual será el promedio entre las calificaciones recibidas por los clientes
+        //Para cada proveedor, encontrar todas las ordenes que contienen sus productos, y buscar la calificacion de cada una.
+        //el promedio será la calificacion del proveedor.
+        Iterator<Item> items_iter = orden_a_calificar.getItems().iterator();
+        HashMap<Long ,Supplier> suppliers = new HashMap<Long, Supplier>();
+
+        while(items_iter.hasNext())
+        {
+            while (items_iter.hasNext())
+            {
+                Supplier proveedor = items_iter.next().getProduct().getSupplier();
+                suppliers.putIfAbsent(proveedor.getId(), proveedor);
+
+            }
+            Iterator<Supplier> iter_supplier = suppliers.values().iterator();
+            while(iter_supplier.hasNext())
+            {
+                Supplier supplier = iter_supplier.next();
+                Iterator<Order> ordenes = this.orderService.getOrderByIdSupplier(supplier.getId()).iterator();
+                while (ordenes.hasNext())
+                {
+                    System.out.println("numero de orden:  " + ordenes.next().getNumber());
+                }
+
+            }
+        }
     }
 
     @Test
