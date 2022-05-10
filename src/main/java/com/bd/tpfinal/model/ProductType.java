@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,7 +28,10 @@ public class ProductType {
 	@JsonIgnore
 	@OneToMany(mappedBy = "type", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Product> products;
-
+	
+	@Transient
+	private Double avgProductsPrice;
+	
 	
 	public ProductType() {
 		this.products = new ArrayList<>();
@@ -64,11 +68,19 @@ public class ProductType {
 	public void setProducts(List<Product> products) {
 		this.products = products;
 	}
+	
+	public Double getAvgProductsPrice() {
+		return avgProductsPrice;
+	}
+
+	public void setAvgProductsPrice(Double avgProductsPrice) {
+		this.avgProductsPrice = avgProductsPrice;
+	}
 
 	@Override
 	public String toString() {
 		return "ProductType [id=" + id + ", name=" + name + ", description=" + description + ", products=" + products
-				+ "]";
+				+ ", avgProductsPrice=" + avgProductsPrice + "]";
 	}
 
 }

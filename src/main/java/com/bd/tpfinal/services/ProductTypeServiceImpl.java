@@ -1,5 +1,7 @@
 package com.bd.tpfinal.services;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -46,4 +48,19 @@ public class ProductTypeServiceImpl implements ProductTypeService {
 		return productTypeRepository.findAll();
 	}
 	
+	public List<ProductType> getAveragePriceOfProductsByType() throws Exception {
+		List<ProductType> pt = new ArrayList<ProductType>();
+		
+		for (Object[] object : productTypeRepository.getAveragePriceOfProductsByType()) {
+			ProductType productType = new ProductType();
+			productType.setId(((BigInteger)object[0]).longValue());
+			productType.setName((String)object[1]);
+			productType.setDescription((String)object[2]);
+			productType.setAvgProductsPrice((Double)object[3]);
+			
+			pt.add(productType);
+		}
+		
+		return pt;
+	}
 }

@@ -42,4 +42,15 @@ public class ProductTypeController {
 			return null;
 		}
     }
+
+	@GetMapping("/getAveragePriceOfProductsByType")
+	public List<ProductType> getAveragePriceOfProductsByType() {
+		try {
+			return productTypeService.getAveragePriceOfProductsByType();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
