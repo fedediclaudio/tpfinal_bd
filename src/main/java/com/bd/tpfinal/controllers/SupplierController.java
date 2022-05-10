@@ -66,4 +66,15 @@ public class SupplierController {
 		}
     }
 	
+	@GetMapping("/getSupplierWithAtLeastOneStar")
+	public List<Supplier> getSupplierWithAtLeastOneStar() {
+		try {
+			return supplierService.getSupplierWithAtLeastOneStar();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }

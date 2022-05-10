@@ -10,4 +10,5 @@ public interface SupplierService {
 	List<Supplier> getSupplierList() throws Exception;
 	List<Supplier> getSupplierListFromType(long idSupplierType) throws Exception;
 	List<Supplier> getTopTen() throws Exception;
+	List<Supplier> getSupplierWithAtLeastOneStar() throws Exception;
 }

@@ -23,11 +23,14 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long>, ISupp
 				+ "FROM supplier s, "
 				+ "	(SELECT p.id_supplier, SUM(quantity) suma "
 				+ "	FROM item i"
-				+ "	inner join product p on (i.id_product = p.id_product) "
-				+ "	group by p.id_supplier) as suma "
+				+ "	INNER JOIN product p ON (i.id_product = p.id_product) "
+				+ "	GROUP BY p.id_supplier) AS suma "
 				+ "WHERE s.id_supplier = suma.id_supplier "
 				+ "LIMIT 10;", 
 				nativeQuery = true)
 	List<Supplier> getTopTen();
+	
+	@Query( value = "FROM Supplier s WHERE s.qualificationOfUsers >= 1")
+	List<Supplier> getSupplierWithAtLeastOneStar();
 	
 }

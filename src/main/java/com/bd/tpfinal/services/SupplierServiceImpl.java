@@ -63,4 +63,8 @@ public class SupplierServiceImpl implements SupplierService {
 		return supplierRepository.getTopTen();
 	}
 	
+	public List<Supplier> getSupplierWithAtLeastOneStar() throws Exception {
+		return supplierRepository.getSupplierWithAtLeastOneStar();
+	}
+	
 }
