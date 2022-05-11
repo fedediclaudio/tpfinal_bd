@@ -46,4 +46,10 @@ public class SupplierServiceImpl implements SupplierService
     {
         return this.supplierRepository.findByName(name);
     }
+
+    @Override
+    public List<Supplier> getSupplierBySupplierTypeId(Long id)
+    {
+        return this.supplierRepository.findBySupplierTypeId(id);
+    }
 }

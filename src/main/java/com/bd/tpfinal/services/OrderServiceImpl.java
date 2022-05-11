@@ -110,9 +110,27 @@ public class OrderServiceImpl implements OrderService
     }
 
     @Override
+    @Transactional
+    //todas las Order de un Supplier
     public List<Order> getOrderByIdSupplier(Long id)
     {
         return this.orderRepository.findBySupplier(id);
+    }
+
+    @Override
+    @Transactional
+    // suma de calificaciones de todas las Order que contienen a un Supplier
+    // cuenta las calificaciones de todas las Order que contienen a un Supplier
+    // calcula el promedio
+    public double getQualificationAverage(Long id_Supplier)
+    {
+        return this.orderRepository.findQualificationSupplier(id_Supplier);
+    }
+
+    @Override
+    public List<Order> getByClientId(Long id)
+    {
+        return this.orderRepository.findByClient(id);
     }
 
 

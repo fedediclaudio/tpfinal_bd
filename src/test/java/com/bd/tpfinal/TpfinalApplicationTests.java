@@ -2,6 +2,7 @@ package com.bd.tpfinal;
 
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.services.*;
+import com.bd.tpfinal.utils.NoExisteProductoException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -130,11 +131,12 @@ class TpfinalApplicationTests
         Product product2 = new Product("producto2", 25.8F, 12.0F, "descripcion producto 2", unSupplier, productType);
         this.productService.newProduct(product2);
 
-        Date startDate = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
-        Date finishDate = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
-        Product product = this.productService.getProductByName("producto1");
-        HistoricalProductPrice hpp = new HistoricalProductPrice(123.00F, startDate, finishDate, product);
-        this.historicalProductPriceService.newHistoricalProductPrice(hpp);
+        //TODO:revisar esto !!!
+        //Date startDate = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
+       // Date finishDate = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
+      //  Product product = this.productService.getProductByName("producto1");
+      //  HistoricalProductPrice hpp = new HistoricalProductPrice(123.00F, startDate, finishDate, product);
+      //  this.historicalProductPriceService.newHistoricalProductPrice(hpp);
     }
 
     @Test
@@ -349,7 +351,7 @@ class TpfinalApplicationTests
         {
             this.orderService.cancelarOrder(number_de_ultima_orden);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             System.out.println("No sería Pending");
         }
@@ -378,7 +380,7 @@ class TpfinalApplicationTests
         {
             this.orderService.cancelarOrder(number_de_ultima_orden);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             System.out.println("No sería Assigned");
         }
@@ -389,6 +391,8 @@ class TpfinalApplicationTests
      * Tenga en cuenta que deberá actualizar la calificación del proveedor.
      * ver esto: https://docs.jboss.org/hibernate/orm/3.5/reference/es-ES/html/queryhql.html
      */
+    //TODO: agregar varias ordenes con diferentes items y diferentes calificaciones, para probar el calculo del promedio
+    //TODO: COMPLETAR
     @Test
     public void test_anadirCalificacion_a_Orden_completada()
     {
@@ -433,39 +437,244 @@ class TpfinalApplicationTests
             System.out.println("No sería una Order Sent");
         }
         // HASTA ACÁ CREACIÓN DE ORDEN Y ENTREGA
-        // ahora se le agrega la Qualification a la orden
+        // ahora se le agrega la Qualification a todas las ordenes del Client 1
+
+        Iterator<Order> ordenes = this.orderService.getByClientId(1L).iterator();
+        while (ordenes.hasNext())
+        {
+            int i = 0;
+            float score = 1.00F;
+            String comentario = "comentario_" + i;
+            Order orden = (Order) ordenes.next();
+            orden.setStatusByName();//tal vez no sea necesario para calificar
+            Qualification qua = new Qualification(score, comentario, orden);
+            orden.setQualification(qua);
+            this.orderService.actualizarOrder(orden);
+            System.out.println("cuenta  " + i);
+            i = i + 1;
+            score = score + 1.00F;
+        }
+
         Order orden_a_calificar = this.orderService.getByNumber(number_de_ultima_orden);
-        Qualification qua = new Qualification(4.0F, "comentario1",orden_a_calificar );
-        orden_a_calificar.setQualification(qua);
-        this.orderService.actualizarOrder(orden_a_calificar);
+        //Qualification qua = new Qualification(4.0F, "comentario1", orden_a_calificar);
+        //orden_a_calificar.setQualification(qua);
+        //this.orderService.actualizarOrder(orden_a_calificar);
+
+
         //Calificación de los proveedores, un proveedor por cada Item.
         //calificación, la cual será el promedio entre las calificaciones recibidas por los clientes
         //Para cada proveedor, encontrar todas las ordenes que contienen sus productos, y buscar la calificacion de cada una.
         //el promedio será la calificacion del proveedor.
+        //Tengo en cuenta solamente la calificación a cada Supplier que está presente en la última Order
         Iterator<Item> items_iter = orden_a_calificar.getItems().iterator();
-        HashMap<Long ,Supplier> suppliers = new HashMap<Long, Supplier>();
+        HashMap<Long, Supplier> suppliers = new HashMap<Long, Supplier>();
 
-        while(items_iter.hasNext())
+        while (items_iter.hasNext())
         {
-            while (items_iter.hasNext())
-            {
-                Supplier proveedor = items_iter.next().getProduct().getSupplier();
-                suppliers.putIfAbsent(proveedor.getId(), proveedor);
+            Supplier proveedor = items_iter.next().getProduct().getSupplier();
+            suppliers.putIfAbsent(proveedor.getId(), proveedor);
 
-            }
-            Iterator<Supplier> iter_supplier = suppliers.values().iterator();
-            while(iter_supplier.hasNext())
+        }
+        Iterator<Supplier> iter_supplier = suppliers.values().iterator();
+        while (iter_supplier.hasNext())
+        {
+            Supplier supplier = iter_supplier.next();
+            Iterator<Order> ordenes2 = this.orderService.getOrderByIdSupplier(supplier.getId()).iterator();
+            while (ordenes2.hasNext())
             {
-                Supplier supplier = iter_supplier.next();
-                Iterator<Order> ordenes = this.orderService.getOrderByIdSupplier(supplier.getId()).iterator();
-                while (ordenes.hasNext())
-                {
-                    System.out.println("numero de orden:  " + ordenes.next().getNumber());
-                }
-
+                System.out.println("numero de orden:  " + ordenes2.next().getNumber());
             }
+
+
+            double promedio = this.orderService.getQualificationAverage(supplier.getId());
+            System.out.println("promedio calificacion de ordenes del supplier: " + promedio);
+
+        }
+
+    }
+
+    //4) Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
+    @Test
+    void actualizar_datos_producto()
+    {
+        //Creo productos y luego los actualizo.
+        ProductType productType1 = new ProductType("ProductoTipo1", "descripción Producto Tipo 1");
+        this.productTypeService.newProductType(productType1);
+
+        ProductType productType2 = new ProductType("ProductoTipo2", "descripción Producto Tipo 2");
+        this.productTypeService.newProductType(productType2);
+
+        SupplierType supplierType1 = new SupplierType("supplierType1", "Descripcion SupplierType1");
+        this.supplierTypeService.newSupplierType(supplierType1);
+
+        SupplierType supplierType2 = new SupplierType("supplierType2", "Descripcion SupplierType1");
+        this.supplierTypeService.newSupplierType(supplierType2);
+
+
+        float coords[] = new float[2];
+        coords[0] = 1.0F;
+        coords[1] = 2.0F;
+        //por ahora no hay calificación
+        float qual = 0.0F;
+        SupplierType supplierType = this.supplierTypeService.getSupplierTypeByName("supplierType1");
+        Supplier supplier1 = new Supplier("supplier1", "20123456784", "San Juan 123", coords, qual, supplierType);
+        this.supplierService.newSupplier(supplier1);
+
+        ProductType productType = this.productTypeService.getProductTypeByName("ProductoTipo1");
+        List<Supplier> suppliers = this.supplierService.getSupplierByName("supplier1");
+        Supplier unSupplier = suppliers.get(0);
+
+        Product product1 = new Product("producto1", 25.8F, 12.0F, "descripcion producto 1", unSupplier, productType);
+        this.productService.newProduct(product1);
+        Product product2 = new Product("producto2", 30.8F, 8.0F, "descripcion producto 2", unSupplier, productType);
+        this.productService.newProduct(product2);
+
+        // cambiar datos. Cambio el precio y la descripción
+        Long id_producto_a_cambiar = product1.getId();
+        float nuevoPrecio = 54.0F;
+        String nuevaDescripcion = "nueva descripción producto 1";
+        Product updatedProduct = new Product("producto1",nuevoPrecio, 12.0F, nuevaDescripcion, unSupplier, productType);
+
+        try
+        {
+            this.productService.updateData(id_producto_a_cambiar, updatedProduct);
+        }
+        catch (NoExisteProductoException e)
+        {
+            e.printStackTrace();
         }
     }
+
+    //5) Eliminar un producto de los ofrecidos por un proveedor
+    @Test
+    void test_eliminar_producto()
+    {
+        //Creo 2 productos
+        ProductType productType1 = new ProductType("ProductoTipo1", "descripción Producto Tipo 1");
+        this.productTypeService.newProductType(productType1);
+
+        ProductType productType2 = new ProductType("ProductoTipo2", "descripción Producto Tipo 2");
+        this.productTypeService.newProductType(productType2);
+
+        SupplierType supplierType1 = new SupplierType("supplierType1", "Descripcion SupplierType1");
+        this.supplierTypeService.newSupplierType(supplierType1);
+
+        SupplierType supplierType2 = new SupplierType("supplierType2", "Descripcion SupplierType1");
+        this.supplierTypeService.newSupplierType(supplierType2);
+
+
+        float coords[] = new float[2];
+        coords[0] = 1.0F;
+        coords[1] = 2.0F;
+        //por ahora no hay calificación
+        float qual = 0.0F;
+        SupplierType supplierType = this.supplierTypeService.getSupplierTypeByName("supplierType1");
+        Supplier supplier1 = new Supplier("supplier1", "20123456784", "San Juan 123", coords, qual, supplierType);
+        this.supplierService.newSupplier(supplier1);
+
+        ProductType productType = this.productTypeService.getProductTypeByName("ProductoTipo1");
+        List<Supplier> suppliers = this.supplierService.getSupplierByName("supplier1");
+        Supplier unSupplier = suppliers.get(0);
+
+        Product product1 = new Product("producto1", 25.8F, 12.0F, "descripcion producto 1", unSupplier, productType);
+        this.productService.newProduct(product1);
+        Product product2 = new Product("producto2", 30.8F, 8.0F, "descripcion producto 2", unSupplier, productType);
+        this.productService.newProduct(product2);
+
+        //eliminar un producto ofrecido por un proveedor
+        product2.setSupplier(null);
+        try
+        {
+            this.productService.updateData(product2.getId(), product2);
+        }
+        catch(NoExisteProductoException n)
+        {
+
+        }
+
+        Optional<Product> p = this.productService.getProductById(product2.getId());
+        if(p==null)
+        {
+            System.out.println("p :"+p);
+        }
+    }
+
+    //6) Obtener todos los proveedores de un cierto tipo.
+    @Test
+    void test_obtener_proveedores_de_un_tipo()
+    {
+        SupplierType supplierType1 = new SupplierType("supplierType1", "Descripcion SupplierType1");
+        this.supplierTypeService.newSupplierType(supplierType1);
+
+        SupplierType supplierType2 = new SupplierType("supplierType2", "Descripcion SupplierType1");
+        this.supplierTypeService.newSupplierType(supplierType2);
+
+
+        float coords[] = new float[2];
+        coords[0] = 1.0F;
+        coords[1] = 2.0F;
+        //por ahora no hay calificación
+        float qual = 0.0F;
+        SupplierType supplierType = this.supplierTypeService.getSupplierTypeByName("supplierType1");
+        Supplier supplier1 = new Supplier("supplier1", "20123456784", "San Juan 123", coords, qual, supplierType);
+        this.supplierService.newSupplier(supplier1);
+        coords[0] = 4.0F;
+        coords[1] = 5.0F;
+        Supplier supplier2 = new Supplier("supplier2", "55123456784", "Luro 123", coords, qual, supplierType);
+        this.supplierService.newSupplier(supplier2);
+
+        Long id = supplierType.getId();
+        Iterator<Supplier> suppliers = this.supplierService.getSupplierBySupplierTypeId(id).iterator();
+        while(suppliers.hasNext())
+        {
+            Supplier ste = (Supplier)suppliers.next();
+            System.out.println("supplier: "+ste.getName()+ " id: "+ste.getId());
+        }
+    }
+
+    //7) Obtener todos los productos y su tipo, de un proveedor específico.
+    @Test
+    void test_obtener_productos_por_proveedor()
+    {
+        ProductType productType1 = new ProductType("ProductoTipo1", "descripción Producto Tipo 1");
+        this.productTypeService.newProductType(productType1);
+
+        ProductType productType2 = new ProductType("ProductoTipo2", "descripción Producto Tipo 2");
+        this.productTypeService.newProductType(productType2);
+
+        SupplierType supplierType1 = new SupplierType("supplierType1", "Descripcion SupplierType1");
+        this.supplierTypeService.newSupplierType(supplierType1);
+
+        float coords[] = new float[2];
+        coords[0] = 1.0F;
+        coords[1] = 2.0F;
+        //por ahora no hay calificación
+        float qual = 0.0F;
+        SupplierType supplierType = this.supplierTypeService.getSupplierTypeByName("supplierType1");
+        Supplier supplier1 = new Supplier("supplier1", "20123456784", "San Juan 123", coords, qual, supplierType);
+        this.supplierService.newSupplier(supplier1);
+
+        ProductType productType = this.productTypeService.getProductTypeByName("ProductoTipo1");
+        List<Supplier> suppliers = this.supplierService.getSupplierByName("supplier1");
+        Supplier unSupplier = suppliers.get(0);
+        Product product1 = new Product("producto1", 25.8F, 12.0F, "descripcion producto 1", unSupplier, productType);
+        this.productService.newProduct(product1);
+        Product product2 = new Product("producto2", 25.8F, 12.0F, "descripcion producto 2", unSupplier, productType);
+        this.productService.newProduct(product2);
+        Product product3 = new Product("producto3", 25.8F, 12.0F, "descripcion producto 3", unSupplier, productType2);
+        this.productService.newProduct(product3);
+
+        Iterator<Product> productos = this.productService.getProductoByProductType(productType.getId()).iterator();
+        while(productos.hasNext())
+        {
+            Product producto = productos.next();
+            System.out.println("Producto: " + producto.getName() + "  " + producto.getType());
+        }
+
+    }
+
+
+
 
     @Test
     void prueba()

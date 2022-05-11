@@ -18,5 +18,8 @@ public interface OrderService
     public boolean assignOrderToDeliveryMan(Long orden, Long dm);
     public Order actualizarOrder(Order orden);
     public void cancelarOrder(Long number) throws Exception;
+    //todas las Order de un Supplier
     public List<Order> getOrderByIdSupplier(Long id);
+    public double getQualificationAverage(Long id_Supplier);
+    public List<Order> getByClientId(Long id);
 }

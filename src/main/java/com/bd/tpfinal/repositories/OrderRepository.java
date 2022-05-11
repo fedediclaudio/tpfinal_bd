@@ -31,4 +31,11 @@ public interface OrderRepository extends JpaRepository<Order, Long>
     String query5 = "SELECT DISTINCT item.order FROM Item item  WHERE item IN (SELECT item from Item item WHERE item.product.supplier.id = :id_supplier)";
     @Query(value = query5)
     List<Order> findBySupplier(@Param("id_supplier") Long id_supplier);
+
+    String query6 = "SELECT avg(orden.qualification.score) FROM Order orden WHERE orden IN" + "("+ query5 + ")";
+    @Query(value = query6)
+    double findQualificationSupplier(@Param("id_supplier") Long id_supplier);
+
+    @Query(value = "SELECT orden FROM Order orden WHERE orden.client.id = :id_user ")
+    List<Order> findByClient(@Param("id_user") Long id_user);
 }

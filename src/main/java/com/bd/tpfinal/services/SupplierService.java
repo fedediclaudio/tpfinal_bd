@@ -12,4 +12,5 @@ public interface SupplierService
     public List<Supplier> getAll();
     public Supplier getSupplierById(Long id);
     public List<Supplier> getSupplierByName(String name);
+    public List<Supplier> getSupplierBySupplierTypeId(Long id);
 }
