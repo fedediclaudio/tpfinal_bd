@@ -1,5 +1,6 @@
 package com.bd.tpfinal.dtos.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import java.util.List;
 @Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonIgnoreProperties("password")
 public class ClientDto {
     private String id;
     private String name;

@@ -47,6 +47,7 @@ public class ClientRepositoryProxyImpl implements ClientRepositoryProxy {
         client.setDateOfBirth(clientDto.getBirthDate());
         client.setUsername(clientDto.getUsername());
         client.setDateOfRegister(new Date());
+        client = clientRepository.save(client);
 
         return getClientDto(client, null, null);
     }
