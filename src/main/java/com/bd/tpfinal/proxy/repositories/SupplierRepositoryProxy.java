@@ -18,4 +18,5 @@ public interface SupplierRepositoryProxy {
 
     SupplierDto delete(String supplierId, String productId) throws PersistenceEntityException;
 
+    SupplierDto create(SupplierDto supplierDto) throws PersistenceEntityException;
 }

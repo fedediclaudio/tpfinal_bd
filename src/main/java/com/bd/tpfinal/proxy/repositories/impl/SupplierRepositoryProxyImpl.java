@@ -8,12 +8,10 @@ import com.bd.tpfinal.mappers.product.ProductMapper;
 import com.bd.tpfinal.mappers.suppplier.SupplierMapper;
 import com.bd.tpfinal.model.Product;
 import com.bd.tpfinal.model.Supplier;
+import com.bd.tpfinal.model.SupplierType;
 import com.bd.tpfinal.model.SupplierWithOrdersCount;
 import com.bd.tpfinal.proxy.repositories.SupplierRepositoryProxy;
-import com.bd.tpfinal.repositories.ProductRepository;
-import com.bd.tpfinal.repositories.ProductTypeRepository;
-import com.bd.tpfinal.repositories.SupplierRepository;
-import com.bd.tpfinal.repositories.SupplierWithOrdersCountRepository;
+import com.bd.tpfinal.repositories.*;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -22,20 +20,22 @@ import java.util.stream.Collectors;
 public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
 
     private final SupplierRepository supplierRepository;
+    private final SupplierMapper supplierMapper;
     private final ProductTypeRepository productTypeRepository;
     private final ProductRepository productRepository;
-    private final SupplierMapper supplierMapper;
     private final ProductMapper productMapper;
     private  final SupplierWithOrdersCountRepository supplierWithOrdersCountRepository;
+    private final SupplierTypeRepository supplierTypeRepository;
     public SupplierRepositoryProxyImpl(SupplierRepository supplierRepository, ProductTypeRepository productTypeRepository,
                                        ProductRepository productRepository, SupplierMapper supplierMapper,
-                                       ProductMapper productMapper, SupplierWithOrdersCountRepository supplierWithOrdersCountRepository) {
+                                       ProductMapper productMapper, SupplierWithOrdersCountRepository supplierWithOrdersCountRepository, SupplierTypeRepository supplierTypeRepository) {
         this.supplierRepository = supplierRepository;
         this.productTypeRepository = productTypeRepository;
         this.productRepository = productRepository;
         this.supplierMapper = supplierMapper;
         this.productMapper = productMapper;
         this.supplierWithOrdersCountRepository = supplierWithOrdersCountRepository;
+        this.supplierTypeRepository = supplierTypeRepository;
     }
 
     @Override
@@ -106,6 +106,21 @@ public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
         dto.setProducts(supplier.getProducts().parallelStream().map(p -> productMapper.toProductDto(p)).collect(Collectors.toList()));
 
         return dto;
+    }
+
+    @Override
+    public SupplierDto create(SupplierDto supplierDto) throws PersistenceEntityException {
+        SupplierType type = supplierTypeRepository.findById(IdConvertionHelper.convert(supplierDto.getSupplierTypeId()))
+                .orElseThrow(() -> new PersistenceEntityException("Cant find supplier type with id " + supplierDto.getSupplierTypeId()));
+        Supplier supplier = new Supplier();
+        supplier.setAddress(supplierDto.getAddress());
+        supplier.setCoords(supplierDto.getCoords());
+        supplier.setCuil(supplierDto.getCuil());
+        supplier.setName(supplierDto.getName());
+        supplier.setType(type);
+        supplier.getType().add(supplier);
+        supplier = supplierRepository.save(supplier);
+        return supplierMapper.toSupplierDto(supplier);
     }
 
 

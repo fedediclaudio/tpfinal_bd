@@ -13,6 +13,7 @@ public interface SupplierMapper {
     @Mappings({
             @Mapping(source = "id", target = "supplierId"),
             @Mapping(source = "type.name", target = "supplierType"),
+            @Mapping(source = "type.id", target = "supplierTypeId"),
             @Mapping(target = "products", ignore = true),
 
     })
@@ -21,9 +22,11 @@ public interface SupplierMapper {
     @Mappings({
             @Mapping(source = "id", target = "supplierId"),
             @Mapping(source = "type.name", target = "supplierType"),
+            @Mapping(source = "type.id", target = "supplierTypeId"),
             @Mapping(target = "products", ignore = true),
             @Mapping(source = "ordersCount", target = "ordersCount")
 
     })
     SupplierWithOrdersCountDto toSupplierWithOrdersCountDto(SupplierWithOrdersCount supplier);
+
 }

@@ -41,7 +41,7 @@ public class SupplierType extends PersistentEntity{
         this.suppliers = suppliers;
     }
 
-    public void addSupplier(Supplier supplier) {
+    public void add(Supplier supplier) {
         suppliers.size();
         suppliers.add(supplier);
     }

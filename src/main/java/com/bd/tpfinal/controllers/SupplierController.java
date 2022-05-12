@@ -1,5 +1,6 @@
 package com.bd.tpfinal.controllers;
 
+import com.bd.tpfinal.dtos.request.suppliers.CreateSupplierRequest;
 import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.services.SuppliersService;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +53,12 @@ public class SupplierController extends BaseController{
     public ResponseEntity<BaseResponse> deleteProduct(@PathVariable("supplier_id") String supplierId, @PathVariable("product_id") String product_id) {
         BaseResponse response = supplierService.deleteSuppliersProduct(supplierId, product_id);
         return new ResponseEntity(response, responseStatus(response));
+    }
+
+    @PostMapping
+    public ResponseEntity<BaseResponse> create(@RequestBody CreateSupplierRequest request){
+        BaseResponse response = supplierService.create(request);
+        return new ResponseEntity<BaseResponse>(response, responseStatus(response));
     }
 
 }
