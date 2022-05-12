@@ -2,6 +2,7 @@ package com.bd.tpfinal.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -78,5 +79,14 @@ public class Address extends PersistentEntity {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    @Override
+    public String toString() {
+        return
+                "Address='" + address + '\'' +
+                ", apartment='" + apartment + '\'' +
+                ", coords=" + Arrays.toString(coords) +
+                ", description='" + description;
     }
 }

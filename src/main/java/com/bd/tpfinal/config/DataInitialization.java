@@ -102,7 +102,7 @@ public class DataInitialization implements ApplicationRunner {
                 address.setAddress(street);
                 address.setClient(client);
                 address.setName(client.getName());
-                client.addAddress(address);
+                client.add(address);
             }
 
             clients.add(clientRepository.save(client).getId());
@@ -128,7 +128,7 @@ public class DataInitialization implements ApplicationRunner {
             SupplierType supplierType = supplierTypes.get(random.nextInt(supplierTypes.size()));
 
             supplier.setType(supplierType);
-            supplierType.addSupplier(supplier);
+            supplierType.add(supplier);
             supplier = supplierRepository.save(supplier);
 
             suppliers.add(supplier.getId());

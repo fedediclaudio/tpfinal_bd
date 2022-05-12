@@ -6,12 +6,12 @@ import java.util.Date;
 import java.util.List;
 @Entity
 @DiscriminatorValue("CLIENT")
-public class Client extends User{
+public class Client extends User {
 
     private Date dateOfRegister;
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
 
     public Date getDateOfRegister() {
@@ -46,7 +46,7 @@ public class Client extends User{
         this.orders.add(order);
     }
 
-    public void addAddress(Address address) {
+    public void add(Address address) {
         this.addresses.size();
         this.addresses.add(address);
     }
