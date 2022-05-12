@@ -2,7 +2,6 @@ package com.bd.tpfinal.services;
 
 import com.bd.tpfinal.dtos.common.ChangeOrderStatusDto;
 import com.bd.tpfinal.dtos.request.items.CreateItemRequest;
-import com.bd.tpfinal.dtos.request.orders.CreateOrderRequest;
 import com.bd.tpfinal.dtos.response.BaseResponse;
 
 import java.util.Date;
@@ -17,7 +16,7 @@ public interface OrdersService {
 
     BaseResponse create(String clientId, String addressId, String comments);
 
-    BaseResponse update(String orderId, CreateOrderRequest orderRequest);
+    BaseResponse update(String orderId, String addressId);
 
     void delete(String orderId);
 

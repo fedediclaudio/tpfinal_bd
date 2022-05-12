@@ -37,4 +37,7 @@ public interface OrderRepositoryProxy {
     OrderDto getOrdersWithMaximumProductsBySupplier(String supplierId) throws PersistenceEntityException;
 
     OrderDto changeOrderStatus(ChangeOrderStatusDto request) throws PersistenceEntityException, ParameterErrorException;
+
+    OrderDto update(String orderId, String addressId) throws PersistenceEntityException;
+
 }

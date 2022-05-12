@@ -2,6 +2,7 @@ package com.bd.tpfinal.controllers;
 
 import com.bd.tpfinal.dtos.common.ChangeOrderStatusDto;
 import com.bd.tpfinal.dtos.request.items.CreateItemRequest;
+import com.bd.tpfinal.dtos.request.orders.CreateOrderRequest;
 import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.dtos.response.orders.SingleOrderResponse;
 import com.bd.tpfinal.enums.OrderStatusAction;
@@ -31,7 +32,7 @@ public class OrderController extends BaseController {
         this.ordersService = ordersService;
     }
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<BaseResponse> retrieve(@RequestParam(value = "status", required = false) String status,
                                                  @RequestParam(value = "number", required = false) Integer number){
         BaseResponse response = ordersService.retrieve(status, number);
@@ -58,7 +59,7 @@ public class OrderController extends BaseController {
         return new ResponseEntity<BaseResponse>(response, responseStatus(response));
     }
 
-    @PatchMapping("/{order_id}/{order_status}")
+    @PatchMapping("/{order_id}/status/{order_status}")
     public ResponseEntity<BaseResponse> changeOrderStatus(@PathVariable("order_id") String orderId,
                                                           @PathVariable("order_status") String orderStatus,
                                                           @RequestParam(value = "cancelled_by_client", required = false) Boolean canceledByClient){
@@ -99,4 +100,18 @@ public class OrderController extends BaseController {
         BaseResponse response = ordersService.getOrdersWithMaximumProductsBySupplier(supplierId);
         return new ResponseEntity<>(response,responseStatus(response));
     }
+
+    @PostMapping
+    public ResponseEntity<BaseResponse> create(@RequestBody CreateOrderRequest request){
+        BaseResponse response = ordersService.create(request.getClientId(), request.getAddressId(), request.getComments());
+        return new ResponseEntity<>(response,responseStatus(response));
+    }
+
+    @PatchMapping("/{order_id}/{address_id}")
+    public ResponseEntity<BaseResponse> update(@PathVariable(value="order_id") String orderId,
+                                               @PathVariable(value="address_id") String addressId){
+        BaseResponse response = ordersService.update(orderId, addressId);
+        return new ResponseEntity<>(response,responseStatus(response));
+    }
+
 }
