@@ -29,7 +29,7 @@ public class DeliverCommand extends ChangeStatusCommand {
             sent.setStartDate(new Date());
             sent.setOrder(order);
             order.setStatus(sent);
-
+            order.getDeliveryMan().setNumberOfSuccessOrders(order.getDeliveryMan().getNumberOfSuccessOrders()+1);
             order = orderRepository.save(order);
         } else
             throw new PersistenceEntityException("Can't change order status. Actual order status is "+order.getStatus().getName());

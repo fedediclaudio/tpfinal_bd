@@ -36,13 +36,14 @@ public class CancelCommand extends ChangeStatusCommand {
 
             if (request.getCanceledByClient() != null && request.getCanceledByClient()) {
                 cancel.setCancelledByClient(request.getCanceledByClient());
-                order.getClient().setScore(order.getClient().getScore() -1);
+                if (order.getDeliveryMan() != null) {
+                    order.getDeliveryMan().setPendingOrder(null);
+                    order.getClient().setScore(order.getClient().getScore() -1);
+                }
+
                 if (ObjectUtils.isEmpty(qualification.getCommentary()))
                     qualification.setCommentary("Order cancelled by client.");
             }
-
-            if (order.getDeliveryMan() != null)
-                order.getDeliveryMan().setPendingOrder(null);
 
             order.setStatus(cancel);
             order.setQualification(qualification);

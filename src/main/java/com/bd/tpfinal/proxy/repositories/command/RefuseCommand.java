@@ -5,6 +5,7 @@ import com.bd.tpfinal.dtos.common.OrderDto;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.mappers.orders.OrderMapper;
 import com.bd.tpfinal.model.Cancel;
+import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.Qualification;
 import com.bd.tpfinal.repositories.DeliveryManRepository;
@@ -32,12 +33,16 @@ public class RefuseCommand extends ChangeStatusCommand {
 
             Qualification qualification = new Qualification();
             qualification.setOrder(order);
-            qualification.setScore(-2);
+            qualification.setScore(0);
             qualification.setCommentary("Order refused by delivery man.");
 
             order.setQualification(qualification);
-            order.getDeliveryMan().setPendingOrder(null);
 
+            DeliveryMan deliveryMan = order.getDeliveryMan();
+            deliveryMan.setScore(deliveryMan.getScore()-2);
+            deliveryMan.setPendingOrder(null);
+
+//            deliveryManRepository.save(deliveryMan);
             order = orderRepository.save(order);
         } else
             throw new PersistenceEntityException("Can't change order status. Actual order status is "+order.getStatus().getName());
