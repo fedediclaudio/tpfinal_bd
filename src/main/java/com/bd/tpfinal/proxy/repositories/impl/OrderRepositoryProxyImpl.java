@@ -15,7 +15,6 @@ import com.bd.tpfinal.proxy.repositories.OrderRepositoryProxy;
 import com.bd.tpfinal.proxy.repositories.command.*;
 import com.bd.tpfinal.repositories.*;
 
-import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -132,20 +131,6 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     public List<OrderDto> findAll() {
         List<Order> orders = orderRepository.findAll();
         return orders.stream().map(order ->  createOrderDto(order, order.getClient())).collect(Collectors.toList());
-    }
-
-    @Override
-    public OrderDto findByIdWithItems(String orderId) throws PersistenceEntityException {
-        Order order = orderRepository.findById(IdConvertionHelper.convert(orderId))
-                .orElseThrow(() -> new PersistenceEntityException("Order with id "+ orderId + " not found"));
-        return createOrderDto(order, order.getClient(), order.getItems());
-    }
-
-    @Override
-    public boolean exists(String orderId) {
-        if (!orderRepository.existsById(IdConvertionHelper.convert(orderId)))
-            new PersistenceEntityException("Order with id " + orderId + " not found.");
-        return true;
     }
 
     @Override

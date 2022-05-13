@@ -17,6 +17,4 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     @Query("From Supplier s where s.qualificationOfUsers >= :qualification")
     List<Supplier> findSuppliersWithQualificationGreaterThanEquals(float qualification);
 
-    @Query("FROM Supplier s JOIN s.products p where s.id = :id")
-    Optional<Supplier> findByIdWithProducts(@Param("id") Long id);
 }
