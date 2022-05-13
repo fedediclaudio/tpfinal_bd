@@ -30,10 +30,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "WHERE s.id=:supplier_id GROUP BY s.id, order_id ORDER BY cant DESC LIMIT 1) selected_order)")
     Optional<Order> findOrderWithMaxProductsBySupplier(@Param("supplier_id") Long supplierId);
 
-    List<Order> findByStatus_nameAndItems_product_supplier(String status, Supplier supplier);
-
     Set<Order> findByStatus_nameAndQualificationIsNotNullAndItems_product_supplier(String delivered, Supplier supplier);
-
-    @Query("FROM Order o LEFT JOIN o.items i WHERE o.id = :id")
-    Optional<Order> findByIdWithItems(@Param("id") Long id);
 }

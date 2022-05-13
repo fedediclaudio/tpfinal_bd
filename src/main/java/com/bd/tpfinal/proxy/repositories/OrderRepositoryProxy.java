@@ -24,8 +24,6 @@ public interface OrderRepositoryProxy {
 
     List<OrderDto> findAll();
 
-    OrderDto findByIdWithItems(String orderId) throws PersistenceEntityException;
-
     boolean exists(String orderId) throws PersistenceEntityException;
 
     OrderDto addItem(ItemDto itemDto) throws PersistenceEntityException;
