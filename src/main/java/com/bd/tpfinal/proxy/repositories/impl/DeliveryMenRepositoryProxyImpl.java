@@ -60,4 +60,10 @@ public class DeliveryMenRepositoryProxyImpl implements DeliveryMenRepositoryProx
                 .orElseThrow(()-> new PersistenceEntityException("Can't find delivery man with id: " + id));
         return deliveryManMapper.toDeliveryManDto(deliveryMan);
     }
+
+    @Override
+    public List<DeliveryManDto> findByPendingOrderIsNull() {
+        List<DeliveryMan> deliveryMen = deliveryManRepository.findByPendingOrderIsNull();
+        return deliveryMen.stream().map(d -> deliveryManMapper.toDeliveryManDto(d)).collect(Collectors.toList());
+    }
 }

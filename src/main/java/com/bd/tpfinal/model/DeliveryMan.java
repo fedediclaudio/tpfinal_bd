@@ -1,5 +1,7 @@
 package com.bd.tpfinal.model;
 
+import org.springframework.data.annotation.Transient;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -8,11 +10,11 @@ import java.util.List;
 public class DeliveryMan extends User{
 
     private int numberOfSuccessOrders;
-
+    @Transient
     private boolean free = true;
     @Temporal(TemporalType.DATE)
     private Date dateOfAdmission;
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
     private Order pendingOrder;
 
     public int getNumberOfSuccessOrders() {
@@ -24,7 +26,7 @@ public class DeliveryMan extends User{
     }
 
     public boolean isFree() {
-        return free;
+        return pendingOrder == null;
     }
 
     public void setFree(boolean free) {

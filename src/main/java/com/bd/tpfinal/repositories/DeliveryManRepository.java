@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DeliveryManRepository extends JpaRepository<DeliveryMan, Long> {
-    Optional<DeliveryMan> findTopByFree(Boolean isFree);
+    Optional<DeliveryMan> findTopByPendingOrderIsNull();
 
     List<DeliveryMan> findFirst10ByOrderByNumberOfSuccessOrdersDesc();
+
+    List<DeliveryMan> findByPendingOrderIsNull();
 }

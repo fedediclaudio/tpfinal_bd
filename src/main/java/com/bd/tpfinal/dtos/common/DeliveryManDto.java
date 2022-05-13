@@ -20,16 +20,17 @@ public class DeliveryManDto extends UserDto {
     @JsonProperty(value = "date_of_admission")
     private Date dateOfAdmission;
 
-    @JsonProperty(value = "orders_pending")
-    private List<OrderDto> ordersPending = new ArrayList<>();
+    @JsonProperty(value = "pending_order")
+    private OrderDto pendingOrder;
+
     @Builder
     public DeliveryManDto(String id, String name, String username, String password, String email,
-                          Date dateOfAdmission, int numberOfSuccessOrders, boolean free, List<OrderDto> ordersPending) {
+                          Date dateOfAdmission, int numberOfSuccessOrders, boolean free, OrderDto pendingOrder) {
         super(id, name, username, password, email);
         this.dateOfAdmission = dateOfAdmission;
         this.numberOfSuccessOrders = numberOfSuccessOrders;
-        this.free = this.free;
-        this.ordersPending = ordersPending;
+        this.free = free;
+        this.pendingOrder = pendingOrder;
     }
 
 }

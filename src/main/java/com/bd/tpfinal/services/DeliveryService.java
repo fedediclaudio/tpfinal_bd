@@ -11,4 +11,6 @@ public interface DeliveryService {
     BaseResponse retrieve(String id);
 
     BaseResponse retrieve();
+
+    BaseResponse retrieveFree();
 }

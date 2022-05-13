@@ -21,15 +21,18 @@ public class DeliveryController extends  BaseController{
     }
 
     @GetMapping
-    public ResponseEntity<BaseResponse> getDeliveryMen(@RequestParam(value = "id", required = false) String id,
-                                                       @RequestParam(value = "best_ranked", required = false) Boolean bestRanked){
+    public ResponseEntity<BaseResponse> getDeliveryMen(@RequestParam(value = "delivery_man_id", required = false) String id,
+                                                       @RequestParam(value = "best_ranked", required = false) Boolean bestRanked,
+                                                       @RequestParam(value = "free", required = false) Boolean free){
         BaseResponse response = null;
         if (id != null){
             response = deliveryService.retrieve(id);
-        }else if (bestRanked == null || !bestRanked){
-            response = deliveryService.retrieve();
-        }else{
+        } else if (free != null && free) {
+            response = deliveryService.retrieveFree();
+        } else if (bestRanked != null && bestRanked) {
             response = deliveryService.getMostScoredDeliveryMen();
+        } else {
+            response = deliveryService.retrieve();
         }
         return new ResponseEntity<>(response, responseStatus(response));
     }

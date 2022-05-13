@@ -30,6 +30,8 @@ public class OrderDto {
     @JsonProperty("qualification_comments")
     private String qualificationComments;
     private List<ItemDto> items = new ArrayList<>();
+    @JsonProperty("delivery_man")
+    private DeliveryManDto deliveryMan;
 
 
 }

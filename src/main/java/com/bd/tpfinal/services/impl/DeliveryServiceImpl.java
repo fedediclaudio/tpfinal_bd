@@ -42,6 +42,15 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
+    public BaseResponse retrieveFree() {
+        ListDeliveryResponse response = new ListDeliveryResponse();
+        List<DeliveryManDto> data = deliveryMenRepositoryProxy.findByPendingOrderIsNull();
+        response.setData(data);
+        response.setMessage("Free delivery men.");
+        return response;
+    }
+
+    @Override
     public BaseResponse retrieve(String id) {
         SingleDeliveryManResponse response = new SingleDeliveryManResponse();
         try {

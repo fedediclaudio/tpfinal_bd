@@ -14,4 +14,6 @@ public interface DeliveryMenRepositoryProxy {
     DeliveryManDto create(DeliveryManDto deliveryManDto) throws PersistenceEntityException;
 
     DeliveryManDto findById(String id) throws PersistenceEntityException;
+
+    List<DeliveryManDto> findByPendingOrderIsNull();
 }
