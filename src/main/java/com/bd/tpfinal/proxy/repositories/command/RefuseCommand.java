@@ -36,7 +36,7 @@ public class RefuseCommand extends ChangeStatusCommand {
             qualification.setCommentary("Order refused by delivery man.");
 
             order.setQualification(qualification);
-            order.getDeliveryMan().getOrdersPending().remove(order);
+            order.getDeliveryMan().setPendingOrder(null);
 
             order = orderRepository.save(order);
         } else

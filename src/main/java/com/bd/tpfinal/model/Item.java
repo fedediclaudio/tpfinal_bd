@@ -59,4 +59,16 @@ public class Item extends PersistentEntity{
     public void setVersion(Long version) {
         this.version = version;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + getId() +
+                ", quantity=" + quantity +
+                ", description='" + description + '\'' +
+                ", order=" + order.toString() +
+                ", product=" + product.toString() +
+                ", version=" + version +
+                '}';
+    }
 }

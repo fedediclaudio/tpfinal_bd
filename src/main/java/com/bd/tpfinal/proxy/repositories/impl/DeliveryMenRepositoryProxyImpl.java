@@ -2,6 +2,7 @@ package com.bd.tpfinal.proxy.repositories.impl;
 
 import com.bd.tpfinal.dtos.common.DeliveryManDto;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
+import com.bd.tpfinal.helpers.IdConvertionHelper;
 import com.bd.tpfinal.mappers.delivery.DeliveryManMapper;
 import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.proxy.repositories.DeliveryMenRepositoryProxy;
@@ -51,5 +52,12 @@ public class DeliveryMenRepositoryProxyImpl implements DeliveryMenRepositoryProx
             throw new PersistenceEntityException("Can't save delivery man with name '" + deliveryManDto.getName() + "'");
         }
         return dto;
+    }
+
+    @Override
+    public DeliveryManDto findById(String id) throws PersistenceEntityException {
+        DeliveryMan deliveryMan = deliveryManRepository.findById(IdConvertionHelper.convert(id))
+                .orElseThrow(()-> new PersistenceEntityException("Can't find delivery man with id: " + id));
+        return deliveryManMapper.toDeliveryManDto(deliveryMan);
     }
 }

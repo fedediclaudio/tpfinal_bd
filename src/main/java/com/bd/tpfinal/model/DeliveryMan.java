@@ -12,8 +12,8 @@ public class DeliveryMan extends User{
     private boolean free = true;
     @Temporal(TemporalType.DATE)
     private Date dateOfAdmission;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private List<Order> ordersPending;
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Order pendingOrder;
 
     public int getNumberOfSuccessOrders() {
         return numberOfSuccessOrders;
@@ -39,11 +39,11 @@ public class DeliveryMan extends User{
         this.dateOfAdmission = dateOfAdmission;
     }
 
-    public List<Order> getOrdersPending() {
-        return ordersPending;
+    public Order getPendingOrder() {
+        return pendingOrder;
     }
 
-    public void setOrdersPending(List<Order> ordersPending) {
-        this.ordersPending = ordersPending;
+    public void setPendingOrder(Order pendingOrder) {
+        this.pendingOrder = pendingOrder;
     }
 }

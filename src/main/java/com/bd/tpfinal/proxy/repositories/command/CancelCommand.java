@@ -42,7 +42,7 @@ public class CancelCommand extends ChangeStatusCommand {
             }
 
             if (order.getDeliveryMan() != null)
-                order.getDeliveryMan().getOrdersPending().remove(order);
+                order.getDeliveryMan().setPendingOrder(null);
 
             order.setStatus(cancel);
             order.setQualification(qualification);

@@ -13,6 +13,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.Named;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,7 @@ public interface OrderMapper {
             @Mapping(source = "address", target = "address", qualifiedByName = "mapAddress"),
             @Mapping(source="qualification.score", target = "qualificationScore"),
             @Mapping(source="qualification.commentary", target = "qualificationComments"),
-            @Mapping(target = "items", ignore = true),
+            @Mapping(source="items",target = "items", qualifiedByName = "mapItems"),
     })
     OrderDto toOrderDto(Order order);
 
@@ -42,5 +43,23 @@ public interface OrderMapper {
             return null;
         AddressDto addressDto = new AddressDto(address.getId().toString(), address.toString());
         return addressDto;
+    }
+
+    @Named("mapItems")
+    default List<ItemDto> mapItems(List<Item> items){
+        if (items == null || items.isEmpty())
+            return null;
+
+        return items.stream().map(item -> {
+                return ItemDto.builder()
+                        .orderId(item.getOrder().getId().toString())
+                        .itemId(item.getId().toString())
+                        .productId(item.getProduct().getId().toString())
+                        .productName(item.getProduct().getName())
+                        .quantity(item.getQuantity())
+                        .price(item.getProduct().getPrice())
+                        .build();
+            }).collect(Collectors.toList());
+
     }
 }

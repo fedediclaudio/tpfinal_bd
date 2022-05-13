@@ -92,6 +92,8 @@ public class ClientsServiceImpl implements ClientsService {
     public BaseResponse retrieve() {
         List<ClientDto> clients = clientRepositoryProxy.findAll();
         ListClientResponse response = new ListClientResponse();
+        response.setData(clients);
+        response.setMessage(clients.size() > 0 ? "Clients list." : "No clients found.");
         return response;
     }
 

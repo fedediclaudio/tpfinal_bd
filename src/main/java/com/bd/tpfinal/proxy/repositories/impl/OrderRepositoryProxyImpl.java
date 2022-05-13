@@ -83,7 +83,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     @Override
     public List<OrderDto> findByStatusName(String status) {
         List<Order> orders = orderRepository.findByStatus_Name(status);
-        return orders.parallelStream().map(order -> {
+        return orders.stream().map(order -> {
             return createOrderDto(order, order.getClient());
         }).collect(Collectors.toList());
     }
@@ -131,9 +131,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     @Override
     public List<OrderDto> findAll() {
         List<Order> orders = orderRepository.findAll();
-        return orders.parallelStream().map(order -> {
-            return createOrderDto(order, order.getClient());
-        }).collect(Collectors.toList());
+        return orders.stream().map(order ->  createOrderDto(order, order.getClient())).collect(Collectors.toList());
     }
 
     @Override
@@ -196,7 +194,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
         qualif.setOrder(order);
         orderRepository.save(order);
 
-        Set<Supplier> suppliers = order.getItems().parallelStream().map(i -> i.getProduct().getSupplier()).collect(Collectors.toSet());
+        Set<Supplier> suppliers = order.getItems().stream().map(i -> i.getProduct().getSupplier()).collect(Collectors.toSet());
 
         suppliers.forEach(supplier -> {
             Set<Order> ordersForSupplier = orderRepository.findByStatus_nameAndQualificationIsNotNullAndItems_product_supplier("DELIVERED", supplier);
@@ -250,6 +248,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     }
 
     private OrderDto createOrderDto(Order order, Client client, List<Item> items){
+        System.out.println("ORDER ID: "+order.getId());
         OrderDto dto = this.createOrderDto(order, client);
         dto.setItems(order.getItems().stream().map(itemMapper::toItemDto).collect(Collectors.toList()));
         return dto;

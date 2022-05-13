@@ -34,7 +34,7 @@ public class ClientRepositoryProxyImpl implements ClientRepositoryProxy {
     public ClientDto findById(String id) throws PersistenceEntityException {
         Client client = clientRepository.findById(IdConvertionHelper.convert(id)).orElseThrow(() -> new PersistenceEntityException("Client with id "+ id +" not found"));
         ClientDto clientDto = clientMapper.toClientDto(client);
-        clientDto.setOrders(client.getOrders().parallelStream().map(order -> orderMapper.toOrderDto(order)).collect(Collectors.toList()));
+        clientDto.setOrders(client.getOrders().stream().map(order -> orderMapper.toOrderDto(order)).collect(Collectors.toList()));
         return getClientDto(client, client.getAddresses(), client.getOrders());
     }
 
@@ -80,9 +80,9 @@ public class ClientRepositoryProxyImpl implements ClientRepositoryProxy {
     private ClientDto getClientDto(Client client, List<Address> addresses, List<Order> orders){
         ClientDto clientDto = clientMapper.toClientDto(client);
         if (orders != null)
-            clientDto.setOrders(client.getOrders().parallelStream().map(order -> orderMapper.toOrderDto(order)).collect(Collectors.toList()));
+            clientDto.setOrders(client.getOrders().stream().map(order -> orderMapper.toOrderDto(order)).collect(Collectors.toList()));
         if (addresses != null)
-            clientDto.setAddresses(client.getAddresses().parallelStream().map(address -> {
+            clientDto.setAddresses(client.getAddresses().stream().map(address -> {
                 return AddressDto.builder()
                         .id(address.getId().toString())
                         .address(address.toString())

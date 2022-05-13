@@ -107,6 +107,7 @@ public class Order extends PersistentEntity {
     }
 
     public List<Item> getItems() {
+        items.size();
         return items;
     }
 

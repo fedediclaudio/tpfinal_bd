@@ -43,39 +43,39 @@ public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
         List<Supplier> suppliers = supplierRepository.findAll();
 
         if (supplierType != null)
-            suppliers = suppliers.parallelStream().filter(supplier -> supplierType.equalsIgnoreCase(supplier.getType().getName())).collect(Collectors.toList());
+            suppliers = suppliers.stream().filter(supplier -> supplierType.equalsIgnoreCase(supplier.getType().getName())).collect(Collectors.toList());
 
         if (qualification != null)
-            suppliers = suppliers.parallelStream().filter(supplier -> supplier.getQualificationOfUsers() >= qualification).collect(Collectors.toList());
+            suppliers = suppliers.stream().filter(supplier -> supplier.getQualificationOfUsers() >= qualification).collect(Collectors.toList());
 
         if (productType != null) {
             Set<Product> products = Collections.synchronizedSet(new HashSet<>());
 
-            suppliers.parallelStream().forEach(supplier -> products.addAll(supplier.getProducts()));
+            suppliers.stream().forEach(supplier -> products.addAll(supplier.getProducts()));
 
             suppliers = products
-                    .parallelStream().distinct()
+                    .stream().distinct()
                     .filter(product -> productType.equalsIgnoreCase(product.getType().getName()))
                     .collect(Collectors.toList())
-                    .parallelStream()
+                    .stream()
                     .distinct()
                     .map(product -> product.getSupplier())
                     .collect(Collectors.toList());
         }
-        return suppliers.parallelStream().map(supplier -> supplierMapper.toSupplierDto(supplier)).collect(Collectors.toList());
+        return suppliers.stream().map(supplier -> supplierMapper.toSupplierDto(supplier)).collect(Collectors.toList());
     }
 
     @Override
     public List<SupplierDto> findSuppliersWithAllProductTypes() {
         long count = productTypeRepository.count();
         List<Supplier> suppliers = supplierRepository.findSuppliersWithAllProductTypes((int) count);
-        return suppliers.parallelStream().map(supplier -> supplierMapper.toSupplierDto(supplier)).collect(Collectors.toList());
+        return suppliers.stream().map(supplier -> supplierMapper.toSupplierDto(supplier)).collect(Collectors.toList());
     }
 
     @Override
     public List<SupplierDto> findByQualificationOfUsersGreaterThanEqual(float qualification) {
         List<Supplier> suppliers = supplierRepository.findSuppliersWithQualificationGreaterThanEquals(1f);
-        return suppliers.parallelStream().map(supplier -> supplierMapper.toSupplierDto(supplier)).collect(Collectors.toList());
+        return suppliers.stream().map(supplier -> supplierMapper.toSupplierDto(supplier)).collect(Collectors.toList());
     }
 
     @Override
@@ -84,7 +84,7 @@ public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
         if (suppliers.size() > 10)
             suppliers = suppliers.subList(0,10);
 
-        return suppliers.parallelStream()
+        return suppliers.stream()
                 .map(supplier -> supplierMapper
                 .toSupplierWithOrdersCountDto(supplier))
                 .collect(Collectors.toList());
@@ -103,7 +103,7 @@ public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
         supplierRepository.save(supplier);
 
         SupplierDto dto =  (SupplierDto) supplierMapper.toSupplierDto(product.getSupplier());
-        dto.setProducts(supplier.getProducts().parallelStream().map(p -> productMapper.toProductDto(p)).collect(Collectors.toList()));
+        dto.setProducts(supplier.getProducts().stream().map(p -> productMapper.toProductDto(p)).collect(Collectors.toList()));
 
         return dto;
     }

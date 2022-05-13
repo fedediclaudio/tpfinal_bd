@@ -84,6 +84,7 @@ public class Address extends PersistentEntity {
     @Override
     public String toString() {
         return
+                "[" + name + "] "+
                 "Address='" + address + '\'' +
                 ", apartment='" + apartment + '\'' +
                 ", coords=" + Arrays.toString(coords) +

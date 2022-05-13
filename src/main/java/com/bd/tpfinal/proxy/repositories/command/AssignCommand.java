@@ -34,7 +34,7 @@ public class AssignCommand extends ChangeStatusCommand {
             DeliveryMan deliveryMan = deliveryManRepository.findTopByFree(true)
                     .orElseThrow(() -> new PersistenceEntityException("Can't find a free delivery man"));
             deliveryMan.setFree(false);
-            deliveryMan.getOrdersPending().add(order);
+            deliveryMan.setPendingOrder(order);
             order.setDeliveryMan(deliveryMan);
 
             order = orderRepository.save(order);

@@ -110,4 +110,20 @@ public class Product extends PersistentEntity {
         prices.add(historicalPrice);
         this.price = historicalPrice.getPrice();
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + getId() +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", weight=" + weight +
+                ", description='" + description + '\'' +
+                ", supplier=" + supplier +
+                ", type=" + type +
+                ", prices=" + prices +
+                ", active=" + active +
+                ", version=" + version +
+                '}';
+    }
 }

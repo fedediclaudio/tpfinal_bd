@@ -31,7 +31,7 @@ public class ClientsController extends BaseController {
     }
 
     @GetMapping
-    public ResponseEntity<BaseResponse> retrieve(@RequestParam(value = "id", required = false) String id){
+    public ResponseEntity<BaseResponse> retrieve(@RequestParam(value = "client_id", required = false) String id){
         BaseResponse response = null;
         if (id != null)
             response = clientService.retrieve(id);
