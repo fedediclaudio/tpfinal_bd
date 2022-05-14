@@ -24,10 +24,6 @@ public class ProductServiceImpl implements ProductService
         this.historicalProductPriceRepository = historicalProductPriceRepository;
     }
 
-
-
-
-
     @Override
     @Transactional
     public void newProduct(Product newProduct)
@@ -48,11 +44,14 @@ public class ProductServiceImpl implements ProductService
 
     @Override
     @Transactional
-    public Optional<Product> getProductById(Long id)
+    public Product getProductById(Long id)
     {
-        Optional<Product> buscado = this.productRepository.findById(id);
-        if(buscado.get().getSupplier()==null)
-            buscado = null;
+        Optional<Product> opt_product_buscado = this.productRepository.findById(id);
+        Product buscado = null;
+        if(opt_product_buscado.isPresent())
+        {
+            buscado = opt_product_buscado.get();
+        }
         return buscado;
     }
 
@@ -77,7 +76,12 @@ public class ProductServiceImpl implements ProductService
     public void updateData(Long id_product, Product updatedProduct) throws NoExisteProductoException
     {
         //Long id = updatedProduct.getId();
-        Product producto_buscado = this.productRepository.findById(id_product).get();
+        Optional<Product> opt_product_buscado = this.productRepository.findById(id_product);
+        Product producto_buscado = null;
+        if(opt_product_buscado.isPresent())
+        {
+            producto_buscado = opt_product_buscado.get();
+        }
         if (producto_buscado == null)
             throw new NoExisteProductoException("No existe producto");
         List<HistoricalProductPrice> prices = this.historicalProductPriceRepository.findByProductId(id_product);
@@ -102,6 +106,22 @@ public class ProductServiceImpl implements ProductService
         producto_buscado.setSupplier(updatedProduct.getSupplier());
         producto_buscado.setType(updatedProduct.getType());
         producto_buscado.setWeight(updatedProduct.getWeight());
+        producto_buscado.setEliminado(updatedProduct.getEliminado());
+        this.productRepository.save(producto_buscado);
+    }
+
+    @Override
+    public void eliminarProductoById(Long id_product)  throws NoExisteProductoException
+    {
+        Optional<Product> opt_product_buscado = this.productRepository.findById(id_product);
+        Product producto_buscado = null;
+        if(opt_product_buscado.isPresent())
+        {
+            producto_buscado = opt_product_buscado.get();
+        }
+        if (producto_buscado == null)
+            throw new NoExisteProductoException("No existe producto");
+        producto_buscado.eliminar();
         this.productRepository.save(producto_buscado);
     }
 

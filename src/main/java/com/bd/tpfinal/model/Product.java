@@ -1,6 +1,5 @@
 package com.bd.tpfinal.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -33,12 +32,15 @@ public class Product
     //Lado muchos
     //@JoinColumn: especificar un nombre de columna de clave externa. La clave del otro lado
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
-    @JoinColumn(name = "id_productType", nullable = false) //nombre del atributo clave del otro lado
+    @JoinColumn(name = "id_productType") //nombre del atributo clave del otro lado
     private ProductType type;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)//era LAZY
     @JsonIgnore
     private List<HistoricalProductPrice> prices;
+
+    //agregado
+    private int eliminado;
 
     public Product()
     {
@@ -53,8 +55,24 @@ public class Product
         this.supplier = supplier;
         this.type = type;
         this.prices = new ArrayList<HistoricalProductPrice>();
+        this.eliminado = 0;//0 es falso
 
         //prices.add(hpp);
+    }
+
+    public int getEliminado()
+    {
+        return eliminado;
+    }
+
+    public void setEliminado(int eliminado)
+    {
+        this.eliminado = eliminado;
+    }
+
+    public void eliminar()
+    {
+        this.eliminado = 1;
     }
 
     public Long getId()

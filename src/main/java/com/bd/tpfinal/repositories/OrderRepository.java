@@ -27,8 +27,9 @@ public interface OrderRepository extends JpaRepository<Order, Long>
 
     //todos los items de un supplier
     String queryA = "SELECT item from Item item WHERE item.product.supplier.id = :id_supplier";
-    //todas las Order de un Supplier
-    String query5 = "SELECT DISTINCT item.order FROM Item item  WHERE item IN (SELECT item from Item item WHERE item.product.supplier.id = :id_supplier)";
+
+    //todas las Order de un Supplier-----------------------
+    String query5 = "SELECT DISTINCT item.order FROM Item item  WHERE item IN (SELECT item FROM Item item WHERE item.product.supplier.id = :id_supplier)";
     @Query(value = query5)
     List<Order> findBySupplier(@Param("id_supplier") Long id_supplier);
 
@@ -38,4 +39,27 @@ public interface OrderRepository extends JpaRepository<Order, Long>
 
     @Query(value = "SELECT orden FROM Order orden WHERE orden.client.id = :id_user ")
     List<Order> findByClient(@Param("id_user") Long id_user);
+
+
+    //cantidad de items de una orden que son de un supplier
+    String query7 = "SELECT count(item.product.supplier.id = :id_supplier), Order orden FROM Item item WHERE orden IN " + "("+ query5 + ")";
+     //findOrderBySupplierItems(Long id_supplier);
+    // Obtener las órdenes con más productos de un proveedor específico.
+    String query8 = "SELECT orden FROM Order orden WHERE IN"+ "("+ query5 + ")";
+
+    //con join-las ordenes de un supplier
+    String query9="SELECT DISTINCT orden FROM Order orden, Item item left join item.order WHERE item.product.supplier.id = :id_supplier";
+
+    String query10 = "SELECT DISTINCT orden FROM Order orden, Item item inner join item.order "+
+            "WHERE item.product.supplier.id = :id_supplier GROUP BY orden.id "+
+            "ORDER BY count(item)";
+
+    //   //todas las Order de un Supplier-----------------------
+    String query11 = "SELECT DISTINCT item.order FROM Item item  WHERE item IN (SELECT item FROM Item item WHERE item.product.supplier.id = :id_supplier) group by order";
+    @Query(value=query5)
+    List<Order> findOrderBySupplierItems(Long id_supplier);
+
+
+
+
 }

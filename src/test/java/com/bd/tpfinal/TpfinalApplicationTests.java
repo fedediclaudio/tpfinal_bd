@@ -105,11 +105,11 @@ class TpfinalApplicationTests
 
     void new_PRODUCT_CreacionProduct()
     {
-        ProductType productType1 = new ProductType("ProductoTipo1", "descripción Producto Tipo 1");
-        this.productTypeService.newProductType(productType1);
+        ProductType pT1 = new ProductType("ProductoTipo1", "descripción Producto Tipo 1");
+        this.productTypeService.newProductType(pT1);
 
-        ProductType productType2 = new ProductType("ProductoTipo2", "descripción Producto Tipo 2");
-        this.productTypeService.newProductType(productType2);
+        ProductType pT2 = new ProductType("ProductoTipo2", "descripción Producto Tipo 2");
+        this.productTypeService.newProductType(pT2);
 
         SupplierType supplierType1 = new SupplierType("supplierType1", "Descripcion SupplierType1");
         this.supplierTypeService.newSupplierType(supplierType1);
@@ -130,14 +130,115 @@ class TpfinalApplicationTests
         this.productService.newProduct(product1);
         Product product2 = new Product("producto2", 25.8F, 12.0F, "descripcion producto 2", unSupplier, productType);
         this.productService.newProduct(product2);
-
-        //TODO:revisar esto !!!
-        //Date startDate = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
-       // Date finishDate = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
-      //  Product product = this.productService.getProductByName("producto1");
-      //  HistoricalProductPrice hpp = new HistoricalProductPrice(123.00F, startDate, finishDate, product);
-      //  this.historicalProductPriceService.newHistoricalProductPrice(hpp);
     }
+
+    public void crear_productos()
+    {
+        ProductType pT1 = new ProductType("ProductoTipo1", "descripción Producto Tipo 1");
+        this.productTypeService.newProductType(pT1);
+        ProductType pT2 = new ProductType("ProductoTipo2", "descripción Producto Tipo 2");
+        this.productTypeService.newProductType(pT2);
+        ProductType pT3 = new ProductType("ProductoTipo3", "descripción Producto Tipo 3");
+        this.productTypeService.newProductType(pT3);
+
+        SupplierType sT1 = new SupplierType("sT1", "Descripcion sT1");
+        this.supplierTypeService.newSupplierType(sT1);
+        SupplierType sT2 = new SupplierType("sT2", "descripcion st2");
+        this.supplierTypeService.newSupplierType(sT2);
+        SupplierType sT3 = new SupplierType("sT3", "descripcion st3");
+        this.supplierTypeService.newSupplierType(sT3);
+
+        float coords[] = new float[2];
+        coords[0] = 1.0F;
+        coords[1] = 2.0F;
+        //por ahora no hay calificación
+        float qual = 0.0F;
+
+        pT1 = this.productTypeService.getProductTypeByName("ProductoTipo1");
+        pT2 = this.productTypeService.getProductTypeByName("ProductoTipo2");
+        pT3 = this.productTypeService.getProductTypeByName("ProductoTipo3");
+
+        sT1 = this.supplierTypeService.getSupplierTypeByName("sT1");
+        sT2 = this.supplierTypeService.getSupplierTypeByName("sT2");
+        sT3 = this.supplierTypeService.getSupplierTypeByName("sT3");
+
+        Supplier s1 = new Supplier("supplier1", "20123456784", "San Juan 123", coords, qual, sT1);
+        Supplier s2 = new Supplier("supplier2", "20123456784", "San Juan 123", coords, qual, sT1);
+        Supplier s3 = new Supplier("supplier3", "20123456784", "San Juan 123", coords, qual, sT2);
+        Supplier s4 = new Supplier("supplier4", "20123456784", "San Juan 123", coords, qual, sT2);
+        Supplier s5 = new Supplier("supplier5", "20123456784", "San Juan 123", coords, qual, sT3);
+        Supplier s6 = new Supplier("supplier6", "20123456784", "San Juan 123", coords, qual, sT3);
+
+        this.supplierService.newSupplier(s1);
+        this.supplierService.newSupplier(s2);
+        this.supplierService.newSupplier(s3);
+        this.supplierService.newSupplier(s4);
+        this.supplierService.newSupplier(s5);
+        this.supplierService.newSupplier(s6);
+
+        List<Supplier> suppliers = this.supplierService.getAll();
+        s1 = suppliers.get(0);
+        s2 = suppliers.get(1);
+        s3 = suppliers.get(2);
+
+        Product p1 = new Product("producto1", 25.8F, 12.0F, "descripcion producto 1", s1, pT1);
+        this.productService.newProduct(p1);
+        Product p2 = new Product("producto2", 25.8F, 12.0F, "descripcion producto 2", s1, pT2);
+        this.productService.newProduct(p2);
+        Product p3 = new Product("producto3", 25.8F, 12.0F, "descripcion producto 3", s1, pT3);
+        this.productService.newProduct(p3);
+
+        this.productService.newProduct(new Product("producto4", 25.8F, 12.0F, "descripcion producto 4", s2, pT1));
+        this.productService.newProduct(new Product("producto5", 25.8F, 12.0F, "descripcion producto 5", s2, pT2));
+        this.productService.newProduct(new Product("producto6", 25.8F, 12.0F, "descripcion producto 6", s2, pT3));
+
+        this.productService.newProduct(new Product("producto7", 25.8F, 12.0F, "descripcion producto 7", s3, pT1));
+        this.productService.newProduct(new Product("producto8", 25.8F, 12.0F, "descripcion producto 8", s3, pT2));
+        this.productService.newProduct(new Product("producto9", 25.8F, 12.0F, "descripcion producto 9", s3, pT3));
+
+    }
+
+    public void crear_ordenes()
+    {
+        Client client1 = new Client("Cliente1", "usuarioCliente1", "passCliente1", "email@email.com", new Date());
+        Address newAddress1 = new Address("Direccion de la casa", "Calle1 Altura1", "Apartment1", new float[]{1F, 2F}, "domicilio particular 1", client1);
+        Address newAddress2 = new Address("Trabajo", "Calle2 Altura2", "Apartment2", new float[]{1.4F, 2.6F}, "domicilio laboral", client1);
+        List<Address> addressList = new ArrayList<Address>();
+        addressList.add(newAddress1);
+        addressList.add(newAddress2);
+        client1.setAddresses(addressList);
+        this.clientService.newClient(client1);
+        Date dateOfOrder = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
+        Client cliente = (Client) this.clientService.getClientByName("Cliente1");
+        Address address = client1.getAddresses().get(0);
+
+        Order o1 = this.orderService.newOrder(new Order(dateOfOrder, "comentario Orden 1", 0.0F, cliente, address));
+        Order o2 = this.orderService.newOrder(new Order(dateOfOrder, "comentario Orden 2", 0.0F, cliente, address));
+        Order o3 = this.orderService.newOrder(new Order(dateOfOrder, "comentario Orden 3", 0.0F, cliente, address));
+        Order o4 = this.orderService.newOrder(new Order(dateOfOrder, "comentario Orden 4", 0.0F, cliente, address));
+        Order o5 = this.orderService.newOrder(new Order(dateOfOrder, "comentario Orden 5", 0.0F, cliente, address));
+
+        List<Order> ordenes = this.orderService.getAll();
+        List<Product> productos = this.productService.getAll();
+        agregar_Items(ordenes.get(0), productos.get(0));
+        agregar_Items(ordenes.get(0), productos.get(1));
+        agregar_Items(ordenes.get(0), productos.get(2));
+        agregar_Items(ordenes.get(0), productos.get(3));
+
+        agregar_Items(ordenes.get(1), productos.get(0));
+        //agregar_Items(ordenes.get(1), productos.get(1));
+        agregar_Items(ordenes.get(1), productos.get(4));
+        agregar_Items(ordenes.get(1), productos.get(5));
+
+    }
+
+    public void agregar_Items(Order o, Product p)
+    {
+        Item item = new Item(3, "descripcion item", o, p);
+        this.itemService.newItem(item);
+    }
+
+
 
     @Test
     void test_PRODUCT_CreacionProduct()
@@ -533,7 +634,7 @@ class TpfinalApplicationTests
         Long id_producto_a_cambiar = product1.getId();
         float nuevoPrecio = 54.0F;
         String nuevaDescripcion = "nueva descripción producto 1";
-        Product updatedProduct = new Product("producto1",nuevoPrecio, 12.0F, nuevaDescripcion, unSupplier, productType);
+        Product updatedProduct = new Product("producto1", nuevoPrecio, 12.0F, nuevaDescripcion, unSupplier, productType);
 
         try
         {
@@ -582,20 +683,18 @@ class TpfinalApplicationTests
         this.productService.newProduct(product2);
 
         //eliminar un producto ofrecido por un proveedor
-        product2.setSupplier(null);
         try
         {
-            this.productService.updateData(product2.getId(), product2);
+            this.productService.eliminarProductoById(product2.getId());
         }
-        catch(NoExisteProductoException n)
+        catch (NoExisteProductoException n)
         {
 
         }
-
-        Optional<Product> p = this.productService.getProductById(product2.getId());
-        if(p==null)
+        Product p = this.productService.getProductById(product2.getId());
+        if (p == null)
         {
-            System.out.println("p :"+p);
+            System.out.println("p :" + p);
         }
     }
 
@@ -608,7 +707,6 @@ class TpfinalApplicationTests
 
         SupplierType supplierType2 = new SupplierType("supplierType2", "Descripcion SupplierType1");
         this.supplierTypeService.newSupplierType(supplierType2);
-
 
         float coords[] = new float[2];
         coords[0] = 1.0F;
@@ -625,14 +723,15 @@ class TpfinalApplicationTests
 
         Long id = supplierType.getId();
         Iterator<Supplier> suppliers = this.supplierService.getSupplierBySupplierTypeId(id).iterator();
-        while(suppliers.hasNext())
+        while (suppliers.hasNext())
         {
-            Supplier ste = (Supplier)suppliers.next();
-            System.out.println("supplier: "+ste.getName()+ " id: "+ste.getId());
+            Supplier ste = (Supplier) suppliers.next();
+            System.out.println("supplier: " + ste.getName() + " id: " + ste.getId());
         }
     }
 
     //7) Obtener todos los productos y su tipo, de un proveedor específico.
+    //TODO: tiene errores, corregir
     @Test
     void test_obtener_productos_por_proveedor()
     {
@@ -655,25 +754,66 @@ class TpfinalApplicationTests
         this.supplierService.newSupplier(supplier1);
 
         ProductType productType = this.productTypeService.getProductTypeByName("ProductoTipo1");
+        productType2 = this.productTypeService.getProductTypeByName("ProductoTipo2");
+
         List<Supplier> suppliers = this.supplierService.getSupplierByName("supplier1");
         Supplier unSupplier = suppliers.get(0);
         Product product1 = new Product("producto1", 25.8F, 12.0F, "descripcion producto 1", unSupplier, productType);
         this.productService.newProduct(product1);
-        Product product2 = new Product("producto2", 25.8F, 12.0F, "descripcion producto 2", unSupplier, productType);
+        Product product2 = new Product("producto2", 35.8F, 12.0F, "descripcion producto 2", unSupplier, productType);
         this.productService.newProduct(product2);
-        Product product3 = new Product("producto3", 25.8F, 12.0F, "descripcion producto 3", unSupplier, productType2);
+        Product product3 = new Product("producto3", 15.8F, 12.0F, "descripcion producto 3", unSupplier, productType2);
         this.productService.newProduct(product3);
 
         Iterator<Product> productos = this.productService.getProductoByProductType(productType.getId()).iterator();
-        while(productos.hasNext())
+        while (productos.hasNext())
         {
             Product producto = productos.next();
-            System.out.println("Producto: " + producto.getName() + "  " + producto.getType());
+            System.out.println("Producto id : " + producto.getId() + " Proveedor:  " + producto.getSupplier().getName() + "  " + producto.getType().getName());
         }
-
     }
 
 
+    //8) Obtener las órdenes con más productos de un proveedor específico.
+    //modularización
+    //
+    // primero obtengo las ordenes con con productos de un supplier
+    @Test
+    void test_ordenes_de_Suppier()
+    {
+        crear_productos();
+        crear_ordenes();
+        List<Supplier> suppliers = this.supplierService.getAll();
+        Iterator<Supplier> iter_supplier = suppliers.iterator();
+        System.out.println("cantidad de suppliers: "+suppliers.size());
+        //while (iter_supplier.hasNext())
+        //{
+            Supplier supplier = (Supplier)iter_supplier.next();
+            System.out.println("SUPPLIER ID: "+ supplier.getId());
+            Iterator<Order> iter_ordenes = this.orderService.getBySupplierMaxCantItems(supplier.getId()).iterator();
+            while (iter_ordenes.hasNext())
+            {
+                Order orden_aux = (Order) iter_ordenes.next();
+                System.out.println("ORDEN: " + orden_aux.getNumber());
+                Iterator<Item> items = orden_aux.getItems().iterator();
+                while (items.hasNext())
+                {
+                    Item item = (Item) items.next();
+                    System.out.println("ITEM: " + item.getId() + " Product id:" + item.getProduct().getId() + " Supplier id: " + item.getProduct().getSupplier().getId());
+                }
+                System.out.println("-----------");
+            }
+        //}
+    }
+
+
+    //9) Obtener la orden de mayor precio total de un día dado.
+    //10) Obtener los diez repartidores con mayor puntaje.
+    //11) Obtener los diez proveedores que más órdenes despacharon.
+    //12) Obtener los precios de un producto entre dos fechas dadas.
+    //13) Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
+    //14) Obtener la información de los proveedores que tengan al menos una calificación de una estrella (la más baja). Es necesario también el número de estas calificaciones que el proveedor posee.
+    //15) Obtener los proveedores que ofrezcan productos de todos los tipos.
 
 
     @Test

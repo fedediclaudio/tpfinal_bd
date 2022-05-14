@@ -22,4 +22,5 @@ public interface OrderService
     public List<Order> getOrderByIdSupplier(Long id);
     public double getQualificationAverage(Long id_Supplier);
     public List<Order> getByClientId(Long id);
+    public List<Order> getBySupplierMaxCantItems(Long id_supplier);
 }

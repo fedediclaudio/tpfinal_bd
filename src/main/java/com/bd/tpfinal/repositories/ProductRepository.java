@@ -12,11 +12,11 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>
 {
-    //@Query(value="SELECT producto FROM Product producto WHERE (producto.supplier != null AND producto.id = :id_product)")
-    //Optional<Product> findById(@Param("id_product") Long id_product);
+    @Query(value="SELECT producto FROM Product producto WHERE (producto.id = :id_product AND producto.eliminado != 1)")
+    Optional<Product> findById(@Param("id_product") Long id_product);
 
     List<Product> findByName(@Param("name") String name);
 
-    @Query(value="SELECT producto FROM Product producto Where producto.type.id = :id_type")
-    List<Product> findByTypeId(@Param("id_type")Long id_type );
+    @Query(value="SELECT producto FROM Product producto WHERE (producto.type.id = :id_type AND producto.eliminado != 1)")
+    List<Product> findByTypeId(@Param("id_type") Long id_type );
 }

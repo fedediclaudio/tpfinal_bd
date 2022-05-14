@@ -30,6 +30,7 @@ public class OrderServiceImpl implements OrderService
 
     @Override
     @Transactional
+    //TODO:sacarle el retorno, creo que no incluye al id
     public Order newOrder(Order newOrder)
     {
         //newOrder.getClient().addOrder(newOrder);
@@ -131,6 +132,12 @@ public class OrderServiceImpl implements OrderService
     public List<Order> getByClientId(Long id)
     {
         return this.orderRepository.findByClient(id);
+    }
+
+    @Override
+    public List<Order> getBySupplierMaxCantItems(Long id_supplier)
+    {
+        return this.orderRepository.findOrderBySupplierItems(id_supplier);
     }
 
 

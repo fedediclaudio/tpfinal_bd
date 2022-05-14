@@ -12,7 +12,7 @@ spring:
     database: MYSQL
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     #ddl-auto: update
     #properties:
      # hibernate:
