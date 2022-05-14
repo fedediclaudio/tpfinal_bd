@@ -33,11 +33,34 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    public BaseResponse findAll() {
+    public BaseResponse retrieve() {
         ListDeliveryResponse response = new ListDeliveryResponse();
         List<DeliveryManDto> data = deliveryMenRepositoryProxy.findAll();
         response.setData(data);
         response.setMessage("All delivery men.");
+        return response;
+    }
+
+    @Override
+    public BaseResponse retrieveFree() {
+        ListDeliveryResponse response = new ListDeliveryResponse();
+        List<DeliveryManDto> data = deliveryMenRepositoryProxy.findByPendingOrderIsNull();
+        response.setData(data);
+        response.setMessage("Free delivery men.");
+        return response;
+    }
+
+    @Override
+    public BaseResponse retrieve(String id) {
+        SingleDeliveryManResponse response = new SingleDeliveryManResponse();
+        try {
+            DeliveryManDto data = deliveryMenRepositoryProxy.findById(id);
+            response.setData(data);
+            response.setMessage("Delivery man found.");
+        } catch (PersistenceEntityException e) {
+            response.setMessage(e.getMessage());
+            response.setStatus(ResponseStatus.ERROR);
+        }
         return response;
     }
 

@@ -6,7 +6,11 @@ import com.bd.tpfinal.dtos.response.BaseResponse;
 public interface DeliveryService {
     BaseResponse getMostScoredDeliveryMen();
 
-    BaseResponse findAll();
-
     BaseResponse createDeliveryMan(CreateDeliveryManRequest createDeliveryManRequest);
+
+    BaseResponse retrieve(String id);
+
+    BaseResponse retrieve();
+
+    BaseResponse retrieveFree();
 }

@@ -8,12 +8,10 @@ import com.bd.tpfinal.mappers.product.ProductMapper;
 import com.bd.tpfinal.mappers.suppplier.SupplierMapper;
 import com.bd.tpfinal.model.Product;
 import com.bd.tpfinal.model.Supplier;
+import com.bd.tpfinal.model.SupplierType;
 import com.bd.tpfinal.model.SupplierWithOrdersCount;
 import com.bd.tpfinal.proxy.repositories.SupplierRepositoryProxy;
-import com.bd.tpfinal.repositories.ProductRepository;
-import com.bd.tpfinal.repositories.ProductTypeRepository;
-import com.bd.tpfinal.repositories.SupplierRepository;
-import com.bd.tpfinal.repositories.SupplierWithOrdersCountRepository;
+import com.bd.tpfinal.repositories.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,20 +19,22 @@ import java.util.stream.Collectors;
 public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
 
     private final SupplierRepository supplierRepository;
+    private final SupplierMapper supplierMapper;
     private final ProductTypeRepository productTypeRepository;
     private final ProductRepository productRepository;
-    private final SupplierMapper supplierMapper;
     private final ProductMapper productMapper;
     private  final SupplierWithOrdersCountRepository supplierWithOrdersCountRepository;
+    private final SupplierTypeRepository supplierTypeRepository;
     public SupplierRepositoryProxyImpl(SupplierRepository supplierRepository, ProductTypeRepository productTypeRepository,
                                        ProductRepository productRepository, SupplierMapper supplierMapper,
-                                       ProductMapper productMapper, SupplierWithOrdersCountRepository supplierWithOrdersCountRepository) {
+                                       ProductMapper productMapper, SupplierWithOrdersCountRepository supplierWithOrdersCountRepository, SupplierTypeRepository supplierTypeRepository) {
         this.supplierRepository = supplierRepository;
         this.productTypeRepository = productTypeRepository;
         this.productRepository = productRepository;
         this.supplierMapper = supplierMapper;
         this.productMapper = productMapper;
         this.supplierWithOrdersCountRepository = supplierWithOrdersCountRepository;
+        this.supplierTypeRepository = supplierTypeRepository;
     }
 
     @Override
@@ -42,26 +42,26 @@ public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
         List<Supplier> suppliers = supplierRepository.findAll();
 
         if (supplierType != null)
-            suppliers = suppliers.parallelStream().filter(supplier -> supplierType.equalsIgnoreCase(supplier.getType().getName())).collect(Collectors.toList());
+            suppliers = suppliers.stream().filter(supplier -> supplierType.equalsIgnoreCase(supplier.getType().getName())).collect(Collectors.toList());
 
         if (qualification != null)
-            suppliers = suppliers.parallelStream().filter(supplier -> supplier.getQualificationOfUsers() >= qualification).collect(Collectors.toList());
+            suppliers = suppliers.stream().filter(supplier -> supplier.getQualificationOfUsers() >= qualification).collect(Collectors.toList());
 
         if (productType != null) {
             Set<Product> products = Collections.synchronizedSet(new HashSet<>());
 
-            suppliers.parallelStream().forEach(supplier -> products.addAll(supplier.getProducts()));
+            suppliers.stream().forEach(supplier -> products.addAll(supplier.getProducts()));
 
             suppliers = products
-                    .parallelStream().distinct()
+                    .stream().distinct()
                     .filter(product -> productType.equalsIgnoreCase(product.getType().getName()))
                     .collect(Collectors.toList())
-                    .parallelStream()
+                    .stream()
                     .distinct()
                     .map(product -> product.getSupplier())
                     .collect(Collectors.toList());
         }
-        return suppliers.parallelStream().map(supplier -> supplierMapper.toSupplierDto(supplier)).collect(Collectors.toList());
+        return suppliers.stream().map(supplier -> supplierMapper.toSupplierDto(supplier)).collect(Collectors.toList());
     }
 
     @Override
@@ -80,13 +80,12 @@ public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
 
     @Override
     public List<SupplierWithOrdersCountDto> findSuppliersWith10OrdersAtLeast() {
-        
         //TODO hacer esto
 //        List<SupplierWithOrdersCount> suppliers = supplierWithOrdersCountRepository.suppliersAtList10Orders();
 //        if (suppliers.size() > 10)
 //            suppliers = suppliers.subList(0,10);
 //
-//        return suppliers.parallelStream()
+//        return suppliers.stream()
 //                .map(supplier -> supplierMapper
 //                .toSupplierWithOrdersCountDto(supplier))
 //                .collect(Collectors.toList());
@@ -105,9 +104,24 @@ public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
         supplierRepository.save(supplier);
 
         SupplierDto dto =  (SupplierDto) supplierMapper.toSupplierDto(product.getSupplier());
-        dto.setProducts(supplier.getProducts().parallelStream().map(p -> productMapper.toProductDto(p)).collect(Collectors.toList()));
+        dto.setProducts(supplier.getProducts().stream().map(p -> productMapper.toProductDto(p)).collect(Collectors.toList()));
 
         return dto;
+    }
+
+    @Override
+    public SupplierDto create(SupplierDto supplierDto) throws PersistenceEntityException {
+        SupplierType type = supplierTypeRepository.findById(IdConvertionHelper.convert(supplierDto.getSupplierTypeId()))
+                .orElseThrow(() -> new PersistenceEntityException("Cant find supplier type with id " + supplierDto.getSupplierTypeId()));
+        Supplier supplier = new Supplier();
+        supplier.setAddress(supplierDto.getAddress());
+        supplier.setCoords(supplierDto.getCoords());
+        supplier.setCuil(supplierDto.getCuil());
+        supplier.setName(supplierDto.getName());
+        supplier.setType(type);
+        supplier.getType().add(supplier);
+        supplier = supplierRepository.save(supplier);
+        return supplierMapper.toSupplierDto(supplier);
     }
 
 

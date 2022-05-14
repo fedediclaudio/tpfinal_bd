@@ -1,5 +1,6 @@
 package com.bd.tpfinal.services;
 
+import com.bd.tpfinal.dtos.request.suppliers.CreateSupplierRequest;
 import com.bd.tpfinal.dtos.response.BaseResponse;
 
 public interface SuppliersService {
@@ -14,4 +15,5 @@ public interface SuppliersService {
 
     BaseResponse findSuppliersWithAllProductTypes();
 
+    BaseResponse create(CreateSupplierRequest request);
 }

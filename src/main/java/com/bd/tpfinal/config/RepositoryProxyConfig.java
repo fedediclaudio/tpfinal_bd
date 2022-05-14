@@ -29,8 +29,8 @@ public class RepositoryProxyConfig {
     }
 
     @Bean
-    public ClientRepositoryProxy getClientRepositoryProxy(ClientRepository clientRepository, ClientMapper clientMapper){
-        return new ClientRepositoryProxyImpl(clientRepository, clientMapper);
+    public ClientRepositoryProxy getClientRepositoryProxy(ClientRepository clientRepository, ClientMapper clientMapper, OrderMapper orderMapper){
+        return new ClientRepositoryProxyImpl(clientRepository, clientMapper, orderMapper);
     }
 
     @Bean
@@ -47,9 +47,10 @@ public class RepositoryProxyConfig {
                                                               ProductRepository productRepository,
                                                               ProductTypeRepository productTypeRepository,
                                                               ProductMapper productMapper,
-                                                              SupplierWithOrdersCountRepository supplierWithOrdersCountRepository){
+                                                              SupplierWithOrdersCountRepository supplierWithOrdersCountRepository,
+                                                              SupplierTypeRepository supplierTypeRepository){
         return new SupplierRepositoryProxyImpl(supplierRepository, productTypeRepository, productRepository, supplierMapper,
-                productMapper, supplierWithOrdersCountRepository);
+                productMapper, supplierWithOrdersCountRepository, supplierTypeRepository);
     }
 
     @Bean

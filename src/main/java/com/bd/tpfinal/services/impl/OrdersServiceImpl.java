@@ -3,7 +3,7 @@ package com.bd.tpfinal.services.impl;
 
 import com.bd.tpfinal.dtos.common.*;
 import com.bd.tpfinal.dtos.request.items.CreateItemRequest;
-import com.bd.tpfinal.dtos.request.orders.CreateOrderRequest;
+import com.bd.tpfinal.dtos.request.orders.UpdateOrderRequest;
 import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.orders.ListOrderResponse;
@@ -142,12 +142,15 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public BaseResponse update(String orderId, CreateOrderRequest orderRequest) {
+    public BaseResponse update(String orderId, String addressId) {
         BaseResponse response = new SingleOrderResponse();
         try {
-            OrderDto orderDto = orderRepository.findById(orderId);
+            OrderDto orderDto = orderRepository.update(orderId, addressId);
+            response.setData(orderDto);
+            response.setMessage("Order address updated.");
         } catch (PersistenceEntityException e) {
-            throw new RuntimeException(e);
+            response.setMessage(e.getMessage());
+            response.setStatus(ResponseStatus.ERROR);
         }
         return response;
     }

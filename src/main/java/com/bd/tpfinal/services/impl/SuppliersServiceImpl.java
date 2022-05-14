@@ -2,11 +2,14 @@ package com.bd.tpfinal.services.impl;
 
 import com.bd.tpfinal.dtos.common.SupplierDto;
 import com.bd.tpfinal.dtos.common.SupplierWithOrdersCountDto;
+import com.bd.tpfinal.dtos.request.suppliers.CreateSupplierRequest;
 import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
+import com.bd.tpfinal.dtos.response.suppliers.SingleSupplierResponse;
 import com.bd.tpfinal.dtos.response.suppliers.SupplierResponse;
 import com.bd.tpfinal.dtos.response.suppliers.ListSupplierResponse;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
+import com.bd.tpfinal.model.SupplierType;
 import com.bd.tpfinal.proxy.repositories.SupplierRepositoryProxy;
 import com.bd.tpfinal.services.SuppliersService;
 import org.springframework.stereotype.Service;
@@ -72,5 +75,21 @@ public class SuppliersServiceImpl implements SuppliersService {
         response.setData(suppliers);
         return response;
 
+    }
+
+    @Override
+    public BaseResponse create(CreateSupplierRequest request) {
+        BaseResponse response = new SingleSupplierResponse();
+        SupplierDto supplierDto = new SupplierDto(null, request.getName(), request.getCuil(), request.getCoords(),
+                request.getAddress(), 0, null, request.getSupplierTypeId(), null);
+        try {
+            supplierDto = supplierRepositoryProxy.create(supplierDto);
+            response.setData(supplierDto);
+        }catch (Exception e){
+            response.setMessage(e.getMessage());
+            response.setStatus(ResponseStatus.ERROR);
+            e.printStackTrace();
+        }
+        return response;
     }
 }

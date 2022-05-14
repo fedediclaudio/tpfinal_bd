@@ -17,8 +17,7 @@ public class DeliveryMan extends User {
     @JsonProperty("date_of_admission")
     private Date dateOfAdmission;
     @DBRef(lazy = true)
-    @JsonProperty("orders_pending")
-    private List<Order> ordersPending = new ArrayList<>();
+    Order pendingOrder;
 
     public int getNumberOfSuccessOrders() {
         return numberOfSuccessOrders;
@@ -44,15 +43,11 @@ public class DeliveryMan extends User {
         this.dateOfAdmission = dateOfAdmission;
     }
 
-    public List<Order> getOrdersPending() {
-        return ordersPending;
+    public Order getPendingOrder() {
+        return pendingOrder;
     }
 
-    public void setOrdersPending(List<Order> ordersPending) {
-        this.ordersPending = ordersPending;
-    }
-
-    public void add(Order order){
-        this.ordersPending.add(order);
+    public void setPendingOrder(Order ordersPending) {
+        this.pendingOrder = ordersPending;
     }
 }

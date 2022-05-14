@@ -28,14 +28,15 @@ public class AssignCommand extends ChangeStatusCommand {
             assigned.setStartDate(new Date());
             order.setStatus(assigned);
 
-            DeliveryMan deliveryMan = deliveryManRepository.findTopByFree(true)
+            DeliveryMan deliveryMan = deliveryManRepository.findTopByPendingOrderIsNull()
                     .orElseThrow(() -> new PersistenceEntityException("Can't find a free delivery man"));
             deliveryMan.setFree(false);
-            deliveryMan.getOrdersPending().add(order);
+            deliveryMan.setPendingOrder(order);
             order.setDeliveryMan(deliveryMan);
 
             order = orderRepository.save(order);
-        }
+        } else
+            throw new PersistenceEntityException("Can't change order status. Actual order status is "+order.getStatus().getName());
         return orderMapper.toOrderDto(order);
     }
 }

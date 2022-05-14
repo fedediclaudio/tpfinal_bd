@@ -31,12 +31,13 @@ public class FinishCommand extends ChangeStatusCommand {
             delivered.setOrder(order);
 
             DeliveryMan deliveryMan = order.getDeliveryMan();
-            deliveryMan.setNumberOfSuccessOrders(deliveryMan.getNumberOfSuccessOrders() + 1);
+            deliveryMan.setPendingOrder(null);
             deliveryMan.setScore(deliveryMan.getScore() + 1);
             order.getClient().setScore(order.getClient().getScore() + 1);
 
             order = orderRepository.save(order);
-        }
+        } else
+            throw new PersistenceEntityException("Can't change order status. Actual order status is "+order.getStatus().getName());
         return orderMapper.toOrderDto(order);
     }
 }

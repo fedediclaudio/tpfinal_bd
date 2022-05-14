@@ -99,16 +99,19 @@ public class DataInitialization implements ApplicationRunner {
             client.setUsername(client.getName().replace(" ", "").toLowerCase(Locale.ROOT));
             client.setPassword("");
 
-            for (int j = 1; j <= random.nextInt(5); j++){
+            int j = random.nextInt(5) + 1;
+            int x = 0;
+            do {
                 String street = Datasets.STREETS[random.nextInt(Datasets.STREETS.length)]+ " Nro. "+ (random.nextInt(5000) + 300) + " - Buenos Aires";
                 Address address = new Address();
                 address.setAddress(street);
                 address.setClient(client);
                 address.setName(client.getName());
-                client.addAddress(address);
-            }
-            Client save = clientRepository.save(client);
-            clients.add(save.getId());
+                client.add(address);
+                x++;
+            } while (x < j);
+
+            clients.add(clientRepository.save(client).getId());
         }
     }
 
@@ -131,7 +134,7 @@ public class DataInitialization implements ApplicationRunner {
             SupplierType supplierType = supplierTypes.get(random.nextInt(supplierTypes.size()));
 
             supplier.setType(supplierType);
-            supplierType.addSupplier(supplier);
+            supplierType.add(supplier);
             supplier = supplierRepository.save(supplier);
 
             suppliers.add(supplier.getId());
@@ -172,7 +175,7 @@ public class DataInitialization implements ApplicationRunner {
             supplier.getProducts().size();
             type.addProduct(product);
             product.setSupplier(supplier);
-            supplier.add(product);
+            supplier.addProduct(product);
 
             product = productRepository.save(product);
 
@@ -233,7 +236,7 @@ public class DataInitialization implements ApplicationRunner {
             historicalPrice.setProduct(product);
 
             product.addPrice(historicalPrice);
-            supplier.add(product);
+            supplier.addProduct(product);
             product.setSupplier(supplier);
 
             product = productRepository.save(product);

@@ -1,16 +1,17 @@
 package com.bd.tpfinal.mappers.orders;
 
+import com.bd.tpfinal.dtos.common.AddressDto;
+import com.bd.tpfinal.dtos.common.DeliveryManDto;
 import com.bd.tpfinal.dtos.common.ItemDto;
 import com.bd.tpfinal.dtos.common.OrderDto;
 import com.bd.tpfinal.mappers.item.ItemMapper;
-import com.bd.tpfinal.model.Item;
-import com.bd.tpfinal.model.Order;
-import com.bd.tpfinal.model.OrderStatus;
+import com.bd.tpfinal.model.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.Named;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,12 +21,12 @@ public interface OrderMapper {
     @Mappings({
 //            @Mapping(source = "number", target = "number"),
             @Mapping(source = "status" ,target = "status", qualifiedByName = "mapStatus"),
-//            @Mapping(target = "deliveryMan", ignore = true),
+            @Mapping(source="deliveryMan", target = "deliveryMan", qualifiedByName = "mapDeliveryMan"),
             @Mapping(target = "client", ignore = true),
-            @Mapping(target = "address", ignore = true),
+            @Mapping(source = "address", target = "address", qualifiedByName = "mapAddress"),
             @Mapping(source="qualification.score", target = "qualificationScore"),
             @Mapping(source="qualification.commentary", target = "qualificationComments"),
-            @Mapping(target = "items", ignore = true),
+            @Mapping(source="items",target = "items", qualifiedByName = "mapItems"),
     })
     OrderDto toOrderDto(Order order);
 
@@ -34,4 +35,41 @@ public interface OrderMapper {
         return (status == null) ? null : status.getName();
     }
 
+    @Named("mapAddress")
+    default AddressDto mapAddress(Address address){
+        if (address == null)
+            return null;
+        AddressDto addressDto = new AddressDto(address.getId().toString(), address.toString());
+        return addressDto;
+    }
+
+    @Named("mapItems")
+    default List<ItemDto> mapItems(List<Item> items){
+        if (items == null || items.isEmpty())
+            return null;
+
+        return items.stream().map(item -> {
+                return ItemDto.builder()
+                        .orderId(item.getOrder().getId().toString())
+                        .itemId(item.getId().toString())
+                        .productId(item.getProduct().getId().toString())
+                        .productName(item.getProduct().getName())
+                        .quantity(item.getQuantity())
+                        .price(item.getProduct().getPrice())
+                        .build();
+            }).collect(Collectors.toList());
+
+    }
+
+    @Named("mapDeliveryMan")
+    default DeliveryManDto mapDeliveryMan(DeliveryMan deliveryMan){
+        if (deliveryMan == null)
+            return null;
+        DeliveryManDto dMan = DeliveryManDto.builder()
+                .id(deliveryMan.getId().toString())
+                .name(deliveryMan.getName())
+                .free(deliveryMan.isFree())
+                .build();
+        return dMan;
+    }
 }

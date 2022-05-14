@@ -9,10 +9,12 @@ import org.mapstruct.Mappings;
 @Mapper(componentModel = "spring")
 public interface ClientMapper {
     @Mappings({
-            @Mapping(source = "id", target = "id")
+            @Mapping(source = "id", target = "id"),
+            @Mapping(target = "addresses", ignore = true),
+            @Mapping(target = "orders", ignore = true)
     })
     ClientDto toClientDto(Client client);
 
 
-    Client toClient(ClientDto clientDto);
+//    Client toClient(ClientDto clientDto);
 }

@@ -11,4 +11,8 @@ public interface DeliveryManRepository extends MongoRepository<DeliveryMan, Stri
     Optional<DeliveryMan> findTopByFree(Boolean isFree);
 
     List<DeliveryMan> findFirst10ByOrderByNumberOfSuccessOrdersDesc();
+
+    Optional<DeliveryMan> findTopByPendingOrderIsNull();
+
+    List<DeliveryMan> findByPendingOrderIsNull();
 }

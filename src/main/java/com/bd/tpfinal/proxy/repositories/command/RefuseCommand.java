@@ -5,6 +5,7 @@ import com.bd.tpfinal.dtos.common.OrderDto;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.mappers.orders.OrderMapper;
 import com.bd.tpfinal.model.Cancel;
+import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.Qualification;
 import com.bd.tpfinal.repositories.DeliveryManRepository;
@@ -21,23 +22,27 @@ public class RefuseCommand extends ChangeStatusCommand {
     @Override
     public OrderDto execute(ChangeOrderStatusDto request) throws PersistenceEntityException {
         Order order = getOrder(request);
+        if (order.getStatus().canCancel()) {
+            Cancel cancel = new Cancel();
+            cancel.setCancelledByClient(false);
+            cancel.setStartDate(new Date());
+            cancel.setOrder(order);
+            order.setStatus(cancel);
 
-        Cancel cancel = new Cancel();
-        cancel.setCancelledByClient(false);
-        cancel.setStartDate(new Date());
-        cancel.setOrder(order);
-        order.setStatus(cancel);
+            Qualification qualification = new Qualification();
+            qualification.setOrder(order);
+            qualification.setScore(0);
+            qualification.setCommentary("Order refused by delivery man.");
 
-        Qualification qualification = new Qualification();
-        qualification.setOrder(order);
-        qualification.setScore(-2);
-        qualification.setCommentary("Order refused by delivery man.");
+            order.setQualification(qualification);
 
-        order.setQualification(qualification);
-        order.getDeliveryMan().getOrdersPending().remove(order);
+            DeliveryMan deliveryMan = order.getDeliveryMan();
+            deliveryMan.setScore(deliveryMan.getScore()-2);
+            deliveryMan.setPendingOrder(null);
 
-        order = orderRepository.save(order);
-
+            order = orderRepository.save(order);
+        } else
+            throw new PersistenceEntityException("Can't change order status. Actual order status is "+order.getStatus().getName());
         return orderMapper.toOrderDto(order);
     }
 }

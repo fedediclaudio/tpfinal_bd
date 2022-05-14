@@ -2,6 +2,7 @@ package com.bd.tpfinal.model;
 
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ public class Item extends PersistentEntity{
 
     private String description;
     @NotNull
-    @Transient
+    @DBRef(lazy = true)
     private Order order;
     private Product product;
 

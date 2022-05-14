@@ -24,10 +24,6 @@ public interface OrderRepositoryProxy {
 
     List<OrderDto> findAll();
 
-    OrderDto findByIdWithItems(String orderId) throws PersistenceEntityException;
-
-    boolean exists(String orderId) throws PersistenceEntityException;
-
     OrderDto addItem(ItemDto itemDto) throws PersistenceEntityException;
 
     OrderDto findMaxTotalPriceBetweenDates(Date from, Date to);
@@ -37,4 +33,7 @@ public interface OrderRepositoryProxy {
     OrderDto getOrdersWithMaximumProductsBySupplier(String supplierId) throws PersistenceEntityException;
 
     OrderDto changeOrderStatus(ChangeOrderStatusDto request) throws PersistenceEntityException, ParameterErrorException;
+
+    OrderDto update(String orderId, String addressId) throws PersistenceEntityException;
+
 }

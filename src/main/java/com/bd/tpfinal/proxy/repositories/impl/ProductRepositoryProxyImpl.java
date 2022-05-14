@@ -44,22 +44,21 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
     @Override
     public List<ProductDto> findBySupplierId(String supplierId) {
         List<Product> products = productRepository.findBySupplier_idAndActive(IdConvertionHelper.convert(supplierId), true);
-        return products.parallelStream().map(product -> productMapper.toProductDto(product)).collect(Collectors.toList());
+        return products.stream().map(product -> productMapper.toProductDto(product)).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductDto> findAllActiveProducts() {
         List<Product> products = productRepository.findAllByActive(true);
-        return products.parallelStream().map(product -> productMapper.toProductDto(product)).collect(Collectors.toList());
+        return products.stream().map(product -> productMapper.toProductDto(product)).collect(Collectors.toList());
     }
 
     @Override
     public List<AverageProductTypeDto> getAveragePriceProductTypes() {
- //       List<Product> products = productRepository.findAveragePriceByProductType();
         List<ProductType> types = productTypeRepository.findAll();
 
         return types.parallelStream().map(type -> {
-            float average = type.getProducts().stream().map(prod ->prod.getPrice()).reduce(Float::sum).get();
+            float average = type.getProducts().stream().map(prod -> prod.getPrice()).reduce(Float::sum).get();
             AverageProductTypeDto dto = new AverageProductTypeDto(type.getId(), type.getName(), average);
             return dto;
         }).collect(Collectors.toList());
@@ -80,7 +79,7 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
             product.setActive(active);
         if (!ObjectUtils.isEmpty(price) && price > 0){
             HistoricalProductPrice historicalProductPrice = product.getPrices()
-                    .parallelStream()
+                    .stream()
                     .filter(p -> ObjectUtils.isEmpty(p.getFinishDate()))
                     .findFirst()
                     .get();

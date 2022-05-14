@@ -107,6 +107,8 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
         Order order = new Order();
         order.setDateOfOrder(new Date());
         order.setStatus(new Pending());
+        Random random = new Random();
+        order.setNumber(random.nextInt(1000000)+9999999);
         Client client = optionalClient.get();
         order.setClient(client);
 
@@ -128,20 +130,6 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
         return orders.parallelStream().map(order -> {
             return createOrderDto(order, order.getClient());
         }).collect(Collectors.toList());
-    }
-
-    @Override
-    public OrderDto findByIdWithItems(String orderId) throws PersistenceEntityException {
-        Order order = orderRepository.findById(IdConvertionHelper.convert(orderId))
-                .orElseThrow(() -> new PersistenceEntityException("Order with id "+ orderId + " not found"));
-        return createOrderDto(order, order.getClient(), order.getItems());
-    }
-
-    @Override
-    public boolean exists(String orderId) {
-        if (!orderRepository.existsById(IdConvertionHelper.convert(orderId)))
-            new PersistenceEntityException("Order with id " + orderId + " not found.");
-        return true;
     }
 
     @Override
@@ -189,7 +177,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
         qualif.setOrder(order);
         orderRepository.save(order);
 
-        Set<Supplier> suppliers = order.getItems().parallelStream().map(i -> i.getProduct().getSupplier()).collect(Collectors.toSet());
+        Set<Supplier> suppliers = order.getItems().stream().map(i -> i.getProduct().getSupplier()).collect(Collectors.toSet());
 
         suppliers.forEach(supplier -> {
             Set<Order> ordersForSupplier = orderRepository.findByStatus_nameAndQualificationIsNotNullAndItems_product_supplier("DELIVERED", supplier);
@@ -217,6 +205,21 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
         OrderDto orderDto = changeStatusCommand.execute(request);
 
         return orderDto;
+    }
+
+    @Override
+    public OrderDto update(String orderId, String addressId) throws PersistenceEntityException {
+        Order order = orderRepository.findById(IdConvertionHelper.convert(orderId))
+                .orElseThrow(() -> new PersistenceEntityException("Can't find order with id: " + orderId));
+        Address address = order.getClient()
+                .getAddresses()
+                .stream()
+                .filter(ad -> ad.getId().compareTo(IdConvertionHelper.convert(addressId)) == 0)
+                .findFirst()
+                .orElseThrow(() -> new PersistenceEntityException("Address with id " + addressId + " does not exists"));
+        order.setAddress(address);
+        order = orderRepository.save(order);
+        return orderMapper.toOrderDto(order);
     }
 
     private OrderDto createOrderDto(Order order, Client client){

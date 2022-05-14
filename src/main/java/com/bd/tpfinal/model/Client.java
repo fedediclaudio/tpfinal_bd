@@ -22,7 +22,7 @@ public class Client extends User {
         this.dateOfRegister = dateOfRegister;
     }
 
-    public Collection<Order> getOrders() {
+    public List<Order> getOrders() {
         return orders;
     }
 
@@ -30,7 +30,7 @@ public class Client extends User {
         this.orders = orders;
     }
 
-    public Collection<Address> getAddresses() {
+    public List<Address> getAddresses() {
         return addresses;
     }
 
@@ -43,7 +43,7 @@ public class Client extends User {
         this.orders.add(order);
     }
 
-    public void addAddress(Address address) {
+    public void add(Address address) {
         this.addresses.size();
         this.addresses.add(address);
     }
