@@ -12,7 +12,8 @@ import java.util.List;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long>
 {
-    List<Item> findByOrder(@Param("number") Long number);
+    @Query(value="SELECT item FROM Item item WHERE item.order.number = :number")
+    List<Item> findByOrderId(@Param("number") Long number);
 
     //todos los items de un supplier
     @Query(value = "SELECT item from Item item WHERE item.product.supplier.id = :id_supplier")

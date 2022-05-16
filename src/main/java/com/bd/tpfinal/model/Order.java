@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @Entity
@@ -111,12 +112,29 @@ public class Order
 
     public float getTotalPrice()
     {
+        float precio_total_aux = 0.0F;
+        Iterator iter_items = items.iterator();
+        while(iter_items.hasNext())
+        {
+            Item item = (Item)iter_items.next();
+            float precio_item = item.getQuantity() * item.getProduct().getPrice();
+            precio_total_aux = precio_total_aux + precio_item;
+        }
+        this.totalPrice = precio_total_aux;
         return totalPrice;
     }
 
-    public void setTotalPrice(float totalPrice)
+    public void setTotalPrice()
     {
-        this.totalPrice = totalPrice;
+        float precio_total_aux = 0.0F;
+        Iterator iter_items = items.iterator();
+        while(iter_items.hasNext())
+        {
+            Item item = (Item)iter_items.next();
+            float precio_item = item.getQuantity() * item.getProduct().getPrice();
+            precio_total_aux = precio_total_aux + precio_item;
+        }
+        this.totalPrice = precio_total_aux;
     }
 
     public DeliveryMan getDeliveryMan()

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -138,6 +139,13 @@ public class OrderServiceImpl implements OrderService
     public List<Order> getBySupplierMaxCantItems(Long id_supplier)
     {
         return this.orderRepository.findOrderBySupplierItems(id_supplier);
+    }
+
+    @Override
+    public List <Order> getOrderMaxPricePorFecha(Date fecha)
+    {
+       return this.orderRepository.findMaxOrderByDate(fecha);
+
     }
 
 

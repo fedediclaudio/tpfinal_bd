@@ -5,6 +5,7 @@ import com.bd.tpfinal.model.Item;
 import com.bd.tpfinal.model.Order;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,4 +24,5 @@ public interface OrderService
     public double getQualificationAverage(Long id_Supplier);
     public List<Order> getByClientId(Long id);
     public List<Order> getBySupplierMaxCantItems(Long id_supplier);
+    public List<Order> getOrderMaxPricePorFecha(Date fecha);
 }

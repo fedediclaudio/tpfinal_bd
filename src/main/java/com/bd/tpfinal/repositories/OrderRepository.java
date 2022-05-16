@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -57,7 +58,16 @@ public interface OrderRepository extends JpaRepository<Order, Long>
     //   //todas las Order de un Supplier-----------------------
     String query11 = "SELECT DISTINCT item.order FROM Item item  WHERE item IN (SELECT item FROM Item item WHERE item.product.supplier.id = :id_supplier) group by order";
     @Query(value=query5)
-    List<Order> findOrderBySupplierItems(Long id_supplier);
+    List<Order> findOrderBySupplierItems(@Param( "id_supplier")Long id_supplier);
+
+    //9) Obtener la orden de mayor precio total de un día dado.
+    String query_9_1 = "SELECT orden, max(orden.totalPrice) FROM Order orden WHERE orden.totalPrice = max(orden.totalPrice) AND orden.dateOfOrder = :fecha)";
+    String query_9_2 = "SELECT orden FROM Order orden WHERE orden.dateOfOrder = :fecha AND orden.totalPrice= (SELECT MAX(orden.totalPrice) FROM Order orden)";
+
+    @Query(value = query_9_2)
+    List <Order> findMaxOrderByDate(@Param("fecha") Date fecha);
+
+
 
 
 

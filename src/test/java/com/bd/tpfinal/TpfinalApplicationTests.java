@@ -183,22 +183,22 @@ class TpfinalApplicationTests
 
         Product p1 = new Product("producto1", 25.8F, 12.0F, "descripcion producto 1", s1, pT1);
         this.productService.newProduct(p1);
-        Product p2 = new Product("producto2", 25.8F, 12.0F, "descripcion producto 2", s1, pT2);
+        Product p2 = new Product("producto2", 40.8F, 12.0F, "descripcion producto 2", s1, pT2);
         this.productService.newProduct(p2);
-        Product p3 = new Product("producto3", 25.8F, 12.0F, "descripcion producto 3", s1, pT3);
+        Product p3 = new Product("producto3", 5.8F, 12.0F, "descripcion producto 3", s1, pT3);
         this.productService.newProduct(p3);
 
-        this.productService.newProduct(new Product("producto4", 25.8F, 12.0F, "descripcion producto 4", s2, pT1));
-        this.productService.newProduct(new Product("producto5", 25.8F, 12.0F, "descripcion producto 5", s2, pT2));
-        this.productService.newProduct(new Product("producto6", 25.8F, 12.0F, "descripcion producto 6", s2, pT3));
+        this.productService.newProduct(new Product("producto4", 67.8F, 12.0F, "descripcion producto 4", s2, pT1));
+        this.productService.newProduct(new Product("producto5", 1000.8F, 12.0F, "descripcion producto 5", s2, pT2));
+        this.productService.newProduct(new Product("producto6", 130.8F, 12.0F, "descripcion producto 6", s2, pT3));
 
-        this.productService.newProduct(new Product("producto7", 25.8F, 12.0F, "descripcion producto 7", s3, pT1));
-        this.productService.newProduct(new Product("producto8", 25.8F, 12.0F, "descripcion producto 8", s3, pT2));
-        this.productService.newProduct(new Product("producto9", 25.8F, 12.0F, "descripcion producto 9", s3, pT3));
+        this.productService.newProduct(new Product("producto7", 18.8F, 12.0F, "descripcion producto 7", s3, pT1));
+        this.productService.newProduct(new Product("producto8", 3.8F, 12.0F, "descripcion producto 8", s3, pT2));
+        this.productService.newProduct(new Product("producto9", 414.8F, 12.0F, "descripcion producto 9", s3, pT3));
 
     }
 
-    public void crear_ordenes()
+    public Date crear_ordenes()
     {
         Client client1 = new Client("Cliente1", "usuarioCliente1", "passCliente1", "email@email.com", new Date());
         Address newAddress1 = new Address("Direccion de la casa", "Calle1 Altura1", "Apartment1", new float[]{1F, 2F}, "domicilio particular 1", client1);
@@ -230,11 +230,26 @@ class TpfinalApplicationTests
         agregar_Items(ordenes.get(1), productos.get(4));
         agregar_Items(ordenes.get(1), productos.get(5));
 
+        agregar_Items(ordenes.get(2), productos.get(0));
+        agregar_Items(ordenes.get(2), productos.get(3));
+        agregar_Items(ordenes.get(2), productos.get(6));
+        agregar_Items(ordenes.get(2), productos.get(7));
+
+        agregar_Items(ordenes.get(3), productos.get(0));
+        agregar_Items(ordenes.get(3), productos.get(8));
+        agregar_Items(ordenes.get(3), productos.get(7));
+        agregar_Items(ordenes.get(3), productos.get(6));
+        agregar_Items(ordenes.get(3), productos.get(5));
+
+        agregar_Items(ordenes.get(4), productos.get(8));
+
+        return dateOfOrder;
     }
 
     public void agregar_Items(Order o, Product p)
     {
         Item item = new Item(3, "descripcion item", o, p);
+
         this.itemService.newItem(item);
     }
 
@@ -806,9 +821,24 @@ class TpfinalApplicationTests
         //}
     }
 
-
     //9) Obtener la orden de mayor precio total de un día dado.
+    //TODO: para que esto funcione debe estar la bd vacía. COrregir
+    @Test
+    void test_orden_mayor_precio_x_fecha()
+    {
+        crear_productos();
+        Date fecha = crear_ordenes();
+        //Date fecha = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
+        Iterator<Order> ordenes = this.orderService.getOrderMaxPricePorFecha(fecha).iterator();
+        while(ordenes.hasNext())
+        {
+            Order orden = ordenes.next();
+            System.out.println("Orden id: "+orden.getNumber()+"  Orden precio:" + orden.getTotalPrice());
+        }
+    }
+
     //10) Obtener los diez repartidores con mayor puntaje.
+
     //11) Obtener los diez proveedores que más órdenes despacharon.
     //12) Obtener los precios de un producto entre dos fechas dadas.
     //13) Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
