@@ -12,6 +12,7 @@ public abstract class OrderStatus {
     private String name;
 
     private Date startDate;
+
     @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn( name="id_order" )
     private Order order;

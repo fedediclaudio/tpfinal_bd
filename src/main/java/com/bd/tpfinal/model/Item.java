@@ -4,7 +4,6 @@ import javax.persistence.*;
 
 @Entity
 public class Item {
-    //Removido Generated ID y agregado a la order cascade type persist.
     @Id
     @Column(name = "id", nullable = false)
     private Long id;

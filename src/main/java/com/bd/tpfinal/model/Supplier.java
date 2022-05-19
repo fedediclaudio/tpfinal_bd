@@ -19,13 +19,13 @@ public class Supplier {
     private float[] coords;
 
     private float qualificationOfUsers;
-    @OneToMany(cascade = CascadeType.ALL)
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "supplier")
     private List<Product> products;
 
-    @ManyToMany
-    @JoinTable(name = "supplier_supplierType",  joinColumns = @JoinColumn(name = "supplier_id"),
-            inverseJoinColumns = @JoinColumn(name = "supplierType_id"))
-    private List<SupplierType> type;
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    private SupplierType type;
 
     public Long getId() {
         return id;
@@ -83,11 +83,11 @@ public class Supplier {
         this.products = products;
     }
 
-    public List<SupplierType> getType() {
+    public SupplierType getType() {
         return type;
     }
 
-    public void setType(List<SupplierType> type) {
+    public void setType(SupplierType type) {
         this.type = type;
     }
 }

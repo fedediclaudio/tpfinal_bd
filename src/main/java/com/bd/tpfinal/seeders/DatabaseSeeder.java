@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.*;
 import java.util.logging.Logger;
-
+/*
 @Component
 public class DatabaseSeeder {
     @Autowired
@@ -38,13 +38,13 @@ public class DatabaseSeeder {
 
     @EventListener
     public void seedTables(ContextRefreshedEvent event){
-        seedProductTypeTable();
+        // seedProductTypeTable();
         //seedItemTable();
-        seedSupplierTypeTable();
-        seedSupplierTable();
-        seedHistoricalProductPriceTable();
-        seedClientTable();
-        seedAddressTable();
+       // seedSupplierTypeTable();
+        //seedSupplierTable();
+        // seedHistoricalProductPriceTable();
+        //seedClientTable();
+        // seedAddressTable();
        // seedOrderTable();
     }
 
@@ -372,7 +372,7 @@ public class DatabaseSeeder {
             item_1.setProduct(products.iterator().next());
             order.setItems(Arrays.asList(item_1));
 
-         Iterable<Item> items = itemRepository.findAll();
+            Iterable<Item> items = itemRepository.findAll();
             items.iterator().forEachRemaining(listaItems::add);
             order.setItems(listaItems);
 
@@ -396,4 +396,4 @@ public class DatabaseSeeder {
             logger.info("Order Seeding no requerido, tabla con datos");
         }
     }
-}
+}/*/

@@ -17,18 +17,18 @@ public class Product {
 
     private String description;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
-    @ManyToMany
-    @JoinTable(name = "product_productType",  joinColumns = @JoinColumn(name = "product_id"),
-          inverseJoinColumns = @JoinColumn(name = "productType_id"))
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
+    @JoinTable(
+            name = "product_product_type",
+            joinColumns = { @JoinColumn(name = "id_product") },
+            inverseJoinColumns = { @JoinColumn(name = "id_product_type") })
     private List<ProductType> type;
 
-    @OneToMany( mappedBy = "product" )
-    private List<Item> item;
-
-    @OneToMany( mappedBy = "product", fetch = FetchType.LAZY )
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<HistoricalProductPrice> prices;
 
     public Long getId() {
@@ -85,14 +85,6 @@ public class Product {
 
     public void setType(List<ProductType> type) {
         this.type = type;
-    }
-
-    public List<Item> getItem() {
-        return item;
-    }
-
-    public void setItem(List<Item> item) {
-        this.item = item;
     }
 
     public List<HistoricalProductPrice> getPrices() {

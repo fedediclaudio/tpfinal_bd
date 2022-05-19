@@ -17,6 +17,7 @@ public class Order {
     private String comments;
 
     private float totalPrice;
+
     @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn( name="id_orderStatus" )
     private OrderStatus status;
@@ -38,7 +39,7 @@ public class Order {
     @JoinColumn( name="id_qualification" )
     private Qualification qualification;
 
-    @OneToMany( mappedBy = "order", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER )
+    @OneToMany( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     private List<Item> items;
 
     public int getNumber() {

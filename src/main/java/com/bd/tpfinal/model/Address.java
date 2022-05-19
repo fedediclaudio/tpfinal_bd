@@ -18,11 +18,11 @@ public class Address {
     private float[] coords;
 
     private String description;
-    @OneToOne( fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn( name="id_client" )
     private Client client;
 
-    @OneToMany( mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+    @OneToMany(mappedBy = "address")
     private List<Order> orders;
 
     public Long getId() {

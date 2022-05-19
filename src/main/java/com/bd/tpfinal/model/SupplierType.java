@@ -12,7 +12,8 @@ public class SupplierType {
     private String name;
 
     private String description;
-    @ManyToMany(mappedBy = "type" )
+
+    @OneToMany(mappedBy = "type" )
     private List<Supplier> suppliers;
 
     public Long getId() {
