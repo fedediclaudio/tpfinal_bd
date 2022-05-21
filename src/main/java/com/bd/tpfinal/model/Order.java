@@ -22,9 +22,11 @@ public class Order extends PersistentEntity {
 
     private OrderStatus status;
     @JsonProperty("delivery_man")
+    @DBRef(lazy = true)
     private DeliveryMan deliveryMan;
 
     @NotNull
+    @DBRef(lazy = true)
     private Client client;
 
     @NotNull

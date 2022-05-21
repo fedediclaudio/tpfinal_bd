@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -82,4 +83,12 @@ public class Address extends PersistentEntity {
         this.orders = orders;
     }
 
+    @Override
+    public String toString() {
+        return  "name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", apartment='" + apartment + '\'' +
+                ", coords=" + Arrays.toString(coords) +
+                ", description='" + description + '\'';
+    }
 }

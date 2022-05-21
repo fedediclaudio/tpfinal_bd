@@ -34,6 +34,7 @@ public class ProductType extends PersistentEntity{
     }
 
     public List<Product> getProducts() {
+        products.size();
         return products;
     }
 

@@ -2,6 +2,7 @@ package com.bd.tpfinal.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
@@ -24,7 +25,7 @@ public class Product extends PersistentEntity {
     @NotNull
     @JsonProperty("product_type")
     private ProductType type;
-
+    @DBRef(lazy = true)
     private List<HistoricalProductPrice> prices = new ArrayList<>();
 
     private Boolean active = true;
