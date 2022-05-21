@@ -1,0 +1,894 @@
+{
+	"info": {
+		"_postman_id": "2dc028a0-8ca3-4959-880d-d9103b0db7b8",
+		"name": "TPFinal-BD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Clients",
+			"item": [
+				{
+					"name": "Get client",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/clients/98abced9-67d2-48a0-a2b1-00291a75e4c5",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"clients",
+								"98abced9-67d2-48a0-a2b1-00291a75e4c5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get clients",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/clients",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create client",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Pepa Sanchez\",\n    \"email\":\"pepa-sanchez@gmail.com\",\n    \"username\":\"pepasanchez\",\n    \"password\":\"mipasswordsegura\",\n    \"birth_date\":\"2020-04-16\",\n    \"address\": {\n        \"name\":\"particular\",\n        \"address\":\"Av. Siempreviva nro 96\",\n        \"apartment\":\"16\",\n        \"coords\":[],\n        \"description\":\"Sara sarasa sasa\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/clients",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add address to client",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"name\":\"legal\",\n        \"address\":\"Av. Siempreviva nro 96\",\n        \"apartment\":\"16\",\n        \"coords\":[16.5,8.2],\n        \"description\":\"Sara sarasa sasa\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/clients/b9b55900-f2ff-49f0-9f3e-0208eb739217",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"clients",
+								"b9b55900-f2ff-49f0-9f3e-0208eb739217"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delivery",
+			"item": [
+				{
+					"name": "Get delivery man",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/delivery/6280930c746f982f36cd3743",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"delivery",
+								"6280930c746f982f36cd3743"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get delivery men",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/delivery?best_ranked=true",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"delivery"
+							],
+							"query": [
+								{
+									"key": "best_ranked",
+									"value": "true"
+								},
+								{
+									"key": "free",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Delivery Man",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Pepe Lepou\",\n    \"username\":\"pepe_lepou\",\n    \"password\":\"p3p3l3pou\",\n    \"email\":\"pepe@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/delivery",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"delivery"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Get order",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/{{path_orders}}/6287971dd82d135c81585461",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{path_orders}}",
+								"6287971dd82d135c81585461"
+							]
+						},
+						"description": "Obtiene todas las ordenes. Recibe una objeto json con una propiedad query_by, que indica por que propiedad se debe filtrar."
+					},
+					"response": []
+				},
+				{
+					"name": "Get orders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/{{path_orders}}?status=PENDING",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{path_orders}}"
+							],
+							"query": [
+								{
+									"key": "number",
+									"value": "45214",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "PENDING"
+								}
+							]
+						},
+						"description": "Obtiene todas las ordenes. Recibe una objeto json con una propiedad query_by, que indica por que propiedad se debe filtrar."
+					},
+					"response": []
+				},
+				{
+					"name": "Create order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"client_id\": \"98abced9-67d2-48a0-a2b1-00291a75e4c5\",\n    \"address_id\": \"1a3c2091-f0a5-403a-b435-5d6a15228cf3\",\n    \"comments\":\"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/{{path_orders}}",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{path_orders}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add item to order",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\":20,\n    \"description\":\"otro que podria describirlo, pero no quiero\",\n    \"productId\":\"2610cbf5-1df2-4a7c-af60-be7f3e1b486a\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/{{path_orders}}/62809306746f982f36cc756a",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{path_orders}}",
+								"62809306746f982f36cc756a"
+							]
+						},
+						"description": "Agrega un nuevo item a una orden"
+					},
+					"response": []
+				},
+				{
+					"name": "Update order",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/{{path_orders}}/6287971ed82d135c815855c6?qualification=4",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{path_orders}}",
+								"6287971ed82d135c815855c6"
+							],
+							"query": [
+								{
+									"key": "accepted",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "qualification",
+									"value": "4"
+								}
+							]
+						},
+						"description": "Actualiza los datos de una orden. Se puede confirmar y calificar mediante los parametros correspondientes"
+					},
+					"response": []
+				},
+				{
+					"name": "Change order status",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/orders/6287971ed82d135c815855c6/status/finish",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"orders",
+								"6287971ed82d135c815855c6",
+								"status",
+								"finish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update order address",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/{{path_orders}}/f2d647c7-384b-4af0-939b-0377e2d2be37/3f2b9ffe-d228-409d-b6fa-e652a8a2a1f6",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{path_orders}}",
+								"f2d647c7-384b-4af0-939b-0377e2d2be37",
+								"3f2b9ffe-d228-409d-b6fa-e652a8a2a1f6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Order with max price",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/{{path_orders}}/max_price?date=2022-05-20",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{path_orders}}",
+								"max_price"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2022-05-20"
+								}
+							]
+						},
+						"description": "Obtiene la orden de mayor precio en una fecha dada"
+					},
+					"response": []
+				},
+				{
+					"name": "Max supplier products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/{{path_orders}}/62879718d82d135c815828bd/max_supplier_products",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{path_orders}}",
+								"62879718d82d135c815828bd",
+								"max_supplier_products"
+							]
+						},
+						"description": "Obtiene las ordenes con mayor cantidad de productos de un proveedor."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/{{path_products}}/6280930c746f982f36cd3a87",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{path_products}}",
+								"6280930c746f982f36cd3a87"
+							]
+						},
+						"description": "Permite obtener todos los productos y su tipo, o filtrarlos por un proveedor especifico"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/{{path_products}}",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{path_products}}"
+							],
+							"query": [
+								{
+									"key": "supplier_id",
+									"value": "6280930c746f982f36cd374d",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Permite obtener todos los productos y su tipo, o filtrarlos por un proveedor especifico"
+					},
+					"response": []
+				},
+				{
+					"name": "Create product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Pochoclera Master\",\n    \"price\":333.33,\n    \"weight\":1.250,\n    \"description\":\"una Pochoclera con nombre fancy\",\n    \"product_type_id\":\"33fe6959-ee4a-48f7-959a-ced3b3f21514\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/{{path_products}}/2c73c37f-a8b5-4033-941f-ec3b0dce9b06",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{path_products}}",
+								"2c73c37f-a8b5-4033-941f-ec3b0dce9b06"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update product data",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Lavandina master\",\n    \"price\":333.33,\n    \"weight\":null,\n    \"description\":\"La mejor lavandina\",\n    \"active\":null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/{{path_products}}/62879718d82d135c81582945",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{path_products}}",
+								"62879718d82d135c81582945"
+							]
+						},
+						"description": "Actualizar los datos de un producto"
+					},
+					"response": []
+				},
+				{
+					"name": "Get average products price",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/{{path_products}}/average",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{path_products}}",
+								"average"
+							]
+						},
+						"description": "Obtiene el precio promedio de los productos, de todos los tipos"
+					},
+					"response": []
+				},
+				{
+					"name": "Get product with prices between dates",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/{{path_products}}/62879718d82d135c81582945/prices_between_dates?from_date=2022-01-01&to_date=2022-04-30",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{path_products}}",
+								"62879718d82d135c81582945",
+								"prices_between_dates"
+							],
+							"query": [
+								{
+									"key": "from_date",
+									"value": "2022-01-01"
+								},
+								{
+									"key": "to_date",
+									"value": "2022-04-30"
+								}
+							]
+						},
+						"description": "Permite obtener todos los productos y su tipo, o filtrarlos por un proveedor especifico"
+					},
+					"response": []
+				},
+				{
+					"name": "Orders with maximum products by supplier",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/orders/62870195beabe6194223fe0a/max_supplier_products",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"orders",
+								"62870195beabe6194223fe0a",
+								"max_supplier_products"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Suppliers",
+			"item": [
+				{
+					"name": "get supplier",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/suppliers/6280930c746f982f36cd374d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"suppliers",
+								"6280930c746f982f36cd374d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get suppliers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/suppliers?supplier_type=Distribuidor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"suppliers"
+							],
+							"query": [
+								{
+									"key": "product_type",
+									"value": "lavandina",
+									"disabled": true
+								},
+								{
+									"key": "supplier_type",
+									"value": "Distribuidor"
+								},
+								{
+									"key": "qualification_over",
+									"value": "2.0",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create supplier",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Moe Syslak\",\n    \"cuil\":\"20-33363236-2\",\n    \"address\":\"Calle falsa 123\",\n    \"coords\":[2.6,3.5],\n    \"supplier_type_id\":\"68778674-c902-4018-9dfc-614a363c9aa8\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/suppliers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"suppliers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "with all product tyes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/suppliers/all_product_types",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"suppliers",
+								"all_product_types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "suppliers with ten or more orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/suppliers/ten_more_orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"suppliers",
+								"ten_more_orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Suppliers with one or more stars",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/suppliers/qualified",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"suppliers",
+								"qualified"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove supplier's product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/suppliers/47/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"suppliers",
+								"47",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "path_delivery",
+			"value": ""
+		},
+		{
+			"key": "path_orders",
+			"value": ""
+		},
+		{
+			"key": "path_products",
+			"value": ""
+		},
+		{
+			"key": "path_suppliers",
+			"value": ""
+		}
+	]
+}
