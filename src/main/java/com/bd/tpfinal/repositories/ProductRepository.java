@@ -13,5 +13,5 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     List<Product> findBySupplier_idAndActive(String supplierId, boolean active);
     List<Product> findAllByActive(boolean active);
 
-    Optional<Product> findByPrices_startDateGreaterThanAndPrices_finishDateLessThan(@Param("id") String id, @Param("from") Date fromDate, @Param("to") Date toDate);
+    Optional<Product> findByIdAndPrices_startDateGreaterThanOrPrices_finishDateLessThan(@Param("id") String id, @Param("from") Date fromDate, @Param("to") Date toDate);
 }
