@@ -30,13 +30,18 @@ public class ClientsController extends BaseController {
         return new ResponseEntity<>(response, responseStatus(response));
     }
 
-    @GetMapping
-    public ResponseEntity<BaseResponse> retrieve(@RequestParam(value = "client_id", required = false) String id){
+    @GetMapping("/{client_id}")
+    public ResponseEntity<BaseResponse> getClient(@PathVariable(value = "client_id", required = false) String id){
         BaseResponse response = null;
-        if (id != null)
-            response = clientService.retrieve(id);
-        else
-            response = clientService.retrieve();
+        response = clientService.retrieve(id);
+        return new ResponseEntity<>(response, responseStatus(response));
+    }
+
+    @GetMapping
+    public ResponseEntity<BaseResponse> getClients(){
+        BaseResponse response = null;
+        response = clientService.retrieve();
         return new ResponseEntity<>(response, responseStatus(response));
     }
 }
+

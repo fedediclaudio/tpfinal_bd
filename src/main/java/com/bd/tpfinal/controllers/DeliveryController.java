@@ -37,6 +37,13 @@ public class DeliveryController extends  BaseController{
         return new ResponseEntity<>(response, responseStatus(response));
     }
 
+    @GetMapping("/{delivery_man_id}")
+    public ResponseEntity<BaseResponse> getDeliveryMan(@PathVariable(value = "delivery_man_id") String id){
+        BaseResponse response = null;
+        response = deliveryService.retrieve(id);
+        return new ResponseEntity<>(response, responseStatus(response));
+    }
+
 
     @PostMapping
     public ResponseEntity<BaseResponse> create(@RequestBody CreateDeliveryManRequest createDeliveryManRequest){
