@@ -8,6 +8,7 @@ import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.orders.ListOrderResponse;
 import com.bd.tpfinal.dtos.response.orders.SingleOrderResponse;
+import com.bd.tpfinal.exceptions.general.ActionNotAllowedException;
 import com.bd.tpfinal.exceptions.parameters.ParameterErrorException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.proxy.repositories.ClientRepositoryProxy;
@@ -98,8 +99,9 @@ public class OrdersServiceImpl implements OrdersService {
         } catch (PersistenceEntityException e) {
             response.setStatus(ResponseStatus.ERROR);
             response.setMessage(e.getMessage());
-        } catch (ParameterErrorException e) {
-            throw new RuntimeException(e);
+        } catch (ParameterErrorException | ActionNotAllowedException e) {
+            response.setStatus(ResponseStatus.ERROR);
+            response.setMessage(e.getMessage());
         }
         return response;
     }

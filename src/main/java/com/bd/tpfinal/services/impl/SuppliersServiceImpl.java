@@ -9,7 +9,6 @@ import com.bd.tpfinal.dtos.response.suppliers.SingleSupplierResponse;
 import com.bd.tpfinal.dtos.response.suppliers.SupplierResponse;
 import com.bd.tpfinal.dtos.response.suppliers.ListSupplierResponse;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
-import com.bd.tpfinal.model.SupplierType;
 import com.bd.tpfinal.proxy.repositories.SupplierRepositoryProxy;
 import com.bd.tpfinal.services.SuppliersService;
 import org.springframework.stereotype.Service;
@@ -89,6 +88,21 @@ public class SuppliersServiceImpl implements SuppliersService {
             response.setMessage(e.getMessage());
             response.setStatus(ResponseStatus.ERROR);
             e.printStackTrace();
+        }
+        return response;
+    }
+
+    @Override
+    public BaseResponse retrieve(String supplierId) {
+        SingleSupplierResponse response = new SingleSupplierResponse();
+        SupplierDto supplier = null;
+        try {
+            supplier = supplierRepositoryProxy.findById(supplierId);
+            response.setData(supplier);
+            response.setMessage("Suppliers found.");
+        } catch (PersistenceEntityException e) {
+            response.setMessage(e.getMessage());
+            response.setStatus(ResponseStatus.ERROR);
         }
         return response;
     }

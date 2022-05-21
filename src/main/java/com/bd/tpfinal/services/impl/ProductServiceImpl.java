@@ -7,6 +7,7 @@ import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.products.ListProductResponse;
 import com.bd.tpfinal.dtos.response.products.SingleProductResponse;
+import com.bd.tpfinal.exceptions.persistence.EmptyResulsetException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.proxy.repositories.ProductRepositoryProxy;
 import com.bd.tpfinal.services.ProductsService;
@@ -132,6 +133,8 @@ public class ProductServiceImpl implements ProductsService {
         } catch (PersistenceEntityException e) {
             response.setMessage(e.getMessage());
             response.setStatus(ResponseStatus.ERROR);
+        } catch (EmptyResulsetException e) {
+            response.setMessage(e.getMessage());
         }
         return response;
     }
