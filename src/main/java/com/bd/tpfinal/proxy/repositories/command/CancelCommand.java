@@ -4,22 +4,26 @@ import com.bd.tpfinal.dtos.common.ChangeOrderStatusDto;
 import com.bd.tpfinal.dtos.common.OrderDto;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.mappers.orders.OrderMapper;
-import com.bd.tpfinal.model.Cancel;
-import com.bd.tpfinal.model.Order;
-import com.bd.tpfinal.model.Qualification;
+import com.bd.tpfinal.model.*;
+import com.bd.tpfinal.repositories.ClientRepository;
 import com.bd.tpfinal.repositories.DeliveryManRepository;
 import com.bd.tpfinal.repositories.OrderRepository;
 import org.apache.commons.lang3.ObjectUtils;
+
 
 import java.util.Date;
 
 public class CancelCommand extends ChangeStatusCommand {
 
-    public CancelCommand(OrderRepository orderRepository, DeliveryManRepository deliveryManRepository, OrderMapper orderMapper) {
+    private final ClientRepository clientRepository;
+
+    public CancelCommand(OrderRepository orderRepository, DeliveryManRepository deliveryManRepository, ClientRepository clientRepository, OrderMapper orderMapper) {
         super(orderRepository, deliveryManRepository, orderMapper);
+        this.clientRepository = clientRepository;
     }
 
     @Override
+
     public OrderDto execute(ChangeOrderStatusDto request) throws PersistenceEntityException {
         Order order = getOrder(request);
 
@@ -34,9 +38,15 @@ public class CancelCommand extends ChangeStatusCommand {
 
             if (request.getCanceledByClient() != null && request.getCanceledByClient()) {
                 cancel.setCancelledByClient(request.getCanceledByClient());
-                if (order.getDeliveryMan() != null) {
-                    order.getDeliveryMan().setPendingOrder(null);
-                    order.getClient().setScore(order.getClient().getScore() -1);
+                DeliveryMan deliveryMan = order.getDeliveryMan();
+                if (deliveryMan != null) {
+                    deliveryMan.setPendingOrder(null);
+                    deliveryManRepository.save(deliveryMan);
+
+                    Client client = order.getClient();
+                    client.setScore(client.getScore() -1);
+                    client = clientRepository.save(client);
+                    order.setClient(client);
                 }
 
                 if (ObjectUtils.isEmpty(qualification.getCommentary()))

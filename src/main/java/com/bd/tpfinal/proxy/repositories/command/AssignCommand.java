@@ -10,6 +10,7 @@ import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.repositories.DeliveryManRepository;
 import com.bd.tpfinal.repositories.OrderRepository;
 
+
 import java.util.Date;
 
 public class AssignCommand extends ChangeStatusCommand {
@@ -19,6 +20,7 @@ public class AssignCommand extends ChangeStatusCommand {
     }
 
     @Override
+
     public OrderDto execute(ChangeOrderStatusDto request) throws PersistenceEntityException {
         Order order = getOrder(request);
 
@@ -36,7 +38,7 @@ public class AssignCommand extends ChangeStatusCommand {
 
             order = orderRepository.save(order);
         } else
-            throw new PersistenceEntityException("Can't change order status. Actual order status is "+order.getStatus().getName());
+            throw new PersistenceEntityException("Can't change order status. Actual order status is " + order.getStatus().getName());
         return orderMapper.toOrderDto(order);
     }
 }

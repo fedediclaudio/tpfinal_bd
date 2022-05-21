@@ -12,6 +12,7 @@ import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.proxy.repositories.ClientRepositoryProxy;
 import com.bd.tpfinal.repositories.ClientRepository;
 
+
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +40,7 @@ public class ClientRepositoryProxyImpl implements ClientRepositoryProxy {
     }
 
     @Override
+
     public ClientDto create(ClientDto clientDto) throws PersistenceEntityException {
         Client client = new Client();
         client.setName(clientDto.getName());
@@ -53,6 +55,7 @@ public class ClientRepositoryProxyImpl implements ClientRepositoryProxy {
     }
 
     @Override
+
     public ClientDto addAddress(String id, String name, String adr, String apartment, float[] coords, String description) throws PersistenceEntityException {
         Client client = clientRepository.findById(IdConvertionHelper.convert(id))
                 .orElseThrow(() -> new PersistenceEntityException("Client with id "+ id +" not found"));

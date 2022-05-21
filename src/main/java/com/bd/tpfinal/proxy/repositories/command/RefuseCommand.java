@@ -11,6 +11,7 @@ import com.bd.tpfinal.model.Qualification;
 import com.bd.tpfinal.repositories.DeliveryManRepository;
 import com.bd.tpfinal.repositories.OrderRepository;
 
+
 import java.util.Date;
 
 public class RefuseCommand extends ChangeStatusCommand {
@@ -20,8 +21,10 @@ public class RefuseCommand extends ChangeStatusCommand {
     }
 
     @Override
+
     public OrderDto execute(ChangeOrderStatusDto request) throws PersistenceEntityException {
         Order order = getOrder(request);
+        final String orderId = order.getId();
         if (order.getStatus().canCancel()) {
             Cancel cancel = new Cancel();
             cancel.setCancelledByClient(false);
@@ -36,13 +39,16 @@ public class RefuseCommand extends ChangeStatusCommand {
 
             order.setQualification(qualification);
 
-            DeliveryMan deliveryMan = order.getDeliveryMan();
+            DeliveryMan deliveryMan = deliveryManRepository.findById(order.getDeliveryMan().getId())
+                    .orElseThrow(() -> new PersistenceEntityException("Error retrieving delivery man for order " + orderId));
             deliveryMan.setScore(deliveryMan.getScore()-2);
             deliveryMan.setPendingOrder(null);
+            deliveryMan = deliveryManRepository.save(deliveryMan);
+            order.setDeliveryMan(deliveryMan);
 
             order = orderRepository.save(order);
         } else
-            throw new PersistenceEntityException("Can't change order status. Actual order status is "+order.getStatus().getName());
+            throw new PersistenceEntityException("Can't change order status. Actual order status is " + order.getStatus().getName());
         return orderMapper.toOrderDto(order);
     }
 }

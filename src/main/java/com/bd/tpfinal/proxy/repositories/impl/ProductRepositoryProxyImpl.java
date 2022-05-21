@@ -2,6 +2,7 @@ package com.bd.tpfinal.proxy.repositories.impl;
 
 import com.bd.tpfinal.dtos.common.AverageProductTypeDto;
 import com.bd.tpfinal.dtos.common.ProductDto;
+import com.bd.tpfinal.exceptions.persistence.EmptyResulsetException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.helpers.IdConvertionHelper;
 import com.bd.tpfinal.mappers.product.ProductMapper;
@@ -14,6 +15,7 @@ import com.bd.tpfinal.repositories.HistoricalProductPriceRepository;
 import com.bd.tpfinal.repositories.ProductRepository;
 import com.bd.tpfinal.repositories.ProductTypeRepository;
 import com.bd.tpfinal.repositories.SupplierRepository;
+
 import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
@@ -57,14 +59,15 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
     public List<AverageProductTypeDto> getAveragePriceProductTypes() {
         List<ProductType> types = productTypeRepository.findAll();
 
-        return types.parallelStream().map(type -> {
-            float average = type.getProducts().stream().map(prod -> prod.getPrice()).reduce(Float::sum).get();
+        return types.stream().map(type -> {
+            float average = type.getProducts().stream().map(prod -> prod.getPrice()).reduce(Float::sum).orElse(0f);
             AverageProductTypeDto dto = new AverageProductTypeDto(type.getId(), type.getName(), average);
             return dto;
         }).collect(Collectors.toList());
     }
 
     @Override
+
     public ProductDto update(String productId, String name, String description, Float weight, Float price, Boolean active) throws PersistenceEntityException {
         Product product = productRepository
                 .findById(IdConvertionHelper.convert(productId))
@@ -104,6 +107,7 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
     }
 
     @Override
+
     public void delete(String productId) throws PersistenceEntityException {
         Product product = productRepository.findById(IdConvertionHelper.convert(productId)).orElseThrow(() -> new PersistenceEntityException("Can't find product by id: " + productId));
         product.setActive(false);
@@ -111,6 +115,7 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
     }
 
     @Override
+
     public ProductDto create(ProductDto dto) throws PersistenceEntityException {
         Supplier supplier = supplierRepository.findById(IdConvertionHelper.convert(dto.getSupplierId()))
                 .orElseThrow(()->new PersistenceEntityException("Can't find supplier with id " + dto.getSupplierId()));
@@ -135,14 +140,26 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
         product.setSupplier(supplier);
         product.getPrices().add(productPrice);
         product = productRepository.save(product);
+        productType.addProduct(product);
+        productTypeRepository.save(productType);
         return productMapper.toProductDto(product);
 
     }
 
     @Override
-    public ProductDto findByIdWithPricesBetweenDates(String productId, Date fromDate, Date toDate) throws PersistenceEntityException {
-        Product product = productRepository.findByPrices_startDateGreaterThanAndPrices_finishDateLessThan(IdConvertionHelper.convert(productId), fromDate, toDate)
-                .orElseThrow(() -> new PersistenceEntityException("Can't find product with id: " + productId + " or the parameters date range is wrong."));
+    public ProductDto findByIdWithPricesBetweenDates(String productId, Date fromDate, Date toDate) throws PersistenceEntityException, EmptyResulsetException {
+        Product product = productRepository.findById(IdConvertionHelper.convert(productId)).orElseThrow(() -> new PersistenceEntityException("Can't find product with id: " + productId));
+        List<HistoricalProductPrice> prices = product.getPrices();
+        prices = prices.stream().filter(price -> {
+            Date dateTo = price.getFinishDate() == null ? new Date() : price.getFinishDate();
+            boolean from = fromDate.compareTo(price.getStartDate()) <= 0;
+            boolean to = toDate.compareTo(dateTo) >= 0;
+            return from && to;
+
+        }).collect(Collectors.toList());
+        if (prices.isEmpty())
+            throw new EmptyResulsetException("No results found for the specified date range");
+        product.setPrices(prices);
         return productMapper.toProductDtoWithPrices(product);
     }
 }

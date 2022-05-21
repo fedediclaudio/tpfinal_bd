@@ -4,6 +4,7 @@ import com.bd.tpfinal.dtos.common.ChangeOrderStatusDto;
 import com.bd.tpfinal.dtos.common.ItemDto;
 import com.bd.tpfinal.dtos.common.OrderDto;
 import com.bd.tpfinal.enums.OrderStatusAction;
+import com.bd.tpfinal.exceptions.general.ActionNotAllowedException;
 import com.bd.tpfinal.exceptions.parameters.ParameterErrorException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.helpers.IdConvertionHelper;
@@ -15,7 +16,7 @@ import com.bd.tpfinal.proxy.repositories.OrderRepositoryProxy;
 import com.bd.tpfinal.proxy.repositories.command.*;
 import com.bd.tpfinal.repositories.*;
 
-import java.text.SimpleDateFormat;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -54,8 +55,8 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
         this.itemMapper = itemMapper;
 
 
-        changeStatusMap.put(OrderStatusAction.FINISH, new FinishCommand(orderRepository, deliveryManRepository, orderMapper));
-        changeStatusMap.put(OrderStatusAction.CANCEL, new CancelCommand(orderRepository, deliveryManRepository, orderMapper));
+        changeStatusMap.put(OrderStatusAction.FINISH, new FinishCommand(orderRepository, deliveryManRepository, clientRepository, orderMapper, supplierRepository));
+        changeStatusMap.put(OrderStatusAction.CANCEL, new CancelCommand(orderRepository, deliveryManRepository, clientRepository, orderMapper));
         changeStatusMap.put(OrderStatusAction.DELIVER, new DeliverCommand(orderRepository, deliveryManRepository, orderMapper));
         changeStatusMap.put(OrderStatusAction.ASSIGN, new AssignCommand(orderRepository, deliveryManRepository, orderMapper));
         changeStatusMap.put(OrderStatusAction.REFUSE, new RefuseCommand(orderRepository, deliveryManRepository, orderMapper));
@@ -87,6 +88,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     }
 
     @Override
+
     public OrderDto save(OrderDto orderDto) throws PersistenceEntityException {
         Optional<Order> orderOp = orderRepository.findById(IdConvertionHelper.convert(orderDto.getId()));
         Order order = orderOp.orElseThrow(() -> new PersistenceEntityException("Order with id " + orderDto.getId() + " not found."));
@@ -99,6 +101,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     }
 
     @Override
+
     public OrderDto create(String clientId, OrderDto orderDto) throws PersistenceEntityException {
         Optional<Client> optionalClient = clientRepository.findById(IdConvertionHelper.convert(clientId));
         if (!optionalClient.isPresent())
@@ -133,6 +136,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     }
 
     @Override
+
     public OrderDto addItem(ItemDto itemDto) throws PersistenceEntityException {
         String orderId = IdConvertionHelper.convert(itemDto.getOrderId());
         String productId = IdConvertionHelper.convert(itemDto.getProductId());
@@ -157,19 +161,19 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
 
     @Override
     public OrderDto findMaxTotalPriceBetweenDates(Date from, Date to) {
-        String strFrom = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(from);
-        String strTo = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(to);
-        Order order = orderRepository.findTopByDateOfOrderBetweenOrderByTotalPriceDesc(strFrom, strTo);
-//        Order order = orders.stream().max(Comparator.comparing(Order::getTotalPrice)).orElseGet(null);
+        Order order = orderRepository.findTopByDateOfOrderBetweenOrderByTotalPriceDesc(from, to);
         if (order == null)
             return OrderDto.builder().build();
         return createOrderDto(order, order.getClient(), order.getItems());
     }
 
     @Override
-    public OrderDto qualifyOrder(String orderId, Float qualification, String qualificationMessage) throws PersistenceEntityException {
+
+    public OrderDto qualifyOrder(String orderId, Float qualification, String qualificationMessage) throws PersistenceEntityException, ActionNotAllowedException {
         Order order = orderRepository.findById(IdConvertionHelper.convert(orderId))
                 .orElseThrow(() -> new PersistenceEntityException("Order with id " + orderId + " not found."));
+        if (!"DELIVERED".equals(order.getStatus().getName()))
+            throw new ActionNotAllowedException("Can't qualify order. The order status isn't DELIVERED.");
         Qualification qualif = new Qualification();
         qualif.setScore(qualification);
         qualif.setCommentary(qualificationMessage);
@@ -180,10 +184,15 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
         Set<Supplier> suppliers = order.getItems().stream().map(i -> i.getProduct().getSupplier()).collect(Collectors.toSet());
 
         suppliers.forEach(supplier -> {
-            Set<Order> ordersForSupplier = orderRepository.findByStatus_nameAndQualificationIsNotNullAndItems_product_supplier("DELIVERED", supplier);
-            Double average = ordersForSupplier.stream().mapToDouble(o -> o.getQualification().getScore()).average().getAsDouble();
-            supplier.setQualificationOfUsers(average.floatValue());
-            supplierRepository.save(supplier);
+            Supplier saveSupplier = supplierRepository.findById(supplier.getId()).get();
+            if (supplier != null) {
+                Set<Order> ordersForSupplier = orderRepository.findByStatus_nameAndQualificationIsNotNullAndItems_product_supplier("DELIVERED", supplier);
+                OptionalDouble average = ordersForSupplier.stream().mapToDouble(o -> o.getQualification().getScore()).average();
+                if (average.isPresent()) {
+                    saveSupplier.setQualificationOfUsers(((Double)average.getAsDouble()).floatValue());
+                    supplierRepository.save(saveSupplier);
+                }
+            }
         });
 
         return orderMapper.toOrderDto(order);
@@ -191,7 +200,13 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
 
     @Override
     public OrderDto getOrdersWithMaximumProductsBySupplier(String supplierId) throws PersistenceEntityException {
-        Order order = orderRepository.findByItems_Product_Supplier_id(IdConvertionHelper.convert(supplierId));
+        List<Order> orders = orderRepository.findByItems_Product_Supplier_id(IdConvertionHelper.convert(supplierId));
+        Map<Long, Order> map = new HashMap<>();
+        orders.forEach( order -> {
+            long count =  order.getItems().stream().map(i -> i.getProduct().getSupplier().getId()).filter(f -> f.equals(supplierId)).count();
+            map.put(count, order);
+        });
+        Order order = map.get(map.keySet().stream().mapToLong(v -> v).max().getAsLong());
         return createOrderDto(order, order.getClient(), order.getItems());
     }
 
@@ -208,6 +223,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     }
 
     @Override
+
     public OrderDto update(String orderId, String addressId) throws PersistenceEntityException {
         Order order = orderRepository.findById(IdConvertionHelper.convert(orderId))
                 .orElseThrow(() -> new PersistenceEntityException("Can't find order with id: " + orderId));
