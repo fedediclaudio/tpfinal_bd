@@ -5,9 +5,15 @@ import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.repositories.*;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
+import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -153,7 +159,6 @@ public class DataInitialization implements ApplicationRunner {
         int npLength = Datasets.PRODUCT_NAME_PARTS.length;
 
         for (int i = 0; i< 200; i++){
-            float price = (float)Math.random() * random.nextInt(1000);
             String name = Datasets.PRODUCT_NAME_PARTS[random.nextInt(npLength)] + Datasets.PRODUCT_NAME_PARTS[random.nextInt(npLength)] +
                     Datasets.PRODUCT_NAME_PARTS[random.nextInt(npLength)];
             int pti = random.nextInt(productTypes.size());
@@ -162,20 +167,46 @@ public class DataInitialization implements ApplicationRunner {
             Product product = new Product();
             product.setName(name);
             product.setType(type);
-            product.setPrice(price);
 
-            HistoricalProductPrice historicalPrice = new HistoricalProductPrice();
-            historicalPrice.setPrice(price);
-            historicalPrice.setStartDate(new Date());
-            historicalPrice.setProduct(product);
+            int time = 0;
 
-            product.addPrice(historicalPrice);
+            Instant date = Instant.now();
+            Instant from = date.minus(30, ChronoUnit.DAYS);
+            Instant to = date;
 
             Supplier supplier = supplierRepository.findById(suppliers.get(random.nextInt(suppliers.size()))).get();
             supplier.getProducts().size();
-            type.addProduct(product);
             product.setSupplier(supplier);
+
+            product = productRepository.save(product);
+            type.addProduct(product);
+            productTypeRepository.save(type);
+
             supplier.addProduct(product);
+            supplierRepository.save(supplier);
+
+
+            do {
+                float price = (float) Math.random() * random.nextInt(1000);
+                HistoricalProductPrice historicalPrice = new HistoricalProductPrice();
+                historicalPrice.setStartDate(Date.from(from));
+                historicalPrice.setPrice(price);
+
+                if (time > 0)
+                    historicalPrice.setFinishDate(Date.from(to));
+
+                historicalPrice.setProduct(product);
+
+
+                from = from.minus(30, ChronoUnit.DAYS);
+                to = to.minus(30, ChronoUnit.DAYS);
+
+                time = time + 1;
+                historicalPrice = historicalProductPriceRepository.save(historicalPrice);
+                product.addPrice(historicalPrice);
+            } while(time < 12);
+
+            product.setPrice(product.getPrices().get(0).getPrice());
 
             product = productRepository.save(product);
 
@@ -211,6 +242,9 @@ public class DataInitialization implements ApplicationRunner {
         SupplierType supplierType = supplierTypeRepository.findAll().stream().findFirst().get();
         supplier.setType(supplierType);
         supplier = supplierRepository.save(supplier);
+        supplierType.add(supplier);
+        supplierTypeRepository.save(supplierType);
+
         suppliers.add(supplier.getId());
 
         int supLength = suppliers.size();
@@ -230,15 +264,22 @@ public class DataInitialization implements ApplicationRunner {
             product.setType(type);
             product.setPrice(price);
 
+
+            supplier.addProduct(product);
+            product.setSupplier(supplier);
+
+            product = productRepository.save(product);
+
+            supplierRepository.save(supplier);
+
+
             HistoricalProductPrice historicalPrice = new HistoricalProductPrice();
             historicalPrice.setPrice(price);
             historicalPrice.setStartDate(new Date());
             historicalPrice.setProduct(product);
+            historicalPrice = historicalProductPriceRepository.save(historicalPrice);
 
             product.addPrice(historicalPrice);
-            supplier.addProduct(product);
-            product.setSupplier(supplier);
-
             product = productRepository.save(product);
 
             products.add(product.getId());
@@ -258,5 +299,10 @@ public class DataInitialization implements ApplicationRunner {
             deliveryMan.setDateOfBirth(new Date());
             deliveryManRepository.save(deliveryMan);
         }
+    }
+
+    @Bean
+    MongoTransactionManager transactionManager(MongoDatabaseFactory dbFactory) {
+        return new MongoTransactionManager(dbFactory);
     }
 }

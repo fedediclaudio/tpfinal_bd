@@ -47,10 +47,10 @@ public class RepositoryProxyConfig {
                                                               ProductRepository productRepository,
                                                               ProductTypeRepository productTypeRepository,
                                                               ProductMapper productMapper,
-                                                              SupplierWithOrdersCountRepository supplierWithOrdersCountRepository,
-                                                              SupplierTypeRepository supplierTypeRepository){
+                                                              SupplierTypeRepository supplierTypeRepository,
+                                                              OrderRepository orderRepository){
         return new SupplierRepositoryProxyImpl(supplierRepository, productTypeRepository, productRepository, supplierMapper,
-                productMapper, supplierWithOrdersCountRepository, supplierTypeRepository);
+                productMapper, supplierTypeRepository, orderRepository);
     }
 
     @Bean
