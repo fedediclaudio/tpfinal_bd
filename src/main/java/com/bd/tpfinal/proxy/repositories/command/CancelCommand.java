@@ -38,12 +38,16 @@ public class CancelCommand extends ChangeStatusCommand {
 
             if (request.getCanceledByClient() != null && request.getCanceledByClient()) {
                 cancel.setCancelledByClient(request.getCanceledByClient());
-                DeliveryMan deliveryMan = order.getDeliveryMan();
-                if (deliveryMan != null) {
+                if (order.getDeliveryMan() != null) {
+                    String id = order.getDeliveryMan().getId();
+                    DeliveryMan deliveryMan = deliveryManRepository.findById(id)
+                            .orElseThrow(() -> new PersistenceEntityException("Can't find delivery man with id: " + id)) ;
                     deliveryMan.setPendingOrder(null);
                     deliveryManRepository.save(deliveryMan);
 
-                    Client client = order.getClient();
+                    String clientId = order.getClient().getId();
+                    Client client = clientRepository.findById(clientId)
+                            .orElseThrow(() -> new PersistenceEntityException("Can't find client with id: "+ clientId));
                     client.setScore(client.getScore() -1);
                     client = clientRepository.save(client);
                     order.setClient(client);

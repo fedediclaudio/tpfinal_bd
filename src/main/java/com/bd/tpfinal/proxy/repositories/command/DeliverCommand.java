@@ -35,8 +35,8 @@ public class DeliverCommand extends ChangeStatusCommand {
                     .orElseThrow(() -> new PersistenceEntityException("Error retrieving delivery man for order " + orderId));
             deliveryMan.setNumberOfSuccessOrders(deliveryMan.getNumberOfSuccessOrders()+1);
             deliveryMan.setScore(deliveryMan.getScore()+1);
-            deliveryMan = deliveryManRepository.save(deliveryMan);
-            order.setDeliveryMan(deliveryMan);
+            deliveryMan.setPendingOrder(null);
+            deliveryManRepository.save(deliveryMan);
 
             order = orderRepository.save(order);
         } else

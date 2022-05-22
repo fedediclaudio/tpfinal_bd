@@ -34,8 +34,9 @@ public class AssignCommand extends ChangeStatusCommand {
                     .orElseThrow(() -> new PersistenceEntityException("Can't find a free delivery man"));
             deliveryMan.setFree(false);
             deliveryMan.setPendingOrder(order);
-            order.setDeliveryMan(deliveryMan);
+            deliveryManRepository.save(deliveryMan);
 
+            order.setDeliveryMan(deliveryMan);
             order = orderRepository.save(order);
         } else
             throw new PersistenceEntityException("Can't change order status. Actual order status is " + order.getStatus().getName());
