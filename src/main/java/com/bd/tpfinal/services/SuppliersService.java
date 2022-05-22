@@ -7,7 +7,7 @@ public interface SuppliersService {
 
     BaseResponse getSupppliersWithAtLeast10DeliveredOrders();
 
-    BaseResponse deleteSuppliersProduct(String productId, String supplierId);
+    BaseResponse deleteSuppliersProduct(String supplierId, String productId);
 
     BaseResponse retrieve(String supplierType, String productType, Float qualification);
 

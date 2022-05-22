@@ -34,10 +34,10 @@ public class SuppliersServiceImpl implements SuppliersService {
     }
 
     @Override
-    public BaseResponse deleteSuppliersProduct(String productId, String supplierId) {
+    public BaseResponse deleteSuppliersProduct(String supplierId, String productId) {
         SupplierResponse response = new SupplierResponse();
         try {
-            SupplierDto supplierDto = supplierRepositoryProxy.delete(productId, supplierId);
+            SupplierDto supplierDto = supplierRepositoryProxy.delete(supplierId, productId);
             response.setData(supplierDto);
             response.setMessage("Product id '" + productId + "'was removed from supplier id " + supplierId);
         } catch (PersistenceEntityException e) {
