@@ -34,7 +34,7 @@ public class DeliveryMenRepositoryProxyImpl implements DeliveryMenRepositoryProx
     @Override
     public List<DeliveryManDto> findMostScoredDeliveryMen() {
         return deliveryManRepository
-                .findFirst10ByOrderByNumberOfSuccessOrdersDesc()
+                .findFirst10ByOrderByScoreDesc()
                 .stream()
                 .map(d -> deliveryManMapper.toDeliveryManDto(d))
                 .collect(Collectors.toList());

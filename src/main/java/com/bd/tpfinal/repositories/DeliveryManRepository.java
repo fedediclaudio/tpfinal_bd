@@ -12,4 +12,8 @@ public interface DeliveryManRepository extends JpaRepository<DeliveryMan, Long> 
     List<DeliveryMan> findFirst10ByOrderByNumberOfSuccessOrdersDesc();
 
     List<DeliveryMan> findByPendingOrderIsNull();
+
+    List<DeliveryMan> findFirst10ByOrderByScoreDesc();
+
+    List<DeliveryMan> findFirst10ByOrderByScoreAsc();
 }
