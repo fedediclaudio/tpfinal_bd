@@ -123,7 +123,7 @@ public class DataInitialization implements ApplicationRunner {
 
 
 
-        for (String company : Datasets.COMPANY_NAMES) {
+        for (String company : Arrays.asList(Datasets.COMPANY_NAMES).subList(0,20)) {
             Supplier supplier = new Supplier();
             supplier.setName(company);
             supplier.setCuil(30 + "-" + (20000000 + random.nextInt(20000000)) + "-" + random.nextInt(9));
