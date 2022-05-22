@@ -40,7 +40,7 @@ public class DeliverCommand extends ChangeStatusCommand {
 
             order = orderRepository.save(order);
         } else
-            throw new PersistenceEntityException("Can't change order status. Actual order status is " + order.getStatus().getName());
+            throw new PersistenceEntityException("Can't change order status. Actual order status is "+order.getStatus().getName());
         return orderMapper.toOrderDto(order);
     }
 }

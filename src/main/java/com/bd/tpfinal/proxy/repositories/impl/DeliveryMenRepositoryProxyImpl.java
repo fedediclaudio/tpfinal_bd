@@ -7,10 +7,6 @@ import com.bd.tpfinal.mappers.delivery.DeliveryManMapper;
 import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.proxy.repositories.DeliveryMenRepositoryProxy;
 import com.bd.tpfinal.repositories.DeliveryManRepository;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,7 +41,6 @@ public class DeliveryMenRepositoryProxyImpl implements DeliveryMenRepositoryProx
     }
 
     @Override
-
     public DeliveryManDto create(DeliveryManDto deliveryManDto) throws PersistenceEntityException {
         DeliveryManDto dto = null;
         try {

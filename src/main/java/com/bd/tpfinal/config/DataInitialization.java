@@ -132,7 +132,7 @@ public class DataInitialization implements ApplicationRunner {
 
 
 
-        for (String company : Datasets.COMPANY_NAMES) {
+        for (String company : Arrays.asList(Datasets.COMPANY_NAMES).subList(0,20)) {
             Supplier supplier = new Supplier();
             supplier.setName(company);
             supplier.setCuil(30 + "-" + (20000000 + random.nextInt(20000000)) + "-" + random.nextInt(9));
@@ -161,30 +161,15 @@ public class DataInitialization implements ApplicationRunner {
         for (int i = 0; i< 200; i++){
             String name = Datasets.PRODUCT_NAME_PARTS[random.nextInt(npLength)] + Datasets.PRODUCT_NAME_PARTS[random.nextInt(npLength)] +
                     Datasets.PRODUCT_NAME_PARTS[random.nextInt(npLength)];
-            int pti = random.nextInt(productTypes.size());
-            ProductType type = productTypes.get(pti);
 
             Product product = new Product();
             product.setName(name);
-            product.setType(type);
 
+            // set price history
             int time = 0;
-
             Instant date = Instant.now();
             Instant from = date.minus(30, ChronoUnit.DAYS);
             Instant to = date;
-
-            Supplier supplier = supplierRepository.findById(suppliers.get(random.nextInt(suppliers.size()))).get();
-            supplier.getProducts().size();
-            product.setSupplier(supplier);
-
-            product = productRepository.save(product);
-            type.addProduct(product);
-            productTypeRepository.save(type);
-
-            supplier.addProduct(product);
-            supplierRepository.save(supplier);
-
 
             do {
                 float price = (float) Math.random() * random.nextInt(1000);
@@ -207,6 +192,22 @@ public class DataInitialization implements ApplicationRunner {
             } while(time < 12);
 
             product.setPrice(product.getPrices().get(0).getPrice());
+
+            // set product supplier
+            Supplier supplier = supplierRepository.findById(suppliers.get(random.nextInt(suppliers.size()))).get();
+//            supplier.getProducts().size();
+            product.setSupplier(supplier);
+            product = productRepository.save(product);
+
+            // set product type
+            int pti = random.nextInt(productTypes.size());
+            ProductType type = productTypes.get(pti);
+            product.setType(type);
+            type.addProduct(product);
+            productTypeRepository.save(type);
+
+            supplier.addProduct(product);
+            supplierRepository.save(supplier);
 
             product = productRepository.save(product);
 
