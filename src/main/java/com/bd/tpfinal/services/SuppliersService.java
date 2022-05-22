@@ -16,4 +16,6 @@ public interface SuppliersService {
     BaseResponse findSuppliersWithAllProductTypes();
 
     BaseResponse create(CreateSupplierRequest request);
+
+    BaseResponse retrieve(String supplierId);
 }

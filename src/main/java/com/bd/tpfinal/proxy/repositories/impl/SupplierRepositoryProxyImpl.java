@@ -80,13 +80,21 @@ public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
 
     @Override
     public List<SupplierWithOrdersCountDto> findSuppliersWith10OrdersAtLeast() {
-        List<SupplierWithOrdersCount> suppliers = supplierWithOrdersCountRepository.suppliersAtList10Orders();
-        if (suppliers.size() > 10)
-            suppliers = suppliers.subList(0,10);
+        List<Map<String, Object>> suppliers = supplierWithOrdersCountRepository.suppliersAtLeast10Orders();
 
-        return suppliers.stream()
-                .map(supplier -> supplierMapper
-                .toSupplierWithOrdersCountDto(supplier))
+                return suppliers.stream()
+                        .map(map -> SupplierWithOrdersCountDto.builder()
+                                .supplierId(map.get("id").toString())
+                                .cuil((String) map.get("cuil"))
+                                .name((String) map.get("name"))
+                                .supplierTypeId(map.get("typeId").toString())
+                                .supplierType((String) map.get("type"))
+                                .qualificationOfUsers((float) map.get("qualificationOfUsers"))
+                                .coords((float[]) map.get("coords"))
+                                .address((String) map.get("address"))
+                                .ordersCount(Integer.parseInt(map.get("counter").toString()))
+                                .build()
+                        )
                 .collect(Collectors.toList());
     }
 
@@ -109,6 +117,7 @@ public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
     }
 
     @Override
+
     public SupplierDto create(SupplierDto supplierDto) throws PersistenceEntityException {
         SupplierType type = supplierTypeRepository.findById(IdConvertionHelper.convert(supplierDto.getSupplierTypeId()))
                 .orElseThrow(() -> new PersistenceEntityException("Cant find supplier type with id " + supplierDto.getSupplierTypeId()));
@@ -121,6 +130,15 @@ public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
         supplier.getType().add(supplier);
         supplier = supplierRepository.save(supplier);
         return supplierMapper.toSupplierDto(supplier);
+    }
+
+    @Override
+    public SupplierDto findById(String supplierId) throws PersistenceEntityException {
+        Supplier supplier = supplierRepository.findById(IdConvertionHelper.convert(supplierId))
+                .orElseThrow(() -> new PersistenceEntityException("Can't find supplier with id: " + supplierId));
+        SupplierDto supplierDto = supplierMapper.toSupplierDto(supplier);
+        supplierDto.setProducts(supplier.getProducts().stream().map(product -> productMapper.toProductDto(product)).collect(Collectors.toList()));
+        return supplierDto;
     }
 
 
