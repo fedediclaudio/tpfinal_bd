@@ -60,9 +60,9 @@ public class OrderController {
 	}
 	
 	@GetMapping("/getHighestPriceOrderOfDate")
-	public Order getOrdersFromSupplier(@RequestParam(name = "date") 
-										@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-										LocalDate date){
+	public Order getHighestPriceOrderOfDate(@RequestParam(name = "date") 
+											@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+											LocalDate date){
 		Order order = null;
 		try {
 			order = orderService.getHighestPriceOrderOfDate(date);

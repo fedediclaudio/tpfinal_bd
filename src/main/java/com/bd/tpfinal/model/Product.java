@@ -45,6 +45,7 @@ public class Product {
 	@OneToMany( mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
 	private List<HistoricalProductPrice> prices;
 
+	@JsonIgnore
 	private boolean productDeleted; 
 	
 	
