@@ -25,10 +25,22 @@ public class ProductController extends BaseController {
         this.productsService = productsService;
     }
 
-    @GetMapping
-    public ResponseEntity<BaseResponse> getProducts(@RequestParam(value = "supplier_id", required = false) String supplierId){
+
+
+    @GetMapping("/{product_id}")
+    public ResponseEntity<BaseResponse> getProduct(@PathVariable(value = "product_id") String productId){
         BaseResponse response;
-        if (supplierId == null || supplierId.isEmpty()){
+        response = productsService.retrieve(productId);
+        return new ResponseEntity<BaseResponse>(response, responseStatus(response));
+    }
+
+    @GetMapping
+    public ResponseEntity<BaseResponse> getProducts(@RequestParam(value = "supplier_id", required = false) String supplierId,
+                                                    @RequestParam(value = "product_id", required = false) String productId){
+        BaseResponse response;
+        if (productId != null && !productId.isEmpty()){
+            response = productsService.retrieve(productId);
+        } else if (supplierId == null || supplierId.isEmpty()){
             response = productsService.retrieve();
         } else {
             response = productsService.getProductsWithProductTypeBySupplier(supplierId);

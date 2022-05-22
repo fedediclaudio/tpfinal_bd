@@ -23,6 +23,13 @@ public class SupplierController extends BaseController{
         this.supplierService = supplierService;
     }
 
+
+    @GetMapping("/{supplier_id}")
+    public ResponseEntity<BaseResponse> getSupplier(@PathVariable(value = "supplier_id") String supplierId){
+        BaseResponse response = supplierService.retrieve(supplierId);
+        return new ResponseEntity<BaseResponse>(response, responseStatus(response));
+    }
+
     @GetMapping
     public ResponseEntity<BaseResponse> retrieve(@RequestParam(value = "supplier_type", required = false) String supplierType,
                                                  @RequestParam(value = "product_type", required = false) String productType,
