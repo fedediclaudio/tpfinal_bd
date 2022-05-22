@@ -4,6 +4,7 @@ import com.bd.tpfinal.dtos.common.ChangeOrderStatusDto;
 import com.bd.tpfinal.dtos.common.ItemDto;
 import com.bd.tpfinal.dtos.common.OrderDto;
 import com.bd.tpfinal.enums.OrderStatusAction;
+import com.bd.tpfinal.exceptions.general.ActionNotAllowedException;
 import com.bd.tpfinal.exceptions.parameters.ParameterErrorException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.helpers.IdConvertionHelper;
@@ -82,9 +83,7 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
     @Override
     public List<OrderDto> findByStatusName(String status) {
         List<Order> orders = orderRepository.findByStatus_Name(status);
-        return orders.stream().map(order -> {
-            return createOrderDto(order, order.getClient());
-        }).collect(Collectors.toList());
+        return orders.stream().map(order -> createOrderDto(order, order.getClient())).collect(Collectors.toList());
     }
 
     @Override
@@ -169,9 +168,11 @@ public class OrderRepositoryProxyImpl implements OrderRepositoryProxy {
 
     @Override
     @Transactional    
-    public OrderDto qualifyOrder(String orderId, Float qualification, String qualificationMessage) throws PersistenceEntityException {
+    public OrderDto qualifyOrder(String orderId, Float qualification, String qualificationMessage) throws PersistenceEntityException, ActionNotAllowedException {
         Order order = orderRepository.findById(IdConvertionHelper.convert(orderId))
                 .orElseThrow(() -> new PersistenceEntityException("Order with id " + orderId + " not found."));
+        if (!"DELIVERED".equals(order.getStatus().getName()))
+            throw new ActionNotAllowedException("Can't qualify order. The order status isn't DELIVERED.");
         Qualification qualif = new Qualification();
         qualif.setScore(qualification);
         qualif.setCommentary(qualificationMessage);
