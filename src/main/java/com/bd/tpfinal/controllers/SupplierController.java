@@ -77,4 +77,15 @@ public class SupplierController {
 		}
 	}
 	
+	@GetMapping("/getSupplierWhoOfferAllProducts")
+	public List<Supplier> getSupplierWhoOfferAllProducts() {
+		try {
+			return supplierService.getSupplierWhoOfferAllProducts();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }
