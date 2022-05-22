@@ -2,6 +2,7 @@ package com.bd.tpfinal.proxy.repositories;
 
 import com.bd.tpfinal.dtos.common.AverageProductTypeDto;
 import com.bd.tpfinal.dtos.common.ProductDto;
+import com.bd.tpfinal.exceptions.persistence.EmptyResulsetException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 
 import java.util.Date;
@@ -22,5 +23,5 @@ public interface ProductRepositoryProxy {
 
     ProductDto create(ProductDto dto) throws PersistenceEntityException;
 
-    ProductDto findByIdWithPricesBetweenDates(String productId, Date fromDate, Date toDate) throws PersistenceEntityException;
+    ProductDto findByIdWithPricesBetweenDates(String productId, Date fromDate, Date toDate) throws PersistenceEntityException, EmptyResulsetException;
 }

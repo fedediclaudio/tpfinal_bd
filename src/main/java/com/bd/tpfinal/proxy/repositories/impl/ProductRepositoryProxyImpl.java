@@ -115,7 +115,7 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
                 .orElseThrow(()->new PersistenceEntityException("Can't find supplier with id " + dto.getSupplierId()));
 
         ProductType productType = productTypeRepository.findById(IdConvertionHelper.convert(dto.getProductTypeId()))
-                .orElseThrow(() -> new PersistenceException("Can't find product type with id '" + dto.getProductTypeId() + "'"));
+                .orElseThrow(() -> new PersistenceEntityException("Can't find product type with id '" + dto.getProductTypeId() + "'"));
 
         Product product = new Product();
         product.setActive(true);
