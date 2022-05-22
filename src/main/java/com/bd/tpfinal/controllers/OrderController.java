@@ -66,6 +66,7 @@ public class OrderController extends BaseController {
         ChangeOrderStatusDto request = ChangeOrderStatusDto.builder()
                 .orderId(orderId)
                 .status(OrderStatusAction.valueOf(orderStatus.toUpperCase()))
+                .canceledByClient(canceledByClient != null && canceledByClient)
                 .build();
         request.setCanceledByClient(canceledByClient);
 

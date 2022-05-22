@@ -1,9 +1,6 @@
 package com.bd.tpfinal.mappers.orders;
 
-import com.bd.tpfinal.dtos.common.AddressDto;
-import com.bd.tpfinal.dtos.common.DeliveryManDto;
-import com.bd.tpfinal.dtos.common.ItemDto;
-import com.bd.tpfinal.dtos.common.OrderDto;
+import com.bd.tpfinal.dtos.common.*;
 import com.bd.tpfinal.mappers.item.ItemMapper;
 import com.bd.tpfinal.model.*;
 import org.mapstruct.Mapper;
@@ -22,7 +19,7 @@ public interface OrderMapper {
 //            @Mapping(source = "number", target = "number"),
             @Mapping(source = "status" ,target = "status", qualifiedByName = "mapStatus"),
             @Mapping(source="deliveryMan", target = "deliveryMan", qualifiedByName = "mapDeliveryMan"),
-            @Mapping(target = "client", ignore = true),
+            @Mapping(source = "client", target = "client", qualifiedByName = "mapClient"),
             @Mapping(source = "address", target = "address", qualifiedByName = "mapAddress"),
             @Mapping(source="qualification.score", target = "qualificationScore"),
             @Mapping(source="qualification.commentary", target = "qualificationComments"),
@@ -71,5 +68,20 @@ public interface OrderMapper {
                 .free(deliveryMan.isFree())
                 .build();
         return dMan;
+    }
+
+
+    @Named("mapClient")
+    default ClientDto mapAddress(Client client){
+        if (client == null)
+            return null;
+        ClientDto clientDto = ClientDto.builder()
+                .id(client.getId().toString())
+                .name(client.getName())
+                .email(client.getEmail())
+                .username(client.getUsername())
+                .score(client.getScore())
+                .build();
+        return clientDto;
     }
 }

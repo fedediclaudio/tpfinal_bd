@@ -12,7 +12,6 @@ import com.bd.tpfinal.repositories.OrderRepository;
 
 import javax.transaction.Transactional;
 import java.util.Date;
-import java.util.Optional;
 
 public class AssignCommand extends ChangeStatusCommand {
 
@@ -39,7 +38,7 @@ public class AssignCommand extends ChangeStatusCommand {
 
             order = orderRepository.save(order);
         } else
-            throw new PersistenceEntityException("Can't change order status. Actual order status is "+order.getStatus().getName());
+            throw new PersistenceEntityException("Can't change order status. Actual order status is " + order.getStatus().getName());
         return orderMapper.toOrderDto(order);
     }
 }

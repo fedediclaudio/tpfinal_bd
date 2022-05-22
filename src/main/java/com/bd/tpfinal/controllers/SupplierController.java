@@ -57,8 +57,8 @@ public class SupplierController extends BaseController{
     }
 
     @DeleteMapping("/{supplier_id}/{product_id}")
-    public ResponseEntity<BaseResponse> deleteProduct(@PathVariable("supplier_id") String supplierId, @PathVariable("product_id") String product_id) {
-        BaseResponse response = supplierService.deleteSuppliersProduct(supplierId, product_id);
+    public ResponseEntity<BaseResponse> deleteProduct(@PathVariable("supplier_id") String supplierId, @PathVariable("product_id") String productId) {
+        BaseResponse response = supplierService.deleteSuppliersProduct(supplierId, productId);
         return new ResponseEntity(response, responseStatus(response));
     }
 
