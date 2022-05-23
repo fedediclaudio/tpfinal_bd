@@ -65,6 +65,8 @@ public interface OrderMapper {
         DeliveryManDto dMan = DeliveryManDto.builder()
                 .id(deliveryMan.getId().toString())
                 .name(deliveryMan.getName())
+                .score(deliveryMan.getScore())
+                .numberOfSuccessOrders(deliveryMan.getNumberOfSuccessOrders())
                 .free(deliveryMan.isFree())
                 .build();
         return dMan;

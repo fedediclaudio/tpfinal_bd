@@ -63,6 +63,7 @@ public interface DeliveryManMapper {
                 .client(ClientDto.builder()
                         .id(order.getClient().getId().toString())
                         .name(order.getClient().getName())
+                        .score(order.getClient().getScore())
                         .email(order.getClient().getEmail())
                         .build())
                 .build();
