@@ -5,6 +5,7 @@ import javax.persistence.*;
 @Entity
 public class Item {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 

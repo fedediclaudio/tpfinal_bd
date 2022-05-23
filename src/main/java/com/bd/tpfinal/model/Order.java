@@ -7,6 +7,7 @@ import java.util.List;
 @Table (name="Orders")
 public class Order {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "id", nullable = false)
     private long id;
 
@@ -22,16 +23,15 @@ public class Order {
     @JoinColumn( name="id_orderStatus" )
     private OrderStatus status;
 
-    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn( name="id_deliveryMan" )
     private DeliveryMan deliveryMan;
 
-    @OneToOne( fetch = FetchType.EAGER)
+    @ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn( name="id_client" )
     private Client client;
 
-
-    @OneToOne( fetch = FetchType.LAZY)
+    @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn( name="id_address" )
     private Address address;
 
