@@ -54,6 +54,8 @@ public class Sent extends OrderStatus
         getOrder().getClient().setScore(scoreCliente);
         int scoreDeliveryMan = getOrder().getDeliveryMan().getScore() + 1;
         getOrder().getDeliveryMan().setScore(scoreDeliveryMan);
+        int numberOfSuccessOrders = getOrder().getDeliveryMan().getNumberOfSuccessOrders() + 1;
+        getOrder().getDeliveryMan().setNumberOfSuccessOrders(numberOfSuccessOrders);
         return true;
     }
 }

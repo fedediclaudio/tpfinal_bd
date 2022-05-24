@@ -3,6 +3,8 @@ package com.bd.tpfinal.services;
 import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.repositories.DeliveryManRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -42,5 +44,15 @@ public class DeliveryManServiceImpl implements DeliveryManService
     public List<DeliveryMan> getAllDeliveryManFree()
     {
         return this.deliveryManRepository.findAllFree();
+    }
+
+    @Override
+    //https://tedblob.com/spring-data-jpa-findall-order-by/
+    public List<DeliveryMan> getAllOrderByScore()
+    {
+        //return this.deliveryManRepository.findAllOrderByScore(Sort.by(Sort.Order.desc("score")));
+        //return this.deliveryManRepository.findAllOrderByScore();
+        //return this.deliveryManRepository.findTop10OrderByScore(Sort.by(Sort.Order.desc("score")), PageRequest.of(0, 10));
+        return this.deliveryManRepository.findTop10OrderByScore(PageRequest.of(0, 10));
     }
 }

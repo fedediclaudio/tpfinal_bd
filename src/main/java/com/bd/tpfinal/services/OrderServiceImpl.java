@@ -32,18 +32,39 @@ public class OrderServiceImpl implements OrderService
     @Override
     @Transactional
     //TODO:sacarle el retorno, creo que no incluye al id
-    public Order newOrder(Order newOrder)
+    public void newOrder(Order newOrder)
     {
         //newOrder.getClient().addOrder(newOrder);
         this.orderRepository.save(newOrder);
-        return newOrder;
+    }
+
+    @Override
+    @Transactional
+    public Order newOrder_seteado_state(Order newOrden)
+    {
+        this.orderRepository.save(newOrden);
+        newOrden.setStatusByName();
+        return newOrden;
     }
 
     @Override
     @Transactional
     public List<Order> getAll()
     {
-        List<Order> orders =  this.orderRepository.findAll();
+        List<Order> orders = this.orderRepository.findAll();
+        return orders;
+    }
+
+    @Override
+    @Transactional
+    public List<Order> getAllWithStatus()
+    {
+        List<Order> orders = this.orderRepository.findAll();
+        int cant = orders.size();
+        for(int i=0; i<cant; i++)
+        {
+            orders.get(i).setStatusByName();
+        }
         return orders;
     }
 
@@ -68,6 +89,7 @@ public class OrderServiceImpl implements OrderService
 
     /**
      * retorna un objeto Order de acuerdo al valor de su atributo "number", que es el id.
+     *
      * @param number
      * @return
      */
@@ -98,18 +120,11 @@ public class OrderServiceImpl implements OrderService
     public Order actualizarOrder(Order orden_actualizada)
     {
         this.orderRepository.save(orden_actualizada);
+        orden_actualizada.setStatusByName();
         return orden_actualizada;
     }
 
-    @Override
-    @Transactional
-    public void cancelarOrder(Long number) throws Exception
-    {
-        Order orden_buscada = this.orderRepository.findByNumber(number);
-        orden_buscada.setStatusByName();
-        orden_buscada.getOrderStatus().cancel();
-        this.orderRepository.save(orden_buscada);
-    }
+
 
     @Override
     @Transactional
@@ -130,22 +145,80 @@ public class OrderServiceImpl implements OrderService
     }
 
     @Override
+    @Transactional
     public List<Order> getByClientId(Long id)
     {
         return this.orderRepository.findByClient(id);
     }
 
     @Override
+    @Transactional
     public List<Order> getBySupplierMaxCantItems(Long id_supplier)
     {
         return this.orderRepository.findOrderBySupplierItems(id_supplier);
     }
 
     @Override
-    public List <Order> getOrderMaxPricePorFecha(Date fecha)
+    @Transactional
+    public List<Order> getOrderMaxPricePorFecha(Date fecha)
     {
-       return this.orderRepository.findMaxOrderByDate(fecha);
+        return this.orderRepository.findMaxOrderByDate(fecha);
 
+    }
+
+    @Override
+    @Transactional
+    public Order getOrderByDateOfOrder(Date date)
+    {
+        Order orden = this.orderRepository.findByDateOfOrder(date);
+        orden.setStatusByName();
+        return orden;
+    }
+
+    @Override
+    @Transactional
+    //retorna la orden con el estado actualizado.
+    public Order aceptacionDeOrden(Long number) throws Exception
+    {
+        Order orden = this.orderRepository.findByNumber(number);
+        orden.deliver();
+        actualizarOrder(orden);
+        orden.setStatusByName();//no es necesario, rever. Lo hace actualizarOrder()
+        return orden;
+    }
+
+    @Override
+    @Transactional
+    //retorna la orden con el estado actualizado.
+    public Order finalizacionDeOrden(Long number) throws Exception
+    {
+        Order orden = this.orderRepository.findByNumber(number);
+        orden.finish();
+        actualizarOrder(orden);
+        orden.setStatusByName();//no es necesario, rever. Lo hace actualizarOrder()
+        return orden;
+    }
+
+    @Override
+    @Transactional
+    public Order rechazoDeOrden(Long number) throws Exception
+    {
+        Order orden = this.orderRepository.findByNumber(number);
+        orden.refuse();
+        actualizarOrder(orden);
+        orden.setStatusByName();//no es necesario, rever. Lo hace actualizarOrder()
+        return orden;
+    }
+
+    @Override
+    @Transactional
+    public Order cancelacionDeOrden(Long number) throws Exception
+    {
+        Order orden = this.orderRepository.findByNumber(number);
+        orden.cancel();
+        actualizarOrder(orden);
+        orden.setStatusByName();//no es necesario, rever. Lo hace actualizarOrder()
+        return orden;
     }
 
 

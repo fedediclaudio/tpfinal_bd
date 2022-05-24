@@ -1,5 +1,6 @@
 package com.bd.tpfinal.services;
 
+import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.Supplier;
 import com.bd.tpfinal.repositories.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +49,36 @@ public class SupplierServiceImpl implements SupplierService
     }
 
     @Override
+    @Transactional
     public List<Supplier> getSupplierBySupplierTypeId(Long id)
     {
         return this.supplierRepository.findBySupplierTypeId(id);
     }
+
+    @Override
+    @Transactional
+    //11) Obtener los diez proveedores que más órdenes despacharon.
+    public List<Supplier> getTop10Supplier()
+    {
+        return this.supplierRepository.findSuppliers();
+        //return this.supplierRepository.findSupplier();
+    }
+
+    @Override
+    @Transactional
+    public List<Order> getOrder()
+    {
+        return this.supplierRepository.findOrder();
+    }
+
+    @Override
+    @Transactional
+    public List<Supplier> getByQualification1()
+    {
+        return this.supplierRepository.findByQualification1();
+    }
+
+
+
+
 }

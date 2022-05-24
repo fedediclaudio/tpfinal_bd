@@ -175,10 +175,17 @@ public class Order
         getOrderStatus().deliver();
     }
 
+    //TODO: se debe contabilizar en el DM numberOfSuccessOrders
     public void finish() throws Exception
     {
         this.setStatusByName();
         getOrderStatus().finish();
+    }
+
+    public void cancel() throws Exception
+    {
+        this.setStatusByName();
+        getOrderStatus().cancel();
     }
 
     public void setDeliveryMan(DeliveryMan dm)

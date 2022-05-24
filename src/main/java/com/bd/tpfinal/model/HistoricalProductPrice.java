@@ -89,4 +89,16 @@ public class HistoricalProductPrice
     {
         this.product = product;
     }
+
+    @Override
+    public String toString()
+    {
+        return "HistoricalProductPrice{" +
+                "id=" + id +
+                ", price=" + price +
+                ", startDate=" + startDate +
+                ", finishDate=" + finishDate +
+                ", product=" + product +
+                '}';
+    }
 }

@@ -11,4 +11,5 @@ public interface DeliveryManService
     public List<DeliveryMan> getAll();
     public Optional<DeliveryMan> getById(Long id);
     public List<DeliveryMan> getAllDeliveryManFree();
+    public List<DeliveryMan> getAllOrderByScore();
  }

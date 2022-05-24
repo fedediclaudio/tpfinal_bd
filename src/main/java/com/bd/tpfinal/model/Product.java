@@ -56,7 +56,9 @@ public class Product
         this.type = type;
         this.prices = new ArrayList<HistoricalProductPrice>();
         this.eliminado = 0;//0 es falso
-
+        //(float price, Date startDate, Date finishDate, Product product)
+        HistoricalProductPrice hpp = new HistoricalProductPrice(this.getPrice(), Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime(), null, this );
+        this.prices.add(hpp);
         //prices.add(hpp);
     }
 
@@ -148,5 +150,34 @@ public class Product
     public void setPrices(List<HistoricalProductPrice> prices)
     {
         this.prices = prices;
+    }
+
+    /**
+     * agrega un nuevo hpp.
+     * actualiza la fecha de finalización del anterior
+     * @param hpp
+     */
+    public void agregarNuevoHpp(HistoricalProductPrice hpp)
+    {
+        int ultimo = this.prices.size()-1;
+        Date finishDate = hpp.getStartDate(); //la fecha de comienzo del ultimo es la de fin del anterior.
+        prices.get(ultimo).setFinishDate(finishDate); //seteo la finishDate del ultimo hpp de la lista, antes de agregar el nuevo
+        prices.add(hpp);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", weight=" + weight +
+                ", description='" + description + '\'' +
+                ", supplier=" + supplier +
+                ", type=" + type +
+                ", prices=" + prices +
+                ", eliminado=" + eliminado +
+                '}';
     }
 }

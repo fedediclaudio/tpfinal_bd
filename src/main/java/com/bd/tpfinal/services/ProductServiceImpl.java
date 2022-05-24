@@ -2,6 +2,7 @@ package com.bd.tpfinal.services;
 
 import com.bd.tpfinal.model.HistoricalProductPrice;
 import com.bd.tpfinal.model.Product;
+import com.bd.tpfinal.model.ProductTypeAvgPrice_DTO;
 import com.bd.tpfinal.repositories.HistoricalProductPriceRepository;
 import com.bd.tpfinal.repositories.ProductRepository;
 import com.bd.tpfinal.utils.NoExisteProductoException;
@@ -29,10 +30,7 @@ public class ProductServiceImpl implements ProductService
     public void newProduct(Product newProduct)
     {
         this.productRepository.save(newProduct);
-        Date starDate = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
-        Date finishDate = null;
-        HistoricalProductPrice hpp = new HistoricalProductPrice(newProduct.getPrice(), starDate, finishDate, newProduct);
-        this.historicalProductPriceRepository.save(hpp);
+        this.historicalProductPriceRepository.save(newProduct.getPrices().get(0));
     }
 
     @Override
@@ -66,6 +64,8 @@ public class ProductServiceImpl implements ProductService
         return producto;
     }
 
+
+
     //TODO: revisar la lógica de los precios históricos, creo que falla
     @Override
     @Transactional
@@ -84,23 +84,30 @@ public class ProductServiceImpl implements ProductService
         }
         if (producto_buscado == null)
             throw new NoExisteProductoException("No existe producto");
-        List<HistoricalProductPrice> prices = this.historicalProductPriceRepository.findByProductId(id_product);
+        List<HistoricalProductPrice> hpp_list = this.historicalProductPriceRepository.findByProductId(id_product);
 
         if (updatedProduct.getPrice() != producto_buscado.getPrice())
         {
-            //List<HistoricalProductPrice> prices = this.historicalProductPriceRepository.findByProductId(id_product);
-            int last_index = prices.size() - 1;
-            HistoricalProductPrice hpp_ultimo = prices.get(last_index);
-            System.out.println("ultimo indicoe  "+last_index);
+            int last_index = hpp_list.size()-1;
+            HistoricalProductPrice hpp_ultimo = hpp_list.get(last_index);
+            System.out.println("ultimo indice  "+last_index);
             hpp_ultimo.setFinishDate(Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime());
-            prices.set(last_index, hpp_ultimo);
+            //hpp_list.set(last_index, hpp_ultimo);
+            System.out.println("startDate: "+hpp_ultimo.getStartDate() + " finishDate:" +hpp_ultimo.getFinishDate());
             Date startDate = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
             HistoricalProductPrice hpp_nuevo = new HistoricalProductPrice(updatedProduct.getPrice(), startDate, null, producto_buscado);
-            producto_buscado.setPrices(prices);
-            producto_buscado.getPrices().add(hpp_nuevo);
-            producto_buscado.setPrice(updatedProduct.getPrice());
+            //producto_buscado.setPrices(hpp_list);
+            //producto_buscado.getPrices().add(hpp_nuevo);
+            //producto_buscado.setPrice(updatedProduct.getPrice());
+            hpp_list.add(hpp_nuevo);
+            Iterator<HistoricalProductPrice> hppIterator = producto_buscado.getPrices().iterator();//hpp actualizado con la fecha de finalización del ultimo y el agregado del nuevo
+            while(hppIterator.hasNext()) //save de todos, ya que el viejo último cambió su fecha de finalización.
+            {
+                HistoricalProductPrice historicalProductPrice = (HistoricalProductPrice) hppIterator.next();
+                this.historicalProductPriceRepository.save(historicalProductPrice);
+            }
         }
-        producto_buscado.setPrices(prices);
+        producto_buscado.setPrices(hpp_list);
         producto_buscado.setDescription(updatedProduct.getDescription());
         producto_buscado.setName(updatedProduct.getName());
         producto_buscado.setSupplier(updatedProduct.getSupplier());
@@ -111,6 +118,7 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
+    @Transactional
     public void eliminarProductoById(Long id_product)  throws NoExisteProductoException
     {
         Optional<Product> opt_product_buscado = this.productRepository.findById(id_product);
@@ -126,10 +134,24 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
+    @Transactional
     public List<Product> getProductoByProductType(Long id_product_type)
     {
         List<Product> productos = this.productRepository.findByTypeId(id_product_type);
         return productos;
+    }
+
+    @Override
+    @Transactional
+    public List<HistoricalProductPrice> getPrices(Long id_product, Date desde, Date hasta)
+    {
+        return this.historicalProductPriceRepository.findAllBetweenDates(id_product, desde, hasta);
+    }
+    @Override
+    @Transactional
+    public List<ProductTypeAvgPrice_DTO> getAvgPriceForProductType()
+    {
+        return this.productRepository.findAllAvgPriceForProductType();
     }
 
 }
