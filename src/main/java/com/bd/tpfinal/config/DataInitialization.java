@@ -3,6 +3,7 @@ package com.bd.tpfinal.config;
 
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.repositories.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +32,16 @@ public class DataInitialization implements ApplicationRunner {
 
     private Random random = new Random();
     private final DeliveryManRepository deliveryManRepository;
+
+    @Value("${data.initialization.number_of_orders:100}")
+    private int numberOfOrders;
+    @Value("${data.initialization.number_of_clients:100}")
+    private int numberOfClients;
+    @Value("${data.initialization.number_of_products:200}")
+    private int numberOfProducts;
+    @Value("${data.initialization.number_of_delivery:10}")
+    private int numberOfDelivery;
+
 
     public DataInitialization(OrderRepository orderRepository,
                               SupplierRepository supplierRepository,
@@ -67,7 +78,7 @@ public class DataInitialization implements ApplicationRunner {
     private void generateOrders(){
         if (clients.size() == 0)
             clients = clientRepository.findAll().stream().map(c -> c.getId()).collect(Collectors.toList());
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < numberOfOrders; i++) {
             Order order = new Order();
             order.setNumber(random.nextInt(100000));
             order.setDateOfOrder(new Date());
@@ -88,7 +99,7 @@ public class DataInitialization implements ApplicationRunner {
     }
 
     private void generateClients(){
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < numberOfClients; i++) {
             Client client = new Client();
             client.setName(Datasets.LASTNAMES[random.nextInt(100)] + " " + Datasets.Names[random.nextInt(100)]);
             client.setDateOfRegister(new Date());
@@ -149,7 +160,7 @@ public class DataInitialization implements ApplicationRunner {
         int supLength = suppliers.size();
         int npLength = Datasets.PRODUCT_NAME_PARTS.length;
 
-        for (int i = 0; i< 200; i++){
+        for (int i = 0; i< numberOfProducts; i++){
             float price = (float)Math.random() * random.nextInt(1000);
             String name = Datasets.PRODUCT_NAME_PARTS[random.nextInt(npLength)] + Datasets.PRODUCT_NAME_PARTS[random.nextInt(npLength)] +
                     Datasets.PRODUCT_NAME_PARTS[random.nextInt(npLength)];
@@ -244,7 +255,7 @@ public class DataInitialization implements ApplicationRunner {
     }
 
     public void generateDeliveryMen(){
-        for (int i = 0; i < 10; i++){
+        for (int i = 0; i < numberOfDelivery; i++){
             DeliveryMan deliveryMan = new DeliveryMan();
             deliveryMan.setName(Datasets.LASTNAMES[random.nextInt(Datasets.LASTNAMES.length)] + " " + Datasets.Names[random.nextInt(Datasets.Names.length)]);
             deliveryMan.setDateOfAdmission(new Date());
