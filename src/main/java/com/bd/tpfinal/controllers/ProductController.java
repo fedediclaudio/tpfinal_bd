@@ -71,7 +71,7 @@ public class ProductController extends BaseController {
             response = productsService.getProductPriceBetweenDates(productId, sdf.parse(fromDate), sdf.parse(toDate));
         } catch (ParseException e) {
             response.setMessage("Error converting dates");
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
         }
 
         return new ResponseEntity<>(response, responseStatus(response));

@@ -2,6 +2,7 @@ package com.bd.tpfinal.proxy.repositories.impl;
 
 import com.bd.tpfinal.dtos.common.SupplierDto;
 import com.bd.tpfinal.dtos.common.SupplierWithOrdersCountDto;
+import com.bd.tpfinal.exceptions.persistence.EntityNotFoundException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.helpers.IdConvertionHelper;
 import com.bd.tpfinal.mappers.product.ProductMapper;
@@ -120,13 +121,12 @@ public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
     }
 
     @Override
-
-    public SupplierDto delete(String supplierId, String productId) throws PersistenceEntityException {
+    public SupplierDto delete(String supplierId, String productId) {
         Supplier supplier = supplierRepository.findById(IdConvertionHelper.convert(supplierId))
-                .orElseThrow(() -> new PersistenceEntityException("Can't find supplier with id " + supplierId));
+                .orElseThrow(() -> new EntityNotFoundException("Can't find supplier with id " + supplierId));
 
         Product product = supplier.getProducts().stream().filter(p -> p.getId().compareTo(IdConvertionHelper.convert(productId))==0).findFirst()
-                .orElseThrow(() -> new PersistenceEntityException("Can't find product with id " + productId +" for supplier id " +supplierId));
+                .orElseThrow(() -> new EntityNotFoundException("Can't find product with id " + productId +" for supplier id " +supplierId));
 
         boolean remove = supplier.getProducts().remove(product);
         supplierRepository.save(supplier);
@@ -139,9 +139,9 @@ public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
 
     @Override
 
-    public SupplierDto create(SupplierDto supplierDto) throws PersistenceEntityException {
+    public SupplierDto create(SupplierDto supplierDto) {
         SupplierType type = supplierTypeRepository.findById(IdConvertionHelper.convert(supplierDto.getSupplierTypeId()))
-                .orElseThrow(() -> new PersistenceEntityException("Cant find supplier type with id " + supplierDto.getSupplierTypeId()));
+                .orElseThrow(() -> new EntityNotFoundException("Cant find supplier type with id: " + supplierDto.getSupplierTypeId()));
         Supplier supplier = new Supplier();
         supplier.setAddress(supplierDto.getAddress());
         supplier.setCoords(supplierDto.getCoords());
@@ -154,9 +154,9 @@ public class SupplierRepositoryProxyImpl implements SupplierRepositoryProxy {
     }
 
     @Override
-    public SupplierDto findById(String supplierId) throws PersistenceEntityException {
+    public SupplierDto findById(String supplierId) {
         Supplier supplier = supplierRepository.findById(IdConvertionHelper.convert(supplierId))
-                .orElseThrow(() -> new PersistenceEntityException("Can't find supplier with id: " + supplierId));
+                .orElseThrow(() -> new EntityNotFoundException("Can't find supplier with id: " + supplierId));
         SupplierDto supplierDto = supplierMapper.toSupplierDto(supplier);
         supplierDto.setProducts(supplier.getProducts().stream().map(product -> productMapper.toProductDto(product)).collect(Collectors.toList()));
         return supplierDto;

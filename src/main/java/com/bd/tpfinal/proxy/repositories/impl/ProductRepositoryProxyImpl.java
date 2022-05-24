@@ -3,6 +3,7 @@ package com.bd.tpfinal.proxy.repositories.impl;
 import com.bd.tpfinal.dtos.common.AverageProductTypeDto;
 import com.bd.tpfinal.dtos.common.ProductDto;
 import com.bd.tpfinal.exceptions.persistence.EmptyResulsetException;
+import com.bd.tpfinal.exceptions.persistence.EntityNotFoundException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.helpers.IdConvertionHelper;
 import com.bd.tpfinal.mappers.product.ProductMapper;
@@ -68,10 +69,10 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
 
     @Override
 
-    public ProductDto update(String productId, String name, String description, Float weight, Float price, Boolean active) throws PersistenceEntityException {
+    public ProductDto update(String productId, String name, String description, Float weight, Float price, Boolean active)  {
         Product product = productRepository
                 .findById(IdConvertionHelper.convert(productId))
-                .orElseThrow(() -> new PersistenceEntityException("Product with id " + productId + " not found."));
+                .orElseThrow(() -> new EntityNotFoundException("Product with id " + productId + " not found."));
         if (!ObjectUtils.isEmpty(name))
             product.setName(name);
         if (!ObjectUtils.isEmpty(description))
@@ -101,27 +102,27 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
     }
 
     @Override
-    public ProductDto findById(String id) throws PersistenceEntityException {
-        Product product = productRepository.findById(IdConvertionHelper.convert(id)).orElseThrow(()-> new PersistenceEntityException("Can't find product by id: "+id));
+    public ProductDto findById(String id) {
+        Product product = productRepository.findById(IdConvertionHelper.convert(id)).orElseThrow(()-> new EntityNotFoundException("Can't find product by id: "+id));
         return productMapper.toProductDto(product);
     }
 
     @Override
 
-    public void delete(String productId) throws PersistenceEntityException {
-        Product product = productRepository.findById(IdConvertionHelper.convert(productId)).orElseThrow(() -> new PersistenceEntityException("Can't find product by id: " + productId));
+    public void delete(String productId) {
+        Product product = productRepository.findById(IdConvertionHelper.convert(productId)).orElseThrow(() -> new EntityNotFoundException("Can't find product by id: " + productId));
         product.setActive(false);
         productRepository.save(product);
     }
 
     @Override
 
-    public ProductDto create(ProductDto dto) throws PersistenceEntityException {
+    public ProductDto create(ProductDto dto) {
         Supplier supplier = supplierRepository.findById(IdConvertionHelper.convert(dto.getSupplierId()))
-                .orElseThrow(()->new PersistenceEntityException("Can't find supplier with id " + dto.getSupplierId()));
+                .orElseThrow(()->new EntityNotFoundException("Can't find supplier with id " + dto.getSupplierId()));
 
         ProductType productType = productTypeRepository.findById(IdConvertionHelper.convert(dto.getProductTypeId()))
-                .orElseThrow(() -> new PersistenceEntityException("Can't find product type with id '" + dto.getProductTypeId() + "'"));
+                .orElseThrow(() -> new EntityNotFoundException("Can't find product type with id '" + dto.getProductTypeId() + "'"));
 
         Product product = new Product();
         product.setActive(true);
@@ -147,8 +148,8 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
     }
 
     @Override
-    public ProductDto findByIdWithPricesBetweenDates(String productId, Date fromDate, Date toDate) throws PersistenceEntityException, EmptyResulsetException {
-        Product product = productRepository.findById(IdConvertionHelper.convert(productId)).orElseThrow(() -> new PersistenceEntityException("Can't find product with id: " + productId));
+    public ProductDto findByIdWithPricesBetweenDates(String productId, Date fromDate, Date toDate) throws EmptyResulsetException {
+        Product product = productRepository.findById(IdConvertionHelper.convert(productId)).orElseThrow(() -> new EntityNotFoundException("Can't find product with id: " + productId));
         List<HistoricalProductPrice> prices = product.getPrices();
         prices = prices.stream().filter(price -> {
             Date dateTo = price.getFinishDate() == null ? new Date() : price.getFinishDate();

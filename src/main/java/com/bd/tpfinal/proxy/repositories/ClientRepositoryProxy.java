@@ -6,11 +6,11 @@ import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import java.util.List;
 
 public interface ClientRepositoryProxy {
-    ClientDto findById(String id) throws PersistenceEntityException;
+    ClientDto findById(String id);
 
-    ClientDto create(ClientDto clientDto) throws PersistenceEntityException;
+    ClientDto create(ClientDto clientDto);
 
-    ClientDto addAddress(String id, String name, String address, String apartment, float[] coords, String description) throws PersistenceEntityException;
+    ClientDto addAddress(String id, String name, String address, String apartment, float[] coords, String description);
 
     List<ClientDto> findAll();
 }

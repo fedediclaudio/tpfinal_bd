@@ -1,6 +1,7 @@
 package com.bd.tpfinal.proxy.repositories.impl;
 
 import com.bd.tpfinal.dtos.common.DeliveryManDto;
+import com.bd.tpfinal.exceptions.persistence.EntityNotFoundException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.helpers.IdConvertionHelper;
 import com.bd.tpfinal.mappers.delivery.DeliveryManMapper;
@@ -55,9 +56,9 @@ public class DeliveryMenRepositoryProxyImpl implements DeliveryMenRepositoryProx
     }
 
     @Override
-    public DeliveryManDto findById(String id) throws PersistenceEntityException {
+    public DeliveryManDto findById(String id) {
         DeliveryMan deliveryMan = deliveryManRepository.findById(IdConvertionHelper.convert(id))
-                .orElseThrow(()-> new PersistenceEntityException("Can't find delivery man with id: " + id));
+                .orElseThrow(()-> new EntityNotFoundException("Can't find delivery man with id: " + id));
         return deliveryManMapper.toDeliveryManDto(deliveryMan);
     }
 

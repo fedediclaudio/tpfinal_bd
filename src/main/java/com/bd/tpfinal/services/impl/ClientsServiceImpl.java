@@ -7,12 +7,10 @@ import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.client.ClientResponse;
 import com.bd.tpfinal.dtos.response.client.ListClientResponse;
-import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
+import com.bd.tpfinal.exceptions.persistence.EntityNotFoundException;
 import com.bd.tpfinal.proxy.repositories.ClientRepositoryProxy;
 import com.bd.tpfinal.services.ClientsService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,12 +46,13 @@ public class ClientsServiceImpl implements ClientsService {
 
             response.setData(dto);
             response.setMessage("Client created.");
+            response.setStatus(ResponseStatus.OK_201);
         } catch (ParseException e) {
             response.setMessage("Error parsing date of birth.");
-            response.setStatus(ResponseStatus.ERROR);
-        } catch (PersistenceEntityException e) {
+            response.setStatus(ResponseStatus.ERROR_404);
+        } catch (EntityNotFoundException e) {
             response.setMessage(e.getMessage());
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
         }
 
         return response;
@@ -66,9 +65,9 @@ public class ClientsServiceImpl implements ClientsService {
             ClientDto clientDto = this.createClientAddress(id, request);
             response.setMessage("Address added to client.");
             response.setData(clientDto);
-        } catch (PersistenceEntityException e) {
+        } catch (EntityNotFoundException e) {
             response.setMessage(e.getMessage());
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
         }
         return response;
     }
@@ -80,9 +79,9 @@ public class ClientsServiceImpl implements ClientsService {
             ClientDto clientDto = clientRepositoryProxy.findById(id);
             response.setMessage("Client found.");
             response.setData(clientDto);
-        } catch (PersistenceEntityException e) {
+        } catch (EntityNotFoundException e) {
             response.setMessage(e.getMessage());
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
         }
 
         return response;
@@ -97,7 +96,7 @@ public class ClientsServiceImpl implements ClientsService {
         return response;
     }
 
-    private ClientDto createClientAddress(String id, CreateAddressRequest request) throws PersistenceEntityException {
+    private ClientDto createClientAddress(String id, CreateAddressRequest request) {
             return clientRepositoryProxy.addAddress(id, request.getName(), request.getAddress(),
                     request.getApartment(), request.getCoords(), request.getDescription());
     }

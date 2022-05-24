@@ -16,9 +16,9 @@ public interface SupplierRepositoryProxy {
 
     List<SupplierWithOrdersCountDto> findSuppliersWith10OrdersAtLeast();
 
-    SupplierDto delete(String supplierId, String productId) throws PersistenceEntityException;
+    SupplierDto delete(String supplierId, String productId);
 
-    SupplierDto create(SupplierDto supplierDto) throws PersistenceEntityException;
+    SupplierDto create(SupplierDto supplierDto);
 
-    SupplierDto findById(String supplierId) throws PersistenceEntityException;
+    SupplierDto findById(String supplierId);
 }
