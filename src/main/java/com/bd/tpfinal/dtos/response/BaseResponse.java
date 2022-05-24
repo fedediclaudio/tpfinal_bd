@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public abstract class BaseResponse<T> {
-    private ResponseStatus status = ResponseStatus.OK;
+    private ResponseStatus status = ResponseStatus.OK_200;
     private String message;
     private T data;
 

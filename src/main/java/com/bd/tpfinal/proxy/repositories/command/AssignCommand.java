@@ -2,6 +2,7 @@ package com.bd.tpfinal.proxy.repositories.command;
 
 import com.bd.tpfinal.dtos.common.ChangeOrderStatusDto;
 import com.bd.tpfinal.dtos.common.OrderDto;
+import com.bd.tpfinal.exceptions.persistence.EntityNotFoundException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.mappers.orders.OrderMapper;
 import com.bd.tpfinal.model.Assigned;
@@ -31,7 +32,7 @@ public class AssignCommand extends ChangeStatusCommand {
             order.setStatus(assigned);
 
             DeliveryMan deliveryMan = deliveryManRepository.findTopByPendingOrderIsNull()
-                    .orElseThrow(() -> new PersistenceEntityException("Can't find a free delivery man"));
+                    .orElseThrow(() -> new EntityNotFoundException("Can't find a free delivery man"));
             deliveryMan.setFree(false);
             deliveryMan.setPendingOrder(order);
             order.setDeliveryMan(deliveryMan);

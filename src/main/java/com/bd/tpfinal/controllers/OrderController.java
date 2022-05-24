@@ -4,6 +4,7 @@ import com.bd.tpfinal.dtos.common.ChangeOrderStatusDto;
 import com.bd.tpfinal.dtos.request.items.CreateItemRequest;
 import com.bd.tpfinal.dtos.request.orders.CreateOrderRequest;
 import com.bd.tpfinal.dtos.response.BaseResponse;
+import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.orders.SingleOrderResponse;
 import com.bd.tpfinal.enums.OrderStatusAction;
 import com.bd.tpfinal.services.OrdersService;
@@ -91,7 +92,7 @@ public class OrderController extends BaseController {
             response = ordersService.getMaximumPriceOrderByDate(date);
         } catch (ParseException e) {
             response.setMessage(e.getMessage());
-            response.setStatus(com.bd.tpfinal.dtos.response.ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
         }
         return new ResponseEntity<>(response,responseStatus(response));
     }

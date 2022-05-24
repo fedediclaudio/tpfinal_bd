@@ -8,7 +8,7 @@ import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.suppliers.SingleSupplierResponse;
 import com.bd.tpfinal.dtos.response.suppliers.SupplierResponse;
 import com.bd.tpfinal.dtos.response.suppliers.ListSupplierResponse;
-import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
+import com.bd.tpfinal.exceptions.persistence.EntityNotFoundException;
 import com.bd.tpfinal.proxy.repositories.SupplierRepositoryProxy;
 import com.bd.tpfinal.services.SuppliersService;
 import org.springframework.stereotype.Service;
@@ -36,14 +36,9 @@ public class SuppliersServiceImpl implements SuppliersService {
     @Override
     public BaseResponse deleteSuppliersProduct(String supplierId, String productId) {
         SupplierResponse response = new SupplierResponse();
-        try {
-            SupplierDto supplierDto = supplierRepositoryProxy.delete(supplierId, productId);
-            response.setData(supplierDto);
-            response.setMessage("Product id '" + productId + "'was removed from supplier id " + supplierId);
-        } catch (PersistenceEntityException e) {
-            response.setMessage(e.getMessage());
-            response.setStatus(ResponseStatus.ERROR);
-        }
+        SupplierDto supplierDto = supplierRepositoryProxy.delete(supplierId, productId);
+        response.setData(supplierDto);
+        response.setMessage("Product id '" + productId + "'was removed from supplier id " + supplierId);
 
         return response;
     }
@@ -84,9 +79,10 @@ public class SuppliersServiceImpl implements SuppliersService {
         try {
             supplierDto = supplierRepositoryProxy.create(supplierDto);
             response.setData(supplierDto);
-        }catch (Exception e){
+            response.setStatus(ResponseStatus.OK_201);
+        }catch (EntityNotFoundException e){
             response.setMessage(e.getMessage());
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
             e.printStackTrace();
         }
         return response;
@@ -100,9 +96,9 @@ public class SuppliersServiceImpl implements SuppliersService {
             supplier = supplierRepositoryProxy.findById(supplierId);
             response.setData(supplier);
             response.setMessage("Suppliers found.");
-        } catch (PersistenceEntityException e) {
+        } catch (EntityNotFoundException e) {
             response.setMessage(e.getMessage());
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
         }
         return response;
     }

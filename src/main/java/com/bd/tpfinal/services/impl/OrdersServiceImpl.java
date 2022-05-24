@@ -3,13 +3,13 @@ package com.bd.tpfinal.services.impl;
 
 import com.bd.tpfinal.dtos.common.*;
 import com.bd.tpfinal.dtos.request.items.CreateItemRequest;
-import com.bd.tpfinal.dtos.request.orders.UpdateOrderRequest;
 import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.orders.ListOrderResponse;
 import com.bd.tpfinal.dtos.response.orders.SingleOrderResponse;
 import com.bd.tpfinal.exceptions.general.ActionNotAllowedException;
 import com.bd.tpfinal.exceptions.parameters.ParameterErrorException;
+import com.bd.tpfinal.exceptions.persistence.EntityNotFoundException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.proxy.repositories.ClientRepositoryProxy;
 import com.bd.tpfinal.proxy.repositories.OrderRepositoryProxy;
@@ -47,8 +47,9 @@ public class OrdersServiceImpl implements OrdersService {
             OrderDto orderDto = orderRepository.addItem(itemDto);
             response.setData(orderDto);
             response.setMessage("Item added to order.");
-        } catch (PersistenceEntityException e) {
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.OK_201);
+        } catch (EntityNotFoundException e) {
+            response.setStatus(ResponseStatus.ERROR_404);
             response.setMessage(e.getMessage());
         }
 
@@ -82,8 +83,8 @@ public class OrdersServiceImpl implements OrdersService {
             OrderDto orderDto = orderRepository.getOrdersWithMaximumProductsBySupplier(supplierId);
             response.setData(orderDto);
             response.setMessage("Orders with maximum products by supplier.");
-        } catch (PersistenceEntityException e) {
-            response.setStatus(ResponseStatus.ERROR);
+        } catch (EntityNotFoundException e) {
+            response.setStatus(ResponseStatus.ERROR_404);
             response.setMessage(e.getMessage());
         }
         return response;
@@ -96,11 +97,11 @@ public class OrdersServiceImpl implements OrdersService {
             OrderDto orderDto = orderRepository.qualifyOrder(orderId, qualification, qualificationMessage);
             response.setData(orderDto);
             response.setMessage("Order qualified.");
-        } catch (PersistenceEntityException e) {
-            response.setStatus(ResponseStatus.ERROR);
+        } catch (EntityNotFoundException e) {
+            response.setStatus(ResponseStatus.ERROR_404);
             response.setMessage(e.getMessage());
         } catch (ParameterErrorException | ActionNotAllowedException e) {
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
             response.setMessage(e.getMessage());
         }
         return response;
@@ -114,10 +115,10 @@ public class OrdersServiceImpl implements OrdersService {
             response.setData(orderDto);
             response.setMessage("Status changed for order id: " + changeOrderStatusDto.getOrderId());
         } catch (PersistenceEntityException e) {
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
             response.setMessage(e.getMessage());
         } catch (ParameterErrorException e) {
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
             response.setMessage(e.getMessage());
         }
         return response;
@@ -136,8 +137,9 @@ public class OrdersServiceImpl implements OrdersService {
              orderDto = orderRepository.create(clientId,orderDto);
              response.setData(orderDto);
              response.setMessage("Order created.");
-        } catch (PersistenceEntityException e) {
-            response.setStatus(ResponseStatus.ERROR);
+             response.setStatus(ResponseStatus.OK_201);
+        } catch (EntityNotFoundException e) {
+            response.setStatus(ResponseStatus.ERROR_404);
             response.setMessage(e.getMessage());
         }
         return response;
@@ -150,9 +152,9 @@ public class OrdersServiceImpl implements OrdersService {
             OrderDto orderDto = orderRepository.update(orderId, addressId);
             response.setData(orderDto);
             response.setMessage("Order address updated.");
-        } catch (PersistenceEntityException e) {
+        } catch (EntityNotFoundException e) {
             response.setMessage(e.getMessage());
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
         }
         return response;
     }
@@ -169,10 +171,10 @@ public class OrdersServiceImpl implements OrdersService {
             OrderDto order = orderRepository.findById(orderId);
             response.setData(order);
             response.setMessage("Order with id " + orderId + " has been found.");
-        } catch (PersistenceEntityException e) {
+        } catch (EntityNotFoundException e) {
             response.setData(null);
             response.setMessage(e.getMessage());
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
         }
         return response;
     }
@@ -190,10 +192,10 @@ public class OrdersServiceImpl implements OrdersService {
                 OrderDto order = orderRepository.findByNumber(number);
                 response.setData(order);
                 response.setMessage("Order number '" + number + "' found.");
-            } catch (PersistenceEntityException e) {
+            } catch (EntityNotFoundException e) {
                 response.setData(null);
                 response.setMessage(e.getMessage());
-                response.setStatus(ResponseStatus.ERROR);
+                response.setStatus(ResponseStatus.ERROR_404);
             }
         }  else {
                 response = new ListOrderResponse();

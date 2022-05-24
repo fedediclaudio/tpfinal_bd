@@ -7,7 +7,7 @@ import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.products.ListProductResponse;
 import com.bd.tpfinal.dtos.response.products.SingleProductResponse;
-import com.bd.tpfinal.exceptions.persistence.EmptyResulsetException;
+import com.bd.tpfinal.exceptions.persistence.EntityNotFoundException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.proxy.repositories.ProductRepositoryProxy;
 import com.bd.tpfinal.services.ProductsService;
@@ -37,9 +37,9 @@ public class ProductServiceImpl implements ProductsService {
                     createProductRequest.isActive());
             response.setData(productDto);
             response.setMessage("Product updated.");
-        } catch (PersistenceEntityException e){
+        } catch (EntityNotFoundException e){
             response.setMessage(e.getMessage());
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
         }
         return response;
     }
@@ -78,9 +78,10 @@ public class ProductServiceImpl implements ProductsService {
             dto = productRepositoryProxy.create(dto);
             response.setData(dto);
             response.setMessage("Product created.");
-        }catch (PersistenceEntityException e){
+            response.setStatus(ResponseStatus.OK_201);
+        }catch (EntityNotFoundException e){
             response.setMessage(e.getMessage());
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
         }
         return response;
     }
@@ -91,9 +92,10 @@ public class ProductServiceImpl implements ProductsService {
         try {
             productRepositoryProxy.delete(productId);
             response.setMessage("Product deleted.");
-        } catch (PersistenceEntityException e) {
+            response.setStatus(ResponseStatus.OK_204);
+        } catch (EntityNotFoundException e) {
             response.setMessage(e.getMessage());
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
         }
         return response;
     }
@@ -114,8 +116,8 @@ public class ProductServiceImpl implements ProductsService {
         try {
             product = productRepositoryProxy.findById(productId);
             response.setMessage("Product found.");
-        } catch (PersistenceEntityException e) {
-            response.setStatus(ResponseStatus.ERROR);
+        } catch (EntityNotFoundException e) {
+            response.setStatus(ResponseStatus.ERROR_404);
             response.setMessage(e.getMessage());
         }
         response.setData(product);
@@ -130,11 +132,9 @@ public class ProductServiceImpl implements ProductsService {
             ProductDto productDto =  productRepositoryProxy.findByIdWithPricesBetweenDates(productId, fromDate, toDate);
             response.setData(productDto);
             response.setMessage("Product id:" + productId + "with prices between dates [" + sdf.format(fromDate) + ", " + sdf.format(toDate) + "]");
-        } catch (PersistenceEntityException e) {
+        } catch (EntityNotFoundException e) {
             response.setMessage(e.getMessage());
-            response.setStatus(ResponseStatus.ERROR);
-        } catch (EmptyResulsetException e) {
-            response.setMessage(e.getMessage());
+            response.setStatus(ResponseStatus.ERROR_404);
         }
         return response;
     }

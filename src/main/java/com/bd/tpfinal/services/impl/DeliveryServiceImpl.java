@@ -6,6 +6,7 @@ import com.bd.tpfinal.dtos.response.BaseResponse;
 import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.delivery.ListDeliveryResponse;
 import com.bd.tpfinal.dtos.response.delivery.SingleDeliveryManResponse;
+import com.bd.tpfinal.exceptions.persistence.EntityNotFoundException;
 import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.proxy.repositories.DeliveryMenRepositoryProxy;
 import com.bd.tpfinal.services.DeliveryService;
@@ -57,9 +58,9 @@ public class DeliveryServiceImpl implements DeliveryService {
             DeliveryManDto data = deliveryMenRepositoryProxy.findById(id);
             response.setData(data);
             response.setMessage("Delivery man found.");
-        } catch (PersistenceEntityException e) {
+        } catch (EntityNotFoundException e) {
             response.setMessage(e.getMessage());
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
         }
         return response;
     }
@@ -82,9 +83,10 @@ public class DeliveryServiceImpl implements DeliveryService {
             deliveryManDto = deliveryMenRepositoryProxy.create(deliveryManDto);
             response.setData(deliveryManDto);
             response.setMessage("Delivery man created.");
+            response.setStatus(ResponseStatus.OK_201);
         }catch (PersistenceEntityException e){
             response.setMessage(e.getMessage());
-            response.setStatus(ResponseStatus.ERROR);
+            response.setStatus(ResponseStatus.ERROR_404);
         }
         return response;
     }
