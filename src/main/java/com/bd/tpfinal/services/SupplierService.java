@@ -17,7 +17,9 @@ public interface SupplierService
     public List<Supplier> getSupplierBySupplierTypeId(Long id);
     public List<Supplier> getTop10Supplier();
 
-    public List<Order> getOrder();
+    public List<Order> getOrderBySupplier();//testeo interno
     public List<Supplier> getByQualification1();
+
+    public List<Supplier> getSupplierWithAllTypes();
 
 }

@@ -155,10 +155,13 @@ class TpfinalApplicationTests
 
         Random precio_aleatorio = new Random();
 
+        Random index_supplier = new Random();
+
         for (int i = 0; i < cant; i++)
         {
             float precio = precio_aleatorio.nextFloat() * 10000;
-            Product p1 = new Product("producto" + i, precio, 12.0F, "descripcion producto" + i, suppliers.get(i % suppliers_cant), pTi.get(i % pTi_cant));
+            int index = index_supplier.nextInt(suppliers_cant - 1);
+            Product p1 = new Product("producto" + i, precio, 12.0F, "descripcion producto" + i, suppliers.get(index), pTi.get(i % pTi_cant));
             this.productService.newProduct(p1);
         }
     }
@@ -855,7 +858,7 @@ class TpfinalApplicationTests
     @Test
     void getOrder()
     {
-        Iterator<Order> ordenes = this.supplierService.getOrder().iterator();
+        Iterator<Order> ordenes = this.supplierService.getOrderBySupplier().iterator();
         while (ordenes.hasNext())
         {
             Order orden = (Order) ordenes.next();
@@ -875,6 +878,12 @@ class TpfinalApplicationTests
     //TODO: no andaaaaaaaa !!!
     //11) Obtener los diez proveedores que más órdenes despacharon.
     // vincular Order con Supplier
+    //Se puede resolver con una unica consulta.
+    //Te dejo algunas pistas: con el GROUP BY podes agrupar por un cierto parámetro, tenes el COUNT para contar la cantidad de elementos estos grupos y luego tenes el ORDER BY para ordenar estos resultados.
+    //Asi podrias agrupar las ordenes por su deliveryMan y ver que cual es el grupo que mas tiene.
+    //Vas a tener que usar el @Query por que el gruoup by no puede colocarse en la cabecera de un metodo.
+
+    //https://stackoverflow.com/questions/7001226/how-to-order-by-count-in-jpa
     @Test
     void test_11_obtener_10_proveedores_con_mas_ordenes_despachadas()
     {
@@ -969,10 +978,44 @@ class TpfinalApplicationTests
         }
     }
 
-
     //15) Obtener los proveedores que ofrezcan productos de todos los tipos.
+    @Test
+    void test_15_obtener_proveedores_con_todos_types()
+    {
+        List<Supplier> suppliers = this.supplierService.getSupplierWithAllTypes();
+        Iterator<Supplier> supplierIterator = suppliers.iterator();
+        while(supplierIterator.hasNext())
+        {
+            Supplier supplier = supplierIterator.next();
+            System.out.println("Supplier id: "+supplier.getId());
+        }
 
+    }
 
+    //AUXILIARES
+
+    @Test
+    void verOrdenes()
+    {
+        Iterator<Order> orderIterator = this.orderService.getAll().iterator();
+        while(orderIterator.hasNext())
+        {
+            Order orden = (Order)orderIterator.next();
+            System.out.println("---ORDER ID: "+orden.getNumber());
+            Iterator<Item> itemIterator = orden.getItems().iterator();
+            while(itemIterator.hasNext())
+            {
+                Item item = itemIterator.next();
+                System.out.println(item.toString());
+            }
+        }
+    }
+
+    @Test
+    void contexto_inicial()
+    {
+        new_CONTEXTO_INICIAL();
+    }
     @Test
     void prueba()
     {

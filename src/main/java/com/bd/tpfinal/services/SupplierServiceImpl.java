@@ -60,15 +60,15 @@ public class SupplierServiceImpl implements SupplierService
     //11) Obtener los diez proveedores que más órdenes despacharon.
     public List<Supplier> getTop10Supplier()
     {
-        return this.supplierRepository.findSuppliers();
+        return this.supplierRepository.findTopTenSupplier();
         //return this.supplierRepository.findSupplier();
     }
 
     @Override
     @Transactional
-    public List<Order> getOrder()
+    public List<Order> getOrderBySupplier()
     {
-        return this.supplierRepository.findOrder();
+        return this.supplierRepository.findOrderBYSupplier();
     }
 
     @Override
@@ -76,6 +76,13 @@ public class SupplierServiceImpl implements SupplierService
     public List<Supplier> getByQualification1()
     {
         return this.supplierRepository.findByQualification1();
+    }
+
+    @Override
+    @Transactional
+    public List<Supplier> getSupplierWithAllTypes()
+    {
+        return this.supplierRepository.findSupplierWithAllTypes();
     }
 
 

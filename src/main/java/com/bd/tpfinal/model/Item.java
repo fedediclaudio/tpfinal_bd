@@ -81,4 +81,11 @@ public class Item
     {
         this.product = product;
     }
+
+    @Override
+    public String toString()
+    {
+        String cadena = "item ID: "+getId() + " order number: "+getOrder().getNumber() + "  product id: "+getProduct().getId() + "  Supplier: " + getProduct().getSupplier().getId();
+        return cadena;
+    }
 }
