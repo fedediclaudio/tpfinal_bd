@@ -1,0 +1,9 @@
+package com.bd.tpfinal.services;
+
+import com.bd.tpfinal.model.Supplier;
+
+import java.util.List;
+
+public interface SupplierService {
+    List<Supplier> getTop10SupplierConMasOrdenesDespachadas();
+}

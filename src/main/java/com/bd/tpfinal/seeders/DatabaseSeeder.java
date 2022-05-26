@@ -467,7 +467,6 @@ public class DatabaseSeeder {
             orderRepository.save(order_6);
 
 */
-
             logger.info("Order table Cargada");
         } else {
             logger.info("Order Seeding no requerido, tabla con datos");
