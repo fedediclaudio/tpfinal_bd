@@ -1,5 +1,7 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -21,14 +23,18 @@ public class Order {
 
     @OneToOne( mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
   /*  @JoinColumn( name="id_orderStatus" )*/
+    @JsonIgnore
+
     private OrderStatus orderStatus;
 
     @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn( name="id_deliveryMan" )
+    @JsonIgnore
     private DeliveryMan deliveryMan;
 
     @ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn( name="id_client" )
+    @JsonIgnore
     private Client client;
 
     @ManyToOne( fetch = FetchType.LAZY)
@@ -40,6 +46,7 @@ public class Order {
     private Qualification qualification;
 
     @OneToMany( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @JsonIgnore
     private List<Item> items;
 
     public int getNumber() {

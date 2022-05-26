@@ -1,5 +1,7 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "supplier_id")
+    @JsonIgnore
     private Supplier supplier;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
@@ -27,6 +30,7 @@ public class Product {
             name = "product_product_type",
             joinColumns = { @JoinColumn(name = "id_product") },
             inverseJoinColumns = { @JoinColumn(name = "id_product_type") })
+    @JsonIgnore
     private List<ProductType> type;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
