@@ -1,8 +1,8 @@
 spring:
   data:
     mongodb:
-      host: 172.17.240.20
+      host: localhost
       port: 27017
       database: db
       password: S3cret
-      username: Grupo2
+      username: grupo2
