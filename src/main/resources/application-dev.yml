@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: db
+      password: S3cret
+      username: grupo2
+  datasource:
+    url: jdbc:mysql://172.17.240.20:3306/five
