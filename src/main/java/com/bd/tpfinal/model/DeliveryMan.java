@@ -20,6 +20,7 @@ public class DeliveryMan extends User {
 
     private Date dateOfAdmission;
 
+
     private List<Order> ordersPending;
 
 }

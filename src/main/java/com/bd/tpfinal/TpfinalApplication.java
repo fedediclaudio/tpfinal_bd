@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Bean;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 @SpringBootApplication
@@ -43,7 +43,6 @@ public class TpfinalApplication {
             address.setApartment("1");
             address.setCoords(f);
             address.setDescription("Una direccion linda");
-            address.setClient(new Client());
             address.setOrders(new ArrayList<>());
 
 
@@ -57,8 +56,11 @@ public class TpfinalApplication {
             client.setScore(50);
 
             client.setDateOfRegister(date);
-            client.setAddresses(Arrays.asList(address));
+            List<Address> addresses = new ArrayList<>();
+            addresses.add(address);
+            client.setAddresses(addresses);
 
+            address.setClient(client);
             clientRepository.save(client);
 
             DeliveryMan deliveryMan = new DeliveryMan();
@@ -76,6 +78,8 @@ public class TpfinalApplication {
             deliveryMan.setOrdersPending(new ArrayList<>());
 
             deliveryManRepository.save(deliveryMan);
+
+
         };
     }
 
