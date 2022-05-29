@@ -138,7 +138,6 @@ class TpfinalApplicationTests
         }
     }
 
-
     /**
      * test
      * crea product Type, SupplierType
@@ -161,57 +160,19 @@ class TpfinalApplicationTests
         {
             float precio = precio_aleatorio.nextFloat() * 10000;
             int index = index_supplier.nextInt(suppliers_cant - 1);
-            Product p1 = new Product("producto" + i, precio, 12.0F, "descripcion producto" + i, suppliers.get(index), pTi.get(i % pTi_cant));
+            Product p1 = new Product("producto" + i, precio, 12.0F, "descripcion producto" + i, suppliers.get(i % suppliers_cant), pTi.get(i % pTi_cant));
             this.productService.newProduct(p1);
         }
     }
 
     public Date new_ORDENES_crear_5()
     {
-        int cant = 5;
-        new_PRODUCTOS_crear(10);
-        new_CLIENT_crear(5);
-        Date dateOfOrder = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
-        Client cliente = (Client) this.clientService.getAll().get(0);
-        Address address = cliente.getAddresses().get(0);
-        List<Product> productos = this.productService.getAll();
-
-        //crea ordenes sin items y las salva
-        for (int i = 0; i < cant; i++)
-        {
-            this.orderService.newOrder(new Order(dateOfOrder, "comentario Orden " + i, 0.0F, cliente, address));//se crea y salva
-        }
-
-        //agrega items a las ordenes
-        List<Order> ordenes = this.orderService.getAll();
-        agregar_Items(ordenes.get(0), productos.get(0), 3);
-        agregar_Items(ordenes.get(0), productos.get(1), 5);
-        agregar_Items(ordenes.get(0), productos.get(2), 1);
-        agregar_Items(ordenes.get(0), productos.get(3), 20);
-
-        agregar_Items(ordenes.get(1), productos.get(0), 5);
-        //agregar_Items(ordenes.get(1), productos.get(1),17);
-        agregar_Items(ordenes.get(1), productos.get(4), 9);
-        agregar_Items(ordenes.get(1), productos.get(5), 12);
-
-        agregar_Items(ordenes.get(2), productos.get(0), 30);
-        agregar_Items(ordenes.get(2), productos.get(3), 67);
-        agregar_Items(ordenes.get(2), productos.get(6), 4);
-        agregar_Items(ordenes.get(2), productos.get(7), 1);
-
-        agregar_Items(ordenes.get(3), productos.get(0), 40);
-        agregar_Items(ordenes.get(3), productos.get(8), 18);
-        agregar_Items(ordenes.get(3), productos.get(7), 4);
-        agregar_Items(ordenes.get(3), productos.get(6), 2);
-        agregar_Items(ordenes.get(3), productos.get(5), 10);
-
-        agregar_Items(ordenes.get(4), productos.get(8), 1);
-
-        return dateOfOrder;
+        return new_ORDENES_crear(5);
     }
 
     public Date new_ORDENES_crear_una_orden(List<Product> productos, Client cliente, Date dateOfOrder, String comentario)
     {
+        System.out.println("+++Creación de una orden");
         Random cantidad = new Random();
         Random index = new Random();
         Random cant_items = new Random();
@@ -222,11 +183,11 @@ class TpfinalApplicationTests
         //TODO: recuperar la orden con el number (id) puesto. Recuperar el id.
         //Ver que la recuperación del repository o service se encargue de setear el Status
         //Order orden = this.orderService.getOrderByDateOfOrder(dateOfOrder); //retorna la misma orden con el id puesto y el status.
-        int cantidad_items = cant_items.nextInt(6) + 1; //cantidad de items
-        for (int i = 0; i < cantidad_items; i++)
+        int cantidad_items = cant_items.nextInt(6); //cantidad de items
+        for (int i = 0; i < cantidad_items && i< cant_productos; i++)
         {
             int cant = cantidad.nextInt(10); //cantidad de productos del item
-            int index_producto = index.nextInt(cant_productos);
+            int index_producto = index.nextInt(cant_productos); //TODO: crea aleatorios sin eliminar repetidos. Mal menor, arreglar cuando se pueda.
             System.out.println("index producto " + index_producto);
             this.itemService.newItem(new Item(cant, "descripcion item de producto id: " + productos.get(index_producto).getId(), orden, productos.get(index_producto)));
         }
@@ -235,8 +196,11 @@ class TpfinalApplicationTests
 
     public Date new_ORDENES_crear(int cant)
     {
-        new_PRODUCTOS_crear(40);
-        List<Product> productos = this.productService.getAll();
+        new_PRODUCTOS_crear(100);
+
+        List<Supplier> suppliers = this.supplierService.getAll();
+        int cantSuppliers = suppliers.size();
+        Random prox_index_supplier = new Random();
         new_CLIENT_crear(5);
         Date dateOfOrder = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
         List<Client> clientes = this.clientService.getAll();
@@ -248,6 +212,9 @@ class TpfinalApplicationTests
             Client cliente = (Client) clientes.get(index_cliente);
             Address address = cliente.getAddresses().get(index_cliente);
             String comentario = "comentario orden del cliente: " + cliente.getId();
+            //elijo los productos de un supplier Supplier
+            int prox_supplier_id = prox_index_supplier.nextInt(cantSuppliers);
+            List<Product> productos = this.productService.getBySupplierId(suppliers.get(prox_supplier_id).getId());
             new_ORDENES_crear_una_orden(productos, cliente, dateOfOrder, comentario);
         }
         return dateOfOrder;
@@ -855,25 +822,7 @@ class TpfinalApplicationTests
     }
 
 
-    @Test
-    void getOrder()
-    {
-        Iterator<Order> ordenes = this.supplierService.getOrderBySupplier().iterator();
-        while (ordenes.hasNext())
-        {
-            Order orden = (Order) ordenes.next();
-            //System.out.println("Order Status: "+item.getOrder().getOrderStatus().getName()+" id Item: "+item.getId()+" item.product.supplier: "+ item.getProduct().getSupplier().getId());
-            System.out.println("Order " + orden.getNumber());
-            Iterator<Item> items = orden.getItems().iterator();
-            while (items.hasNext())
-            {
-                Item item = (Item) items.next();
-                System.out.println("--supplier " + item.getProduct().getSupplier().getId());
-            }
 
-
-        }
-    }
 
     //TODO: no andaaaaaaaa !!!
     //11) Obtener los diez proveedores que más órdenes despacharon.
@@ -998,6 +947,7 @@ class TpfinalApplicationTests
     void verOrdenes()
     {
         Iterator<Order> orderIterator = this.orderService.getAll().iterator();
+        //Iterator<Order> orderIterator = this.supplierService.getOrderBySupplier().iterator();
         while(orderIterator.hasNext())
         {
             Order orden = (Order)orderIterator.next();
@@ -1012,10 +962,30 @@ class TpfinalApplicationTests
     }
 
     @Test
+    void getOrder()
+    {
+        Iterator<Order> ordenes = this.supplierService.getOrderBySupplier().iterator();
+        while (ordenes.hasNext())
+        {
+            Order orden = (Order) ordenes.next();
+            //System.out.println("Order Status: "+item.getOrder().getOrderStatus().getName()+" id Item: "+item.getId()+" item.product.supplier: "+ item.getProduct().getSupplier().getId());
+            System.out.println("Order " + orden.getNumber());
+            Iterator<Item> items = orden.getItems().iterator();
+            while (items.hasNext())
+            {
+                Item item = (Item) items.next();
+                System.out.println("--supplier " + item.getProduct().getSupplier().getId());
+            }
+        }
+    }
+
+    @Test
     void contexto_inicial()
     {
         new_CONTEXTO_INICIAL();
+        verOrdenes();
     }
+
     @Test
     void prueba()
     {

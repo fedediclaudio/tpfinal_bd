@@ -22,5 +22,6 @@ public interface ProductService
     public List<Product> getProductoByProductType(Long id_product_type);
     public List<HistoricalProductPrice> getPrices(Long id_product, Date desde, Date hasta);
     public List<ProductTypeAvgPrice_DTO> getAvgPriceForProductType();
+    public List<Product> getBySupplierId(Long id_supplier);
 
 }

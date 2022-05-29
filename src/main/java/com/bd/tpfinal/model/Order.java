@@ -14,7 +14,7 @@ public class Order
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "number_id_order", unique = true, updatable = false)
+    @Column(name = "number", unique = true, updatable = false)
     private Long number;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")

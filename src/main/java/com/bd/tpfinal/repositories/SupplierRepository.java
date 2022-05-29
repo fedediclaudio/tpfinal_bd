@@ -18,27 +18,58 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long>
     List<Supplier> findBySupplierTypeId(@Param("supplier_type_id") Long supplier_type_id);
 
     //11) Obtener los diez proveedores que más órdenes despacharon.
-    //Se puede resolver con una unica consulta.
-    //Te dejo algunas pistas: con el GROUP BY podes agrupar por un cierto parámetro, tenes el COUNT para contar la cantidad de elementos estos grupos
-    // y luego tenes el ORDER BY para ordenar estos resultados.
-    //Asi podrias agrupar las ordenes por su deliveryMan y ver que cual es el grupo que mas tiene.
-    //Vas a tener que usar el @Query por que el gruoup by no puede colocarse en la cabecera de un metodo.
+    //Claro, una orden es de un solo proveedor, todos los ítems de productos son del mismo proveedor.
+    // Bueno ahi vas a tenes que buscar como hacer la conexion entre una orden y un proovedor
+    // y ahi agrupar por proveedor las ordenes y poder hacer el count de cada uno, me explico?
+    // Fijate que el item deberia tener el id de la orden y el producto tiene el id del proveedor,
+    // uniendo estas dos tablas con un inner join tenes todos los datos que precisas para agrupar y contar.
 
-    //Ordenes de los supplier
-    // seleccionar items agrupados por supplier sin repetir orden
+    //SELECT id_supplier, id_order_number
+    //FROM db_delivery.items INNER JOIN db_delivery.orders INNER JOIN db_delivery.products
+    //WHERE (db_delivery.orders.number = db_delivery.items.id_order_number AND db_delivery.items.product_id_product = db_delivery.products.id_product )
+    //GROUP BY id_supplier, id_order_number
+    //ORDER BY id_supplier, id_order_number;
 
-    String q11_0 = "SELECT item.order FROM Item item  WHERE item IN " +  //seleccionar todas las ordenes a partir de los items
-            "(SELECT item FROM Item item WHERE item.product.supplier IN " + // seleccionar items que tienen sus suppliers
-            "(SELECT supplier FROM Supplier supplier)) " +
-            "GROUP BY item.order";
+    //SELECT * FROM db_delivery.items;
+    //SELECT * FROM db_delivery.items INNER JOIN db_delivery.orders INNER JOIN db_delivery.products WHERE (db_delivery.orders.number = db_delivery.items.id_order_number);
+    //
+    //
+    //SELECT id_supplier, id_order_number
+    //FROM db_delivery.items INNER JOIN db_delivery.orders INNER JOIN db_delivery.products
+    //WHERE (db_delivery.orders.number = db_delivery.items.id_order_number AND db_delivery.items.product_id_product = db_delivery.products.id_product )
+    //GROUP BY id_supplier, id_order_number
+    //ORDER BY id_supplier, id_order_number;
+    //
+    //SELECT number, count(number) as cantidad FROM db_delivery.items INNER JOIN db_delivery.orders INNER JOIN db_delivery.products WHERE (db_delivery.orders.number = db_delivery.items.id_order_number) GROUP BY number;
+    //
+    //
+    //SELECT id_supplier, id_product FROM db_delivery.products WHERE id_supplier IN (
+    //
+    //SELECT DISTINCT id_supplier,  count(id_order_number)
+    //FROM db_delivery.items INNER JOIN db_delivery.products
+    //WHERE db_delivery.items.product_id_product = db_delivery.products.id_product
+    //GROUP BY id_supplier, id_order_number
+    //ORDER BY count(id_order_number)
+    //
+    //);
+    //
+    //SELECT * FROM db_delivery.items;
 
-    @Query(value = q11_0)
+    String aux = "SELECT item.order FROM Item item ";
+   // String q11_1= "SELECT orden FROM Order orden  WHERE orden IN " +
+           // "( SELECT item.order FROM Item item INNER JOIN item.product.supplier WHERE item.product.supplier IN " +
+          //  "( ";
+
+
+    @Query(value="SELECT supplier FROM Supplier supplier")
+    List<Supplier> findTopTenSupplier();
+
+    @Query(value = aux)
     List<Order> findOrderBYSupplier();
 
 
-    String q11_1 = "SELECT item.product.supplier FROM Item item ORDER BY item.product.supplier";
-    @Query(value=q11_1)
-    List<Supplier> findTopTenSupplier();
+
+
 
 
 
@@ -65,9 +96,14 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long>
 
     //15) Obtener los proveedores que ofrezcan productos de todos los tipos.
     //Corregir esto
+    //String q15 = "SELECT product.supplier FROM Product product WHERE product.type IN " +
+           // "( select product.type, count(product.type) FROM Product product WHERE count(product.type) = 3) " +
+         //   "GROUP BY product.supplier";
+
     String q15 = "SELECT product.supplier FROM Product product WHERE product.type IN " +
-            "( select product.type, count(product.type) FROM Product product WHERE count(product.type) = 3) " +
-            "GROUP BY product.supplier";
+            "       ( SELECT product.type, count(product.type) FROM Product product " +
+            "           WHERE count(product.type) = (SELECT count(type) FROM ProductType type)) " +
+            "   GROUP BY product.supplier";
 
     @Query(value = q15)
     List<Supplier> findSupplierWithAllTypes();

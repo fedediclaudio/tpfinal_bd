@@ -16,7 +16,7 @@ public class Item
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
-    @JoinColumn(name = "id_order", nullable = false)
+    @JoinColumn(name = "id_order_number", nullable = false)
     private Order order;
 
     @ManyToOne(fetch = FetchType.EAGER)

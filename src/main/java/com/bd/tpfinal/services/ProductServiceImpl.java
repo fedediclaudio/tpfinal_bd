@@ -154,4 +154,11 @@ public class ProductServiceImpl implements ProductService
         return this.productRepository.findAllAvgPriceForProductType();
     }
 
+    @Override
+    @Transactional
+    public List<Product> getBySupplierId(Long id_supplier)
+    {
+        return this.productRepository.findBySupplierId(id_supplier);
+    }
+
 }

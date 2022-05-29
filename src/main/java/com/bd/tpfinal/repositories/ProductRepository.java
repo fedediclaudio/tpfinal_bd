@@ -21,6 +21,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>
     @Query(value="SELECT producto FROM Product producto WHERE (producto.type.id = :id_type AND producto.eliminado != 1)")
     List<Product> findByTypeId(@Param("id_type") Long id_type );
 
+    @Query(value = "SELECT product FROM Product product WHERE product.supplier.id = :id_supplier")
+    List<Product> findBySupplierId(@Param("id_supplier") Long id_supplier);
+
     //13) Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
     /*
       @Query("SELECT new com.devutil.examples.spring.jpa.repository.customobjects.EntidadNombre(e.nombre, COUNT(*)) "
