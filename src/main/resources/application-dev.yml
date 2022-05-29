@@ -6,3 +6,4 @@ spring:
       database: db
       password: S3cret
       username: grupo2
+      authentication-database: admin

@@ -2,7 +2,9 @@ package com.bd.tpfinal;
 
 import com.bd.tpfinal.model.Address;
 import com.bd.tpfinal.model.Client;
+import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.repositories.ClientRepository;
+import com.bd.tpfinal.repositories.DeliveryManRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,7 +25,7 @@ public class TpfinalApplication {
 
 
     @Bean
-    CommandLineRunner runner(ClientRepository clientRepository) {
+    CommandLineRunner runner(ClientRepository clientRepository, DeliveryManRepository deliveryManRepository) {
         return args -> {
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
             String dateInString = "08-Nov-1986";
@@ -47,18 +49,33 @@ public class TpfinalApplication {
 
             Client client = new Client();
             client.setName("German");
-            client.setId("0fe4cb40-de2e-11ec-9d64-0242ac120002");
             client.setUsername("Gianotti");
             client.setPassword("GermanElMasMejor");
             client.setEmail("gggianotti@gmail.com");
             client.setDateOfBirth(date);
-            client.setScrore(Boolean.TRUE);
+            client.setActive(Boolean.TRUE);
             client.setScore(50);
 
             client.setDateOfRegister(date);
             client.setAddresses(Arrays.asList(address));
 
             clientRepository.save(client);
+
+            DeliveryMan deliveryMan = new DeliveryMan();
+            deliveryMan.setName("German Delivery");
+            deliveryMan.setUsername("Gianotti");
+            deliveryMan.setPassword("GermanElMasMejor");
+            deliveryMan.setEmail("gggianotti@gmail.com");
+            deliveryMan.setDateOfBirth(date);
+            deliveryMan.setActive(Boolean.TRUE);
+            deliveryMan.setScore(50);
+
+            deliveryMan.setNumberOfSuccessOrders(5);
+            deliveryMan.setFree(Boolean.FALSE);
+            deliveryMan.setDateOfAdmission(date);
+            deliveryMan.setOrdersPending(new ArrayList<>());
+
+            deliveryManRepository.save(deliveryMan);
         };
     }
 

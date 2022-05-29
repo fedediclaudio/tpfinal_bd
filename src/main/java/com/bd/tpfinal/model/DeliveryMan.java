@@ -1,9 +1,18 @@
 package com.bd.tpfinal.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Date;
 import java.util.List;
 
-public class DeliveryMan extends User{
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Document("DeliveryMan")
+public class DeliveryMan extends User {
 
     private int numberOfSuccessOrders;
 
@@ -13,35 +22,4 @@ public class DeliveryMan extends User{
 
     private List<Order> ordersPending;
 
-    public int getNumberOfSuccessOrders() {
-        return numberOfSuccessOrders;
-    }
-
-    public void setNumberOfSuccessOrders(int numberOfSuccessOrders) {
-        this.numberOfSuccessOrders = numberOfSuccessOrders;
-    }
-
-    public boolean isFree() {
-        return free;
-    }
-
-    public void setFree(boolean free) {
-        this.free = free;
-    }
-
-    public Date getDateOfAdmission() {
-        return dateOfAdmission;
-    }
-
-    public void setDateOfAdmission(Date dateOfAdmission) {
-        this.dateOfAdmission = dateOfAdmission;
-    }
-
-    public List<Order> getOrdersPending() {
-        return ordersPending;
-    }
-
-    public void setOrdersPending(List<Order> ordersPending) {
-        this.ordersPending = ordersPending;
-    }
 }
