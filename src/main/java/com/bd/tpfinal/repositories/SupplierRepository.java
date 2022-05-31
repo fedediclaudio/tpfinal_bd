@@ -2,11 +2,14 @@ package com.bd.tpfinal.repositories;
 
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.Supplier;
+import com.bd.tpfinal.model.Supplier_Order_DTO;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 @Repository
@@ -24,47 +27,23 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long>
     // Fijate que el item deberia tener el id de la orden y el producto tiene el id del proveedor,
     // uniendo estas dos tablas con un inner join tenes todos los datos que precisas para agrupar y contar.
 
-    //SELECT id_supplier, id_order_number
-    //FROM db_delivery.items INNER JOIN db_delivery.orders INNER JOIN db_delivery.products
-    //WHERE (db_delivery.orders.number = db_delivery.items.id_order_number AND db_delivery.items.product_id_product = db_delivery.products.id_product )
-    //GROUP BY id_supplier, id_order_number
-    //ORDER BY id_supplier, id_order_number;
+    //PageRequest.of(0, 10) en el service
+    //findxxx(Pageable pageable); en el repositorio
+     String q11_1= "SELECT DISTINCT new com.bd.tpfinal.model.Supplier_Order_DTO( item.product.supplier.id, count(item.order.number)) " +
+            "   FROM Item item INNER JOIN Product product " +
+            "   ON item.product.id = product.id " +
+            "   GROUP BY item.product.supplier" +
+            "   ORDER BY count(item.order.number) DESC, item.product.supplier" ;
 
-    //SELECT * FROM db_delivery.items;
-    //SELECT * FROM db_delivery.items INNER JOIN db_delivery.orders INNER JOIN db_delivery.products WHERE (db_delivery.orders.number = db_delivery.items.id_order_number);
-    //
-    //
-    //SELECT id_supplier, id_order_number
-    //FROM db_delivery.items INNER JOIN db_delivery.orders INNER JOIN db_delivery.products
-    //WHERE (db_delivery.orders.number = db_delivery.items.id_order_number AND db_delivery.items.product_id_product = db_delivery.products.id_product )
-    //GROUP BY id_supplier, id_order_number
-    //ORDER BY id_supplier, id_order_number;
-    //
-    //SELECT number, count(number) as cantidad FROM db_delivery.items INNER JOIN db_delivery.orders INNER JOIN db_delivery.products WHERE (db_delivery.orders.number = db_delivery.items.id_order_number) GROUP BY number;
-    //
-    //
-    //SELECT id_supplier, id_product FROM db_delivery.products WHERE id_supplier IN (
-    //
-    //SELECT DISTINCT id_supplier,  count(id_order_number)
-    //FROM db_delivery.items INNER JOIN db_delivery.products
-    //WHERE db_delivery.items.product_id_product = db_delivery.products.id_product
-    //GROUP BY id_supplier, id_order_number
-    //ORDER BY count(id_order_number)
-    //
-    //);
-    //
-    //SELECT * FROM db_delivery.items;
-
-    String aux = "SELECT item.order FROM Item item ";
-   // String q11_1= "SELECT orden FROM Order orden  WHERE orden IN " +
-           // "( SELECT item.order FROM Item item INNER JOIN item.product.supplier WHERE item.product.supplier IN " +
-          //  "( ";
+    @Query(value= q11_1)
+    List<Supplier_Order_DTO> findTopTenSupplierWithOrders(PageRequest pageable);
 
 
-    @Query(value="SELECT supplier FROM Supplier supplier")
+    //borradores
+    @Query(value=q11_1)
     List<Supplier> findTopTenSupplier();
 
-    @Query(value = aux)
+    @Query(value = q11_1)
     List<Order> findOrderBYSupplier();
 
 

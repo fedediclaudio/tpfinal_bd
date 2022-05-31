@@ -836,12 +836,13 @@ class TpfinalApplicationTests
     @Test
     void test_11_obtener_10_proveedores_con_mas_ordenes_despachadas()
     {
-        Iterator<Supplier> suppliers = this.supplierService.getTop10Supplier().iterator();
+        Iterator<Supplier_Order_DTO> suppliers = this.supplierService.getTopTenSupplierWithOrders().iterator();
         while (suppliers.hasNext())
         {
-            Supplier supplier = (Supplier) suppliers.next();
+            Supplier_Order_DTO supplier = (Supplier_Order_DTO) suppliers.next();
             //System.out.println("Order Status: "+item.getOrder().getOrderStatus().getName()+" id Item: "+item.getId()+" item.product.supplier: "+ item.getProduct().getSupplier().getId());
-            System.out.println("Supplier " + supplier.getId());
+            System.out.println("Supplier " + supplier.getId_supplier()+ " cantidad de ordenes: "+supplier.getCantidad_ordenes());
+
         }
     }
 

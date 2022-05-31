@@ -2,11 +2,14 @@ package com.bd.tpfinal.services;
 
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.Supplier;
+import com.bd.tpfinal.model.Supplier_Order_DTO;
 import com.bd.tpfinal.repositories.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.awt.print.Pageable;
 import java.util.List;
 
 @Service
@@ -83,6 +86,13 @@ public class SupplierServiceImpl implements SupplierService
     public List<Supplier> getSupplierWithAllTypes()
     {
         return this.supplierRepository.findSupplierWithAllTypes();
+    }
+
+    @Override
+    @Transactional
+    public List<Supplier_Order_DTO> getTopTenSupplierWithOrders()
+    {
+        return this.supplierRepository.findTopTenSupplierWithOrders(PageRequest.of(0, 10));
     }
 
 
