@@ -8,6 +8,7 @@ import com.bd.tpfinal.services.HistoricalProductPriceService;
 import com.bd.tpfinal.services.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -48,8 +49,8 @@ public class ProductController {
     // Hay que arreglar el tema del formato de fecha.
     @GetMapping("/get-precios-producto-dos-fechas/{product_id}")
     public List<HistoricalProductPrice> getPreciosProductoBetweenToFechas(@PathVariable long product_id,
-                                                          @RequestParam(value = "start_date") Date start_date,
-                                                          @RequestParam (value= "finish_date") Date finish_date) {
+                                                          @RequestParam(value = "start_date") @DateTimeFormat(pattern="dd-MM-yyyy")  Date start_date,
+                                                          @RequestParam (value= "finish_date") @DateTimeFormat(pattern="dd-MM-yyyy") Date finish_date) {
        return historicalProductPriceService.getPreciosProductoBetweenToFechas(product_id, start_date, finish_date);
     }
 }

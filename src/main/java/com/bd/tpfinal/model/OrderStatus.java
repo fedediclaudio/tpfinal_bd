@@ -11,7 +11,7 @@ public abstract class OrderStatus {
     @Column(name = "id", nullable = false)
     private Long id;
 
-  @Column(name = "state")
+    @Column(name = "state")
     private String name;
 
     private Date startDate;

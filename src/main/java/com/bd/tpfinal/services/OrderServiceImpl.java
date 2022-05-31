@@ -6,6 +6,7 @@ import com.bd.tpfinal.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +41,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Optional<Order> getOrderConMayorPrecioDelDia(Date fecha) {
+    public Optional<Order> getOrderConMayorPrecioDelDia(LocalDate fecha) {
         return orderRepository.getOrdenConMayorPrecioDelDia(fecha);
     }
 

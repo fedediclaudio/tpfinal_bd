@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -34,9 +35,9 @@ public class OrderController {
         return orderService.getOrdersConMasProductosDeSupplier(supplier_id);
     }
     // Obtener la orden de mayor precio total de un dia dado
-    @GetMapping("/mayor-precio-del-dia/{fecha}")
-    public Order getOrderMayorPrecioDelDia(@PathVariable @DateTimeFormat(pattern="dd-MM-yyyy") Date fecha) {
-        Optional<Order> order = orderService.getOrderConMayorPrecioDelDia(fecha);
+    @GetMapping("/mayor-precio-del-dia/{fecha_dia}")
+    public Order getOrderMayorPrecioDelDia(@PathVariable @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate fecha_dia) {
+        Optional<Order> order = orderService.getOrderConMayorPrecioDelDia(fecha_dia);
         if(order.isPresent())
             return order.get();
         return null;
