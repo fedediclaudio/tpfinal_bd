@@ -21,13 +21,12 @@ public class Order {
 
     private float totalPrice;
 
-    @OneToOne( mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne( mappedBy = "order", fetch = FetchType.EAGER, cascade ={ CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
   /*  @JoinColumn( name="id_orderStatus" )*/
     @JsonIgnore
-
     private OrderStatus orderStatus;
 
-    @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn( name="id_deliveryMan" )
     @JsonIgnore
     private DeliveryMan deliveryMan;
@@ -39,6 +38,7 @@ public class Order {
 
     @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn( name="id_address" )
+    @JsonIgnore
     private Address address;
 
     @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)

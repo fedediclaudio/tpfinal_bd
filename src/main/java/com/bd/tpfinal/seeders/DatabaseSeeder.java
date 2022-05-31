@@ -447,12 +447,12 @@ public class DatabaseSeeder {
             Order order_4 = order4.get();
             order_4.getStatus().cancel();
             orderRepository.save(order_4);
-*/
+
             // para probar  refuse
             Optional <Order> order5 = orderRepository.findById(1L);
             Order order_5 = order5.get();
             order_5.getStatus().refuse();
-            orderRepository.save(order_5);
+            orderRepository.save(order_5);*/
 /*
             // para probar entrega
             Optional <Order> order5 = orderRepository.findById(1L);

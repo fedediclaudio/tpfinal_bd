@@ -10,5 +10,6 @@ import java.util.List;
 
 @Repository
 public interface HistoricalProductPriceRepository  extends CrudRepository<HistoricalProductPrice, Long> {
+
     public List<HistoricalProductPrice> findByProductIdAndStartDateGreaterThanAndFinishDateLessThan(long productId, Date start_date, Date finish_date);
 }
