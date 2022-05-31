@@ -1,9 +1,16 @@
 package com.bd.tpfinal.model;
 
-import java.util.Date;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public abstract class User {
+import java.time.format.DateTimeFormatter;
 
+@Data
+@Document
+public  class User {
+    @Id
+    private String id;
     private String name;
 
     private String username;
@@ -12,7 +19,7 @@ public abstract class User {
 
     private String email;
 
-    private Date dateOfBirth;
+    private DateTimeFormatter dateOfBirth;
 
     private boolean scrore;
 
@@ -50,11 +57,11 @@ public abstract class User {
         this.email = email;
     }
 
-    public Date getDateOfBirth() {
+    public DateTimeFormatter getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(DateTimeFormatter dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -72,5 +79,15 @@ public abstract class User {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public User() {
+        this.name = "fede";
+        this.username = "lockix";
+        this.password = "1234";
+        this.email = "amandifederico@gmail.com";
+        this.dateOfBirth = DateTimeFormatter.ofPattern("1985/06/28 12:00:00");;
+        this.scrore = true;
+        this.score = 9;
     }
 }

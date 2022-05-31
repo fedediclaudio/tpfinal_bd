@@ -1,9 +1,15 @@
 package com.bd.tpfinal.model;
 
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.List;
-
+@Data
+@Document
 public class Address {
-
+    @Id
+    private String id;
     private String name;
 
     private String address;
@@ -71,6 +77,16 @@ public class Address {
     }
 
     public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public Address(String name, String address, String apartment, float[] coords, String description, Client client, List<Order> orders) {
+        this.name = name;
+        this.address = address;
+        this.apartment = apartment;
+        this.coords = coords;
+        this.description = description;
+        this.client = client;
         this.orders = orders;
     }
 }
