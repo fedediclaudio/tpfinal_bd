@@ -3,7 +3,9 @@ package com.bd.tpfinal.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
 
 import java.util.Date;
 
@@ -13,7 +15,8 @@ import java.util.Date;
 public abstract class User {
 
 
-    private String id;
+    @Id
+    private ObjectId id;
 
     private String name;
 
@@ -28,5 +31,8 @@ public abstract class User {
     private boolean active;
 
     private int score;
+
+    @Version
+    private Long version;
 
 }

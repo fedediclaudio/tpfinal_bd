@@ -1,7 +1,17 @@
 package com.bd.tpfinal.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Document(collection = "Supplier")
 public class Supplier {
 
     private String name;
@@ -14,63 +24,10 @@ public class Supplier {
 
     private float qualificationOfUsers;
 
+    @DBRef(lazy = true)
     private List<Product> products;
 
+    @DBRef
     private SupplierType type;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCuil() {
-        return cuil;
-    }
-
-    public void setCuil(String cuil) {
-        this.cuil = cuil;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public float[] getCoords() {
-        return coords;
-    }
-
-    public void setCoords(float[] coords) {
-        this.coords = coords;
-    }
-
-    public float getQualificationOfUsers() {
-        return qualificationOfUsers;
-    }
-
-    public void setQualificationOfUsers(float qualificationOfUsers) {
-        this.qualificationOfUsers = qualificationOfUsers;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
-    public SupplierType getType() {
-        return type;
-    }
-
-    public void setType(SupplierType type) {
-        this.type = type;
-    }
 }

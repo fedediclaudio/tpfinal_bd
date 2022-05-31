@@ -1,10 +1,7 @@
 package com.bd.tpfinal;
 
-import com.bd.tpfinal.model.Address;
-import com.bd.tpfinal.model.Client;
-import com.bd.tpfinal.model.DeliveryMan;
-import com.bd.tpfinal.repositories.ClientRepository;
-import com.bd.tpfinal.repositories.DeliveryManRepository;
+import com.bd.tpfinal.model.*;
+import com.bd.tpfinal.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,7 +22,9 @@ public class TpfinalApplication {
 
 
     @Bean
-    CommandLineRunner runner(ClientRepository clientRepository, DeliveryManRepository deliveryManRepository) {
+    CommandLineRunner runner(ClientRepository clientRepository, DeliveryManRepository deliveryManRepository,
+                             AddressRepository addressRepository, ProductTypeRepository productTypeRepository,
+                             SupplierRepository supplierRepository, SupplierTypeRepository supplierTypeRepository) {
         return args -> {
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
             String dateInString = "08-Nov-1986";
@@ -39,25 +38,27 @@ public class TpfinalApplication {
 
             Address address = new Address();
             address.setName("Siempre viva");
-            address.setAddress("Calle falsa");
+            address.setAddress("Calle falsa 123");
             address.setApartment("1");
             address.setCoords(f);
             address.setDescription("Una direccion linda");
             address.setOrders(new ArrayList<>());
+            List<Address> addresses = new ArrayList<>();
+            addresses.add(address);
+            addressRepository.save(address);
 
 
             Client client = new Client();
             client.setName("German");
             client.setUsername("Gianotti");
-            client.setPassword("GermanElMasMejor");
+            client.setPassword("GermanTheBest");
             client.setEmail("gggianotti@gmail.com");
             client.setDateOfBirth(date);
             client.setActive(Boolean.TRUE);
             client.setScore(50);
 
             client.setDateOfRegister(date);
-            List<Address> addresses = new ArrayList<>();
-            addresses.add(address);
+
             client.setAddresses(addresses);
 
             address.setClient(client);
@@ -66,7 +67,7 @@ public class TpfinalApplication {
             DeliveryMan deliveryMan = new DeliveryMan();
             deliveryMan.setName("German Delivery");
             deliveryMan.setUsername("Gianotti");
-            deliveryMan.setPassword("GermanElMasMejor");
+            deliveryMan.setPassword("GermanTheBest");
             deliveryMan.setEmail("gggianotti@gmail.com");
             deliveryMan.setDateOfBirth(date);
             deliveryMan.setActive(Boolean.TRUE);
@@ -78,6 +79,62 @@ public class TpfinalApplication {
             deliveryMan.setOrdersPending(new ArrayList<>());
 
             deliveryManRepository.save(deliveryMan);
+
+
+            Qualification qualification = new Qualification();
+            qualification.setScore(5f);
+            qualification.setCommentary("Some Comment");
+
+
+            /*
+             * Product Type
+             */
+            ProductType productType = new ProductType();
+            productType.setName("Drink");
+            productType.setDescription("Some Description");
+            productTypeRepository.save(productType);
+
+            /*
+             *Historical Product Price
+             */
+            String stringDateStart = "01-Jun-2022";
+            String stringDateEnd = "30-Jun-2022";
+            Date dateStart = formatter.parse(stringDateStart);
+            Date dateEnd = formatter.parse(stringDateEnd);
+            HistoricalProductPrice historicalProductPrice = new HistoricalProductPrice();
+            historicalProductPrice.setPrice(10f);
+            historicalProductPrice.setStartDate(dateStart);
+            historicalProductPrice.setFinishDate(dateEnd);
+
+
+            /*
+            Supplier Type
+             */
+            SupplierType supplierType = new SupplierType();
+            supplierType.setName("Name");
+            supplierType.setDescription("Some description");
+            supplierTypeRepository.save(supplierType);
+
+            /*
+            Supplier
+             */
+            float coords[];
+            coords = new float[2];
+            coords[0] = 10.10f;
+            coords[1] = 30.3f;
+            Supplier supplier = new Supplier();
+            supplier.setName("Supplier Name");
+            supplier.setType(supplierType);
+            supplier.setQualificationOfUsers(new Float(5f));
+            supplier.setAddress("Some Address");
+            supplier.setCoords(coords);
+            supplier.setCuil("Some Cuil");
+
+            supplierRepository.save(supplier);
+
+            /*
+            Product
+             */
 
 
         };

@@ -1,9 +1,23 @@
 package com.bd.tpfinal.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
+
 import java.util.Date;
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Document("Orders")
 public class Order {
+
+    private ObjectId id;
 
     private int number;
 
@@ -15,93 +29,18 @@ public class Order {
 
     private OrderStatus status;
 
+    @DocumentReference
     private DeliveryMan deliveryMan;
 
+    @DocumentReference
     private Client client;
 
+    @DocumentReference
     private Address address;
 
     private Qualification qualification;
 
+    @DBRef
     private List<Item> items;
 
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public Date getDateOfOrder() {
-        return dateOfOrder;
-    }
-
-    public void setDateOfOrder(Date dateOfOrder) {
-        this.dateOfOrder = dateOfOrder;
-    }
-
-    public String getComments() {
-        return comments;
-    }
-
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
-    public float getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(float totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public DeliveryMan getDeliveryMan() {
-        return deliveryMan;
-    }
-
-    public void setDeliveryMan(DeliveryMan deliveryMan) {
-        this.deliveryMan = deliveryMan;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public Qualification getQualification() {
-        return qualification;
-    }
-
-    public void setQualification(Qualification qualification) {
-        this.qualification = qualification;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
 }
