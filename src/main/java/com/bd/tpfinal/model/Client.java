@@ -1,6 +1,8 @@
 package com.bd.tpfinal.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 @Entity
@@ -13,6 +15,12 @@ public class Client extends User{
     @OneToMany( mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Address> addresses;
 
+    public Client (){}
+    public Client (String name, String email, String userName, String password, Date dateOfBirth){
+        super(name, email, userName, password, dateOfBirth);
+        this.dateOfRegister = Calendar.getInstance().getTime();
+        this.orders = new ArrayList<>();
+    }
     public Date getDateOfRegister() {
         return dateOfRegister;
     }
@@ -37,5 +45,19 @@ public class Client extends User{
         this.addresses = addresses;
     }
 
+    public void addOrder(Order order){this.orders.add(order);}
+
+
+    public void decreaseScore() throws Exception {
+        int actualScore = this.getScore();
+        if (actualScore > 0) // para que no quede un score negativo
+            this.setScore(actualScore - 1);
+    }
+
+
+    public void increaseScore() throws Exception {
+        int actualScore = this.getScore();
+        this.setScore(actualScore + 1);
+    }
 
 }

@@ -26,6 +26,10 @@ public abstract class User {
 
     private boolean active;
 
+    public User (){}
+    public User(String name, String email, String username, String password, Date dateOfBirth) {
+    }
+
     public Long getId() {
         return id;
     }
@@ -89,4 +93,10 @@ public abstract class User {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public void addScore(int score) {
+        this.score = this.score + score;
+    }
+
+
 }

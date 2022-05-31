@@ -39,7 +39,7 @@ public class DatabaseSeeder {
     private Logger logger = Logger.getLogger(String.valueOf(DatabaseSeeder.class));
 
     @EventListener
-    public void seedTables(ContextRefreshedEvent event) {
+    public void seedTables(ContextRefreshedEvent event) throws Exception {
         seedProductTypeTable();
         seedSupplierTypeTable();
         seedSupplierTable();
@@ -371,7 +371,7 @@ public class DatabaseSeeder {
             deliveryMan_1.setUsername("pizzadude1");
             deliveryMan_1.setPassword("pizzapassword");
             deliveryMan_1.setActive(true);
-            deliveryMan_1.setScore(8);
+            deliveryMan_1.setScore(0);
             deliveryMan_1.setDateOfBirth(new GregorianCalendar(2014, 3, 5).getTime());
             deliveryMan_1.setOrdersPending(null);
             deliveryManRepository.save(deliveryMan_1);
@@ -384,7 +384,7 @@ public class DatabaseSeeder {
             deliveryMan_2.setUsername("pizzadude2");
             deliveryMan_2.setPassword("pizza2password");
             deliveryMan_2.setActive(true);
-            deliveryMan_2.setScore(8);
+            deliveryMan_2.setScore(0);
             deliveryMan_2.setDateOfBirth(new GregorianCalendar(2018, 3, 5).getTime());
             deliveryMan_2.setOrdersPending(null);
             deliveryManRepository.save(deliveryMan_2);
@@ -395,15 +395,20 @@ public class DatabaseSeeder {
         }
     }
 
-    private void seedOrderTable() {
+    private void seedOrderTable() throws Exception {
         String sql = "SELECT * FROM orders";
         List<Order> u = jdbcTemplate.query(sql, (resultSet, rowNum) -> null);
         if(u == null || u.size() <= 0) {
 
+
+
+
             Order order_1 = new Order();
             order_1.setComments("Casa de rejas negras");
             order_1.setNumber(1);
-            //order_1.setStatus(new Pending());
+            order_1.setStatus(new Pending(order_1,new Date() ) );
+
+          /*  order_1.setStatusByName();*/
             order_1.setDateOfOrder(new Date());
 
             Iterable<Product> products_cafe = productRepository.findByNameIgnoreCaseContaining("Cafe");
@@ -429,13 +434,39 @@ public class DatabaseSeeder {
                // order_1.setAddress(client.getAddresses().get(0));
             }
             orderRepository.save(order_1);
+            // para probar asignar
+            Optional <Order> order = orderRepository.findById(1L);
+            Order order_3 = order.get();
+            Optional <DeliveryMan> deliverys = deliveryManRepository.findById(4L);
+            DeliveryMan deliv = deliverys.get();
+            order_3.getStatus().assign(deliv);
+            orderRepository.save(order_3);
 
-            Order order_2 = new Order();
-            order_2.setComments("No anda el timbre");
-            order_2.setNumber(2);
-            order_2.setStatus(new Pending());
-            order_2.setDateOfOrder(new Date());
-            orderRepository.save(order_2);
+            // para probar cancel
+/*            Optional <Order> order4 = orderRepository.findById(1L);
+            Order order_4 = order4.get();
+            order_4.getStatus().cancel();
+            orderRepository.save(order_4);
+*/
+            // para probar  refuse
+            Optional <Order> order5 = orderRepository.findById(1L);
+            Order order_5 = order5.get();
+            order_5.getStatus().refuse();
+            orderRepository.save(order_5);
+/*
+            // para probar entrega
+            Optional <Order> order5 = orderRepository.findById(1L);
+            Order order_5 = order5.get();
+            order_5.getStatus().deliver();
+            orderRepository.save(order_5);
+
+            //una vez entregado se finaliza y califica
+            Optional <Order> order6 = orderRepository.findById(1L);
+            Order order_6 = order6.get();
+            order_6.getStatus().finish(2, "muy bien");
+            orderRepository.save(order_6);
+
+*/
 
             logger.info("Order table Cargada");
         } else {

@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface DeliveryManRepository extends CrudRepository<DeliveryMan, Long> {
     public List<Client> findByUsernameIgnoreCaseContaining(String username);
-    public List<Client> findByUsername(String username);
+    public List<DeliveryMan> findByUsername(String username);
+
 }

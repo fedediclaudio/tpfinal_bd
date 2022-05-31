@@ -19,9 +19,9 @@ public class Order {
 
     private float totalPrice;
 
-    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn( name="id_orderStatus" )
-    private OrderStatus status;
+    @OneToOne( mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+  /*  @JoinColumn( name="id_orderStatus" )*/
+    private OrderStatus orderStatus;
 
     @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn( name="id_deliveryMan" )
@@ -113,13 +113,44 @@ public class Order {
     public void setItems(List<Item> items) {
         this.items = items;
     }
-
     public OrderStatus getStatus() {
-        return status;
+        return orderStatus;
     }
 
-    public void setStatus(OrderStatus status) {
-        this.status = status;
+  public void setStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
+    /* para cambiar los estados de las ordenes*/
+    public void cancelOrder() throws Exception {
+        this.orderStatus = new Cancel(this);
+    }
+
+    public void refuseOrder() throws Exception {
+        this.orderStatus = new Cancel(this);
+    }
+
+    public void deliverOrder() throws Exception {
+        this.orderStatus = new Sent(this);
+    }
+
+    public void finishOrder() throws Exception {
+        this.orderStatus = new Delivered(this);
+    }
+
+    public boolean addItem(Item item) throws Exception {
+        if (this.orderStatus.canAddItem()) {
+            this.items.add(item);
+            return true;
+        }
+        return false;
+    }
+
+    public void decreaseClientScore() throws Exception {
+        this.client.decreaseScore();
+    }
+    public void increaseClientScore() throws Exception {
+        this.client.increaseScore();
+    }
+
 }
 
