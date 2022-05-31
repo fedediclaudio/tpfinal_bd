@@ -1,6 +1,7 @@
 package com.bd.tpfinal.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Qualification {
@@ -15,6 +16,13 @@ public class Qualification {
     @OneToOne( fetch = FetchType.EAGER)
     @JoinColumn( name="id_order" )
     private Order order;
+    public Qualification(){}
+
+    public Qualification(float score, String commentary ){
+        this.score = score;
+        this.commentary = commentary;
+    }
+
 
     public Long getId() {
         return id;

@@ -1,14 +1,17 @@
 package com.bd.tpfinal.model;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class OrderStatus {
-    @Id
+   @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
+  @Column(name = "state")
     private String name;
 
     private Date startDate;
@@ -17,7 +20,19 @@ public abstract class OrderStatus {
     @JoinColumn( name="id_order" )
     private Order order;
 
-    public Long getId() {
+    public OrderStatus(){}
+    public OrderStatus(Order order, String name){
+        this.order = order;
+        this.name =  name;
+        this.startDate = Calendar.getInstance().getTime();
+    }
+    public OrderStatus(Order order, String name, Date startDate){
+        this.order = order;
+        this.name =  name;
+        this.startDate = startDate;
+    }
+
+   public Long getId() {
         return id;
     }
 
@@ -73,11 +88,11 @@ public abstract class OrderStatus {
         throw new Exception("No se puede realizarse esta accion");
     }
 
-    public boolean finish() throws Exception{
+    public boolean finish(int score, String commentary) throws Exception{
         throw new Exception("No se puede realizarse esta accion");
     }
 
-    public Order getOrder() {
+   public Order getOrder() {
         return order;
     }
 
