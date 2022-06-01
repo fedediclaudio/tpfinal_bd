@@ -14,7 +14,6 @@ import java.util.List;
 public class Client extends User
 {
     //hereda el campo id de User
-
     @Column(name = "date_of_register_client")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "es_AR")
     private Date dateOfRegister;

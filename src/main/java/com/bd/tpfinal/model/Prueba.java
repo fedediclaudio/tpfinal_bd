@@ -11,6 +11,10 @@ import java.util.Date;
 @Table(name = "pruebas")
 public class Prueba
 {
+    @Version
+    @Column(name = "OBJ_VERSION")
+    private int version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_prueba")

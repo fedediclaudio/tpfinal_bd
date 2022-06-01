@@ -8,6 +8,10 @@ import java.util.Date;
 @MappedSuperclass
 public abstract class User
 {
+    @Version
+    @Column(name = "OBJ_VERSION")
+    private int version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_user")

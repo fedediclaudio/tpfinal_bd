@@ -33,4 +33,5 @@ public interface OrderService
     public Order rechazoDeOrden(Long id_orden) throws Exception;
     public Order cancelacionDeOrden(Long id_orden) throws Exception;
     public List<Order> getAllWithStatus();
+    public List<Order> getAllWithoutQual();
 }

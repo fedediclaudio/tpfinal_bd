@@ -19,6 +19,13 @@ public interface OrderRepository extends JpaRepository<Order, Long>
     //@Query(value = "SELECT * FROM Order")
     List<Order> findAll();
 
+
+    //encontrar todas las ordenes sin califiación
+    String q1="SELECT orden FROM Order orden WHERE orden.qualification.score = 0F" +
+            "AND orden.orderStatus.name = 'Delivered'";
+    @Query(value=q1)
+    List<Order> findAllWithoutQual();
+
     //https://docs.jboss.org/hibernate/orm/3.5/reference/es-ES/html/queryhql.html
     String query1 = "SELECT orden FROM Order orden WHERE orden.items.product.supplier.id = :id_supplier";
     String query2 = "SELECT orden FROM Order orden WHERE orden.items[].product.supplier.id = :id_supplier";

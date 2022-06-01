@@ -68,6 +68,22 @@ public class OrderServiceImpl implements OrderService
         return orders;
     }
 
+    @Override
+    @Transactional
+    public List<Order> getAllWithoutQual()
+    {
+        List<Order> orders = this.orderRepository.findAllWithoutQual();
+        int cant = orders.size();
+        System.out.println("getAllWithoutQual() tamano lista de ordenes: "+cant);
+        int i = 0;
+        for(i=0; i<cant; i++)
+        {
+            orders.get(i).setStatusByName();
+            System.out.println("orden number: "+orders.get(i).getNumber()+" status: "+orders.get(i).getOrderStatus().getName());
+        }
+        return orders;
+    }
+
     /**
      * retorna la orden con el atributo status reconstruido.
      *

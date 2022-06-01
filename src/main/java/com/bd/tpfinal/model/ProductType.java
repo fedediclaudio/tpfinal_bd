@@ -10,6 +10,10 @@ import java.util.List;
 @Table(name = "productTypes")
 public class ProductType
 {
+    @Version
+    @Column(name = "OBJ_VERSION")
+    private int version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_productType")

@@ -12,6 +12,10 @@ import java.util.List;
 @Table(name = "orders")
 public class Order
 {
+    @Version
+    @Column(name = "OBJ_VERSION")
+    private int version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "number", unique = true, updatable = false)
@@ -251,7 +255,6 @@ public class Order
     public void setStatusByName()
     {
         String name = orderStatus.getName();
-        System.out.println("setStatusByName--->nombre del orderStatus: "+ name);
         switch (orderStatus.getName())
         {
             case "Pending":

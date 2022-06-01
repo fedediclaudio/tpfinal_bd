@@ -8,6 +8,10 @@ import java.util.Date;
 @Table(name="historicalProductPrices")
 public class HistoricalProductPrice
 {
+    @Version
+    @Column(name = "OBJ_VERSION")
+    private int version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_historicalProductPrice")

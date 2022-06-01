@@ -9,6 +9,10 @@ import java.util.*;
 @Table(name = "products")
 public class Product
 {
+    @Version
+    @Column(name = "OBJ_VERSION")
+    private int version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_product")

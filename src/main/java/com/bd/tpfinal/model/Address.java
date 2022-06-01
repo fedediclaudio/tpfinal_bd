@@ -14,6 +14,10 @@ import java.util.List;
  */
 public class Address
 {
+    @Version
+    @Column(name = "OBJ_VERSION")
+    private int version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_address")

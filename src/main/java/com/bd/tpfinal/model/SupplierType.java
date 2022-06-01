@@ -8,6 +8,10 @@ import java.util.List;
 @Table(name = "supplierTypes")
 public class SupplierType
 {
+    @Version
+    @Column(name = "OBJ_VERSION")
+    private int version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_supplierType")

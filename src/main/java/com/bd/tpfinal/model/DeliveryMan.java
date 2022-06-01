@@ -19,7 +19,6 @@ public class DeliveryMan extends User
      *     @Column(name = "id_user")
      *     protected Long id;
      */
-
     private int numberOfSuccessOrders;
 
     private boolean free;
