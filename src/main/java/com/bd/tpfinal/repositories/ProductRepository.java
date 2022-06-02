@@ -16,8 +16,13 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {
+
     List<Product> findByNameIgnoreCaseContaining(String name);
+
     List<Product> findBySupplierId(long supplier_id);
+
     @Query(nativeQuery = true)
     List<ProductoPrecioPromedioDTO> getProductosPrecioPromedioDTO();
+
+    public List<Product> findBySupplierIdAndNameIgnoreCaseContaining(long supplier_id, String name);
 }

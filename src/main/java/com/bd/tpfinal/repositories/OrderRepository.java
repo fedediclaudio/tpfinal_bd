@@ -23,7 +23,8 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
     public List<Order> getOrdersConMasProductosDeSupplier(long supplier_id);
 
     @Query(value="SELECT *, MAX(total_price) "
-            + "from orders "
-            + "where date (date_of_order) = :fecha", nativeQuery = true)
-    public Optional<Order> getOrdenConMayorPrecioDelDia(@Param("fecha") @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate fecha);
+            + "from orders " //where id = 1",
+            + "where date (date_of_order) = :fecha",
+            nativeQuery = true)
+    public Optional<Order> getOrdenConMayorPrecioDelDia(@Param("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha);
 }
