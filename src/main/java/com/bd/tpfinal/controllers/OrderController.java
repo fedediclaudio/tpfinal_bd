@@ -36,7 +36,7 @@ public class OrderController {
     }
     // Obtener la orden de mayor precio total de un dia dado
     @GetMapping("/mayor-precio-del-dia/{fecha_dia}")
-    public Order getOrderMayorPrecioDelDia(@PathVariable @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate fecha_dia) {
+    public Order getOrderMayorPrecioDelDia(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha_dia) {
         Optional<Order> order = orderService.getOrderConMayorPrecioDelDia(fecha_dia);
         if(order.isPresent())
             return order.get();

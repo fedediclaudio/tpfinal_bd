@@ -3,6 +3,10 @@ package com.bd.tpfinal.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 @Entity
@@ -48,6 +52,19 @@ public class Order {
     @OneToMany( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     @JsonIgnore
     private List<Item> items;
+
+    @Version
+    @Column(name = "version")
+    private int version;
+
+    public Order() {}
+    public Order(Client client) {
+        this.orderStatus = new Pending(this); // la orden inicia pendiente
+        this.dateOfOrder = Calendar.getInstance().getTime();
+        this.client = client;
+        this.items = new ArrayList<>();
+    }
+
 
     public int getNumber() {
         return number;
@@ -157,6 +174,12 @@ public class Order {
     }
     public void increaseClientScore() throws Exception {
         this.client.increaseScore();
+    }
+
+    public void updateQualification(Qualification qualification) throws Exception {
+        this.qualification =  qualification; // la orden
+        // para cada producto actulizo la calificacion del proveedor segun la calificacion de la orden
+        this.items.forEach( i -> i.getProduct().getSupplier().updateQualification(qualification.getScore() ) );
     }
 
 }
