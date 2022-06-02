@@ -1,5 +1,6 @@
 package com.bd.tpfinal.services;
 
+import com.bd.tpfinal.DTOs.SupplierDTO;
 import com.bd.tpfinal.model.Supplier;
 
 import java.util.List;
