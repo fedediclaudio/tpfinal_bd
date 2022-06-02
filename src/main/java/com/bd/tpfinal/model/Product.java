@@ -1,9 +1,25 @@
 package com.bd.tpfinal.model;
 
+import com.bd.tpfinal.DTOs.ProductoPrecioPromedioDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
+
+@NamedNativeQuery(name = "Product.getProductosPrecioPromedioDTO",
+        query= "SELECT  p.name as nombreProducto, pt.name as nombreTipoProducto, AVG(p.price) as promedioPrecio "
+                + " FROM product p INNER JOIN product_product_type ptp "
+                + "ON p.id = ptp.id_product INNER JOIN product_type pt ON ptp.id_product_type  = pt.id "
+                + "GROUP BY p.name", resultSetMapping = "Mapping.ProductoPrecioPromedioDTO")
+@SqlResultSetMapping(name="Mapping.ProductoPrecioPromedioDTO",
+        classes = @ConstructorResult(targetClass = ProductoPrecioPromedioDTO.class,
+                columns = {
+                        @ColumnResult(name="nombreProducto", type = String.class),
+                        @ColumnResult(name="nombreTipoProducto", type = String.class),
+                        @ColumnResult(name="promedioPrecio", type = float.class)
+                }
+        )
+)
 
 @Entity
 public class Product {
@@ -33,7 +49,7 @@ public class Product {
     @JsonIgnore
     private List<ProductType> type;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<HistoricalProductPrice> prices;
 
     public Long getId() {
