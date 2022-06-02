@@ -1,11 +1,10 @@
 package com.bd.tpfinal.services;
 
-import com.bd.tpfinal.model.DeliveryMan;
-import com.bd.tpfinal.model.Item;
-import com.bd.tpfinal.model.Order;
+import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.repositories.DeliveryManRepository;
 import com.bd.tpfinal.repositories.ItemRepository;
 import com.bd.tpfinal.repositories.OrderRepository;
+import com.bd.tpfinal.repositories.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +19,15 @@ public class OrderServiceImpl implements OrderService
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
     private final DeliveryManRepository deliveryManRepository;
+    private final SupplierRepository supplierRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, ItemRepository itemRepository, DeliveryManRepository deliveryManRepository)
+    public OrderServiceImpl(OrderRepository orderRepository, ItemRepository itemRepository, DeliveryManRepository deliveryManRepository, SupplierRepository supplierRepository)
     {
         this.orderRepository = orderRepository;
         this.itemRepository = itemRepository;
         this.deliveryManRepository = deliveryManRepository;
+        this.supplierRepository = supplierRepository;
     }
 
     @Override
@@ -42,7 +43,7 @@ public class OrderServiceImpl implements OrderService
     @Transactional
     public Order newOrder_seteado_state(Order newOrden)
     {
-        this.orderRepository.save(newOrden);
+        newOrden = this.orderRepository.save(newOrden);
         newOrden.setStatusByName();
         return newOrden;
     }
@@ -82,6 +83,28 @@ public class OrderServiceImpl implements OrderService
             System.out.println("orden number: "+orders.get(i).getNumber()+" status: "+orders.get(i).getOrderStatus().getName());
         }
         return orders;
+    }
+
+    @Override
+    @Transactional
+    public Order calificarOrden(float score, String comentario, Long number)
+    {
+        Order orden_a_calificar = this.orderRepository.findByNumber(number);
+        // si no anda, usar en el constructor, el number de la orden_a_calificar
+        Qualification qua = new Qualification(score, comentario, orden_a_calificar);
+        //orden_a_calificar.setQualification(qua);
+        //this.orderRepository.save(orden_a_calificar);
+        this.orderRepository.updateQualification(number, qua);
+        List<Item> items = this.itemRepository.findByOrderId(number);
+        if(items.size()!=0)
+        {
+            Supplier supplier = items.get(0).getProduct().getSupplier();
+            float promedio = getQualificationAverage(supplier.getId());
+            //se puede mejorar y agregar un método updateQualifa.. al repositorio
+            supplier.setQualificationOfUsers(promedio);
+            this.supplierRepository.save(supplier);
+        }
+        return orden_a_calificar;
     }
 
     /**
@@ -135,7 +158,7 @@ public class OrderServiceImpl implements OrderService
     @Transactional
     public Order actualizarOrder(Order orden_actualizada)
     {
-        this.orderRepository.save(orden_actualizada);
+        orden_actualizada = this.orderRepository.save(orden_actualizada);
         orden_actualizada.setStatusByName();
         return orden_actualizada;
     }
@@ -155,7 +178,7 @@ public class OrderServiceImpl implements OrderService
     // suma de calificaciones de todas las Order que contienen a un Supplier
     // cuenta las calificaciones de todas las Order que contienen a un Supplier
     // calcula el promedio
-    public double getQualificationAverage(Long id_Supplier)
+    public float getQualificationAverage(Long id_Supplier)
     {
         return this.orderRepository.findQualificationSupplier(id_Supplier);
     }
@@ -236,6 +259,5 @@ public class OrderServiceImpl implements OrderService
         orden.setStatusByName();//no es necesario, rever. Lo hace actualizarOrder()
         return orden;
     }
-
 
 }

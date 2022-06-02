@@ -2,7 +2,9 @@ package com.bd.tpfinal.repositories;
 
 import com.bd.tpfinal.model.Item;
 import com.bd.tpfinal.model.Order;
+import com.bd.tpfinal.model.Qualification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -43,7 +45,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>
 
     String query6 = "SELECT avg(orden.qualification.score) FROM Order orden WHERE orden IN" + "("+ query5 + ")";
     @Query(value = query6)
-    double findQualificationSupplier(@Param("id_supplier") Long id_supplier);
+    float findQualificationSupplier(@Param("id_supplier") Long id_supplier);
 
     @Query(value = "SELECT orden FROM Order orden WHERE orden.client.id = :id_user ")
     List<Order> findByClient(@Param("id_user") Long id_user);
@@ -74,11 +76,11 @@ public interface OrderRepository extends JpaRepository<Order, Long>
     @Query(value = query_9_2)
     List <Order> findMaxOrderByDate(@Param("fecha") Date fecha);
 
-
-
-
-
     Order findByDateOfOrder(@Param("fecha") Date fecha);
+
+    @Modifying
+    @Query("UPDATE Order orden SET orden.qualification =:qualification WHERE orden.number = :number")
+    void updateQualification(@Param(value= "number") Long number, @Param(value = "qualification") Qualification qualification);
 
 
 

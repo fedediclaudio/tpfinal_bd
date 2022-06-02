@@ -22,7 +22,7 @@ public interface OrderService
 
     //todas las Order de un Supplier
     public List<Order> getOrderByIdSupplier(Long id);
-    public double getQualificationAverage(Long id_Supplier);
+    public float getQualificationAverage(Long id_Supplier);
     public List<Order> getByClientId(Long id);
     public List<Order> getBySupplierMaxCantItems(Long id_supplier);
     public List<Order> getOrderMaxPricePorFecha(Date fecha);
@@ -34,4 +34,5 @@ public interface OrderService
     public Order cancelacionDeOrden(Long id_orden) throws Exception;
     public List<Order> getAllWithStatus();
     public List<Order> getAllWithoutQual();
+    public Order calificarOrden(float score, String comentario, Long number);
 }

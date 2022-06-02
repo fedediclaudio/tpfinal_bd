@@ -3,6 +3,8 @@ package com.bd.tpfinal;
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.services.*;
 import com.bd.tpfinal.utils.NoExisteProductoException;
+import com.bd.tpfinal.utils.NoMasRandomException;
+import com.bd.tpfinal.utils.RandomSinRepetir;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -172,20 +174,28 @@ public class TPFinalTests_borrador
     {
         System.out.println("+++Creación de una orden");
         Random cantidad = new Random();
-        Random index = new Random();
+        //Random index = new Random();
         Random cant_items = new Random();
         int cant_productos = productos.size();
         Address address = cliente.getAddresses().get(0);
 
+        RandomSinRepetir rsp = new RandomSinRepetir(0, cant_productos);
+        int index_producto=0;
+
         Order orden = this.orderService.newOrder_seteado_state(new Order(dateOfOrder, comentario, 0.0F, cliente, address));//se crea y salva
-        //TODO: recuperar la orden con el number (id) puesto. Recuperar el id.
-        //Ver que la recuperación del repository o service se encargue de setear el Status
-        //Order orden = this.orderService.getOrderByDateOfOrder(dateOfOrder); //retorna la misma orden con el id puesto y el status.
-        int cantidad_items = 2 + cant_items.nextInt(6); //cantidad de items
+        System.out.println("orden creada: "+orden.getNumber());
+        int cantidad_items = 2 + cant_items.nextInt(10); //cantidad de items
         for (int i = 0; i < cantidad_items && i < cant_productos; i++)
         {
-            int cant = cantidad.nextInt(10); //cantidad de productos del item
-            int index_producto = index.nextInt(cant_productos); //TODO: crea aleatorios sin eliminar repetidos. Mal menor, arreglar cuando se pueda.
+            int cant = 1+ cantidad.nextInt(10); //cantidad de productos del item
+            try
+            {
+                index_producto = rsp.siguiente();
+            }
+            catch (NoMasRandomException e)
+            {
+                e.printStackTrace();
+            }
             System.out.println("index producto " + index_producto);
             this.itemService.newItem(new Item(cant, "descripcion item de producto id: " + productos.get(index_producto).getId(), orden, productos.get(index_producto)));
         }
@@ -320,6 +330,8 @@ public class TPFinalTests_borrador
         {
             //estado pasa a Cancelled
             this.orderService.cancelacionDeOrden(number_de_ultima_orden);
+            Order orden = this.orderService.getByNumber(number_de_ultima_orden);
+            System.out.println("Estado de la orden: "+ orden.getOrderStatus().getName() );
         }
         catch (Exception e)
         {
@@ -344,28 +356,34 @@ public class TPFinalTests_borrador
             Order orden_a_calificar = (Order) orderIterator.next();
             float score = calif.nextFloat() * 5;
             String comentario = "comentario_" + score;
-            //test_03_1_calificar_Orden_y_actualizar_calificacion_Supplier(orden_a_calificar);
-            test_03_2_calificar_Orden_y_Supplier(orden_a_calificar, score, comentario);
+            System.out.println("+++ se califica la orden: "+orden_a_calificar.getNumber());
+            //test_03_2_calificar_Orden_y_Supplier(orden_a_calificar, score, comentario);
+            //Qualification qua = new Qualification(score, comentario, orden_a_calificar);
+            //orden_a_calificar.setQualification(qua);
+            // esto tal vez lo debería hacer el service directamente.
+            // o sea, orderService.calificar(...)
+            //this.orderService.actualizarOrder(orden_a_calificar);  //actualiza la orden con la calificación.
+            this.orderService.calificarOrden(score, comentario, orden_a_calificar.getNumber());
         }
+        //test_03_2_calificar_Suppliers();
     }
-
-    public void test_03_2_calificar_Orden_y_Supplier(Order orden_a_calificar, float score, String comentario)
+    //califica todos los suppliers
+    public void test_03_2_calificar_Suppliers()
     {
-        Qualification qua = new Qualification(score, comentario, orden_a_calificar);
-        orden_a_calificar.setQualification(qua);
-        // esto tal vez lo debería hacer el service directamente.
-        // o sea, orderService.calificar(...)
-        this.orderService.actualizarOrder(orden_a_calificar);  //actualiza la orden con la calificación.
-        Supplier proveedor = orden_a_calificar.getItems().get(0).getProduct().getSupplier();//proveedor de la orden
-        Iterator<Order> ordenes2 = this.orderService.getOrderByIdSupplier(proveedor.getId()).iterator();
-        while (ordenes2.hasNext())
+        Iterator<Supplier> suppliers = this.supplierService.getAll().iterator();
+        while(suppliers.hasNext())
         {
-            System.out.println("supplier: "+ proveedor.getId()+" numero de orden:  " + ordenes2.next().getNumber());
+            Supplier proveedor = (Supplier) suppliers.next();
+            Iterator<Order> ordenes_de_supplier = this.orderService.getOrderByIdSupplier(proveedor.getId()).iterator();
+            while (ordenes_de_supplier.hasNext())
+            {
+                System.out.println("supplier: " + proveedor.getId() + " numero de orden:  " + ordenes_de_supplier.next().getNumber());
+            }
+            float promedio = this.orderService.getQualificationAverage(proveedor.getId());
+            proveedor.setQualificationOfUsers(promedio);
+            this.supplierService.newSupplier(proveedor);//Esto actualiza la información del proveedor, con su calificación
+            System.out.println("promedio calificacion de ordenes del supplier id : " + proveedor.getId() + "  promedio: " + promedio);
         }
-        double promedio = this.orderService.getQualificationAverage(proveedor.getId());
-        proveedor.setQualificationOfUsers((float) promedio);
-        this.supplierService.newSupplier(proveedor);//Esto actualiza la información del proveedor, con su calificación
-        System.out.println("promedio calificacion de ordenes del supplier id : " + proveedor.getId() + "  promedio: " + promedio);
     }
 
     //4) Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
