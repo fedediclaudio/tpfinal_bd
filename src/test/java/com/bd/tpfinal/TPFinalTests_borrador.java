@@ -490,12 +490,12 @@ public class TPFinalTests_borrador
         while (iter_ST.hasNext())
         {
             SupplierType sT = iter_ST.next();
-            Long id = sT.getId();
-            Iterator<Supplier> suppliers = this.supplierService.getSupplierBySupplierTypeId(id).iterator();
+            Long id_type = sT.getId();
+            Iterator<Supplier> suppliers = this.supplierService.getSupplierBySupplierTypeId(id_type).iterator();
             while (suppliers.hasNext())
             {
                 Supplier ste = (Supplier) suppliers.next();
-                System.out.println("supplierType id : " + sT.getId() + " supplier: " + ste.getName() + " id: " + ste.getId());
+                System.out.println("supplierType id : " + sT.getId() + " ++ supplier id: " + ste.getId());
             }
         }
     }
