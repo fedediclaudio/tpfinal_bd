@@ -1,25 +1,24 @@
 package com.bd.tpfinal;
 
-import com.bd.tpfinal.model.User;
-import com.bd.tpfinal.repositories.UserRepository;
+import com.bd.tpfinal.model.*;
+import com.bd.tpfinal.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+
 
 @SpringBootApplication
-@EnableMongoRepositories
 public class TpfinalApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TpfinalApplication.class, args);
 	}
 	@Bean
-	CommandLineRunner runner(UserRepository userRepository){
+	CommandLineRunner runner(ProductTypeRepository productTypeRepository){
 		return args -> {
-			User user = new User();
-			userRepository.save(user);
+			ProductType pt = new ProductType();
+			productTypeRepository.save(pt);
 		};
 	}
 
