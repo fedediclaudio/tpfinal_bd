@@ -16,6 +16,4 @@ public class ProductType {
     private String description;
 
     private List<Product> products;
-
-
 }

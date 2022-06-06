@@ -1,37 +1,20 @@
 package com.bd.tpfinal.model;
 
+import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
+
 import java.util.Date;
 import java.util.List;
-
+@Data
 public class Client extends User{
 
     private Date dateOfRegister;
 
+    @DocumentReference
     private List<Order> orders;
 
+    @DBRef
     private List<Address> addresses;
 
-    public Date getDateOfRegister() {
-        return dateOfRegister;
-    }
-
-    public void setDateOfRegister(Date dateOfRegister) {
-        this.dateOfRegister = dateOfRegister;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
-    public List<Address> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
-    }
 }

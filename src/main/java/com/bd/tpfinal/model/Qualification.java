@@ -1,5 +1,8 @@
 package com.bd.tpfinal.model;
 
+import lombok.Data;
+
+@Data
 public class Qualification {
 
     private float score;
@@ -8,27 +11,5 @@ public class Qualification {
 
     private Order order;
 
-    public float getScore() {
-        return score;
-    }
 
-    public void setScore(float score) {
-        this.score = score;
-    }
-
-    public String getCommentary() {
-        return commentary;
-    }
-
-    public void setCommentary(String commentary) {
-        this.commentary = commentary;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
 }

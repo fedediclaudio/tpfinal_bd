@@ -1,8 +1,10 @@
 package com.bd.tpfinal.model;
 
+import lombok.Data;
+
 import java.util.Date;
 import java.util.List;
-
+@Data
 public class DeliveryMan extends User{
 
     private int numberOfSuccessOrders;
@@ -13,35 +15,4 @@ public class DeliveryMan extends User{
 
     private List<Order> ordersPending;
 
-    public int getNumberOfSuccessOrders() {
-        return numberOfSuccessOrders;
-    }
-
-    public void setNumberOfSuccessOrders(int numberOfSuccessOrders) {
-        this.numberOfSuccessOrders = numberOfSuccessOrders;
-    }
-
-    public boolean isFree() {
-        return free;
-    }
-
-    public void setFree(boolean free) {
-        this.free = free;
-    }
-
-    public Date getDateOfAdmission() {
-        return dateOfAdmission;
-    }
-
-    public void setDateOfAdmission(Date dateOfAdmission) {
-        this.dateOfAdmission = dateOfAdmission;
-    }
-
-    public List<Order> getOrdersPending() {
-        return ordersPending;
-    }
-
-    public void setOrdersPending(List<Order> ordersPending) {
-        this.ordersPending = ordersPending;
-    }
 }

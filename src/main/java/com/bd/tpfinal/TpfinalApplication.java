@@ -18,7 +18,11 @@ public class TpfinalApplication {
 	CommandLineRunner runner(ProductTypeRepository productTypeRepository){
 		return args -> {
 			ProductType pt = new ProductType();
+			pt.setName("Coca Cola");
+			pt.setDescription("Se utiliza para preparar fernet con coca");
 			productTypeRepository.save(pt);
+
+
 		};
 	}
 
