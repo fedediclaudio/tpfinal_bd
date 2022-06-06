@@ -7,10 +7,9 @@ import org.springframework.data.annotation.Id;
 import java.time.format.DateTimeFormatter;
 
 @Data
-
 public abstract class User {
     @Id
-    private String id;
+    private String id; //tipo de dato temporal
     private String name;
 
     private String username;
