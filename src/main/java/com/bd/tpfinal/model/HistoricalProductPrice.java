@@ -1,6 +1,10 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 @Entity
 public class HistoricalProductPrice {
@@ -14,9 +18,25 @@ public class HistoricalProductPrice {
     private Date startDate;
 
     private Date finishDate;
-    @OneToOne( fetch = FetchType.EAGER)
-    @JoinColumn( name="id_product" )
+    //@OneToOne//( fetch = FetchType.EAGER)
+    //@JoinColumn( name="id_product" )
+
+
+    @ManyToOne (fetch = FetchType.EAGER, cascade = CascadeType.ALL )
+    @JoinColumn( name = "id_product")
+    @JsonIgnore
     private Product product;
+
+    public HistoricalProductPrice() {}
+
+    public HistoricalProductPrice(Product product) {
+        this.product = product;
+        this.price = product.getPrice();
+        this.startDate = Calendar.getInstance().getTime();;
+        this.finishDate = null;
+    }
+
+
 
     public Long getId() {
         return id;

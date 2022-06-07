@@ -1,6 +1,7 @@
 package com.bd.tpfinal.repositories;
 
 import com.bd.tpfinal.DTOs.SupplierDTO;
+import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.Supplier;
 import com.bd.tpfinal.model.SupplierType;
 import org.springframework.data.jpa.repository.Query;
@@ -8,10 +9,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SupplierRepository extends CrudRepository<Supplier, Long> {
     public List<Supplier> findByNameIgnoreCaseContaining(String supplierName);
+   // public Optional<Supplier> findById(long order_id) ;
 
     @Query(value= "select p.supplier_id, s.name, count(DISTINCT  o.id) "
             + "from product P inner join item i on P.id = i.id_product "
