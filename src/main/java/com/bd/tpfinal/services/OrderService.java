@@ -23,7 +23,6 @@ public interface OrderService {
     Optional<Order> finalizarPedido (FinishOrderScore score, long order_id) throws Exception;
 
     void guardarOrder(Order order);
-
-
+    List<Order> getOrdenesConMasProductosDelSupplier(long supplier_id);
+    Order getOrderConMayorPrecioTotalDelDia(LocalDate fecha);
 }
-

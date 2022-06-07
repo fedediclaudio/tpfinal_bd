@@ -24,6 +24,23 @@ import java.util.List;
 
 @Entity
 public class Product {
+
+    public Product(){}
+
+    public Product(String name,
+                   float price,
+                   float weight,
+                   String description,
+                   List<ProductType> types,
+                   List<HistoricalProductPrice> historicalProductPrices) {
+        this.setName(name);
+        this.setPrice(price);
+        this.setWeight(weight);
+        this.setDescription(description);
+        this.setType(types);
+        this.setPrices(historicalProductPrices);
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

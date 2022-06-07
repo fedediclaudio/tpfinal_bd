@@ -12,7 +12,7 @@ public class Item {
     private int quantity;
 
     private String description;
-    @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne( fetch = FetchType.EAGER)
     @JoinColumn( name="id_order" )
     private Order order;
 

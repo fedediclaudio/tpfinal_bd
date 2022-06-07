@@ -17,4 +17,14 @@ public class SupplierServiceImpl implements SupplierService {
     public List<Supplier> getTop10SupplierConMasOrdenesDespachadas() {
        return supplierRepository.getTop10SupplierConMasOrdenesDespachadas();
     }
+
+    @Override
+    public List<Supplier> getAllProveedoresByTipo(long id_tipo) {
+        return supplierRepository.findAllByTypeId(id_tipo);
+    }
+
+    @Override
+    public List<Supplier> getProveedoresWithProductosDeTodosLosTipos() {
+        return supplierRepository.getProveedoresWithProductosDeTodosLosTipos();
+    }
 }
