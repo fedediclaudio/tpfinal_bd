@@ -376,11 +376,11 @@ public class DatabaseSeeder {
     private List<Product> createAndReturnAlmancenLimpiezaVerduleriaProducts(Supplier aSupplier, int i) {
         List<Product> products = new ArrayList<>();
         Random r = new Random();
-        float random_1 = i + r.nextFloat() * (20 - 10);
-        float random_2 = i + r.nextFloat() * (20 - 10);
-        float random_3 = i + r.nextFloat() * (20 - 10);
-        float random_4 = i + r.nextFloat() * (20 - 10);
-        float random_5 = i + r.nextFloat() * (20 - 10);
+        float random_1 =  Math.round (i + r.nextFloat() * (20 - 10));
+        float random_2 = Math.round (i + r.nextFloat() * (20 - 10));
+        float random_3 = Math.round (i + r.nextFloat() * (20 - 10));
+        float random_4 = Math.round (i + r.nextFloat() * (20 - 10));
+        float random_5 = Math.round (i + r.nextFloat() * (20 - 10));
         Optional<ProductType> type_1 = productTypeRepository.findProductTypesByNameIgnoreCase("Almacen");
         Optional<ProductType> type_2 = productTypeRepository.findProductTypesByNameIgnoreCase("Limpieza");
         Optional<ProductType> type_3 = productTypeRepository.findProductTypesByNameIgnoreCase("Panificados");
@@ -477,11 +477,11 @@ public class DatabaseSeeder {
     private List<Product> createAndReturnIndumentariaProducts(Supplier aSupplier, int i) {
         List<Product> products = new ArrayList<>();
         Random r = new Random();
-        float random_1 = i + r.nextFloat() * (20 - 10);
-        float random_2 = i + r.nextFloat() * (20 - 10);
-        float random_3 = i + r.nextFloat() * (20 - 10);
-        float random_4 = i + r.nextFloat() * (20 - 10);
-        float random_5 = i + r.nextFloat() * (20 - 10);
+        float random_1 = Math.round (i + r.nextFloat() * (20 - 10));
+        float random_2 = Math.round (i + r.nextFloat() * (20 - 10));
+        float random_3 = Math.round (i + r.nextFloat() * (20 - 10));
+        float random_4 = Math.round (i + r.nextFloat() * (20 - 10));
+        float random_5 = Math.round (i + r.nextFloat() * (20 - 10));
 
         Optional<ProductType> type_1 = productTypeRepository.findProductTypesByNameIgnoreCase("indumentaria");
 
@@ -549,10 +549,10 @@ public class DatabaseSeeder {
     private List<Product> createAndReturnMascotasProducts(Supplier aSupplier, int i) {
         List<Product> products = new ArrayList<>();
         Random r = new Random();
-        float random_1 = i + r.nextFloat() * (20 - 10);
-        float random_2 = i + r.nextFloat() * (20 - 10);
-        float random_3 = i + r.nextFloat() * (20 - 10);
-        float random_4 = i + r.nextFloat() * (20 - 10);
+        float random_1 = Math.round (i + r.nextFloat() * (20 - 10));
+        float random_2 = Math.round (i + r.nextFloat() * (20 - 10));
+        float random_3 = Math.round (i + r.nextFloat() * (20 - 10));
+        float random_4 = Math.round (i + r.nextFloat() * (20 - 10));
 
         Optional<ProductType> type_1 = productTypeRepository.findProductTypesByNameIgnoreCase("alimento para animales");
         Optional<ProductType> type_2 = productTypeRepository.findProductTypesByNameIgnoreCase("casas para animales");
@@ -597,11 +597,11 @@ public class DatabaseSeeder {
     }
     private List<Product> createAndReturnToolsConstructionProducts(Supplier aSupplier, int i) {
         Random r = new Random();
-        float random_1 = i + r.nextFloat() * (100 - 10);
-        float random_2 = i + r.nextFloat() * (100 - 10);
-        float random_3 = i + r.nextFloat() * (100 - 10);
-        float random_4 = i + r.nextFloat() * (100 - 10);
-        float random_5 = i + r.nextFloat() * (100 - 10);
+        float random_1 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_2 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_4 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_3 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_5 = Math.round (i + r.nextFloat() * (100 - 10));
         List<Product> products = new ArrayList<>();
 
         Optional<ProductType> type_1 = productTypeRepository.findProductTypesByNameIgnoreCase("Construccion");
@@ -656,11 +656,11 @@ public class DatabaseSeeder {
     }
     private List<Product> createAndReturnPanProducts(Supplier aSupplier, int i) {
         Random r = new Random();
-        float random_1 = i + r.nextFloat() * (100 - 10);
-        float random_2 = i + r.nextFloat() * (100 - 10);
-        float random_3 = i + r.nextFloat() * (100 - 10);
-        float random_4 = i + r.nextFloat() * (100 - 10);
-        float random_5 = i + r.nextFloat() * (100 - 10);
+        float random_1 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_2 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_3 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_4 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_5 = Math.round (i + r.nextFloat() * (100 - 10));
         List<Product> products = new ArrayList<>();
 
         Optional<ProductType> type_1 = productTypeRepository.findProductTypesByNameIgnoreCase("Panificados");
@@ -713,15 +713,16 @@ public class DatabaseSeeder {
     }
     private List<Product> createAndReturnAireLibreProducts(Supplier aSupplier, int i) {
         Random r = new Random();
-        float random_1 = i + r.nextFloat() * (100 - 10);
-        float random_2 = i + r.nextFloat() * (100 - 10);
-        float random_3 = i + r.nextFloat() * (100 - 10);
-        float random_4 = i + r.nextFloat() * (100 - 10);
-        float random_5 = i + r.nextFloat() * (100 - 10);
+        float random_1 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_2 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_3 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_4 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_5 = Math.round (i + r.nextFloat() * (100 - 10));
         List<Product> products = new ArrayList<>();
 
         Optional<ProductType> type_1 = productTypeRepository.findProductTypesByNameIgnoreCase("aire libre y jardin");
         Optional<ProductType> type_2 = productTypeRepository.findProductTypesByNameIgnoreCase("tiempo libre, deporte y entretenimiento");
+        // random_1 = Math.round(random_1);
 
         Product prod_1 = new Product();
         prod_1.setPrice(random_1);
@@ -766,16 +767,19 @@ public class DatabaseSeeder {
         prod_5.setName("pileta de lona");
         prod_5.setSupplier(aSupplier);
         prod_5.setType(Arrays.asList(type_1.get(), type_2.get()));
+        HistoricalProductPrice historicalProductPrice = new HistoricalProductPrice(prod_5); //creo historial de precio nuevo
+        prod_5.setPrices(Arrays.asList(historicalProductPrice)); // lo agrego al historial
+
         products.add(prod_5);
         return products;
     }
     private List<Product> createAndReturnMueblesProducts(Supplier aSupplier, int i) {
         Random r = new Random();
-        float random_1 = i + r.nextFloat() * (100 - 10);
-        float random_2 = i + r.nextFloat() * (100 - 10);
-        float random_3 = i + r.nextFloat() * (100 - 10);
-        float random_4 = i + r.nextFloat() * (100 - 10);
-        float random_5 = i + r.nextFloat() * (100 - 10);
+        float random_1 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_2 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_3 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_4 = Math.round (i + r.nextFloat() * (100 - 10));
+        float random_5 = Math.round (i + r.nextFloat() * (100 - 10));
         List<Product> products = new ArrayList<>();
 
         Optional<ProductType> type_1 = productTypeRepository.findProductTypesByNameIgnoreCase("Muebles de interior");
@@ -1074,16 +1078,16 @@ public class DatabaseSeeder {
         List<Order> u = jdbcTemplate.query(sql, (resultSet, rowNum) -> null);
         if(u == null || u.size() <= 0) {
 
-        seedOrderTableSupplier( 11L,  "mesa", "Juan Perez", "casa de rejas negras");
-        seedOrderTableSupplier( 10L,  "", "Luisa Soto", "pasillo al fondo");
-        seedOrderTableSupplier( 1L,  "", "Sara Gomez", "tocar el timbre");
-        seedOrderTableSupplier( 8L,  "pileta", "Sara Gomez", "nada");
-        seedOrderTableSupplier( 7L,  "alimento", "Sara Gomez", "sin aviso");
-        seedOrderTableSupplier( 9L,  "pan", "Sara Gomez", "retiro");
-            seedOrderTableSupplier( 1L,  "fideo", "Sara Gomez", "retiro en sucursal");
-            seedOrderTableSupplier( 5L,  "", "Sara Gomez", "no funcionan las cuotas");
-            seedOrderTableSupplier( 6L,  "remera", "Sara Gomez", "no aplica descuento por pago efectivo");
-            seedOrderTableSupplier( 2L,  "arroz", "Sara Gomez", "contraentrega");
+        seedOrderTableSupplier( 11L,  "mesa", 1L, "casa de rejas negras");
+        seedOrderTableSupplier( 10L,  "", 2L, "pasillo al fondo");
+        seedOrderTableSupplier( 1L,  "", 3L, "tocar el timbre");
+        seedOrderTableSupplier( 8L,  "pileta", 3L,  "nada");
+        seedOrderTableSupplier( 7L,  "alimento", 2L, "sin aviso");
+        seedOrderTableSupplier( 9L,  "pan", 1L, "retiro");
+            seedOrderTableSupplier( 1L,  "fideo", 3L, "retiro en sucursal");
+            seedOrderTableSupplier( 5L,  "", 2L, "no funcionan las cuotas");
+            seedOrderTableSupplier( 6L,  "remera", 2L, "no aplica descuento por pago efectivo");
+            seedOrderTableSupplier( 2L,  "arroz", 1L, "contraentrega");
 
             logger.info("Order table Cargada");
         } else {
@@ -1092,7 +1096,7 @@ public class DatabaseSeeder {
 
     }
 
-        private void seedOrderTableSupplier( long id, String productName, String clientName, String comments) throws Exception {
+        private void seedOrderTableSupplier( long id, String productName, long  id_client, String comments) throws Exception {
 
             List<Product> productList = new ArrayList<Product>();
             List<Item> itemsProducts = new ArrayList<>();
@@ -1113,6 +1117,7 @@ public class DatabaseSeeder {
             order_1.setNumber(1);
             order_1.setStatus(new Pending(order_1,new Date() ) );
             order_1.setDateOfOrder(new Date());
+            //order_1.setTotalPrice(id_client + id);
 
             int i =0;
             while (!productList.isEmpty()){
@@ -1123,15 +1128,14 @@ public class DatabaseSeeder {
                 item_2.setOrder(order_1);
                 item_2.setProduct(tmp);
                 itemsProducts.add(item_2);
+                order_1.setTotalPrice((item_2.getProduct().getPrice() * item_2.getQuantity()) + order_1.getTotalPrice());
                 productList.remove(i);
             }
             order_1.setItems(itemsProducts);
-            List<Client> clients = clientRepository.findByUsername(clientName);
-            if(!clients.isEmpty()) {
-                Client client = clients.get(0);
-                order_1.setClient(client);
+            Optional <Client> clients = clientRepository.findById(id_client) ; // .findByUsername(clientName);
+            Client client = clients.get();
+            order_1.setClient(client);
                // order_1.setAddress(client.getAddresses().get(0));
-            }
             orderRepository.save(order_1);
 
 

@@ -25,21 +25,5 @@ public class DeliveryManController {
     public List<DeliveryMan> getTop10RepartidoresConMayorPuntaje(){
         return deliveryManService.getTop10RepartidoresMayorPuntaje();
     }
-    // Confirmar un pedido.
-    @PutMapping("/confirmar-pedido/{order_id}")
-    public boolean confirmarPedido(@PathVariable long order_id) {
-        Optional<DeliveryMan> deliveryMan = deliveryManService.getFreeAndActiveDeliveryMan();
-        if(deliveryMan.isPresent()) {
-            DeliveryMan currentDeliveryMan = deliveryMan.get();
-            Optional<Order> order = orderService.findOrderById(order_id);
-            if(order.isPresent()) {
-                order.get().setDeliveryMan(currentDeliveryMan);
-                currentDeliveryMan.setFree(false);
-                orderService.guardarOrder(order.get());
-                deliveryManService.guardarDeliveryMan(currentDeliveryMan);
-                return true;
-            }
-        }
-        return false;
-    }
+
 }

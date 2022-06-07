@@ -3,6 +3,7 @@ package com.bd.tpfinal.controllers;
 import com.bd.tpfinal.DTOs.ProductDTO;
 import com.bd.tpfinal.DTOs.ProductoPrecioPromedioDTO;
 import com.bd.tpfinal.model.HistoricalProductPrice;
+import com.bd.tpfinal.model.Item;
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.Product;
 import com.bd.tpfinal.services.HistoricalProductPriceService;
@@ -14,10 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,6 +32,18 @@ public class ProductController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+
+    // Agregar un producto nuevo de un proveedor
+    @PostMapping("/nuevo-product/{product_id}")
+    public Product nuevoProduct(@RequestBody Product product, @PathVariable long supplier_id) throws Exception {
+        Optional<Product> productoAgregado = productService.agregarProductoSupplier(supplier_id, product);
+        if(productoAgregado.isPresent()) {
+            return productoAgregado.get();
+        }
+        return null;
+    }
+
 
     // Obtener todos los productos y su tipo de un proveedor especifico
     @GetMapping("/get-productos-tipos-por-supplier/{supplier_id}")
@@ -68,22 +78,45 @@ public class ProductController {
     @PutMapping("/update-producto/{product_id}")
     @ResponseStatus(HttpStatus.OK)
     public void updateProducto(@RequestBody Product newProduct, @PathVariable long product_id) {
+        // actualiza los datos de un producto, si el precio cambia se deja historial del mismo
+
         Optional<Product> productToUpdate = productService.findProduct(product_id);
         if(productToUpdate.isPresent()) {
             Product currentProduct = productToUpdate.get();
-            if(currentProduct.getPrice() != newProduct.getPrice()) {
-                HistoricalProductPrice historicalProductPrice = new HistoricalProductPrice();
-                historicalProductPrice.setPrice(currentProduct.getPrice());
-                historicalProductPrice.setFinishDate(new Date());
-                historicalProductPrice.setProduct(currentProduct);
-                // historicalProductPrice.setStartDate(); --> cual seria la start date?
-                currentProduct.setPrices(Arrays.asList(historicalProductPrice));
+
+            if(currentProduct.getPrice() != newProduct.getPrice()) { //cambio el precio, dejar historico
+
+                List<HistoricalProductPrice> historical = currentProduct.getPrices();
+                int i =0;
+                while (!historical.isEmpty()){
+                    HistoricalProductPrice tmp = historical.get(i);
+                    if (tmp.getFinishDate() == null)
+                    {
+                        tmp.setFinishDate(Calendar.getInstance().getTime() );
+                        break;
+                    }
+                    else
+                    { i++;}
+                }
+
+/*
+                int lastIndex = historical.size() - 1; //busco el ultimo historial y le asigno fecha fin
+                HistoricalProductPrice last = historical.get( lastIndex );
+                last.setFinishDate( Calendar.getInstance().getTime() );
+                historical.set( lastIndex, last );
+
+
+ */
+                HistoricalProductPrice historicalProductPrice = new HistoricalProductPrice(currentProduct); //creo historial de precio nuevo
+                historical.add(historicalProductPrice);
+                currentProduct.setPrices(historical); // lo agrego al historial
             }
+
             currentProduct.setType(newProduct.getType());
             currentProduct.setName(newProduct.getName());
             currentProduct.setDescription(newProduct.getDescription());
             currentProduct.setWeight(newProduct.getWeight());
-            currentProduct.setSupplier(newProduct.getSupplier());
+            //currentProduct.setSupplier(newProduct.getSupplier());
             currentProduct.setPrice(newProduct.getPrice());
             productService.guardar(currentProduct);
         }

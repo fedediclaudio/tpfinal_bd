@@ -4,6 +4,7 @@ import com.bd.tpfinal.DTOs.ProductoPrecioPromedioDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @NamedNativeQuery(name = "Product.getProductosPrecioPromedioDTO",
@@ -36,7 +37,7 @@ public class Product {
 
     private String description;
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "supplier_id")
     @JsonIgnore
     private Supplier supplier;
@@ -49,8 +50,14 @@ public class Product {
     @JsonIgnore
     private List<ProductType> type;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<HistoricalProductPrice> prices;
+
+
+    public Product() {
+        this.prices = new ArrayList<>();
+    }
+
 
     public Long getId() {
         return id;
@@ -115,4 +122,7 @@ public class Product {
     public void setPrices(List<HistoricalProductPrice> prices) {
         this.prices = prices;
     }
+
+
+
 }
