@@ -7,6 +7,7 @@ import com.bd.tpfinal.model.Item;
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.Product;
 import com.bd.tpfinal.services.HistoricalProductPriceService;
+import com.bd.tpfinal.services.ItemService;
 import com.bd.tpfinal.services.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(value="/api/products")
@@ -30,6 +30,8 @@ public class ProductController {
     @Autowired
     private HistoricalProductPriceService historicalProductPriceService;
 
+    @Autowired
+    private ItemService itemService;
     @Autowired
     private ModelMapper modelMapper;
 
@@ -126,8 +128,13 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     public void removerProducto(@PathVariable long product_id) {
         Optional<Product> productToRemove = productService.findProduct(product_id);
+        List<Item> itemsToRemove = itemService.itemsWithProductId(product_id);
+
+        if(!itemsToRemove.isEmpty()) {
+            itemService.eliminar(itemsToRemove);
+        }
         if(productToRemove.isPresent()) {
-            productService.eliminar(productToRemove.get());
+          productService.eliminar(productToRemove.get());
         }
     }
 }

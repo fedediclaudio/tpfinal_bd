@@ -44,9 +44,11 @@ public class OrderController {
         return orderService.getOrdersConMasProductosDeSupplier(supplier_id);
     }
     // Obtener la orden de mayor precio total de un dia dado
-    @GetMapping("/mayor-precio-del-dia/{fecha_dia}")
-    public Order getOrderMayorPrecioDelDia(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha_dia) {
-        Optional<Order> order = orderService.getOrderConMayorPrecioDelDia(fecha_dia);
+    @GetMapping("/mayor-precio-del-dia")
+    public Order getOrderMayorPrecioDelDia(@RequestParam("fecha")
+                                               @DateTimeFormat(pattern = "dd-MM-yyyy",
+                                                       iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+        Optional<Order> order = orderService.getOrderConMayorPrecioDelDia(fecha);
         if(order.isPresent())
             return order.get();
         return null;
@@ -83,6 +85,16 @@ public class OrderController {
         Optional<Order> order = orderService.finalizarPedido(score, order_id);
     }
 
-
-
+    //Obtener las órdenes con más productos de un proveedor específico
+    @GetMapping("/ordenes-mas-productos-supplier/{supplier_id}")
+    public List<Order> getOrdenesMasProductosDeSupplier(@PathVariable long supplier_id) {
+        return orderService.getOrdenesConMasProductosDelSupplier(supplier_id);
+    }
+    // Obtener la orden de mayor precio total de un día dado
+    @GetMapping("/get-orden-de-mayor-precio-total-dia")
+    public Order getOrdenMayorPrecioTotalDelDia(@RequestParam
+                                                    @DateTimeFormat(pattern = "dd-MM-yyyy",
+                                                            iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+        return orderService.getOrderConMayorPrecioTotalDelDia(fecha);
+    }
 }

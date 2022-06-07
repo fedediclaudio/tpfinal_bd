@@ -16,7 +16,7 @@ public interface SupplierRepository extends CrudRepository<Supplier, Long> {
     public List<Supplier> findByNameIgnoreCaseContaining(String supplierName);
    // public Optional<Supplier> findById(long order_id) ;
 
-    @Query(value= "select p.supplier_id, s.name, count(DISTINCT  o.id) "
+    @Query(value= "select s.* "
             + "from product P inner join item i on P.id = i.id_product "
             + " inner join orders o on i.id_order = o.id "
             + "inner join order_status os on o.id = os.id_order "
@@ -26,4 +26,9 @@ public interface SupplierRepository extends CrudRepository<Supplier, Long> {
             + "order by 2 desc "
             + "limit 10", nativeQuery = true)
     public List<Supplier> getTop10SupplierConMasOrdenesDespachadas();
+
+    List<Supplier> findAllByTypeId(long id_tipo);
+
+    @Query(value = "SELECT * from supplier", nativeQuery = true)
+    List<Supplier> getProveedoresWithProductosDeTodosLosTipos();
 }

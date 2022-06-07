@@ -110,8 +110,6 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
-
-
     @Override
     public Optional<Item> agregarItemAOrdenCreada(Long order_id, ItemDTO item) throws Exception{
         Optional<Order> order = orderRepository.findById(order_id);
@@ -149,5 +147,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void guardarOrder(Order order) {
         orderRepository.save(order);
+    }
+
+    @Override
+    public List<Order> getOrdenesConMasProductosDelSupplier(long supplier_id) {
+        return orderRepository.findOrdersConMasProductosDeSupplier(supplier_id);
+    }
+
+    @Override
+    public Order getOrderConMayorPrecioTotalDelDia(LocalDate fecha) {
+        return orderRepository.getOrdenConMayorPrecioTotalDelDia(fecha);
     }
 }
