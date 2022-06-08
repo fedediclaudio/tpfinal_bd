@@ -3,7 +3,8 @@ package com.bd.tpfinal;
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.services.*;
 import com.bd.tpfinal.utils.NoExisteProductoException;
-import org.junit.jupiter.api.BeforeAll;
+import com.bd.tpfinal.utils.NoMasRandomException;
+import com.bd.tpfinal.utils.RandomSinRepetir;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,9 +13,8 @@ import org.springframework.test.context.event.annotation.BeforeTestClass;
 import java.util.*;
 
 @SpringBootTest
-class TpfinalApplicationTests
+public class TPfinalApplicationTests
 {
-
     @Autowired
     private ProductTypeService productTypeService;
     @Autowired
@@ -36,19 +36,17 @@ class TpfinalApplicationTests
     @Autowired
     private ItemService itemService;
 
-//	private DeliveryService service;
-
     @BeforeTestClass
     public void setUp()
     {
-        new_CONTEXTO_INICIAL();
-        verOrdenes();
+
     }
 
     @Test
-    void test_PRODUCTTYPE_CreacionProductType()
+    void test_00_contexto()
     {
-        new_PRODUCTTYPE_crear(6);
+        new_CONTEXTO_INICIAL();
+        verOrdenes();
     }
 
     public void new_PRODUCTTYPE_crear(int cant)
@@ -61,11 +59,75 @@ class TpfinalApplicationTests
         }
     }
 
-
-    @Test
-    void test_CLIENT_CreacionClient()
+    public void new_crear_SupplierType(int cant)
     {
-        new_CLIENT_crear(5);
+        int i = 0;
+        for (i = 0; i < cant; i++)
+        {
+            SupplierType supplierType = new SupplierType("supplierType" + i, "Descripcion SupplierType" + i);
+            this.supplierTypeService.newSupplierType(supplierType);
+        }
+    }
+
+    /**
+     * pre: crear supplierTypes antes
+     * @param cant
+     */
+    public void new_SUPPLIER_crear(int cant, List<SupplierType> supplierTypes)
+    {
+        //new_crear_SupplierType(3);
+        //List<SupplierType> supplierTypes = this.supplierTypeService.getAll();
+        int cant_supplierTypes = supplierTypes.size();
+        int i = 0;
+        for (i = 0; i < cant; i++)
+        {
+            float coords[] = new float[2];
+            coords[0] = 1.0F;
+            coords[1] = 2.0F;
+            //por ahora no hay calificación
+            float qual = 0.0F;
+            SupplierType supplierType = (SupplierType) supplierTypes.get(i % cant_supplierTypes);
+            Supplier supplier1 = new Supplier("supplier" + i, "2012345678" + i, "San Juan 123" + i, coords, qual, supplierType);
+            this.supplierService.newSupplier(supplier1);
+        }
+    }
+
+    public void new_PRODUCTOS_crear(int cant, List<Supplier> suppliers, List<ProductType> productTypes)
+    {
+        //List<Supplier> suppliers = this.supplierService.getAll();
+        int productTypes_cant = productTypes.size();
+        int suppliers_cant = suppliers.size();
+        Random precio_aleatorio = new Random();
+        Random index_supplier = new Random();
+        //asigna al primer supplier un producto de cada tipo
+        new_PRODUCTOS_crear_Supplier_con_ProductTypes(suppliers.get(0), productTypes);
+        for (int i = 0; i < cant; i++)
+        {
+            float precio = precio_aleatorio.nextFloat() * 10000;
+            //int index = index_supplier.nextInt(suppliers_cant);
+            Product p1 = new Product("producto" + i, precio, 12.0F,
+                    "descripcion producto" + i,
+                    suppliers.get(i % suppliers_cant),
+                    productTypes.get(i % productTypes_cant));
+            this.productService.newProduct(p1);
+        }
+    }
+
+    public void new_PRODUCTOS_crear_Supplier_con_ProductTypes(Supplier supplier, List<ProductType> productTypes)
+    {
+        int productTypes_cant = productTypes.size();
+        Random precio_aleatorio = new Random();
+        //creo tantos productos como types existen, para un mismo proveedor
+        for (int i = 0; i < productTypes_cant; i++)
+        {
+            float precio = precio_aleatorio.nextFloat() * 10000;
+            //int index = index_supplier.nextInt(suppliers_cant);
+            Product p1 = new Product("producto" + i, precio, 20.0F,
+                    "descripcion producto" + i,
+                    supplier,
+                    productTypes.get(i));
+            this.productService.newProduct(p1);
+        }
     }
 
     public void new_CLIENT_crear(int cant)
@@ -88,12 +150,6 @@ class TpfinalApplicationTests
 
     }
 
-    @Test
-    void test_DELIVERYMAN_CreacionDeliveryMan()
-    {
-        new_DELIVERYMAN_CreacionDeliveryMan(6, new Date(), true, new Date());
-    }
-
     public void new_DELIVERYMAN_CreacionDeliveryMan(int cant, Date dateOfBirth, boolean free, Date dateOfAdmission)
     {
         int i = 0;
@@ -104,115 +160,17 @@ class TpfinalApplicationTests
         }
     }
 
-    @Test
-    void test_SUPPLIERTYPE_CreacionSupplierType()
-    {
-        new_crear_SupplierType(6);
-    }
-
-    public void new_crear_SupplierType(int cant)
-    {
-        int i = 0;
-        for (i = 0; i < cant; i++)
-        {
-            SupplierType supplierType = new SupplierType("supplierType" + i, "Descripcion SupplierType" + i);
-            this.supplierTypeService.newSupplierType(supplierType);
-        }
-    }
-
-    @Test
-    void test_SUPPLIER_CreacionSupplier()
-    {
-        new_SUPPLIER_crear(5);
-    }
-
-    public void new_SUPPLIER_crear(int cant)
-    {
-        new_crear_SupplierType(3);
-        List<SupplierType> supplierTypes = this.supplierTypeService.getAll();
-        int cant_supplierTypes = supplierTypes.size();
-        int i = 0;
-        for (i = 0; i < cant; i++)
-        {
-            float coords[] = new float[2];
-            coords[0] = 1.0F;
-            coords[1] = 2.0F;
-            //por ahora no hay calificación
-            float qual = 0.0F;
-            SupplierType supplierType = (SupplierType) supplierTypes.get(i % cant_supplierTypes);
-            Supplier supplier1 = new Supplier("supplier" + i, "2012345678" + i, "San Juan 123" + i, coords, qual, supplierType);
-            this.supplierService.newSupplier(supplier1);
-        }
-    }
-
-    /**
-     * test
-     * crea product Type, SupplierType
-     */
-    public void new_PRODUCTOS_crear(int cant)
-    {
-        new_PRODUCTTYPE_crear(10);
-        List<ProductType> pTi = this.productTypeService.getAll();
-        int pTi_cant = pTi.size();
-
-        new_SUPPLIER_crear(15);
-        List<Supplier> suppliers = this.supplierService.getAll();
-        int suppliers_cant = suppliers.size();
-
-        Random precio_aleatorio = new Random();
-
-        Random index_supplier = new Random();
-
-        for (int i = 0; i < cant; i++)
-        {
-            float precio = precio_aleatorio.nextFloat() * 10000;
-            int index = index_supplier.nextInt(suppliers_cant - 1);
-            Product p1 = new Product("producto" + i, precio, 12.0F, "descripcion producto" + i, suppliers.get(i % suppliers_cant), pTi.get(i % pTi_cant));
-            this.productService.newProduct(p1);
-        }
-    }
-
-    public Date new_ORDENES_crear_5()
-    {
-        return new_ORDENES_crear(5);
-    }
-
-    public Date new_ORDENES_crear_una_orden(List<Product> productos, Client cliente, Date dateOfOrder, String comentario)
-    {
-        System.out.println("+++Creación de una orden");
-        Random cantidad = new Random();
-        Random index = new Random();
-        Random cant_items = new Random();
-        int cant_productos = productos.size();
-        Address address = cliente.getAddresses().get(0);
-
-        Order orden = this.orderService.newOrder_seteado_state(new Order(dateOfOrder, comentario, 0.0F, cliente, address));//se crea y salva
-        //TODO: recuperar la orden con el number (id) puesto. Recuperar el id.
-        //Ver que la recuperación del repository o service se encargue de setear el Status
-        //Order orden = this.orderService.getOrderByDateOfOrder(dateOfOrder); //retorna la misma orden con el id puesto y el status.
-        int cantidad_items = 1 + cant_items.nextInt(6); //cantidad de items
-        for (int i = 0; i < cantidad_items && i < cant_productos; i++)
-        {
-            int cant = cantidad.nextInt(10); //cantidad de productos del item
-            int index_producto = index.nextInt(cant_productos); //TODO: crea aleatorios sin eliminar repetidos. Mal menor, arreglar cuando se pueda.
-            System.out.println("index producto " + index_producto);
-            this.itemService.newItem(new Item(cant, "descripcion item de producto id: " + productos.get(index_producto).getId(), orden, productos.get(index_producto)));
-        }
-        return dateOfOrder;
-    }
-
     public Date new_ORDENES_crear(int cant)
     {
-        new_PRODUCTOS_crear(100);
-
+        //new_PRODUCTOS_crear(100);
         List<Supplier> suppliers = this.supplierService.getAll();
         int cantSuppliers = suppliers.size();
         Random prox_index_supplier = new Random();
-        new_CLIENT_crear(5);
+        //new_CLIENT_crear(5);
         Date dateOfOrder = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
         List<Client> clientes = this.clientService.getAll();
         int cantidad_clientes = clientes.size();
-        //crea ordenes sin items y las salva
+        //crea ordenes
         for (int i = 0; i < cant; i++)
         {
             int index_cliente = (int) Math.random() * cantidad_clientes;
@@ -220,190 +178,127 @@ class TpfinalApplicationTests
             Address address = cliente.getAddresses().get(index_cliente);
             String comentario = "comentario orden del cliente: " + cliente.getId();
             //elijo los productos de un supplier Supplier
-            int prox_supplier_id = prox_index_supplier.nextInt(cantSuppliers);
-            List<Product> productos = this.productService.getBySupplierId(suppliers.get(prox_supplier_id).getId());
-            new_ORDENES_crear_una_orden(productos, cliente, dateOfOrder, comentario);
+            int index = prox_index_supplier.nextInt(cantSuppliers);
+            new_ORDENES_crear_una_orden(suppliers.get(index).getId(), cliente, dateOfOrder, comentario);
         }
         return dateOfOrder;
     }
 
-
-    public void agregar_Items(Order o, Product p, int quanti)
+    public Date new_ORDENES_crear_una_orden(Long supplier_id, Client cliente, Date dateOfOrder, String comentario)
     {
-        this.itemService.newItem(new Item(quanti, "descripcion item de producto id: " + p.getId(), o, p));
+        List<Product> productos = this.productService.getBySupplierId(supplier_id);
+        System.out.println("+++Creación de una orden");
+        Random cantidad = new Random();
+        //Random index = new Random();
+        Random cant_items = new Random();
+        int cant_productos = productos.size();
+        Address address = cliente.getAddresses().get(0);
+
+        RandomSinRepetir rsp = new RandomSinRepetir(0, cant_productos);
+        int index_producto=0;
+
+        Order orden = this.orderService.newOrder_seteado_state(new Order(dateOfOrder, comentario, 0.0F, cliente, address));//se crea y salva
+        System.out.println("orden creada: "+orden.getNumber());
+        int cantidad_items = 2 + cant_items.nextInt(10); //cantidad de items
+        for (int i = 0; i < cantidad_items && i < cant_productos; i++)
+        {
+            int cant = 1+ cantidad.nextInt(10); //cantidad de productos del item
+            try
+            {
+                index_producto = rsp.siguiente();
+            }
+            catch (NoMasRandomException e)
+            {
+                e.printStackTrace();
+            }
+            System.out.println("index producto " + index_producto);
+            this.itemService.newItem(new Item(cant, "descripcion item de producto id: " + productos.get(index_producto).getId(), orden, productos.get(index_producto)));
+        }
+        return dateOfOrder;
     }
 
-
-    @Test
-    void test_PRODUCT_CreacionProduct()
+    /**
+     * Crea 30 0rdenes, todas pending
+     * Crea 15 DM y le asigna 15 ordenes que todos aceptan y finalizan, con lo cual quedan libres.
+     * Luego asigna otras 15 ordenes a los mismos. En forma aleatoria algunas ordenes son aceptadas y otras rechazadas.
+     * Esto actualiza las calificaciones de los clientes y DM
+     */
+    public void new_CONTEXTO_INICIAL()
     {
-        //new_PRODUCT_CreacionProduct();
-        new_PRODUCTOS_crear(5);
-    }
+        new_PRODUCTTYPE_crear(5);
+        new_crear_SupplierType(5);
+        List<SupplierType> supplierTypes = this.supplierTypeService.getAll();
+        new_SUPPLIER_crear(15, supplierTypes);
+        List<Supplier> suppliers = this.supplierService.getAll();
+        List<ProductType> productTypes = this.productTypeService.getAll();
+        new_PRODUCTOS_crear(500, suppliers, productTypes);
+        new_CLIENT_crear(5);
+        Date dateOfBirth = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
+        Date dateOfAdmision = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
+        Date date = new_ORDENES_crear(30);//crea 30 ordenes con items. Todas Pending
 
+        new_DELIVERYMAN_CreacionDeliveryMan(15, dateOfBirth, true, dateOfAdmision);//crea 15 deliveryMan
+        List<Order> ordenes = this.orderService.getAll();
+        List<DeliveryMan> deliveryMENFree = this.deliveryManService.getAllDeliveryManFree();
+        //Asignación de Ordenes a los DeliveryMan
+        Iterator<Order> iter_order = ordenes.iterator();
+        Iterator<DeliveryMan> iter_deliveryMan = deliveryMENFree.iterator();
+        //Pending -> Assigned -> Sent ->Delivered - 15 primeras ordenes.
 
-    @Test
-    public void test_ORDER_CreationOrder()
-    {
-        Date date = new_ORDENES_crear_5();
-
+        while (iter_order.hasNext() && iter_deliveryMan.hasNext())
+        {
+            Order orden = (Order) iter_order.next();
+            DeliveryMan deliveryManFree = (DeliveryMan) iter_deliveryMan.next();
+            this.orderService.asignacionDeOrden(orden.getNumber(), deliveryManFree.getId());
+            try
+            {
+                //estado pasa a Sent
+                this.orderService.aceptacionDeOrden(orden.getNumber());
+                //estado pasa a Delivered
+                this.orderService.finalizacionDeOrden(orden.getNumber());
+            }
+            catch (Exception e)
+            {
+                System.out.println("La orden no estaba en el estado correcto");
+            }
+        }
+        iter_deliveryMan = deliveryMENFree.iterator();//repaso los 15 deliveryMan y sigo agregando ordenes
+        while (iter_order.hasNext() && iter_deliveryMan.hasNext())
+        {
+            Order orden = (Order) iter_order.next();
+            DeliveryMan deliveryManFree = (DeliveryMan) iter_deliveryMan.next();
+            //estado pasa a Assigned
+            this.orderService.asignacionDeOrden(orden.getNumber(), deliveryManFree.getId());
+            try
+            {
+                if (Math.random() < 0.5)
+                {
+                    //estado pasa a Sent
+                    this.orderService.aceptacionDeOrden(orden.getNumber());
+                    //estado pasa a Delivered
+                    this.orderService.finalizacionDeOrden(orden.getNumber());
+                } else
+                    //estado pasa a Cancelled por parte del DM
+                    this.orderService.rechazoDeOrden(orden.getNumber());
+            }
+            catch (Exception e)
+            {
+                System.out.println("La orden no estaba en el estado correcto");
+            }
+        }
     }
 
     /**
      * 1) agregar un ítem a una orden ya creada.
+     * Se resuelve en el contexto inicial
      */
-    @Test
-    public void test_01_ORDER_agregar_Item_a_Order_Creada()
-    {
-        //new_ORDER_agregar_Item_a_Order_Creada();
-        Date date = new_ORDENES_crear_5();
-    }
 
     /**
      * 2) Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
      * El estado queda en Assigned
+     * Se resuelve en el contexto inicial
      */
-    @Test
-    public void test_02_Confirmar_Pedido()
-    {
-        Date date = new_ORDENES_crear_5();
-        List<Order> ordenes = this.orderService.getAll();
-        Long number_de_ultima_orden = ordenes.get(ordenes.size() - 1).getNumber();
-        //Alta de un DeliveryMan
-        new_DELIVERYMAN_CreacionDeliveryMan(2, new Date(), true, new Date());
-        //ASIGNACION
-        //1 se busca el primer repartidor libre
-        List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
-        DeliveryMan deliveryManFree = deliveryMEN.get(0);
-        //asigna el primer repartidor libre encontrado a la orden recien creada.
-        Order orden_buscada = this.orderService.getByNumber(number_de_ultima_orden);
-        //orden_buscada.assignDeliveryMan(deliveryManFree);
-        //this.orderService.actualizarOrder(orden_buscada);
-        this.orderService.assignOrderToDeliveryMan(orden_buscada.getNumber(), deliveryManFree.getId());
-    }
 
-    /**
-     * DeliveryMan rechaza una Orden (ya está Assigned)
-     * La Order pasa a Cancelled
-     * El repartidor descuenta puntaje
-     */
-    @Test
-    public void test_DeliveryMan_Rechaza_Order()
-    {
-        new_ORDENES_crear_5();
-        List<Order> ordenes = this.orderService.getAll();
-        Long number_de_ultima_orden = ordenes.get(ordenes.size() - 1).getNumber();
-        //Alta de un DeliveryMan
-        new_DELIVERYMAN_CreacionDeliveryMan(2, new Date(), true, new Date());
-        //new_DELIVERYMAN_CreacionDeliveryMan(2, "delivery", "usuario", "pass", "delivery@email.com", new Date(), true, new Date());
-        //new_DELIVERYMAN_CreacionDeliveryMan("delivery2", "usuario2", "pass2", "delivery2@email.com", new Date(), true, new Date());
-        //1 se busca un repartidor libre
-        List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
-        DeliveryMan deliveryManFree = deliveryMEN.get(0);
-        //asigna el primer repartidor libre encontrado a la orden recien creada.
-        Order orden_buscada = this.orderService.getByNumber(number_de_ultima_orden);
-        orden_buscada.assignDeliveryMan(deliveryManFree);
-        this.orderService.actualizarOrder(orden_buscada);
-        //la orden_buscada está en Assigned.
-        //el deliveryManFree ya no esta free.
-        try
-        {
-            orden_buscada.refuse();
-            this.orderService.actualizarOrder(orden_buscada);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            System.out.println("No sería una Order Assigned");
-        }
-    }
-
-    /**
-     * DeliveryMan acepta Order (estaba en Assigned)
-     * La Order pasa a Sent
-     */
-    @Test
-    public void test_DeliveryMan_acepta_Order()
-    {
-        new_ORDENES_crear_5();
-        List<Order> ordenes = this.orderService.getAll();
-        Long number_de_ultima_orden = ordenes.get(ordenes.size() - 1).getNumber();
-        //Alta de un DeliveryMan
-        new_DELIVERYMAN_CreacionDeliveryMan(2, new Date(), true, new Date());
-        //new_DELIVERYMAN_CreacionDeliveryMan(3, "delivery", "usuario", "pass", "delivery@email.com", new Date(), true, new Date());
-
-        //1 se busca el primer repartidor libre
-        List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
-        DeliveryMan deliveryManFree = deliveryMEN.get(0);
-        //asigna el primer repartidor libre encontrado a la orden recien creada.
-        Order orden_buscada = this.orderService.getByNumber(number_de_ultima_orden);
-        orden_buscada.assignDeliveryMan(deliveryManFree);
-        this.orderService.actualizarOrder(orden_buscada);
-        //la orden_buscada está en Assigned.
-        //el deliveryManFree ya no esta free.
-        try
-        {
-            orden_buscada.deliver(); //la orden pasa a SENT
-            this.orderService.actualizarOrder(orden_buscada);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            System.out.println("No sería una Order Assigned");
-        }
-    }
-
-    /**
-     * DeliveryMan entrega pedido (Order estaba en Sent)
-     * La Order pasa a Finished
-     * Se actualizan los puntajes
-     */
-    @Test
-    public void test_DeliveryMan_Finishe_Pedido()
-    {
-        //crea una orden y progresa hasta la aceptación
-        new_ORDENES_crear_5();
-        List<Order> ordenes = this.orderService.getAll();
-        Long number_de_ultima_orden = ordenes.get(ordenes.size() - 1).getNumber();
-        //Alta de un DeliveryMan
-        new_DELIVERYMAN_CreacionDeliveryMan(2, new Date(), true, new Date());
-        //new_DELIVERYMAN_CreacionDeliveryMan(4, "delivery", "usuario", "pass", "delivery@email.com", new Date(), true, new Date());
-        //new_DELIVERYMAN_CreacionDeliveryMan("delivery1", "usuario1", "pass1", "delivery1@email.com", new Date(), true, new Date());
-        // new_DELIVERYMAN_CreacionDeliveryMan("delivery2", "usuario2", "pass2", "delivery2@email.com", new Date(), true, new Date());
-        //1 se busca el primer repartidor libre
-        List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
-        DeliveryMan deliveryManFree = deliveryMEN.get(0);
-        //asigna el primer repartidor libre encontrado a la orden recien creada.
-        Order orden_buscada = this.orderService.getByNumber(number_de_ultima_orden);
-        orden_buscada.assignDeliveryMan(deliveryManFree);
-        this.orderService.actualizarOrder(orden_buscada);
-        //la orden_buscada está en Assigned.
-        //el deliveryManFree ya no esta free.
-        try
-        {
-            orden_buscada.deliver();//la Order pasa a Sent
-            this.orderService.actualizarOrder(orden_buscada);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            System.out.println("No sería una Order Assigned");
-        }
-
-        //ahora viene la parte de finalizar un pedido
-        Order orden_sent = this.orderService.getByNumber(number_de_ultima_orden);
-        try
-        {
-            orden_sent.finish();// la Order para a Delivered
-            this.orderService.actualizarOrder(orden_sent);
-
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            System.out.println("No sería una Order Sent");
-        }
-    }
 
     /**
      * Cliente cancela Order (Order en Pending o Assigned)
@@ -414,7 +309,7 @@ class TpfinalApplicationTests
     {
         //se crea una Order con Items.
         //El estado es Pending
-        new_ORDENES_crear_5();
+        new_ORDENES_crear(1);
         List<Order> ordenes = this.orderService.getAll();
         Long number_de_ultima_orden = ordenes.get(ordenes.size() - 1).getNumber();
         try
@@ -431,7 +326,7 @@ class TpfinalApplicationTests
     @Test
     public void test_Cliente_cancela_orden_Assigned()
     {
-        new_ORDENES_crear_5();
+        new_ORDENES_crear(1);
         List<Order> ordenes = this.orderService.getAll();
         Long number_de_ultima_orden = ordenes.get(ordenes.size() - 1).getNumber();
 
@@ -447,11 +342,14 @@ class TpfinalApplicationTests
         Order orden_buscada = this.orderService.getByNumber(number_de_ultima_orden);
         //orden_buscada.assignDeliveryMan(deliveryManFree);
         //this.orderService.actualizarOrder(orden_buscada);
-        this.orderService.assignOrderToDeliveryMan(orden_buscada.getNumber(), deliveryManFree.getId());
+        this.orderService.asignacionDeOrden(orden_buscada.getNumber(), deliveryManFree.getId());
         //Long number_de_ultima_orden = new_ORDER_agregar_Item_a_Order_Creada();
         try
         {
+            //estado pasa a Cancelled
             this.orderService.cancelacionDeOrden(number_de_ultima_orden);
+            Order orden = this.orderService.getByNumber(number_de_ultima_orden);
+            System.out.println("Estado de la orden: "+ orden.getOrderStatus().getName() );
         }
         catch (Exception e)
         {
@@ -474,76 +372,37 @@ class TpfinalApplicationTests
         while (orderIterator.hasNext())
         {
             Order orden_a_calificar = (Order) orderIterator.next();
-            float score = calif.nextFloat() * 5;
+            float score = calif.nextInt(5);
             String comentario = "comentario_" + score;
-            //test_03_1_calificar_Orden_y_actualizar_calificacion_Supplier(orden_a_calificar);
-            test_03_2_calificar_Orden_y_Supplier(orden_a_calificar, score, comentario);
+            System.out.println("+++ se califica la orden: "+orden_a_calificar.getNumber());
+            //test_03_2_calificar_Orden_y_Supplier(orden_a_calificar, score, comentario);
+            //Qualification qua = new Qualification(score, comentario, orden_a_calificar);
+            //orden_a_calificar.setQualification(qua);
+            // esto tal vez lo debería hacer el service directamente.
+            // o sea, orderService.calificar(...)
+            //this.orderService.actualizarOrder(orden_a_calificar);  //actualiza la orden con la calificación.
+            this.orderService.calificarOrden(score, comentario, orden_a_calificar.getNumber());
         }
-
+        //test_03_2_calificar_Suppliers();
     }
-
-    public void test_03_2_calificar_Orden_y_Supplier(Order orden_a_calificar, float score, String comentario)
+    //califica todos los suppliers
+    public void test_03_2_calificar_Suppliers()
     {
-        Qualification qua = new Qualification(score, comentario, orden_a_calificar);
-        orden_a_calificar.setQualification(qua);
-        // esto tal vez lo debería hacer el service directamente.
-        // o sea, orderService.calificar(...)
-        this.orderService.actualizarOrder(orden_a_calificar);  //actualiza la orden con la calificación.
-        Supplier proveedor = orden_a_calificar.getItems().get(0).getProduct().getSupplier();//proveedor de la orden
-        Iterator<Order> ordenes2 = this.orderService.getOrderByIdSupplier(proveedor.getId()).iterator();
-        while (ordenes2.hasNext())
+        Iterator<Supplier> suppliers = this.supplierService.getAll().iterator();
+        while(suppliers.hasNext())
         {
-            System.out.println("numero de orden:  " + ordenes2.next().getNumber());
-        }
-        double promedio = this.orderService.getQualificationAverage(proveedor.getId());
-        proveedor.setQualificationOfUsers((float) promedio);
-        this.supplierService.newSupplier(proveedor);//Esto actualiza la información del proveedor, con su calificación
-        System.out.println("promedio calificacion de ordenes del supplier id : " + proveedor.getId() + "  promedio: " + promedio);
-
-
-    }
-
-    //califica una orden.
-    // NO SIRVE. esto tiene una mala interpretación de la ORDEN.
-    // Supuse que la orden podía tener items de diferentes suppliers
-    public void test_03_1_calificar_Orden_y_actualizar_calificacion_Supplier(Order orden_a_calificar)
-    {
-        //Calificación de los proveedores, un proveedor por cada Item.
-        //calificación, la cual será el promedio entre las calificaciones recibidas por los clientes
-        //Para cada proveedor, encontrar todas las ordenes que contienen sus productos, y buscar la calificacion de cada una.
-        //el promedio será la calificacion del proveedor.
-        //Tengo en cuenta solamente la calificación a cada Supplier que está presente en la última Order
-        float score = (float) Math.random() * 5;
-        String comentario = "comentario_" + score;
-        //orden_a_calificar.setStatusByName();ya hecho por getAllWithStatus()
-        Qualification qua = new Qualification(score, comentario, orden_a_calificar);
-        orden_a_calificar.setQualification(qua);
-        this.orderService.actualizarOrder(orden_a_calificar);
-
-        Iterator<Item> items_iter = orden_a_calificar.getItems().iterator();
-        HashMap<Long, Supplier> suppliers = new HashMap<Long, Supplier>();
-        while (items_iter.hasNext())
-        {
-            Supplier proveedor = items_iter.next().getProduct().getSupplier();
-            suppliers.putIfAbsent(proveedor.getId(), proveedor);
-        }
-
-        Iterator<Supplier> iter_supplier = suppliers.values().iterator();
-        while (iter_supplier.hasNext())
-        {
-            Supplier supplier = iter_supplier.next();
-            Iterator<Order> ordenes2 = this.orderService.getOrderByIdSupplier(supplier.getId()).iterator();
-            while (ordenes2.hasNext())
+            Supplier proveedor = (Supplier) suppliers.next();
+            Iterator<Order> ordenes_de_supplier = this.orderService.getOrderByIdSupplier(proveedor.getId()).iterator();
+            while (ordenes_de_supplier.hasNext())
             {
-                System.out.println("numero de orden:  " + ordenes2.next().getNumber());
+                System.out.println("supplier: " + proveedor.getId() + " numero de orden:  " + ordenes_de_supplier.next().getNumber());
             }
-            double promedio = this.orderService.getQualificationAverage(supplier.getId());
-            supplier.setQualificationOfUsers((float) promedio);
-            this.supplierService.newSupplier(supplier);
-            System.out.println("promedio calificacion de ordenes del supplier id: " + supplier.getId() + "promedio: " + promedio);
+            float promedio = this.orderService.getQualificationAverage(proveedor.getId());
+            proveedor.setQualificationOfUsers(promedio);
+            this.supplierService.newSupplier(proveedor);//Esto actualiza la información del proveedor, con su calificación
+            System.out.println("promedio calificacion de ordenes del supplier id : " + proveedor.getId() + "  promedio: " + promedio);
         }
     }
-
 
     //4) Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
     @Test
@@ -602,7 +461,11 @@ class TpfinalApplicationTests
     void test_05_eliminar_producto()
     {
         //Creo 2 productos
-        new_PRODUCTOS_crear(2);
+        List<SupplierType> supplierTypes = this.supplierTypeService.getAll();
+        new_SUPPLIER_crear(15, supplierTypes);
+        List<Supplier> suppliers = this.supplierService.getAll();
+        List<ProductType> productTypes = this.productTypeService.getAll();
+        new_PRODUCTOS_crear(2, suppliers, productTypes);
         List<Product> productos = this.productService.getAll();
         Long id_producto = productos.get(0).getId();
         //eliminar un producto ofrecido por un proveedor
@@ -625,6 +488,7 @@ class TpfinalApplicationTests
     @Test
     void test_06_obtener_proveedores_de_un_tipo()
     {
+        /*
         SupplierType supplierType1 = new SupplierType("supplierType1", "Descripcion SupplierType1");
         this.supplierTypeService.newSupplierType(supplierType1);
 
@@ -645,16 +509,18 @@ class TpfinalApplicationTests
         this.supplierService.newSupplier(supplier2);
 
         new_SUPPLIER_crear(10);
+
+         */
         Iterator<SupplierType> iter_ST = this.supplierTypeService.getAll().iterator();
         while (iter_ST.hasNext())
         {
             SupplierType sT = iter_ST.next();
-            Long id = sT.getId();
-            Iterator<Supplier> suppliers = this.supplierService.getSupplierBySupplierTypeId(id).iterator();
+            Long id_type = sT.getId();
+            Iterator<Supplier> suppliers = this.supplierService.getSupplierBySupplierTypeId(id_type).iterator();
             while (suppliers.hasNext())
             {
                 Supplier ste = (Supplier) suppliers.next();
-                System.out.println("supplierType id : " + sT.getId() + " supplier: " + ste.getName() + " id: " + ste.getId());
+                System.out.println("supplierType id : " + sT.getId() + " ++ supplier id: " + ste.getId());
             }
         }
     }
@@ -694,14 +560,15 @@ class TpfinalApplicationTests
         Product product3 = new Product("producto3", 15.8F, 12.0F, "descripcion producto 3", unSupplier, productType2);
         this.productService.newProduct(product3);
 
-        Iterator<Product> productos = this.productService.getProductoByProductType(productType.getId()).iterator();
+        //Iterator<Product> productos = this.productService.getProductoByProductType(productType.getId()).iterator();
+        Iterator<Product> productos = this.productService.getBySupplierId(unSupplier.getId()).iterator();
+
         while (productos.hasNext())
         {
             Product producto = productos.next();
             System.out.println("Producto id : " + producto.getId() + " Proveedor:  " + producto.getSupplier().getName() + "  " + producto.getType().getName());
         }
     }
-
 
     //8) Obtener las órdenes con más productos de un proveedor específico.
     //modularización
@@ -711,8 +578,8 @@ class TpfinalApplicationTests
     void test_08_ordenes_de_Suppier()
     {
         //crear_productos();
-        new_PRODUCTOS_crear(10);
-        new_ORDENES_crear_5();
+        //new_PRODUCTOS_crear(10);
+        //new_ORDENES_crear_5();
         List<Supplier> suppliers = this.supplierService.getAll();
         Iterator<Supplier> iter_supplier = suppliers.iterator();
         System.out.println("cantidad de suppliers: " + suppliers.size());
@@ -737,14 +604,10 @@ class TpfinalApplicationTests
     }
 
     //9) Obtener la orden de mayor precio total de un día dado.
-    //TODO: para que esto funcione debe estar la bd vacía. COrregir
     @Test
     void test_09_orden_mayor_precio_x_fecha()
     {
-        //crear_productos();
-        new_PRODUCTOS_crear(6);
-
-        Date fecha = new_ORDENES_crear_5();
+        Date fecha = new_ORDENES_crear(10);
         //Date fecha = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
         Iterator<Order> ordenes = this.orderService.getOrderMaxPricePorFecha(fecha).iterator();
         while (ordenes.hasNext())
@@ -754,104 +617,18 @@ class TpfinalApplicationTests
         }
     }
 
-    /**
-     * Crea 30 0rdenes, todas pending
-     * Crea 15 DM y le asigna 15 ordenes que todos aceptan y finalizan, con lo cual quedan libres.
-     * Luego asigna otras 15 ordenes a los mismos. En forma aleatoria algunas ordenes son aceptadas y otras rechazadas.
-     * Esto actualiza las calificaciones de los clientes y DM
-     */
-    public void new_CONTEXTO_INICIAL()
-    {
-        Date dateOfBirth = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
-        Date dateOfAdmision = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
-        Date date = new_ORDENES_crear(30);//crea 30 ordenes con items. Todas Pending
-
-        new_DELIVERYMAN_CreacionDeliveryMan(15, dateOfBirth, true, dateOfAdmision);//crea 15 deliveryMan
-        List<Order> ordenes = this.orderService.getAll();
-        List<DeliveryMan> deliveryMENFree = this.deliveryManService.getAllDeliveryManFree();
-        //Asignación de Ordenes a los DeliveryMan
-        Iterator<Order> iter_order = ordenes.iterator();
-        Iterator<DeliveryMan> iter_deliveryMan = deliveryMENFree.iterator();
-        //Pending -> Assigned -> Sent ->Delivered - 15 primeras ordenes.
-
-        while (iter_order.hasNext() && iter_deliveryMan.hasNext())
-        {
-            Order orden = (Order) iter_order.next();
-            DeliveryMan deliveryManFree = (DeliveryMan) iter_deliveryMan.next();
-            this.orderService.assignOrderToDeliveryMan(orden.getNumber(), deliveryManFree.getId());
-            try
-            {
-                this.orderService.aceptacionDeOrden(orden.getNumber());
-                this.orderService.finalizacionDeOrden(orden.getNumber());
-            }
-            catch (Exception e)
-            {
-                System.out.println("La orden no estaba en el estado correcto");
-            }
-        }
-        iter_deliveryMan = deliveryMENFree.iterator();//repaso los 15 deliveryMan y sigo agregando ordenes
-        while (iter_order.hasNext() && iter_deliveryMan.hasNext())
-        {
-            Order orden = (Order) iter_order.next();
-            DeliveryMan deliveryManFree = (DeliveryMan) iter_deliveryMan.next();
-            this.orderService.assignOrderToDeliveryMan(orden.getNumber(), deliveryManFree.getId());
-            try
-            {
-                if (Math.random() < 0.5)
-                {
-                    this.orderService.aceptacionDeOrden(orden.getNumber());
-                    this.orderService.finalizacionDeOrden(orden.getNumber());
-                } else
-                    this.orderService.rechazoDeOrden(orden.getNumber());
-            }
-            catch (Exception e)
-            {
-                System.out.println("La orden no estaba en el estado correcto");
-            }
-        }
-    }
-
     //10) Obtener los diez repartidores con mayor puntaje.
     // un repartidor suma un punto cuando completa una entrega mientras que
     // resta dos puntos cuando rechaza un pedido que le fue asignado.
     @Test
     void test_10_obtener_10_repartidores_mayor_puntaje()
     {
-        //contexto inicial
-        new_CONTEXTO_INICIAL();
-
-
-        //iter_order = ordenes.iterator();
-        //  while (iter_order.hasNext())
-        //   {
-        //        Order orden_a_calificar = (Order)iter_order.next();
-        //       calificar_Orden_y_actualizar_calificacion_Supplier(orden_a_calificar);
-        //   }
-
         Iterator<DeliveryMan> deliveryMEN_buscados = this.deliveryManService.getAllOrderByScore().iterator();
         while (deliveryMEN_buscados.hasNext())
         {
             DeliveryMan dm = (DeliveryMan) deliveryMEN_buscados.next();
             System.out.println("delivery man: " + dm.getId() + " ordenados por score: " + dm.getScore());
         }
-    }
-
-    public void DeliveryMan_asignacion_confirma_pedido()
-    {
-        Date date = new_ORDENES_crear_5();
-        List<Order> ordenes = this.orderService.getAll();
-        Long number_de_ultima_orden = ordenes.get(ordenes.size() - 1).getNumber();
-        //Alta de un DeliveryMan
-        new_DELIVERYMAN_CreacionDeliveryMan(2, new Date(), true, new Date());
-        //ASIGNACION
-        //1 se busca el primer repartidor libre
-        List<DeliveryMan> deliveryMEN = this.deliveryManService.getAllDeliveryManFree();
-        DeliveryMan deliveryManFree = deliveryMEN.get(0);
-        //asigna el primer repartidor libre encontrado a la orden recien creada.
-        Order orden_buscada = this.orderService.getByNumber(number_de_ultima_orden);
-        //orden_buscada.assignDeliveryMan(deliveryManFree);
-        //this.orderService.actualizarOrder(orden_buscada);
-        this.orderService.assignOrderToDeliveryMan(orden_buscada.getNumber(), deliveryManFree.getId());
     }
 
     //11) Obtener los diez proveedores que más órdenes despacharon.
@@ -895,13 +672,10 @@ class TpfinalApplicationTests
         return fecha_cambio;
     }
 
-
     //12) Obtener los precios de un producto entre dos fechas dadas.
     @Test
     void test_12_obtener_los_precios_un_producto_entre_fechas()
     {
-        //new_CONTEXTO_INICIAL();
-
         Date fecha1 = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
         Date fecha2 = new_PRODUCTOS_PRECIOS_CAMBIAR();
         Date fecha3 = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
@@ -920,12 +694,10 @@ class TpfinalApplicationTests
         }
     }
 
-
     //13) Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
     @Test
     void test_13_obtener_precio_promedio()
     {
-        new_PRODUCTOS_crear(30);
         new_PRODUCTOS_PRECIOS_CAMBIAR();
         List<ProductTypeAvgPrice_DTO> ptap = this.productService.getAvgPriceForProductType();
         Iterator<ProductTypeAvgPrice_DTO> ptapIterator = ptap.iterator();
@@ -942,16 +714,18 @@ class TpfinalApplicationTests
     // Es necesario también el número de estas calificaciones que el proveedor posee.
     // las calificaciones salen de la calificacion que da el cliente a cada orden. Cada item de la orden se queda con esa calificación
     // de esa forma se lo vincula con el supplier. Item->Product->Supplier  =  Item->Order->Qualification
-    //TODO: COMPLETAR !!!
+
     @Test
     void test_14_suppliers_con_calificacion_1()
     {
-        List<Supplier> suppliers = this.supplierService.getByQualification1();
-        Iterator<Supplier> supplierIterator = suppliers.iterator();
+        List<Supplier_Qualif_DTO> suppliers = this.supplierService.getByQualification1(1F);
+        Iterator<Supplier_Qualif_DTO> supplierIterator = suppliers.iterator();
         while (supplierIterator.hasNext())
         {
-            Supplier supplier = (Supplier) supplierIterator.next();
-            System.out.println("Supplier id: " + supplier.getId() + " calificacion: " + supplier.getQualificationOfUsers());
+            Supplier_Qualif_DTO supplier = (Supplier_Qualif_DTO) supplierIterator.next();
+            System.out.println("Supplier id: " + supplier.getId_supplier() +
+
+                    " cantidad: " + supplier.getCantidad_1());
         }
     }
 
@@ -1008,10 +782,5 @@ class TpfinalApplicationTests
     }
 
 
-    @Test
-    void prueba()
-    {
-        System.out.println("OK!");
-    }
 
 }

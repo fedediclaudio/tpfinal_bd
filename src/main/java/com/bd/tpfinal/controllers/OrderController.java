@@ -6,6 +6,7 @@ import com.bd.tpfinal.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,29 +26,15 @@ public class OrderController
 
     ///////     POST
 
-    //TODO: necesito validar desde el repositorio que la id de Address pasada en la newOrder pertenece al id del Client
-    //por ahora intento desde acá.
+    //1) Agregar un ítem a una orden ya creada.
+    //ver ItemController
+
     @PostMapping(value = "/new")
     public void addOrder(@RequestBody Order newOrder)
     {
         this.orderService.newOrder(newOrder);
     }
-    //public void newOrder(@RequestBody Order newOrder) throws AddressEquivocadaException
-    //{
-    //    Order order = newOrder;
-    //    Address address_of_order = order.getAddress();Client client_of_order = order.getClient();
-    //    Long idClient = client_of_order.getId();
-    //    //Long idAddress = address_of_order.getId();
-    //    List<Address> addresses_of_client = this.addressService.getAllByIdUser(idClient);
 
-    //    if(addresses_of_client.contains(address_of_order))
-    //        this.orderService.newOrder(newOrder);
-    //    else
-    //        throw new AddressEquivocadaException(address_of_order);
-
-    //}
-
-    //anda bien
     @PostMapping("/test")
     public int test()
     {
@@ -55,7 +42,39 @@ public class OrderController
         return 1;
     }
 
-    ///////     GET
+    //////  PUT
+
+    //2) Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido
+    @PutMapping("/{number}/assign")
+    public boolean assignOrder(@PathVariable Long number)
+    {
+        return this.orderService.asignacionDeOrden(number);
+    }
+
+    //3) Añadir una calificación a una orden ya completada.
+    // Tenga en cuenta que deberá actualizar la calificación del proveedor.
+    @PutMapping("/score/{score}/comentario/{comentario}/orden/{orden}")
+    public void calificarOrder(@PathVariable float score, @PathVariable String comentario, @PathVariable Long orden)
+    {
+        this.orderService.calificarOrden(score, comentario, orden);
+    }
+
+    //////     GET
+
+    //8) Obtener las órdenes con más productos de un proveedor específico.
+
+    @GetMapping("/supplier/{id_supplier}")
+    public List<Order> getBySupplierMaxCantItems(@PathVariable Long id_supplier)
+    {
+        return this.orderService.getBySupplierMaxCantItems(id_supplier);
+    }
+
+    //9) Obtener la orden de mayor precio total de un día dado.
+    @GetMapping("/fecha/{fecha}")
+    public List<Order> getOrderMaxPricePorFecha(@PathVariable Date fecha)
+    {
+        return this.orderService.getOrderMaxPricePorFecha(fecha);
+    }
 
     @GetMapping("/all")
     public List<Order> getAll()

@@ -143,7 +143,7 @@ public class OrderServiceImpl implements OrderService
 
     @Override
     @Transactional
-    public boolean assignOrderToDeliveryMan(Long orden_id, Long dm_id)
+    public boolean asignacionDeOrden(Long orden_id, Long dm_id)
     {
         Optional<Order> orden_buscada = this.orderRepository.findById(orden_id);
         boolean rta = true;
@@ -152,6 +152,18 @@ public class OrderServiceImpl implements OrderService
         this.orderRepository.save(orden_buscada.get());
         return rta;
 
+    }
+
+    @Override
+    @Transactional
+    public boolean asignacionDeOrden(Long orden_id)
+    {
+        Optional<Order> orden_buscada = this.orderRepository.findById(orden_id);
+        boolean rta = true;
+        List<DeliveryMan> dm = this.deliveryManRepository.findAllFree();
+        orden_buscada.get().assignDeliveryMan(dm.get(0));
+        this.orderRepository.save(orden_buscada.get());
+        return rta;
     }
 
     @Override

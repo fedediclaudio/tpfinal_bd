@@ -30,6 +30,14 @@ public class DeliveryManController
 
     //////  GET
 
+    //10) Obtener los diez repartidores con mayor puntaje.
+    @GetMapping("/TopTen")
+    public List<DeliveryMan> getAllOrderByScore()
+    {
+        return this.deliveryManService.getAllOrderByScore();
+    }
+
+
     @GetMapping("/all")
     public List<DeliveryMan> getAll()
     {

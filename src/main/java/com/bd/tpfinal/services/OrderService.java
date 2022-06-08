@@ -17,7 +17,7 @@ public interface OrderService
     public List<Order> getAll();
     public Optional<Order> getById(Long id);
     public Order getByNumber(Long number);
-    public boolean assignOrderToDeliveryMan(Long orden, Long dm);
+
     public Order actualizarOrder(Order orden);
 
     //todas las Order de un Supplier
@@ -28,6 +28,8 @@ public interface OrderService
     public List<Order> getOrderMaxPricePorFecha(Date fecha);
     public Order getOrderByDateOfOrder(Date date);
 
+    public boolean asignacionDeOrden(Long orden, Long dm);
+    public boolean asignacionDeOrden(Long orden);
     public Order aceptacionDeOrden(Long id_orden) throws Exception;
     public Order finalizacionDeOrden(Long id_orden)  throws Exception;
     public Order rechazoDeOrden(Long id_orden) throws Exception;

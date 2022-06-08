@@ -156,6 +156,8 @@ public class ProductServiceImpl implements ProductService
 
     @Override
     @Transactional
+    //7) Obtener todos los productos y su tipo, de un proveedor específico.
+    // tal vez haya que meter un DTO
     public List<Product> getBySupplierId(Long id_supplier)
     {
         return this.productRepository.findBySupplierId(id_supplier);

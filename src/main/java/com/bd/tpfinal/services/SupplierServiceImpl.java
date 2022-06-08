@@ -1,26 +1,28 @@
 package com.bd.tpfinal.services;
 
-import com.bd.tpfinal.model.Order;
-import com.bd.tpfinal.model.Supplier;
-import com.bd.tpfinal.model.Supplier_Order_DTO;
+import com.bd.tpfinal.model.*;
+import com.bd.tpfinal.repositories.ProductTypeRepository;
 import com.bd.tpfinal.repositories.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.awt.print.Pageable;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
 public class SupplierServiceImpl implements SupplierService
 {
     private final SupplierRepository supplierRepository;
+    private final ProductTypeRepository productTypeRepository;
 
     @Autowired
-    public SupplierServiceImpl(SupplierRepository supplierRepository)
+    public SupplierServiceImpl(SupplierRepository supplierRepository, ProductTypeRepository productTypeRepository)
     {
         this.supplierRepository = supplierRepository;
+        this.productTypeRepository = productTypeRepository;
     }
 
     @Override
@@ -76,22 +78,53 @@ public class SupplierServiceImpl implements SupplierService
 
     @Override
     @Transactional
-    public List<Supplier> getByQualification1()
+    public List<Supplier_Qualif_DTO> getByQualification1(float valor)
     {
-        return this.supplierRepository.findByQualification1();
+        Iterator<Supplier> suppliers = this.supplierRepository.findSuppliersQualif_1(valor).iterator();
+        //Iterator<Supplier> suppliers = this.supplierRepository.findSuppliers_1(1F).iterator();
+        //List<Supplier_Qualif_DTO> supplier_qualif_dtos = new ArrayList<Supplier_Qualif_DTO>();
+        //Iterator<Supplier_Qualif_DTO> cuentas = this.supplierRepository.findCount().iterator();
+        List<Supplier_Qualif_DTO> supplier_qualif_dtos = new ArrayList<Supplier_Qualif_DTO>();
+        while(suppliers.hasNext())
+        {
+            Supplier supplier = suppliers.next();
+            Supplier_Qualif_DTO supplier_qualif_dto = new Supplier_Qualif_DTO();
+            supplier_qualif_dto.setId_supplier(supplier.getId());
+
+            supplier_qualif_dtos.add(supplier_qualif_dto);
+            int cuenta = this.supplierRepository.findCountBySupplierIdAndScoreOne(supplier.getId(), valor);
+            supplier_qualif_dto.setCantidad_1(cuenta);
+        }
+
+        return supplier_qualif_dtos;
+
     }
 
     @Override
     @Transactional
     public List<Supplier> getSupplierWithAllTypes()
     {
-        return this.supplierRepository.findSupplierWithAllTypes();
+        List<Supplier> suppliersRta = new ArrayList<Supplier>();
+        long cant_Product_Types = this.productTypeRepository.findAll().size();
+        Iterator<Supplier> suppliers = this.supplierRepository.findAll().iterator();
+        while(suppliers.hasNext())
+        {
+            Supplier supplier = suppliers.next();
+            long cantidad = supplier.getProducts().stream().map(Product::getType)
+                    .map(ProductType::getName)
+                    .distinct()
+                    .count();
+            if(cantidad == cant_Product_Types)
+                suppliersRta.add(supplier);
+        }
+        return suppliersRta;
     }
 
     @Override
     @Transactional
     public List<Supplier_Order_DTO> getTopTenSupplierWithOrders()
     {
+
         return this.supplierRepository.findTopTenSupplierWithOrders(PageRequest.of(0, 10));
     }
 
