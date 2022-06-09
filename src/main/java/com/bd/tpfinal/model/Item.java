@@ -12,9 +12,12 @@ public class Item {
     private int quantity;
 
     private String description;
-    @ManyToOne( fetch = FetchType.EAGER)
-    @JoinColumn( name="id_order" )
+
+    @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL )
+    @JoinColumn( name = "id_order" )
+
     private Order order;
+
 
     public Long getId() {
         return id;

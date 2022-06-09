@@ -140,7 +140,13 @@ public class Order {
         return orderStatus;
     }
 
-  public void setStatus(OrderStatus orderStatus) {
+    public Supplier getSupplier() {
+
+        return this.items.get(1).getProduct().getSupplier();
+    }
+
+
+    public void setStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
     /* para cambiar los estados de las ordenes*/
@@ -175,10 +181,11 @@ public class Order {
         this.client.increaseScore();
     }
 
+
+
     public void updateQualification(Qualification qualification) throws Exception {
         this.qualification =  qualification; // la orden
-        // para cada producto actulizo la calificacion del proveedor segun la calificacion de la orden
-        this.items.forEach( i -> i.getProduct().getSupplier().updateQualification(qualification.getScore() ) );
+
     }
 
 }

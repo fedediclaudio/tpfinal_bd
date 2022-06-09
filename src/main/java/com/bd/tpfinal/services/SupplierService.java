@@ -11,4 +11,5 @@ public interface SupplierService {
     List<Supplier> getAllProveedoresByTipo(long id_tipo);
 
     List<Supplier> getProveedoresWithProductosDeTodosLosTipos();
+    List<SupplierDTO> getAllProveedoresPorCantEstrellas(int cant_estrellas);
 }

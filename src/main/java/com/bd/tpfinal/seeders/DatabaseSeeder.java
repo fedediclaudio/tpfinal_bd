@@ -1089,7 +1089,11 @@ public class DatabaseSeeder {
             seedOrderTableSupplier( 6L,  "remera", 2L, "no aplica descuento por pago efectivo");
             seedOrderTableSupplier( 2L,  "arroz", 1L, "contraentrega");
 
-            logger.info("Order table Cargada");
+
+
+
+
+            logger.info("Order table Cargada con cambio estado ");
         } else {
             logger.info("Order Seeding no requerido, tabla con datos");
         }
@@ -1140,12 +1144,13 @@ public class DatabaseSeeder {
 
 
             // para probar asignar
-  /*          Optional <Order> order = orderRepository.findById(1L);
+ /*            if (id ==  1) {
+           Optional <Order> order = orderRepository.findById(1L);
             Order order_3 = order.get();
             Optional <DeliveryMan> deliverys = deliveryManRepository.findById(4L);
             DeliveryMan deliv = deliverys.get();
             order_3.getStatus().assign(deliv);
-            orderRepository.save(order_3);
+            orderRepository.save(order_3);}
 
             // para probar cancel
             Optional <Order> order4 = orderRepository.findById(1L);

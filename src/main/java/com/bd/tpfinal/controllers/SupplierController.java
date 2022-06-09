@@ -19,7 +19,7 @@ public class SupplierController {
     @Autowired
     private ModelMapper modelMapper;
 
-    // Obtener los diez proveedores que más órdenes despacharon.
+    // Obtener los diez proveedor   es que más órdenes despacharon.
     @GetMapping("/top10-suppliers-con-mas-ordenes-despachadas")
     public List<SupplierDTO> getTop10SupplierConMasOrdenesDespachadas() {
         List<Supplier> suppliers = supplierService.getTop10SupplierConMasOrdenesDespachadas();
@@ -49,4 +49,13 @@ public class SupplierController {
                 .map(supplier -> convertToDTO(supplier))
                 .collect(Collectors.toList());
     }
+
+
+    @GetMapping("/proveedores-con-estrellas/{cant_estrellas}")
+    public List<SupplierDTO> getAllProveedoresPorCantEstrellas(@PathVariable int cant_estrellas) {
+        List<SupplierDTO> suppliers = supplierService.getAllProveedoresPorCantEstrellas(cant_estrellas);
+        return suppliers;
+    }
+
+
 }

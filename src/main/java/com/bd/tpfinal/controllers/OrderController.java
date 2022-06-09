@@ -36,7 +36,7 @@ public class OrderController {
     private ModelMapper modelMapper;
 
     // Agregar un item a una orden ya creada.
-    @PutMapping("/nuevo-item-Order/{order_id}")
+    @PutMapping("/put-nuevo-item-Order/{order_id}")
     public Item nuevoItemForOrder(@RequestBody ItemDTO item, @PathVariable long order_id) throws Exception {
         Optional<Item> itemAgregado = orderService.agregarItemAOrdenCreada(order_id, item);
         if(itemAgregado.isPresent()) {
@@ -45,12 +45,12 @@ public class OrderController {
         return null;
     }
     // Obtener las ordenes con mas productos de un proveedor especifico
-    @GetMapping("/mayor-cantidad-productos-supplier/{supplier_id}")
+    @GetMapping("/get-mayor-cantidad-productos-supplier/{supplier_id}")
     public List<Order> getMayorCantidadProductosPorSupplier(@PathVariable long supplier_id) {
         return orderService.getOrdersConMasProductosDeSupplier(supplier_id);
     }
     // Obtener la orden de mayor precio total de un dia dado
-    @GetMapping("/mayor-precio-del-dia")
+    @GetMapping("/get-mayor-precio-del-dia")
     public Order getOrderMayorPrecioDelDia(@RequestParam("fecha")
                                                @DateTimeFormat(pattern = "dd-MM-yyyy",
                                                        iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
@@ -61,42 +61,44 @@ public class OrderController {
     }
 
     // Confirmar un pedido.
-    @PutMapping("/confirmar-pedido/{order_id}") //las ordenes que estan pendientes
+    @PutMapping("/put-1-confirmar-pedido/{order_id}") //las ordenes que estan pendientes
     public void updateOrdenConfirmar(@PathVariable long order_id)  throws Exception  {
         Optional<Order> order = orderService.confirmarPedido(order_id);
     }
 
     // cancelar un pedido por el cliente.
-    @PutMapping("/cancelar-pedido/{order_id}") //las ordenes que estan pendientes y asignadas
+    @PutMapping("/put-4-cancelar-pedido/{order_id}") //las ordenes que estan pendientes y asignadas
     public void updateOrdenCancelar(@PathVariable long order_id)  throws Exception  {
         Optional<Order> order = orderService.cancelarPedido(order_id);
     }
 
     // rechazar un pedido por el delivery
-    @PutMapping("/rechazar-pedido/{order_id}") //las ordenes que estan asignadas
+    @PutMapping("/put-5-rechazar-pedido/{order_id}") //las ordenes que estan asignadas
     public void updateOrdenRechazar(@PathVariable long order_id)  throws Exception  {
         Optional<Order> order = orderService.rechazarPedido(order_id);
     }
 
     // entregar un pedido por el delivery
-    @PutMapping("/entregar-pedido/{order_id}") //las ordenes que estan asignadas
+    @PutMapping("/put-2-entregar-pedido/{order_id}") //las ordenes que estan asignadas
     public void updateOrdenEntregar(@PathVariable long order_id)  throws Exception  {
         Optional<Order> order = orderService.entregarPedido(order_id);
     }
 
     // finalizar y calificar un pedido por el cliente
-    @PutMapping("/finalizar-pedido/{order_id}") //las ordenes que estan asignadas
+    @PutMapping("/put-3-finalizar-pedido/{order_id}") //las ordenes que estan asignadas
     public void updateOrdenFinalizar(@RequestBody FinishOrderScore score, @PathVariable long order_id)  throws Exception  {
         Optional<Order> order = orderService.finalizarPedido(score, order_id);
     }
 
     //Obtener las órdenes con más productos de un proveedor específico
-    @GetMapping("/ordenes-mas-productos-supplier/{supplier_id}")
+
+    @GetMapping("/get-ordenes-mas-productos-supplier/{supplier_id}")
     public List<OrderDTO> getOrdenesMasProductosDeSupplier(@PathVariable long supplier_id) {
         List<Order> orders = orderService.getOrdenesConMasProductosDelSupplier(supplier_id);
         return orders.stream()
                 .map(order -> convertToDTO(order))
                 .collect((Collectors.toList()));
+
     }
     // Obtener la orden de mayor precio total de un día dado
     @GetMapping("/get-orden-de-mayor-precio-total-dia")
