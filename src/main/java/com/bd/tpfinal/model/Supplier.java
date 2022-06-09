@@ -76,10 +76,14 @@ public class Supplier {
     }
 
     public void updateQualification(float userQualification) {
+
      /*   float qualifications = this.qualificationOfUsers * this.totalQualifications;
         this.totalQualifications++;
 
         this.qualificationOfUsers = (qualifications + userQualification) * this.totalQualifications;*/
+
+
+
     }
 
     public List<Product> getProducts() {

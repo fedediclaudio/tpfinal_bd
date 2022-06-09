@@ -35,7 +35,7 @@ public class Assigned extends OrderStatus{
             this.getOrder().getDeliveryMan().decreaseScore(); // descuenta 2 puntos del repartidor
             this.getOrder().getDeliveryMan().deleteOrder(getOrder()); //Remuevo la orden de la lista de pendientes de envío del DeliveryMan
             this.getOrder().getDeliveryMan().setFree(true); // ahora está libre
-            ((Cancel)this.getOrder().getStatus()).setCancelledByClient(false); // cancelada por cliente, ver si se puede hacer en cancelorder
+            ((Cancel)this.getOrder().getStatus()).setCancelledByClient(false); // no es cancelada por cliente, fue rechazada
             return true;
     }
 

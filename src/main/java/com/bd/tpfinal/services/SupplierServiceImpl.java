@@ -1,17 +1,24 @@
 package com.bd.tpfinal.services;
 
 import com.bd.tpfinal.DTOs.SupplierDTO;
+import com.bd.tpfinal.model.Item;
+import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.Supplier;
+import com.bd.tpfinal.repositories.OrderRepository;
 import com.bd.tpfinal.repositories.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SupplierServiceImpl implements SupplierService {
     @Autowired
     private SupplierRepository supplierRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Override
     public List<Supplier> getTop10SupplierConMasOrdenesDespachadas() {
@@ -27,4 +34,39 @@ public class SupplierServiceImpl implements SupplierService {
     public List<Supplier> getProveedoresWithProductosDeTodosLosTipos() {
         return supplierRepository.getProveedoresWithProductosDeTodosLosTipos();
     }
+    @Override
+    public List<SupplierDTO> getAllProveedoresPorCantEstrellas(int cant_estrellas)
+    {
+        List <SupplierDTO> suplliersDTO = new ArrayList(); // para devolver los prov con X cant de estrellas
+
+        Iterable <Supplier> supplierAll = supplierRepository.findAll();
+        List<Supplier> supplier = new ArrayList<>();
+        supplierAll.forEach(supplier::add);
+
+        for (int j=0;j< supplier.size();j++) //// recorro todos los suplliers
+        {
+            Supplier s = supplier.get(j);
+            List<Order> ordersSupplier = orderRepository.findOrdersDeSupplier(s.getId());// busco las ordenes del supllier
+            int cantQualification = 0;
+            int i = 0;
+            for (i = 0; i < ordersSupplier.size(); i++) {
+                Order o = ordersSupplier.get(i);
+                if (o.getStatus().getName().equals("Delivered"))
+                    if (o.getQualification().getScore() == cant_estrellas) // la orden tiene las estrellas que busco
+                        cantQualification = cantQualification + (int) (o.getQualification().getScore());
+            }
+            if (cantQualification > 0) // tiene calificaciones con la estrella indicada, agregarlo
+            {
+                SupplierDTO sDTO = new SupplierDTO();
+                sDTO.setName(s.getName());
+                sDTO.setStarQualification(cant_estrellas);
+                sDTO.setCantQualifications(cantQualification);
+                suplliersDTO.add(sDTO);
+            }
+
+        }
+        return suplliersDTO;
+    }
+
+
 }

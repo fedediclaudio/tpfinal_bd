@@ -18,7 +18,8 @@ public class Qualification {
     private Order order;
     public Qualification(){}
 
-    public Qualification(float score, String commentary ){
+    public Qualification(Order order, float score, String commentary ){
+        this.order = order;
         this.score = score;
         this.commentary = commentary;
     }

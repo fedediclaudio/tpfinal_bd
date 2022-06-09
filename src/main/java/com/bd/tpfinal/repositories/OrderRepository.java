@@ -37,6 +37,7 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
             + "group by o.id) Ordenes on o.id = ordenes.id", nativeQuery = true)
     List<Order> findOrdersConMasProductosDeSupplier(long supplier_id);
 
+
     @Query(value = "SELECT o.*"
             + "FROM tpfinal.orders o "
             + "order by total_price  desc "
@@ -48,4 +49,12 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
             + "on o.id = i.id_order "
             + "where i.id = :id", nativeQuery = true)
     Optional<Order> findOrderWithItemId(Long id);
+
+    @Query(value= "(select o.* "
+            + " from orders o "
+            + " where o.id in ( select i.id_order from item i inner join product p on i.id_product = p.id where p.supplier_id = :supplier_id ))" , nativeQuery = true)
+    List<Order> findOrdersDeSupplier(long supplier_id);
+
+
 }
+

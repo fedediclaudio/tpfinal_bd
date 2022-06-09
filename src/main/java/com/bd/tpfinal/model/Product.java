@@ -25,10 +25,12 @@ import java.util.List;
 @Entity
 public class Product {
 
+
     public Product() {
         this.prices = new ArrayList<>();
         this.setActive(true);
     }
+
 
     public Product(String name,
                    float price,

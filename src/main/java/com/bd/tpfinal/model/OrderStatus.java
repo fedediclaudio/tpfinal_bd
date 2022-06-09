@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class OrderStatus {
+public  class OrderStatus {
    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -66,7 +66,7 @@ public abstract class OrderStatus {
 
     public boolean canFinish() { return false; }
 
-    public boolean canCancel() { return false; }
+    public boolean  canCancel() { return false; }
 
     public boolean addItem() throws Exception{
         throw new Exception("No se puede realizarse esta accion");
@@ -99,4 +99,6 @@ public abstract class OrderStatus {
     public void setOrder(Order order) {
         this.order = order;
     }
+
+
 }
