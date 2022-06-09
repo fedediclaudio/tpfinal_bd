@@ -25,7 +25,10 @@ import java.util.List;
 @Entity
 public class Product {
 
-    public Product(){}
+    public Product() {
+        this.prices = new ArrayList<>();
+        this.setActive(true);
+    }
 
     public Product(String name,
                    float price,
@@ -39,6 +42,7 @@ public class Product {
         this.setDescription(description);
         this.setType(types);
         this.setPrices(historicalProductPrices);
+        this.setActive(false);
     }
 
     @Id
@@ -53,6 +57,16 @@ public class Product {
     private float weight;
 
     private String description;
+
+    private boolean active;
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     @ManyToOne (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "supplier_id")
@@ -69,12 +83,6 @@ public class Product {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<HistoricalProductPrice> prices;
-
-
-    public Product() {
-        this.prices = new ArrayList<>();
-    }
-
 
     public Long getId() {
         return id;

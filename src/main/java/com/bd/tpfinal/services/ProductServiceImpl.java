@@ -9,6 +9,7 @@ import com.bd.tpfinal.repositories.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
@@ -20,6 +21,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
     @Autowired
     private HistoricalProductPriceRepository historicalProductPriceRepository;
 
@@ -57,8 +59,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<HistoricalProductPrice> getPreciosProductoBetweenToFechas(Long product_id, LocalDateTime start_date, LocalDateTime finish_date) {
-       return historicalProductPriceRepository.findByProductIdAndStartDateGreaterThanAndFinishDateLessThan(product_id, start_date, finish_date);
+    public List<HistoricalProductPrice> getPreciosProductoBetweenToFechas(Long product_id, LocalDate start_date, LocalDate finish_date) {
+       return historicalProductPriceRepository.findHistoricalProductPricesBetweenTwoDates(product_id, start_date, finish_date);
     }
 
     @Override
@@ -72,8 +74,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void eliminar(Product product) {
-        productRepository.delete(product);
+    public void eliminarLogico(Product product) {
+        productRepository.save(product);
     }
 
     @Override

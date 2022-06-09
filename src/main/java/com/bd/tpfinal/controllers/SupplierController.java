@@ -43,7 +43,10 @@ public class SupplierController {
 
     // Obtener proveedores que ofrezcan productos de todos los tipos
     @GetMapping("/proveedores-productos-todos-tipos/")
-    public List<Supplier> getProveedoresWithProductosDeTodosLosTipos() {
-        return supplierService.getProveedoresWithProductosDeTodosLosTipos();
+    public List<SupplierDTO> getProveedoresWithProductosDeTodosLosTipos() {
+        List<Supplier> suppliers = supplierService.getProveedoresWithProductosDeTodosLosTipos();
+        return suppliers.stream()
+                .map(supplier -> convertToDTO(supplier))
+                .collect(Collectors.toList());
     }
 }

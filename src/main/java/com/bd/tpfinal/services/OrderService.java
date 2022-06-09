@@ -5,9 +5,7 @@ import com.bd.tpfinal.DTOs.ItemDTO;
 import com.bd.tpfinal.model.Item;
 import com.bd.tpfinal.model.Order;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +19,8 @@ public interface OrderService {
     Optional<Order> rechazarPedido(long order_id) throws Exception;
     Optional<Order> entregarPedido(long order_id) throws Exception;
     Optional<Order> finalizarPedido (FinishOrderScore score, long order_id) throws Exception;
-
     void guardarOrder(Order order);
     List<Order> getOrdenesConMasProductosDelSupplier(long supplier_id);
-    Order getOrderConMayorPrecioTotalDelDia(LocalDate fecha);
+    Optional<Order> getOrderConMayorPrecioTotalDelDia(LocalDate fecha);
+    void removeItemFromOrderAndUpdatePrice(Item item);
 }

@@ -24,5 +24,5 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     @Query(nativeQuery = true)
     List<ProductoPrecioPromedioDTO> getProductosPrecioPromedioDTO();
 
-    public List<Product> findBySupplierIdAndNameIgnoreCaseContaining(long supplier_id, String name);
+    List<Product> findBySupplierIdAndNameIgnoreCaseContaining(long supplier_id, String name);
 }
