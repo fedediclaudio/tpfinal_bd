@@ -13,13 +13,15 @@ public class ItemServiceImpl implements ItemService{
     @Autowired
     private ItemRepository itemRepository;
 
-    @Override
-    public List<Item> itemsWithProductId(long product_id) {
-        return itemRepository.getByProductId(product_id);
-    }
 
     @Override
     public void eliminar(List<Item> itemsToRemove) {
-        itemRepository.deleteAll(itemsToRemove);
+
+        itemsToRemove.forEach(item -> itemRepository.deleteById(item.getId()));
+    }
+
+    @Override
+    public Optional<Item> itemWithProductId(long product_id) {
+        return itemRepository.findByProductId(product_id);
     }
 }

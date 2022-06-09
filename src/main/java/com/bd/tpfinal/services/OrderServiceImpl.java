@@ -6,16 +6,16 @@ import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.model.Item;
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.Product;
+import com.bd.tpfinal.repositories.ItemRepository;
 import com.bd.tpfinal.repositories.OrderRepository;
 import com.bd.tpfinal.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -25,8 +25,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProductRepository  productRepository;
+
     @Autowired
+
     private DeliveryManService deliveryManService;
+
+    @Autowired
+    private ItemRepository itemRepository;
 
     @Override
     public Optional<Order> findOrderById(long order_id) {
@@ -155,7 +160,38 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getOrderConMayorPrecioTotalDelDia(LocalDate fecha) {
+    public Optional<Order> getOrderConMayorPrecioTotalDelDia(LocalDate fecha) {
         return orderRepository.getOrdenConMayorPrecioTotalDelDia(fecha);
     }
+
+    @Override
+    public void removeItemFromOrderAndUpdatePrice(Item item) {
+        Optional<Order> orderToUpdate = orderRepository.findOrderWithItemId(item.getId());
+
+        if(orderToUpdate.isPresent()) {
+            float total = orderToUpdate.get().getTotalPrice() - item.getProduct().getPrice();
+            orderToUpdate.get().setTotalPrice(total);
+            List<Item> updatedItems = orderToUpdate.get().getItems()
+                    .stream()
+                    .filter(oldItem -> oldItem.getId() == item.getId())
+                    .collect(Collectors.toList());
+            itemRepository.deleteById(updatedItems.get(0).getId());
+
+            orderToUpdate.get().getItems().clear();
+            orderToUpdate.get().setItems(updatedItems);
+            orderRepository.save(orderToUpdate.get());
+        }
+    }
+
+   /* @Override
+    public List<Order> findOrderThatIncludesItems(List<Item> itemsToRemove) {
+        List<Order> orders = orderRepository.findOrdersThatIncludesItems(itemsToRemove);
+        orders.forEach(order -> {
+            order.getItems().forEach(item -> {
+                order.setTotalPrice(order.getTotalPrice() - item.getProduct().getPrice());
+            });
+            order.getItems().removeAll(itemsToRemove);
+        });
+        return orders;
+    }*/
 }

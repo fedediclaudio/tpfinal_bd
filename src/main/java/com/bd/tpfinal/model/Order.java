@@ -26,7 +26,6 @@ public class Order {
     private float totalPrice;
 
     @OneToOne( mappedBy = "order", fetch = FetchType.EAGER, cascade ={ CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-  /*  @JoinColumn( name="id_orderStatus" )*/
     @JsonIgnore
     private OrderStatus orderStatus;
 
@@ -49,7 +48,7 @@ public class Order {
     @JoinColumn( name="id_qualification" )
     private Qualification qualification;
 
-    @OneToMany( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @OneToMany( mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Item> items;
 

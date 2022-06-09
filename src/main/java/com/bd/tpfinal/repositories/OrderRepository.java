@@ -1,14 +1,12 @@
 package com.bd.tpfinal.repositories;
 
+import com.bd.tpfinal.model.Item;
 import com.bd.tpfinal.model.Order;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +37,15 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
             + "group by o.id) Ordenes on o.id = ordenes.id", nativeQuery = true)
     List<Order> findOrdersConMasProductosDeSupplier(long supplier_id);
 
-    @Query(value="SELECT * from supplier", nativeQuery = true)
-    Order getOrdenConMayorPrecioTotalDelDia(LocalDate fecha);
+    @Query(value = "SELECT o.*"
+            + "FROM tpfinal.orders o "
+            + "order by total_price  desc "
+            + "limit 1", nativeQuery = true)
+    Optional<Order> getOrdenConMayorPrecioTotalDelDia(LocalDate fecha);
+
+    @Query(value = "SELECT o.* "
+            + "from orders o inner join item i "
+            + "on o.id = i.id_order "
+            + "where i.id = :id", nativeQuery = true)
+    Optional<Order> findOrderWithItemId(Long id);
 }

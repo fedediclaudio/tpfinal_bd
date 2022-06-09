@@ -8,6 +8,7 @@ import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.Product;
 import com.bd.tpfinal.services.HistoricalProductPriceService;
 import com.bd.tpfinal.services.ItemService;
+import com.bd.tpfinal.services.OrderService;
 import com.bd.tpfinal.services.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,12 +34,15 @@ public class ProductController {
 
     @Autowired
     private ItemService itemService;
+
+    @Autowired
+    private OrderService orderService;
+
     @Autowired
     private ModelMapper modelMapper;
 
-
     // Agregar un producto nuevo de un proveedor
-    @PostMapping("/nuevo-product/{product_id}")
+    @PostMapping("/nuevo-product/{supplier_id}")
     public Product nuevoProduct(@RequestBody Product product, @PathVariable long supplier_id) throws Exception {
         Optional<Product> productoAgregado = productService.agregarProductoSupplier(supplier_id, product);
         if(productoAgregado.isPresent()) {
@@ -45,7 +50,6 @@ public class ProductController {
         }
         return null;
     }
-
 
     // Obtener todos los productos y su tipo de un proveedor especifico
     @GetMapping("/get-productos-tipos-por-supplier/{supplier_id}")
@@ -65,8 +69,10 @@ public class ProductController {
     //Obtener los precios de un producto entre dos fechas dadas
     @GetMapping("/get-precios-producto-dos-fechas/{product_id}")
     public List<HistoricalProductPrice> getPreciosProductoBetweenToFechas(@PathVariable long product_id,
-                                                          @RequestParam(value = "start_date") @DateTimeFormat(pattern="dd-MM-yyyy") LocalDateTime start_date,
-                                                          @RequestParam (value= "finish_date") @DateTimeFormat(pattern="dd-MM-yyyy") LocalDateTime finish_date) {
+                                                          @RequestParam(value = "start_date") @DateTimeFormat(pattern="dd-MM-yyyy",
+                                                                  iso = DateTimeFormat.ISO.DATE) LocalDate start_date,
+                                                          @RequestParam (value= "finish_date") @DateTimeFormat(pattern="dd-MM-yyyy",
+                                                                  iso = DateTimeFormat.ISO.DATE) LocalDate finish_date) {
        return historicalProductPriceService.getPreciosProductoBetweenToFechas(product_id, start_date, finish_date);
     }
 
@@ -77,11 +83,10 @@ public class ProductController {
         return productosPrecioPromedioDTO;
     }
 
+    // actualiza los datos de un producto, si el precio cambia se deja historial del mismo
     @PutMapping("/update-producto/{product_id}")
     @ResponseStatus(HttpStatus.OK)
     public void updateProducto(@RequestBody Product newProduct, @PathVariable long product_id) {
-        // actualiza los datos de un producto, si el precio cambia se deja historial del mismo
-
         Optional<Product> productToUpdate = productService.findProduct(product_id);
         if(productToUpdate.isPresent()) {
             Product currentProduct = productToUpdate.get();
@@ -128,13 +133,14 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     public void removerProducto(@PathVariable long product_id) {
         Optional<Product> productToRemove = productService.findProduct(product_id);
-        List<Item> itemsToRemove = itemService.itemsWithProductId(product_id);
 
-        if(!itemsToRemove.isEmpty()) {
-            itemService.eliminar(itemsToRemove);
-        }
         if(productToRemove.isPresent()) {
-          productService.eliminar(productToRemove.get());
+            productToRemove.get().setActive(false);
+            productService.eliminarLogico(productToRemove.get());
+            Optional<Item> itemToRemove = itemService.itemWithProductId(product_id);
+            if(itemToRemove.isPresent()) {
+                orderService.removeItemFromOrderAndUpdatePrice(itemToRemove.get());
+            }
         }
     }
 }

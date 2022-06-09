@@ -12,7 +12,7 @@ public class Item {
     private int quantity;
 
     private String description;
-    @OneToOne( fetch = FetchType.EAGER)
+    @ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn( name="id_order" )
     private Order order;
 
@@ -23,6 +23,7 @@ public class Item {
     public void setId(Long id) {
         this.id = id;
     }
+
     @OneToOne( fetch = FetchType.EAGER)
     @JoinColumn( name="id_product" )
     private Product product;
