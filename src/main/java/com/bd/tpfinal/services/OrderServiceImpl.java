@@ -153,10 +153,12 @@ public class OrderServiceImpl implements OrderService {
                 float total = ((productActual.getPrice()) * it.getQuantity() ) + ordenActual.getTotalPrice();
                 ordenActual.setTotalPrice(total);
                 orderRepository.save(ordenActual);
+            } else {
+                throw new Exception("No se puede agregar el item " + it.getDescription() + " a la orden " + order_id + " la misma ya fue asignada");
             }
         }
         else {
-            throw new Exception("No se puede agregar el item " + it.getDescription() + " a la orden " + order_id + " la misma ya fue asignada");
+            throw new Exception("La orden no existe");
         }
             return Optional.ofNullable(it);
     }
