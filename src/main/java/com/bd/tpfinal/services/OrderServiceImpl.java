@@ -140,21 +140,23 @@ public class OrderServiceImpl implements OrderService {
         Optional<Order> order = orderRepository.findById(order_id);
         Optional<Product> product = productRepository.findById(item.getIdProduct());
         Item it = new Item();
-
         if(order.isPresent()) {
-            Order ordenActual = order.get();
-            Product productActual = product.get();
+            if(order.get().getStatus().getName().equals("Pending")) {
+                Order ordenActual = order.get();
+                Product productActual = product.get();
 
-            it.setDescription(item.getDescription());
-            it.setQuantity(item.getQuantity());
-            it.setProduct(productActual);
-            it.setOrder(ordenActual);
-            ordenActual.getItems().add(it);
-            float total = ((productActual.getPrice()) * it.getQuantity() ) + ordenActual.getTotalPrice();
-            ordenActual.setTotalPrice(total);
-            orderRepository.save(ordenActual);
-        } else {
-            throw new Exception("La orden con el id: " + order_id + " no existe");
+                it.setDescription(item.getDescription());
+                it.setQuantity(item.getQuantity());
+                it.setProduct(productActual);
+                it.setOrder(ordenActual);
+                ordenActual.getItems().add(it);
+                float total = ((productActual.getPrice()) * it.getQuantity() ) + ordenActual.getTotalPrice();
+                ordenActual.setTotalPrice(total);
+                orderRepository.save(ordenActual);
+            }
+        }
+        else {
+            throw new Exception("No se puede agregar el item " + it.getDescription() + " a la orden " + order_id + " la misma ya fue asignada");
         }
             return Optional.ofNullable(it);
     }
