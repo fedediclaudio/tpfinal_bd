@@ -18,7 +18,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>
     //@Query(value = "SELECT o FROM Order o WHERE o.order.number = :number")
     Order findByNumber(@Param("number") Long number);
 
-    //@Query(value = "SELECT * FROM Order")
+    @Query(value = "SELECT orden FROM Order orden")
     List<Order> findAll();
 
 

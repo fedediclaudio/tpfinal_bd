@@ -24,7 +24,7 @@ public class OrderController
         this.addressService = addressService;
     }
 
-    ///////     POST
+    /////// POST
 
     //1) Agregar un ítem a una orden ya creada.
     //ver ItemController
@@ -79,7 +79,7 @@ public class OrderController
     @GetMapping("/all")
     public List<Order> getAll()
     {
-        return this.orderService.getAll();
+        return this.orderService.getAllWithStatus();
     }
 
     @GetMapping("/id/{id}")
