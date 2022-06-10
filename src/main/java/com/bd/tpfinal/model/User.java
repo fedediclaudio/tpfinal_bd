@@ -1,15 +1,16 @@
 package com.bd.tpfinal.model;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 
 import java.time.format.DateTimeFormatter;
 
 @Data
 public abstract class User {
-    @Id
-    private String id; //tipo de dato temporal
+    @MongoId
+    private ObjectId id;
     private String name;
 
     private String username;
