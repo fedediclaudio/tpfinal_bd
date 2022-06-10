@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -62,9 +63,8 @@ public class HistoricalProductPriceServiceImpl implements HistoricalProductPrice
 
     @Override
     @Transactional
-    public List<HistoricalProductPrice> getPrices(Long id_product, Date desde, Date hasta)
+    public List<HistoricalProductPrice> getPrices(Long id_product, LocalDate desde, LocalDate hasta)
     {
-        System.out.println("desde: " + desde);
         //return this.historicalProductPriceRepository.findAllBetweenDates(id_product, desde, hasta);
         return this.historicalProductPriceRepository.findByProductId(id_product);
 

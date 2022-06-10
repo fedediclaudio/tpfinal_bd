@@ -12,7 +12,6 @@ public class Assigned extends OrderStatus
     public Assigned(Order order, Date start_date)
     {
         super(order, "Assigned", start_date);
-       // setOrder_status_enum(Order_Status_Enum.ASSIGNED);
     }
 
     @Override

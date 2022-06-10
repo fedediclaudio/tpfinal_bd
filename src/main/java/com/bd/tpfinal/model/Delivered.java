@@ -14,6 +14,5 @@ public class Delivered extends OrderStatus
     public Delivered(Order order, Date start_date)
     {
         super(order, "Delivered", start_date);
-       // setOrder_status_enum(Order_Status_Enum.DELIVERED);
     }
 }

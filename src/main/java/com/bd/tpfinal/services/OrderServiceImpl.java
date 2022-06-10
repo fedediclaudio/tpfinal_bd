@@ -32,7 +32,6 @@ public class OrderServiceImpl implements OrderService
 
     @Override
     @Transactional
-    //TODO:sacarle el retorno, creo que no incluye al id
     public void newOrder(Order newOrder)
     {
         //newOrder.getClient().addOrder(newOrder);

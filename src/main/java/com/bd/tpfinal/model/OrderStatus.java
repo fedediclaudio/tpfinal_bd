@@ -24,8 +24,8 @@ public class OrderStatus
 
     //@Transient
     @OneToOne
-    @JoinColumn(name = "order_number")
-    //@JsonIgnore
+    @JoinColumn(name = "number")
+    @JsonIgnore
     protected Order order;
 
     public OrderStatus()

@@ -45,7 +45,7 @@ public class OrderController
     //////  PUT
 
     //2) Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido
-    @PutMapping("/{number}/assign")
+    @PostMapping("/{number}")
     public boolean assignOrder(@PathVariable Long number)
     {
         return this.orderService.asignacionDeOrden(number);
@@ -64,14 +64,14 @@ public class OrderController
     //8) Obtener las órdenes con más productos de un proveedor específico.
 
     @GetMapping("/supplier/{id_supplier}")
-    public List<Order> getBySupplierMaxCantItems(@PathVariable Long id_supplier)
+    public List<Order> getBySupplierMaxCantItems(@PathVariable(value="id_supplier") Long id_supplier)
     {
         return this.orderService.getBySupplierMaxCantItems(id_supplier);
     }
 
     //9) Obtener la orden de mayor precio total de un día dado.
     @GetMapping("/fecha/{fecha}")
-    public List<Order> getOrderMaxPricePorFecha(@PathVariable Date fecha)
+    public List<Order> getOrderMaxPricePorFecha(@PathVariable(value="fecha") Date fecha)
     {
         return this.orderService.getOrderMaxPricePorFecha(fecha);
     }
@@ -79,7 +79,7 @@ public class OrderController
     @GetMapping("/all")
     public List<Order> getAll()
     {
-        return this.orderService.getAllWithStatus();
+        return this.orderService.getAll();
     }
 
     @GetMapping("/id/{id}")

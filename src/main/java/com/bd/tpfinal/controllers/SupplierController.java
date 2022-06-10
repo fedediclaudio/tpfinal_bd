@@ -34,7 +34,7 @@ public class SupplierController
 
     //6) Obtener todos los proveedores de un cierto tipo.
     @GetMapping("/type/{id_type}")
-    public List<Supplier> getSupplierBySupplierTypeId(@RequestBody Long id_type)
+    public List<Supplier> getSupplierBySupplierTypeId(@PathVariable(value="id_type") Long id_type)
     {
         return this.supplierService.getSupplierBySupplierTypeId(id_type);
     }

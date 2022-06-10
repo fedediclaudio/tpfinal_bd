@@ -21,7 +21,7 @@ public class Order
     @Column(name = "number", unique = true, updatable = false)
     private Long number;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", locale = "es_AR")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "es_AR")
     @Column(nullable = false, updatable = false)
     private Date dateOfOrder;
 
@@ -57,8 +57,8 @@ public class Order
     @JsonIgnore
     private Address address;
 
-   // @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-   @Embedded
+    // @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Embedded
     private Qualification qualification;
 
     //relación uno a muchos
@@ -67,13 +67,13 @@ public class Order
     //@JoinColumn(name = "order_id")
     //"order_id" es el nombre de la columna de tabla items que se agrega para
     //mantener la relación
-    //@JsonIgnore
+    @JsonIgnore
     private List<Item> items;
 
     //solamente puse lo relativo a patrón STATE
     public Order()
     {
-        this.orderStatus = new Pending(this,this.getDateOfOrder());
+        this.orderStatus = new Pending(this, this.getDateOfOrder());
     }
 
     public Order(Date dateOfOrder, String comments, float totalPrice, Client client, Address address)
@@ -84,9 +84,9 @@ public class Order
         this.deliveryMan = null;
         this.client = client;
         this.address = address;
-        this.qualification = new Qualification(0.0F, "sin calificación aún",this );
+        this.qualification = new Qualification(0.0F, "sin calificación aún", this);
         this.items = null;
-        this.orderStatus = new Pending(this,dateOfOrder);
+        this.orderStatus = new Pending(this, dateOfOrder);
     }
 
     public Long getNumber()
@@ -118,9 +118,9 @@ public class Order
     {
         float precio_total_aux = 0.0F;
         Iterator iter_items = items.iterator();
-        while(iter_items.hasNext())
+        while (iter_items.hasNext())
         {
-            Item item = (Item)iter_items.next();
+            Item item = (Item) iter_items.next();
             float precio_item = item.getQuantity() * item.getProduct().getPrice();
             precio_total_aux = precio_total_aux + precio_item;
         }
@@ -132,9 +132,9 @@ public class Order
     {
         float precio_total_aux = 0.0F;
         Iterator iter_items = items.iterator();
-        while(iter_items.hasNext())
+        while (iter_items.hasNext())
         {
-            Item item = (Item)iter_items.next();
+            Item item = (Item) iter_items.next();
             float precio_item = item.getQuantity() * item.getProduct().getPrice();
             precio_total_aux = precio_total_aux + precio_item;
         }
@@ -148,6 +148,7 @@ public class Order
 
     /**
      * Solamente puede asignar un repartidor si el estado es pending.
+     *
      * @param deliveryMan
      */
     //TODO: tal vez esto deba propagar una exception
@@ -156,7 +157,7 @@ public class Order
         try
         {
             this.setStatusByName();
-            System.out.println("STATUS----"+getOrderStatus().getClass().getName());
+            System.out.println("STATUS----" + getOrderStatus().getClass().getName());
             getOrderStatus().assign(deliveryMan);
         }
         catch (Exception e)

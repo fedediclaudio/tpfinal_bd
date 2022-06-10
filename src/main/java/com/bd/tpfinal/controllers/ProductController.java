@@ -7,10 +7,14 @@ import com.bd.tpfinal.services.HistoricalProductPriceService;
 import com.bd.tpfinal.services.ProductService;
 import com.bd.tpfinal.utils.NoExisteProductoException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @RestController
 @RequestMapping("/product")
@@ -38,16 +42,16 @@ public class ProductController
 
     //4) Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
     @PutMapping("/update/{id_producto}/updated/{updatedProduct}")
-    public void actualizarDatosProducto(@RequestBody Long id_producto_a_cambiar, @RequestBody Product updatedProduct) throws NoExisteProductoException
+    public void actualizarDatosProducto(@PathVariable(value = "id_producto") Long id_producto, @RequestBody Product updatedProduct) throws NoExisteProductoException
     {
-        this.productService.updateData(id_producto_a_cambiar, updatedProduct);
+        this.productService.updateData(id_producto, updatedProduct);
     }
 
     //5) Eliminar un producto de los ofrecidos por un proveedor.
-    @PutMapping("/delete/{id_product}")
-    public void eliminarProducto(@RequestBody Long id_producto) throws NoExisteProductoException
+    @PutMapping("/delete/{id}")
+    public void eliminarProducto(@PathVariable(value="id") Long id) throws NoExisteProductoException
     {
-        this.productService.eliminarProductoById(id_producto);
+        this.productService.eliminarProductoById(id);
     }
 
 
@@ -56,16 +60,19 @@ public class ProductController
     //7) Obtener todos los productos y su tipo, de un proveedor específico.
     // tal vez haya que meter un DTO
     @GetMapping("/supplier/{id_supplier}")
-    public List<Product> getBySupplierId(@PathVariable Long id_supplier)
+    public List<Product> getBySupplierId(@PathVariable(value="id_supplier") Long id_supplier)
     {
         return this.productService.getBySupplierId(id_supplier);
     }
 
     //12) Obtener los precios de un producto entre dos fechas dadas.
-    @GetMapping("/historicalPrices/{id_producto}/{desde}/{hasta}")
-    public List<HistoricalProductPrice> getHPPDesdeHasta(@PathVariable Long id_producto, @PathVariable Date desde, @PathVariable Date hasta)
+    @GetMapping("/historicalPrices/{id_producto}")
+    public List<HistoricalProductPrice> getHPPDesdeHasta(@PathVariable(value="id_producto") Long id_producto,
+                                                         @RequestParam(name = "dateFrom") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+                                                         @RequestParam(name = "dateTo") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo)
+
     {
-        return this.historicalProductPriceService.getPrices(id_producto, desde, hasta);
+         return this.historicalProductPriceService.getPrices(id_producto, dateFrom, dateTo);
     }
 
     //13) Obtener el precio promedio de los productos de cada tipo, para todos los tipos.

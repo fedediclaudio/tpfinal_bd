@@ -147,6 +147,8 @@ public class ProductServiceImpl implements ProductService
     {
         return this.historicalProductPriceRepository.findAllBetweenDates(id_product, desde, hasta);
     }
+
+    //13
     @Override
     @Transactional
     public List<ProductTypeAvgPrice_DTO> getAvgPriceForProductType()

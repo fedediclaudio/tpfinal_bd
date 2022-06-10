@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.event.annotation.BeforeTestClass;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 @SpringBootTest
@@ -166,6 +168,7 @@ public class TPfinalApplicationTests
         List<Supplier> suppliers = this.supplierService.getAll();
         int cantSuppliers = suppliers.size();
         Random prox_index_supplier = new Random();
+        Random prox_index_cliente = new Random();
         //new_CLIENT_crear(5);
         Date dateOfOrder = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
         List<Client> clientes = this.clientService.getAll();
@@ -173,9 +176,9 @@ public class TPfinalApplicationTests
         //crea ordenes
         for (int i = 0; i < cant; i++)
         {
-            int index_cliente = (int) Math.random() * cantidad_clientes;
+            int index_cliente = prox_index_cliente.nextInt(cantidad_clientes);
             Client cliente = (Client) clientes.get(index_cliente);
-            Address address = cliente.getAddresses().get(index_cliente);
+            Address address = cliente.getAddresses().get(0);
             String comentario = "comentario orden del cliente: " + cliente.getId();
             //elijo los productos de un supplier Supplier
             int index = prox_index_supplier.nextInt(cantSuppliers);
@@ -235,7 +238,7 @@ public class TPfinalApplicationTests
         new_CLIENT_crear(5);
         Date dateOfBirth = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
         Date dateOfAdmision = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
-        Date date = new_ORDENES_crear(30);//crea 30 ordenes con items. Todas Pending
+        Date date = new_ORDENES_crear(40);//crea 40 ordenes con items. Todas Pending
 
         new_DELIVERYMAN_CreacionDeliveryMan(15, dateOfBirth, true, dateOfAdmision);//crea 15 deliveryMan
         List<Order> ordenes = this.orderService.getAll();
@@ -286,6 +289,7 @@ public class TPfinalApplicationTests
                 System.out.println("La orden no estaba en el estado correcto");
             }
         }
+        Date date2 = new_ORDENES_crear(10);//crea 10 ordenes con items. Todas quedan Pending
     }
 
     /**
@@ -383,26 +387,8 @@ public class TPfinalApplicationTests
             //this.orderService.actualizarOrder(orden_a_calificar);  //actualiza la orden con la calificación.
             this.orderService.calificarOrden(score, comentario, orden_a_calificar.getNumber());
         }
-        //test_03_2_calificar_Suppliers();
     }
-    //califica todos los suppliers
-    public void test_03_2_calificar_Suppliers()
-    {
-        Iterator<Supplier> suppliers = this.supplierService.getAll().iterator();
-        while(suppliers.hasNext())
-        {
-            Supplier proveedor = (Supplier) suppliers.next();
-            Iterator<Order> ordenes_de_supplier = this.orderService.getOrderByIdSupplier(proveedor.getId()).iterator();
-            while (ordenes_de_supplier.hasNext())
-            {
-                System.out.println("supplier: " + proveedor.getId() + " numero de orden:  " + ordenes_de_supplier.next().getNumber());
-            }
-            float promedio = this.orderService.getQualificationAverage(proveedor.getId());
-            proveedor.setQualificationOfUsers(promedio);
-            this.supplierService.newSupplier(proveedor);//Esto actualiza la información del proveedor, con su calificación
-            System.out.println("promedio calificacion de ordenes del supplier id : " + proveedor.getId() + "  promedio: " + promedio);
-        }
-    }
+
 
     //4) Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
     @Test
@@ -526,7 +512,6 @@ public class TPfinalApplicationTests
     }
 
     //7) Obtener todos los productos y su tipo, de un proveedor específico.
-    //TODO: tiene errores, corregir
     @Test
     void test_07_obtener_productos_por_proveedor()
     {
@@ -672,6 +657,12 @@ public class TPfinalApplicationTests
         return fecha_cambio;
     }
 
+    public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+
     //12) Obtener los precios de un producto entre dos fechas dadas.
     @Test
     void test_12_obtener_los_precios_un_producto_entre_fechas()
@@ -684,9 +675,11 @@ public class TPfinalApplicationTests
         Date fecha6 = new_PRODUCTOS_PRECIOS_CAMBIAR();
         Date fecha7 = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
 
+        LocalDate f1 = convertToLocalDateViaInstant(fecha1);
+        LocalDate f7 = convertToLocalDateViaInstant(fecha7);
         List<Product> productos = this.productService.getAll();
         Product producto = productos.get(0);//tomo el primer producto
-        Iterator<HistoricalProductPrice> hppIterator = this.historicalProductPriceService.getPrices(producto.getId(), fecha1, fecha7).iterator();
+        Iterator<HistoricalProductPrice> hppIterator = this.historicalProductPriceService.getPrices(producto.getId(), f1, f7).iterator();
         while (hppIterator.hasNext())
         {
             HistoricalProductPrice hpp = (HistoricalProductPrice) hppIterator.next();
@@ -780,7 +773,4 @@ public class TPfinalApplicationTests
             }
         }
     }
-
-
-
 }
