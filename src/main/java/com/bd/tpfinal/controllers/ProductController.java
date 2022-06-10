@@ -133,13 +133,10 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     public void removerProducto(@PathVariable long product_id) {
         Optional<Product> productToRemove = productService.findProduct(product_id);
-
         if(productToRemove.isPresent()) {
-            productToRemove.get().setActive(false);
-            productService.eliminarLogico(productToRemove.get());
             Optional<Item> itemToRemove = itemService.itemWithProductId(product_id);
             if(itemToRemove.isPresent()) {
-                orderService.removeItemFromOrderAndUpdatePrice(itemToRemove.get());
+                orderService.removeProductAndItemFromOrderAndUpdatePrice(itemToRemove.get(), productToRemove.get());
             }
         }
     }
