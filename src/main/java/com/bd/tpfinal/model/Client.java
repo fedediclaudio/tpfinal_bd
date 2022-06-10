@@ -21,12 +21,14 @@ public class Client extends User{
     @DBRef
     private List<Address> addresses;
     /*
-    public Client (String name, String email, String userName, String password, Date dateOfBirth){
+
+     */
+    /*public Client (String name, String email, String userName, String password, Date dateOfBirth){
         super(name, email, userName, password, dateOfBirth);
         this.dateOfRegister = Calendar.getInstance().getTime();
         this.orders = new ArrayList<>();
-    }
-    */
+    }*/
+
     public void decreaseScore() throws Exception {
         int actualScore = this.getScore();
         if (actualScore > 0) // para que no quede un score negativo

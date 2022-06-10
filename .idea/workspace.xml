@@ -5,19 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f28ff38-f3d5-4bc2-b6b0-0ce726adfe56" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/repositories/AddressRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/repositories/ClientRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/repositories/DeliveryManRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/repositories/SupplierRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/repositories/SupplierTypeRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/Address.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/ProductType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/ProductType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/Qualification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/Qualification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/Supplier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/repositories/ProductTypeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/repositories/ProductTypeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/TpfinalApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/TpfinalApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/Client.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
