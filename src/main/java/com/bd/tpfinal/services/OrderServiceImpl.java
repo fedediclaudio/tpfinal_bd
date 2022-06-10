@@ -139,11 +139,14 @@ public class OrderServiceImpl implements OrderService {
     public Optional<Item> agregarItemAOrdenCreada(Long order_id, ItemDTO item) throws Exception{
         Optional<Order> order = orderRepository.findById(order_id);
         Optional<Product> product = productRepository.findById(item.getIdProduct());
+        Product productActual = product.get();
+        if (!productActual.isActive()){
+            throw new Exception("La producto seleccionado no está disponible");
+        }
         Item it = new Item();
         if(order.isPresent()) {
             if(order.get().getStatus().getName().equals("Pending")) {
                 Order ordenActual = order.get();
-                Product productActual = product.get();
 
                 it.setDescription(item.getDescription());
                 it.setQuantity(item.getQuantity());
