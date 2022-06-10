@@ -27,7 +27,9 @@ public class OrderServiceImpl implements OrderService {
     private ProductRepository  productRepository;
 
     @Autowired
+    private ProductService productService;
 
+    @Autowired
     private DeliveryManService deliveryManService;
 
     @Autowired
@@ -165,21 +167,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void removeItemFromOrderAndUpdatePrice(Item item) {
+    public void removeProductAndItemFromOrderAndUpdatePrice(Item item, Product product) {
         Optional<Order> orderToUpdate = orderRepository.findOrderWithItemId(item.getId());
-
         if(orderToUpdate.isPresent()) {
-            float total = orderToUpdate.get().getTotalPrice() - item.getProduct().getPrice();
-            orderToUpdate.get().setTotalPrice(total);
-            List<Item> updatedItems = orderToUpdate.get().getItems()
-                    .stream()
-                    .filter(oldItem -> oldItem.getId() == item.getId())
-                    .collect(Collectors.toList());
-            itemRepository.deleteById(updatedItems.get(0).getId());
-
-            orderToUpdate.get().getItems().clear();
-            orderToUpdate.get().setItems(updatedItems);
-            orderRepository.save(orderToUpdate.get());
+            Order order = orderToUpdate.get();
+            if(order.getStatus().getName().equals("Pending")) {
+                product.setActive(false);
+                productService.eliminarLogico(product);
+                float total = order.getTotalPrice() - (item.getProduct().getPrice() * item.getQuantity());
+                order.setTotalPrice(total);
+                orderRepository.save(order);
+            }
         }
     }
 

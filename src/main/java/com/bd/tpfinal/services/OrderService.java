@@ -4,6 +4,7 @@ import com.bd.tpfinal.DTOs.FinishOrderScore;
 import com.bd.tpfinal.DTOs.ItemDTO;
 import com.bd.tpfinal.model.Item;
 import com.bd.tpfinal.model.Order;
+import com.bd.tpfinal.model.Product;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,5 +23,5 @@ public interface OrderService {
     void guardarOrder(Order order);
     List<Order> getOrdenesConMasProductosDelSupplier(long supplier_id);
     Optional<Order> getOrderConMayorPrecioTotalDelDia(LocalDate fecha);
-    void removeItemFromOrderAndUpdatePrice(Item item);
+    void removeProductAndItemFromOrderAndUpdatePrice(Item item, Product product);
 }
