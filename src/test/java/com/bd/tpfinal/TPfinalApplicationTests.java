@@ -41,7 +41,8 @@ public class TPfinalApplicationTests
     @BeforeTestClass
     public void setUp()
     {
-
+       // new_CONTEXTO_INICIAL();
+       // verOrdenes();
     }
 
     @Test
@@ -221,7 +222,7 @@ public class TPfinalApplicationTests
     }
 
     /**
-     * Crea 30 0rdenes, todas pending
+     * Crea 40 ordenes que comienzan en Pending y luego evolucionan hacia los otros estados.
      * Crea 15 DM y le asigna 15 ordenes que todos aceptan y finalizan, con lo cual quedan libres.
      * Luego asigna otras 15 ordenes a los mismos. En forma aleatoria algunas ordenes son aceptadas y otras rechazadas.
      * Esto actualiza las calificaciones de los clientes y DM
@@ -669,9 +670,6 @@ public class TPfinalApplicationTests
     {
         Date fecha1 = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
         Date fecha2 = new_PRODUCTOS_PRECIOS_CAMBIAR();
-        Date fecha3 = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
-        Date fecha4 = new_PRODUCTOS_PRECIOS_CAMBIAR();
-        Date fecha5 = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
         Date fecha6 = new_PRODUCTOS_PRECIOS_CAMBIAR();
         Date fecha7 = Calendar.getInstance(TimeZone.getTimeZone("es-AR")).getTime();
 
@@ -691,7 +689,6 @@ public class TPfinalApplicationTests
     @Test
     void test_13_obtener_precio_promedio()
     {
-        new_PRODUCTOS_PRECIOS_CAMBIAR();
         List<ProductTypeAvgPrice_DTO> ptap = this.productService.getAvgPriceForProductType();
         Iterator<ProductTypeAvgPrice_DTO> ptapIterator = ptap.iterator();
         while (ptapIterator.hasNext())

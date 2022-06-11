@@ -48,14 +48,14 @@ public class SupplierController
 
     //14) Obtener la información de los proveedores que tengan al menos una calificación de una estrella (la más baja).
     // Es necesario también el número de estas calificaciones que el proveedor posee.
-    @GetMapping("/calificacion({valor}")
+    @GetMapping("/calificacion/{valor}")
     List<Supplier_Qualif_DTO> getByQualification1(@PathVariable float valor)
     {
         return this.supplierService.getByQualification1(valor);
     }
 
     //15) Obtener los proveedores que ofrezcan productos de todos los tipos.
-    @GetMapping("/alltypes")
+    @GetMapping("/allTypes")
     List<Supplier> getSupplierWithAllTypes()
     {
         return this.supplierService.getSupplierWithAllTypes();

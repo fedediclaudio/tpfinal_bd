@@ -25,27 +25,10 @@ public interface ProductRepository extends JpaRepository<Product, Long>
     List<Product> findBySupplierId(@Param("id_supplier") Long id_supplier);
 
     //13) Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
-
-    String q13 = "SELECT new com.bd.tpfinal.model.ProductTypeAvgPrice_DTO(p.id, avg_price,productType)"
-            +" FROM Product p "
-            +" WHERE p.id avg_price productType IN " +
-            "( SELECT AVG(p.price),  FROM Product p GROUP BY p.type.id)";
-
-    //@Query(value = "select count(v) as cnt, v.answer from Survey v group by v.answer")
-    //public List<?> findSurveyCount();
-
-    //@Query("SELECT " +
-    //           "    new com.path.to.SurveyAnswerStatistics(v.answer, COUNT(v)) " +
-    //           "FROM " +
-    //           "    Survey v " +
-    //           "GROUP BY " +
-    //           "    v.answer")
-    //    List<SurveyAnswerStatistics> findSurveyCount();
-    String q13_1 = "SELECT p.type.id, AVG(p.price) as promedio,  FROM Product p GROUP BY p.type.id)";
-    String q13_2 = "SELECT new com.bd.tpfinal.model.ProductTypeAvgPrice_DTO(p.type.id, AVG(p.price) ) "
+    String q13 = "SELECT new com.bd.tpfinal.model.ProductTypeAvgPrice_DTO(p.type.id, AVG(p.price) ) "
             +" FROM Product p "
             +" GROUP BY p.type.id";
-    @Query(value=q13_2)
+    @Query(value=q13)
     List<ProductTypeAvgPrice_DTO> findAllAvgPriceForProductType();
 
 }
