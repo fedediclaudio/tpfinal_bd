@@ -5,42 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c4557641-d9c6-4595-b1d5-4d7c6c905dbd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/DTOs/FinishOrderScore.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/DTOs/ItemDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/DTOs/OrderDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/DTOs/ProductDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/DTOs/ProductTypeDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/DTOs/ProductoPrecioPromedioDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/DTOs/SupplierDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/controllers/DeliveryManController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/controllers/OrderController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/controllers/ProductController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/controllers/SupplierController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/DeliveryManService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/DeliveryManServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/HistoricalProductPriceService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/HistoricalProductPriceServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/ItemService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/ItemServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/OrderService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/OrderServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/ProductService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/ProductServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/SupplierService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/SupplierServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/TpfinalApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/TpfinalApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/controllers/DeliveryController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/DeliveryService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/DeliveryServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/bd/tpfinal/TpfinalApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bd/tpfinal/TpfinalApplicationTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

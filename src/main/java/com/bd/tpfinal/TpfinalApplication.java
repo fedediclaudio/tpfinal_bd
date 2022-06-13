@@ -1,5 +1,4 @@
 package com.bd.tpfinal;
-
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.repositories.*;
 import org.springframework.boot.CommandLineRunner;
@@ -66,7 +65,6 @@ public class TpfinalApplication {
 			ProductType productType_4 = new ProductType();
 			productType_4.setName("Autopartes");
 			productType_4.setDescription("Productos autopartes");
-
 
 			//--------------------------
 			ProductType productType_9 = new ProductType();
