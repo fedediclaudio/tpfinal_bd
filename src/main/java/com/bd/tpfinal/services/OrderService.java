@@ -23,5 +23,6 @@ public interface OrderService {
     void guardarOrder(Order order);
     List<Order> getOrdenesConMasProductosDelSupplier(long supplier_id);
     Optional<Order> getOrderConMayorPrecioTotalDelDia(LocalDate fecha);
-    void removeProductAndItemFromOrderAndUpdatePrice(Item item, Product product);
+    List<Order> getOrderByOrderStatus(String status) ;
+    void updateOrdersTotalPrice(String status);
 }

@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface ItemRepository extends CrudRepository<Item, Long> {
     List<Item> getByProductId(long productId);
+    List<Item> getByOrderId(long orderId);
 
     @Query(value="DELETE FROM item where id = :id", nativeQuery = true)
     void deleteById(long id);

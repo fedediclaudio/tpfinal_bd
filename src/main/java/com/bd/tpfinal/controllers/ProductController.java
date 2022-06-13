@@ -16,6 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -44,10 +45,12 @@ public class ProductController {
     // Agregar un producto nuevo de un proveedor
     @PostMapping("/nuevo-product/{supplier_id}")
     public Product nuevoProduct(@RequestBody Product product, @PathVariable long supplier_id) throws Exception {
+        try {
         Optional<Product> productoAgregado = productService.agregarProductoSupplier(supplier_id, product);
         if(productoAgregado.isPresent()) {
             return productoAgregado.get();
-        }
+        }}
+        catch (Exception e){}
         return null;
     }
 
@@ -86,58 +89,41 @@ public class ProductController {
     // actualiza los datos de un producto, si el precio cambia se deja historial del mismo
     @PutMapping("/update-producto/{product_id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateProducto(@RequestBody Product newProduct, @PathVariable long product_id) {
-        Optional<Product> productToUpdate = productService.findProduct(product_id);
-        if(productToUpdate.isPresent()) {
-            Product currentProduct = productToUpdate.get();
-
-            if(currentProduct.getPrice() != newProduct.getPrice()) { //cambio el precio, dejar historico
-
-                List<HistoricalProductPrice> historical = currentProduct.getPrices();
-                int i =0;
-                while (!historical.isEmpty()){
-                    HistoricalProductPrice tmp = historical.get(i);
-                    if (tmp.getFinishDate() == null)
-                    {
-                        tmp.setFinishDate(Calendar.getInstance().getTime() );
-                        break;
-                    }
-                    else
-                    { i++;}
-                }
-
-/*
-                int lastIndex = historical.size() - 1; //busco el ultimo historial y le asigno fecha fin
-                HistoricalProductPrice last = historical.get( lastIndex );
-                last.setFinishDate( Calendar.getInstance().getTime() );
-                historical.set( lastIndex, last );
-
-
- */
-                HistoricalProductPrice historicalProductPrice = new HistoricalProductPrice(currentProduct); //creo historial de precio nuevo
-                historical.add(historicalProductPrice);
-                currentProduct.setPrices(historical); // lo agrego al historial
+    @Transactional
+    public Product updateProducto(@RequestBody Product newProduct, @PathVariable long product_id) throws Exception {
+        try {
+            Optional<Product> productoModificado = productService.modificaProductoConHistorico(product_id, newProduct);
+            if(productoModificado.isPresent()) {
+                return productoModificado.get();
             }
 
-            currentProduct.setType(newProduct.getType());
-            currentProduct.setName(newProduct.getName());
-            currentProduct.setDescription(newProduct.getDescription());
-            currentProduct.setWeight(newProduct.getWeight());
-            //currentProduct.setSupplier(newProduct.getSupplier());
-            currentProduct.setPrice(newProduct.getPrice());
-            productService.guardar(currentProduct);
         }
+        catch (Exception e) {
+            return null;
+        }
+        return null;
     }
 
     @DeleteMapping("/remover-producto/{product_id}")
     @ResponseStatus(HttpStatus.OK)
-    public void removerProducto(@PathVariable long product_id) {
-        Optional<Product> productToRemove = productService.findProduct(product_id);
+    public Product removerProducto(@PathVariable long product_id) throws Exception {
+        try {
+            Optional<Product> productoModificado = productService.EliminaProducto(product_id);
+            if (productoModificado.isPresent()) {
+                return productoModificado.get();
+            }
+        }
+        catch (Exception e) {}
+        return null;
+
+
+
+/*        Optional<Product> productToRemove = productService.findProduct(product_id);
         if(productToRemove.isPresent()) {
             Optional<Item> itemToRemove = itemService.itemWithProductId(product_id);
             if(itemToRemove.isPresent()) {
                 orderService.removeProductAndItemFromOrderAndUpdatePrice(itemToRemove.get(), productToRemove.get());
             }
-        }
+        }*/
     }
 }

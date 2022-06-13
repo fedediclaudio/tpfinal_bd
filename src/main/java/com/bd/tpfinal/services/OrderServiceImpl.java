@@ -12,7 +12,9 @@ import com.bd.tpfinal.repositories.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,6 +46,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Optional<Order> confirmarPedido(long order_id) throws Exception {
         Optional<DeliveryMan> deliveryMan = deliveryManService.getFreeAndActiveDeliveryMan();
         if(deliveryMan.isPresent()) { // si no hay repartidor libre, no se puede confirmar pedido
@@ -64,6 +67,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Optional<Order> cancelarPedido(long order_id) throws Exception {
         Optional<Order> order = orderRepository.findById(order_id);
         if(order.isPresent()) {
@@ -80,6 +84,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
+    @Transactional
     public Optional<Order> rechazarPedido(long order_id) throws Exception {
         Optional<Order> order = orderRepository.findById(order_id);
         if(order.isPresent()) {
@@ -94,6 +99,7 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
     @Override
+    @Transactional
     public Optional<Order> entregarPedido(long order_id) throws Exception {
         Optional<Order> order = orderRepository.findById(order_id);
         if(order.isPresent()) {
@@ -107,7 +113,8 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
-
+    @Override
+    @Transactional
     public Optional<Order> finalizarPedido(FinishOrderScore score, long order_id) throws Exception {
         Optional<Order> order = orderRepository.findById(order_id);
         if(order.isPresent()) {
@@ -136,6 +143,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Optional<Item> agregarItemAOrdenCreada(Long order_id, ItemDTO item) throws Exception{
         Optional<Order> order = orderRepository.findById(order_id);
         Optional<Product> product = productRepository.findById(item.getIdProduct());
@@ -191,19 +199,52 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.getOrdenConMayorPrecioTotalDelDia(fecha);
     }
 
+
     @Override
-    public void removeProductAndItemFromOrderAndUpdatePrice(Item item, Product product) {
-        Optional<Order> orderToUpdate = orderRepository.findOrderWithItemId(item.getId());
-        if(orderToUpdate.isPresent()) {
-            Order order = orderToUpdate.get();
-            if(order.getStatus().getName().equals("Pending")) {
-                product.setActive(false);
-                productService.eliminarLogico(product);
-                float total = order.getTotalPrice() - (item.getProduct().getPrice() * item.getQuantity());
+    @Transactional
+    public void updateOrdersTotalPrice(String status) {
+        List<Order> orderList = new ArrayList<Order>();
+        Iterable<Order> orders = orderRepository.findAll();
+        orders.forEach(orderList::add);
+        int i = 0;
+        while (!orderList.isEmpty()) {
+            Order order = orderList.get(i);
+            if (!order.getStatus().getName().equals("Pending")) {
+                int j = 0;
+                List <Item> items = itemRepository.getByOrderId(order.getNumber());
+                float total =0;
+                while (!items.isEmpty()) {
+                    Item it = items.get(j);
+                    if (it.getProduct().isActive())
+                        total = total + (it.getProduct().getPrice() * it.getQuantity());
+                    items.remove(j);
+                }
                 order.setTotalPrice(total);
                 orderRepository.save(order);
+                orderList.remove(i);
+
             }
         }
     }
+
+
+
+    @Override
+    public List <Order> getOrderByOrderStatus(String status) {
+        List<Order> orderList = new ArrayList<Order>();
+        Iterable<Order> orders = orderRepository.findAll();
+        orders.forEach(orderList::add);
+        int i = 0;
+        while (!orderList.isEmpty()) {
+            Order order = orderList.get(i);
+            if (!order.getStatus().getName().equals(status)) {
+                orderList.remove(i);
+            }
+        }
+        return orderList;
+    }
+
+
+
 
 }

@@ -2,19 +2,16 @@ package com.bd.tpfinal.services;
 
 import com.bd.tpfinal.DTOs.ProductoPrecioPromedioDTO;
 import com.bd.tpfinal.model.*;
-import com.bd.tpfinal.repositories.HistoricalProductPriceRepository;
-import com.bd.tpfinal.repositories.OrderRepository;
-import com.bd.tpfinal.repositories.ProductRepository;
-import com.bd.tpfinal.repositories.SupplierRepository;
+import com.bd.tpfinal.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -27,8 +24,73 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private SupplierRepository supplierRepository;
+    @Autowired
+    private ItemRepository itemRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderService orderService;
+
 
     @Override
+    @Transactional
+    public Optional<Product> EliminaProducto(long id_product)  throws Exception {
+        Optional<Product> productToRemove = productRepository.findById(id_product);
+        if(productToRemove.isPresent()) {
+            Product currentProduct = productToRemove.get();
+            if (!currentProduct.isActive()){
+                throw new Exception("La producto seleccionado no está disponible");
+            }
+            currentProduct.setActive (false);
+            productRepository.save(currentProduct);
+            orderService.updateOrdersTotalPrice("Pending");
+        }
+        return Optional.ofNullable(productToRemove.get());
+    }
+
+
+
+
+    @Override
+    @Transactional
+    public Optional<Product> modificaProductoConHistorico(long id_product,Product product)  throws Exception {
+        Optional<Product> productToUpdate = productRepository.findById(id_product);
+        if(productToUpdate.isPresent()) {
+            Product currentProduct = productToUpdate.get();
+            if (!currentProduct.isActive()){
+                throw new Exception("La producto seleccionado no está disponible");
+            }
+            if(currentProduct.getPrice() != product.getPrice()) { //cambio el precio, dejar historico
+                List<HistoricalProductPrice> historical = currentProduct.getPrices();
+                int i =0;
+                while (!historical.isEmpty()){
+                    HistoricalProductPrice tmp = historical.get(i);
+                    if (tmp.getFinishDate() == null)
+                    {
+                        tmp.setFinishDate(Calendar.getInstance().getTime() );
+                        break;
+                    }
+                    else
+                    { i++;}
+                }
+                currentProduct.setPrice(product.getPrice());
+                HistoricalProductPrice historicalProductPrice = new HistoricalProductPrice(currentProduct); //creo historial de precio nuevo
+                historical.add(historicalProductPrice);
+                currentProduct.setPrices(historical); // lo agrego al historial
+            }
+            currentProduct.setType(product.getType());
+            currentProduct.setName(product.getName());
+            currentProduct.setDescription(product.getDescription());
+            currentProduct.setWeight(product.getWeight());
+            currentProduct.setPrice(product.getPrice());
+            productRepository.save(currentProduct);
+        }
+        return Optional.ofNullable(product);
+    }
+
+    @Override
+    @Transactional
     public Optional<Product> agregarProductoSupplier(Long supplier_id, Product product) throws Exception{
         Optional<Supplier> supplier  = supplierRepository.findById(supplier_id);
         if(supplier.isPresent()) {
