@@ -1,15 +1,13 @@
 package com.bd.tpfinal;
 
-import com.bd.tpfinal.services.DeliveryService;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class TpfinalApplicationTests {
 
 //	@Autowired
-//	private DeliveryService service;
+//	private DeliveryManService service;
 
 	@Test
 	void contextLoads() {
