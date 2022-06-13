@@ -4,90 +4,85 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4f28ff38-f3d5-4bc2-b6b0-0ce726adfe56" name="Changes" comment="">
+    <list default="true" id="c4557641-d9c6-4595-b1d5-4d7c6c905dbd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/DTOs/FinishOrderScore.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/DTOs/ItemDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/DTOs/OrderDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/DTOs/ProductDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/DTOs/ProductTypeDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/DTOs/ProductoPrecioPromedioDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/DTOs/SupplierDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/controllers/DeliveryManController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/controllers/OrderController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/controllers/ProductController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/controllers/SupplierController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/DeliveryManService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/DeliveryManServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/HistoricalProductPriceService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/HistoricalProductPriceServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/ItemService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/ItemServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/OrderService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/OrderServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/ProductService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/ProductServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/SupplierService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/SupplierServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/TpfinalApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/TpfinalApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/model/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/controllers/DeliveryController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/DeliveryService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bd/tpfinal/services/DeliveryServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bd/tpfinal/TpfinalApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bd/tpfinal/TpfinalApplicationTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Interface" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="myId2FirstActivated">
+      <map>
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+      </map>
+    </option>
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+      </map>
+    </option>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="useMavenConfig" value="true" />
-      </MavenGeneralSettings>
-    </option>
-  </component>
-  <component name="ProjectId" id="2A7QSpFH04RM6kcjXc5bh3KxciB" />
+  <component name="ProjectId" id="2AXR4bsEWFIvsrRipZrPuk3MHgL" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
-  }
-}</component>
-  <component name="RunManager">
-    <configuration name="TpfinalApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.bd.tpfinal.TpfinalApplication" />
-      <module name="tpfinal" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.bd.tpfinal.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.TpfinalApplication" />
-      </list>
-    </recent_temporary>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="4f28ff38-f3d5-4bc2-b6b0-0ce726adfe56" name="Changes" comment="" />
-      <created>1654358151483</created>
+      <changelist id="c4557641-d9c6-4595-b1d5-4d7c6c905dbd" name="Changes" comment="" />
+      <created>1655153766416</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1654358151483</updated>
+      <updated>1655153766416</updated>
     </task>
     <servers />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
   </component>
 </project>

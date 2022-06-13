@@ -8,7 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Arrays;
-import java.util.logging.Logger;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 
 @SpringBootApplication
 public class TpfinalApplication {
@@ -17,7 +18,7 @@ public class TpfinalApplication {
 		SpringApplication.run(TpfinalApplication.class, args);
 	}
 	@Bean
-	CommandLineRunner runner(ProductTypeRepository productTypeRepository){
+	CommandLineRunner runner(ProductTypeRepository productTypeRepository) {
 		return args -> {
 			/*ProductType pt = new ProductType();
 			pt.setName("Coca Cola");
@@ -62,7 +63,6 @@ public class TpfinalApplication {
 			productType_10.setName("Tiempo libre, deporte y entretenimiento");
 			productType_10.setDescription("Productos para tiempo libre, deporte y entretenimiento");
 
-
 			ProductType productType_4 = new ProductType();
 			productType_4.setName("Autopartes");
 			productType_4.setDescription("Productos autopartes");
@@ -93,8 +93,15 @@ public class TpfinalApplication {
 
 			productTypeRepository.saveAll(Arrays.asList(productType_1, productType_2, productType_3,
 					productType_4, productType_5, productType_6, productType_7, productType_8, productType_9,
-					productType_10, productType_11, productType_12, productType_13 , productType_14, productType_15));
+					productType_10, productType_11, productType_12, productType_13, productType_14, productType_15));
 
 		};
+	}
+
+	@Bean
+	public ModelMapper modelMapper() {
+		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+		return modelMapper;
 	}
 }
