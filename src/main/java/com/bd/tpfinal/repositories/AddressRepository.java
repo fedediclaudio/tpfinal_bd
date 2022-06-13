@@ -6,5 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface AddressRepository extends MongoRepository<Address, ObjectId> {
 
-
+    Address getAddressById(String id);
 }

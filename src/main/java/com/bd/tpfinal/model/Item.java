@@ -6,22 +6,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("Items")
+@Document(collection = "Item")
 public class Item {
+
+    private String id;
 
     private int quantity;
 
     private String description;
 
-    @DocumentReference
+    //	@DocumentReference
+    @DBRef(lazy = true)
     private Order order;
 
-    @DBRef
+    //	@DocumentReference
+//	@DBRef
     private Product product;
 
 }

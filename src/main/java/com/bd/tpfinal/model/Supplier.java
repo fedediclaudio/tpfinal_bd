@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.List;
 
@@ -13,6 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @Document(collection = "Supplier")
 public class Supplier {
+
+    private String id;
 
     private String name;
 
@@ -25,9 +28,12 @@ public class Supplier {
     private float qualificationOfUsers;
 
     @DBRef(lazy = true)
+    @DocumentReference
     private List<Product> products;
 
-    @DBRef
     private SupplierType type;
 
+    public void addProductt(Product product) {
+        this.products.add(product);
+    }
 }

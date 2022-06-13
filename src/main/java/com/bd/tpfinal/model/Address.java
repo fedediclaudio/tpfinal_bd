@@ -32,6 +32,7 @@ public class Address {
     @DocumentReference
     private Client client;
 
+    @DocumentReference
     private List<Order> orders;
 
 }

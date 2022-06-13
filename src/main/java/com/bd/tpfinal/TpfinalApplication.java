@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,8 +27,7 @@ public class TpfinalApplication {
                              SupplierRepository supplierRepository, SupplierTypeRepository supplierTypeRepository) {
         return args -> {
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-            String dateInString = "08-Nov-1986";
-            Date date = formatter.parse(dateInString);
+            LocalDate date = LocalDate.of(1986, 11, 8);
 
 
             float f[];
@@ -97,14 +96,10 @@ public class TpfinalApplication {
             /*
              *Historical Product Price
              */
-            String stringDateStart = "01-Jun-2022";
-            String stringDateEnd = "30-Jun-2022";
-            Date dateStart = formatter.parse(stringDateStart);
-            Date dateEnd = formatter.parse(stringDateEnd);
             HistoricalProductPrice historicalProductPrice = new HistoricalProductPrice();
             historicalProductPrice.setPrice(10f);
-            historicalProductPrice.setStartDate(dateStart);
-            historicalProductPrice.setFinishDate(dateEnd);
+            historicalProductPrice.setStartDate(LocalDate.of(2022, 6, 1));
+            historicalProductPrice.setFinishDate(LocalDate.of(2022, 6, 30));
 
 
             /*
@@ -125,7 +120,7 @@ public class TpfinalApplication {
             Supplier supplier = new Supplier();
             supplier.setName("Supplier Name");
             supplier.setType(supplierType);
-            supplier.setQualificationOfUsers(new Float(5f));
+            supplier.setQualificationOfUsers(5f);
             supplier.setAddress("Some Address");
             supplier.setCoords(coords);
             supplier.setCuil("Some Cuil");
@@ -135,7 +130,6 @@ public class TpfinalApplication {
             /*
             Product
              */
-
 
 
         };

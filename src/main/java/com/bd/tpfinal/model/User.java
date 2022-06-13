@@ -1,13 +1,12 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -15,8 +14,7 @@ import java.util.Date;
 public abstract class User {
 
 
-    @Id
-    private ObjectId id;
+    private String id;
 
     private String name;
 
@@ -26,11 +24,12 @@ public abstract class User {
 
     private String email;
 
-    private Date dateOfBirth;
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDate dateOfBirth;
 
     private boolean active;
 
-    private int score;
+    private int score = 0;
 
     @Version
     private Long version;
