@@ -2,6 +2,8 @@ package com.bd.tpfinal;
 
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.repositories.*;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -96,5 +98,12 @@ public class TpfinalApplication {
 					productType_10, productType_11, productType_12, productType_13 , productType_14, productType_15));
 
 		};
+	}
+
+	@Bean
+	public ModelMapper modelMapper() {
+		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+		return modelMapper;
 	}
 }
