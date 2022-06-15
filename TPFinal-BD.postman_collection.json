@@ -26,12 +26,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/clients/628c473f09329410f91cffa7",
+							"raw": "http://localhost:8081/clients/628c473f09329410f91cffa7",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
 								"clients",
 								"628c473f09329410f91cffa7"
@@ -58,12 +58,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/clients",
+							"raw": "http://localhost:8081/clients",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
 								"clients"
 							]
@@ -86,12 +86,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/clients",
+							"raw": "http://localhost:8081/clients",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
 								"clients"
 							]
@@ -114,12 +114,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/clients/b9b55900-f2ff-49f0-9f3e-0208eb739217",
+							"raw": "http://localhost:8081/clients/b9b55900-f2ff-49f0-9f3e-0208eb739217",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
 								"clients",
 								"b9b55900-f2ff-49f0-9f3e-0208eb739217"
@@ -307,14 +307,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/{{path_orders}}",
+							"raw": "http://localhost:8081/orders",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
-								"{{path_orders}}"
+								"orders"
 							]
 						}
 					},
@@ -335,14 +335,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/{{path_orders}}/62809306746f982f36cc756a",
+							"raw": "http://localhost:8081/orders/62809306746f982f36cc756a",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
-								"{{path_orders}}",
+								"orders",
 								"62809306746f982f36cc756a"
 							]
 						},
@@ -447,14 +447,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}:{{port}}/{{path_orders}}/max_price?date=2022-05-20",
+							"raw": "http://localhost:8081/orders/max_price?date=2022-05-20",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
-								"{{path_orders}}",
+								"orders",
 								"max_price"
 							],
 							"query": [
@@ -474,14 +474,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}:{{port}}/{{path_orders}}/62879718d82d135c815828bd/max_supplier_products",
+							"raw": "http://localhost:8081/orders/62879718d82d135c815828bd/max_supplier_products",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
-								"{{path_orders}}",
+								"orders",
 								"62879718d82d135c815828bd",
 								"max_supplier_products"
 							]
@@ -572,14 +572,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/{{path_products}}/2c73c37f-a8b5-4033-941f-ec3b0dce9b06",
+							"raw": "http://localhost:8081/products/2c73c37f-a8b5-4033-941f-ec3b0dce9b06",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
-								"{{path_products}}",
+								"products",
 								"2c73c37f-a8b5-4033-941f-ec3b0dce9b06"
 							]
 						}
@@ -601,14 +601,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/{{path_products}}/62879718d82d135c81582945",
+							"raw": "http://localhost:8081/products/62879718d82d135c81582945",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
-								"{{path_products}}",
+								"products",
 								"62879718d82d135c81582945"
 							]
 						},
@@ -622,14 +622,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}:{{port}}/{{path_products}}/average",
+							"raw": "http://localhost:8081/products/average",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
-								"{{path_products}}",
+								"products",
 								"average"
 							]
 						},
@@ -650,15 +650,15 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{host}}:{{port}}/{{path_products}}/62879718d82d135c81582945/prices_between_dates?from_date=2022-01-01&to_date=2022-04-30",
+							"raw": "http://localhost:8081/products/628c474009329410f91d00a2/prices_between_dates?from_date=2022-01-01&to_date=2022-04-30",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
-								"{{path_products}}",
-								"62879718d82d135c81582945",
+								"products",
+								"628c474009329410f91d00a2",
 								"prices_between_dates"
 							],
 							"query": [
@@ -682,15 +682,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}:{{port}}/orders/62870195beabe6194223fe0a/max_supplier_products",
+							"raw": "http://localhost:8081/orders/628c473f09329410f91d0035/max_supplier_products",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
 								"orders",
-								"62870195beabe6194223fe0a",
+								"628c473f09329410f91d0035",
 								"max_supplier_products"
 							]
 						}
