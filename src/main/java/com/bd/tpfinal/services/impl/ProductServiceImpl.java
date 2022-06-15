@@ -132,7 +132,7 @@ public class ProductServiceImpl implements ProductsService {
         try {
             ProductDto productDto =  productRepositoryProxy.findByIdWithPricesBetweenDates(productId, fromDate, toDate);
             response.setData(productDto);
-            response.setMessage("Product id:" + productId + "with prices between dates [" + sdf.format(fromDate) + ", " + sdf.format(toDate) + "]");
+            response.setMessage("Product id: " + productId + " with prices between dates [" + sdf.format(fromDate) + ", " + sdf.format(toDate) + "]");
         } catch (EntityNotFoundException | EmptyResulsetException e) {
             response.setMessage(e.getMessage());
             response.setStatus(ResponseStatus.ERROR_404);

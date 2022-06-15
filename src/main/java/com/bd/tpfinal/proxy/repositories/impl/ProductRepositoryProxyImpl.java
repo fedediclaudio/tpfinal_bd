@@ -149,17 +149,11 @@ public class ProductRepositoryProxyImpl implements ProductRepositoryProxy {
 
     @Override
     public ProductDto findByIdWithPricesBetweenDates(String productId, Date fromDate, Date toDate) throws EmptyResulsetException {
-        Product product = productRepository.findById(IdConvertionHelper.convert(productId)).orElseThrow(() -> new EntityNotFoundException("Can't find product with id: " + productId));
-        List<HistoricalProductPrice> prices = product.getPrices();
-        prices = prices.stream().filter(price -> {
-            Date dateTo = price.getFinishDate() == null ? new Date() : price.getFinishDate();
-            boolean from = fromDate.compareTo(price.getStartDate()) <= 0;
-            boolean to = toDate.compareTo(dateTo) >= 0;
-            return from && to;
-
-        }).collect(Collectors.toList());
+        List<HistoricalProductPrice> prices = historicalProductPriceRepository
+                .findByStartDateGreaterThanAndFinishDateLessThanAndProduct_Id(fromDate, toDate, productId);
         if (prices.isEmpty())
             throw new EmptyResulsetException("No results found for the specified date range");
+        Product product = prices.get(0).getProduct();
         product.setPrices(prices);
         return productMapper.toProductDtoWithPrices(product);
     }
