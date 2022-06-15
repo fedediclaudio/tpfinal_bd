@@ -3,7 +3,7 @@ package com.bd.tpfinal.controllers;
 import com.bd.tpfinal.dtos.request.clients.CreateAddressRequest;
 import com.bd.tpfinal.dtos.request.clients.CreateClientRequest;
 import com.bd.tpfinal.dtos.response.BaseResponse;
-import com.bd.tpfinal.services.impl.ClientsServiceImpl;
+import com.bd.tpfinal.services.ClientsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT ,RequestMethod.DELETE})
 public class ClientsController extends BaseController {
 
-    private final ClientsServiceImpl clientService;
+    private final ClientsService clientService;
 
-    public ClientsController(ClientsServiceImpl clientService) {
+    public ClientsController(ClientsService clientService) {
         this.clientService = clientService;
     }
 
