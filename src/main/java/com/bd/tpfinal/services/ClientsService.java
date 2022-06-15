@@ -10,7 +10,7 @@ public interface ClientsService {
 
     BaseResponse addAddress(String id, CreateAddressRequest request);
 
-    BaseResponse retrieve(String id) throws PersistenceEntityException;
+    BaseResponse retrieve(String id);
 
     BaseResponse retrieve();
 }
