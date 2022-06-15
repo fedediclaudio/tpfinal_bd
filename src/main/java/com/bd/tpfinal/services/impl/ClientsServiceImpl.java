@@ -8,7 +8,6 @@ import com.bd.tpfinal.dtos.response.ResponseStatus;
 import com.bd.tpfinal.dtos.response.client.ClientResponse;
 import com.bd.tpfinal.dtos.response.client.ListClientResponse;
 import com.bd.tpfinal.exceptions.persistence.EntityNotFoundException;
-import com.bd.tpfinal.exceptions.persistence.PersistenceEntityException;
 import com.bd.tpfinal.proxy.repositories.ClientRepositoryProxy;
 import com.bd.tpfinal.services.ClientsService;
 import org.springframework.stereotype.Service;
@@ -74,7 +73,7 @@ public class ClientsServiceImpl implements ClientsService {
     }
 
     @Override
-    public BaseResponse retrieve(String id){
+    public BaseResponse retrieve(String id) {
         ClientResponse response = new ClientResponse();
         try {
             ClientDto clientDto = clientRepositoryProxy.findById(id);
