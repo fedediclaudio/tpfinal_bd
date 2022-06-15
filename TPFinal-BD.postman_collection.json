@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "2dc028a0-8ca3-4959-880d-d9103b0db7b8",
-		"name": "TPFinal-BD",
+		"_postman_id": "2259b63f-156d-4366-bf73-33c71289a847",
+		"name": "TPFinal-BD Mongo",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -26,7 +26,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/clients/98abced9-67d2-48a0-a2b1-00291a75e4c5",
+							"raw": "http://{{host}}:{{port}}/clients/628c473f09329410f91cffa7",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -34,7 +34,7 @@
 							"port": "{{port}}",
 							"path": [
 								"clients",
-								"98abced9-67d2-48a0-a2b1-00291a75e4c5"
+								"628c473f09329410f91cffa7"
 							]
 						}
 					},
@@ -139,15 +139,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}:{{port}}/delivery/6280930c746f982f36cd3743",
+							"raw": "http://localhost:8081/delivery/628a76e41c53df4f68d842a3",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
 								"delivery",
-								"6280930c746f982f36cd3743"
+								"628a76e41c53df4f68d842a3"
 							]
 						}
 					},
@@ -159,12 +159,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}:{{port}}/delivery?best_ranked=true",
+							"raw": "http://localhost:8081/delivery?best_ranked=true",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
 								"delivery"
 							],
@@ -198,12 +198,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/delivery",
+							"raw": "http://localhost:8081/delivery",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
 								"delivery"
 							]
@@ -234,15 +234,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/{{path_orders}}/6287971dd82d135c81585461",
+							"raw": "http://localhost:8081/orders/628a8cb4597ee131acdd8d26",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
-								"{{path_orders}}",
-								"6287971dd82d135c81585461"
+								"orders",
+								"628a8cb4597ee131acdd8d26"
 							]
 						},
 						"description": "Obtiene todas las ordenes. Recibe una objeto json con una propiedad query_by, que indica por que propiedad se debe filtrar."
@@ -267,14 +267,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/{{path_orders}}?status=PENDING",
+							"raw": "http://localhost:8081/orders?status=PENDING",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
-								"{{path_orders}}"
+								"orders"
 							],
 							"query": [
 								{
@@ -356,15 +356,15 @@
 						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}:{{port}}/{{path_orders}}/6287971ed82d135c815855c6?qualification=4",
+							"raw": "http://localhost:8081/orders/628a8cb4597ee131acdd8d1f?qualification=4",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
-								"{{path_orders}}",
-								"6287971ed82d135c815855c6"
+								"orders",
+								"628a8cb4597ee131acdd8d1f"
 							],
 							"query": [
 								{
@@ -388,7 +388,7 @@
 						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/orders/6287971ed82d135c815855c6/status/finish",
+							"raw": "http://localhost:8081/orders/628a8cb4597ee131acdd8d1f/status/finish",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -396,9 +396,16 @@
 							"port": "8081",
 							"path": [
 								"orders",
-								"6287971ed82d135c815855c6",
+								"628a8cb4597ee131acdd8d1f",
 								"status",
 								"finish"
+							],
+							"query": [
+								{
+									"key": "cancelled_by_client",
+									"value": "true",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -409,17 +416,26 @@
 					"request": {
 						"method": "PATCH",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/{{path_orders}}/f2d647c7-384b-4af0-939b-0377e2d2be37/3f2b9ffe-d228-409d-b6fa-e652a8a2a1f6",
+							"raw": "http://localhost:8081/orders/628a8cb4597ee131acdd8d26/628a8cab597ee131acdd6c96",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
-								"{{path_orders}}",
-								"f2d647c7-384b-4af0-939b-0377e2d2be37",
-								"3f2b9ffe-d228-409d-b6fa-e652a8a2a1f6"
+								"orders",
+								"628a8cb4597ee131acdd8d26",
+								"628a8cab597ee131acdd6c96"
 							]
 						}
 					},
@@ -480,7 +496,7 @@
 			"name": "Products",
 			"item": [
 				{
-					"name": "Get Products",
+					"name": "Get Product",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -492,15 +508,15 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{host}}:{{port}}/{{path_products}}/6280930c746f982f36cd3a87",
+							"raw": "http://localhost:8081/products/628a76d51c53df4f68d766b1",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
-								"{{path_products}}",
-								"6280930c746f982f36cd3a87"
+								"products",
+								"628a76d51c53df4f68d766b1"
 							]
 						},
 						"description": "Permite obtener todos los productos y su tipo, o filtrarlos por un proveedor especifico"
@@ -520,14 +536,14 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{host}}:{{port}}/{{path_products}}",
+							"raw": "http://localhost:8081/products",
 							"protocol": "http",
 							"host": [
-								"{{host}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8081",
 							"path": [
-								"{{path_products}}"
+								"products"
 							],
 							"query": [
 								{
@@ -692,7 +708,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/suppliers/6280930c746f982f36cd374d",
+							"raw": "http://localhost:8081/suppliers/628a76d41c53df4f68d76682",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -700,7 +716,7 @@
 							"port": "8081",
 							"path": [
 								"suppliers",
-								"6280930c746f982f36cd374d"
+								"628a76d41c53df4f68d76682"
 							]
 						}
 					},
@@ -712,7 +728,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/suppliers?supplier_type=Distribuidor",
+							"raw": "http://localhost:8081/suppliers",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -729,7 +745,8 @@
 								},
 								{
 									"key": "supplier_type",
-									"value": "Distribuidor"
+									"value": "Distribuidor",
+									"disabled": true
 								},
 								{
 									"key": "qualification_over",
@@ -835,7 +852,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/suppliers/47/3",
+							"raw": "http://localhost:8081/suppliers/628a76d41c53df4f68d76682/628a76d61c53df4f68d76a3a",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -843,8 +860,8 @@
 							"port": "8081",
 							"path": [
 								"suppliers",
-								"47",
-								"3"
+								"628a76d41c53df4f68d76682",
+								"628a76d61c53df4f68d76a3a"
 							]
 						}
 					},
