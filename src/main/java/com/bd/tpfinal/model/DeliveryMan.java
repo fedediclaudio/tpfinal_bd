@@ -1,47 +1,95 @@
 package com.bd.tpfinal.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-public class DeliveryMan extends User{
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-    private int numberOfSuccessOrders;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-    private boolean free;
+@Document(collection = "DeliveryMan")
+public class DeliveryMan extends User {
+    
+	private int numberOfSuccessOrders = 0;
 
-    private Date dateOfAdmission;
+	private boolean free = true;
 
-    private List<Order> ordersPending;
+	@JsonFormat(pattern = "dd-MM-yyyy")
+	private LocalDate dateOfAdmission;
+	
+	@DBRef(lazy = true)
+    @JsonBackReference(value = "ordersPending")
+	private List<Order> ordersPending;
 
-    public int getNumberOfSuccessOrders() {
-        return numberOfSuccessOrders;
-    }
+    
+	public DeliveryMan() {
+		super();
+		
+		this.numberOfSuccessOrders = 0;
+		this.free = true;
+		this.dateOfAdmission = LocalDate.now(); 
+		this.ordersPending = new ArrayList<Order>();
+	}
 
-    public void setNumberOfSuccessOrders(int numberOfSuccessOrders) {
-        this.numberOfSuccessOrders = numberOfSuccessOrders;
-    }
+	public int getNumberOfSuccessOrders() {
+		return numberOfSuccessOrders;
+	}
 
-    public boolean isFree() {
-        return free;
-    }
+	public void setNumberOfSuccessOrders(int numberOfSuccessOrders) {
+		this.numberOfSuccessOrders = numberOfSuccessOrders;
+	}
 
-    public void setFree(boolean free) {
-        this.free = free;
-    }
+	public boolean isFree() {
+		return free;
+	}
 
-    public Date getDateOfAdmission() {
-        return dateOfAdmission;
-    }
+	public void setFree(boolean free) {
+		this.free = free;
+	}
 
-    public void setDateOfAdmission(Date dateOfAdmission) {
-        this.dateOfAdmission = dateOfAdmission;
-    }
+	public LocalDate getDateOfAdmission() {
+		return dateOfAdmission;
+	}
 
-    public List<Order> getOrdersPending() {
-        return ordersPending;
-    }
+	public void setDateOfAdmission(LocalDate dateOfAdmission) {
+		this.dateOfAdmission = dateOfAdmission;
+	}
 
-    public void setOrdersPending(List<Order> ordersPending) {
-        this.ordersPending = ordersPending;
-    }
+	public List<Order> getOrdersPending() {
+		return ordersPending;
+	}
+
+	public void setOrdersPending(List<Order> ordersPending) {
+		this.ordersPending = ordersPending;
+	}
+	
+	public void addPendingOrder(Order order) {
+		this.ordersPending.add(order);
+	}
+	
+	public void removePendingOrder(Order order) {
+		this.ordersPending.removeIf(o -> o.getNumber() == order.getNumber());
+	}
+	
+	public void deductScore() throws Exception {
+		int actualScore = this.getScore();
+		this.setScore(actualScore - 2);
+	}
+	
+	public void addScore() throws Exception {
+		int actualScore = this.getScore();
+		this.setScore(actualScore + 1);
+	}
+	
+	public boolean isValid() {
+		if (!super.isValid()) return false;
+		
+		if (numberOfSuccessOrders < 0) return false;
+		if (dateOfAdmission.isAfter( LocalDate.now() )) return false;
+		
+		return true;
+	}
 }

@@ -1,76 +1,115 @@
 package com.bd.tpfinal.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+@Document(collection = "Supplier")
 public class Supplier {
 
-    private String name;
+	@Id
+    private String id;
 
-    private String cuil;
+	private String name;
 
-    private String address;
+	private String cuil;
 
-    private float[] coords;
+	private String address;
 
-    private float qualificationOfUsers;
+	private float[] coords;
 
-    private List<Product> products;
+	private float qualificationOfUsers;
 
-    private SupplierType type;
+	@DBRef(lazy = true)
+	@JsonBackReference(value = "products")
+	private List<Product> products;
+	
+	private SupplierType type;
 
-    public String getName() {
-        return name;
-    }
+	
+	public Supplier() {
+		this.products = new ArrayList<Product>();
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getCuil() {
-        return cuil;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public void setCuil(String cuil) {
-        this.cuil = cuil;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+	public String getCuil() {
+		return cuil;
+	}
 
-    public float[] getCoords() {
-        return coords;
-    }
+	public void setCuil(String cuil) {
+		this.cuil = cuil;
+	}
 
-    public void setCoords(float[] coords) {
-        this.coords = coords;
-    }
+	public String getAddress() {
+		return address;
+	}
 
-    public float getQualificationOfUsers() {
-        return qualificationOfUsers;
-    }
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
-    public void setQualificationOfUsers(float qualificationOfUsers) {
-        this.qualificationOfUsers = qualificationOfUsers;
-    }
+	public float[] getCoords() {
+		return coords;
+	}
 
-    public List<Product> getProducts() {
-        return products;
-    }
+	public void setCoords(float[] coords) {
+		this.coords = coords;
+	}
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
+	public float getQualificationOfUsers() {
+		return qualificationOfUsers;
+	}
+	
+	public void setQualificationOfUsers(float qualificationOfUsers) {
+		this.qualificationOfUsers = qualificationOfUsers;
+	}
 
-    public SupplierType getType() {
-        return type;
-    }
+	public List<Product> getProducts() {
+		return products;
+	}
 
-    public void setType(SupplierType type) {
-        this.type = type;
-    }
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+	
+	public void addProduct(Product product) {
+		this.products.add(product);
+	}
+	
+	public SupplierType getType() {
+		return type;
+	}
+
+	public void setType(SupplierType type) {
+		this.type = type;
+	}
+
+	@Override
+	public String toString() {
+		return "Supplier [id=" + id + ", name=" + name + ", cuil=" + cuil + ", address=" + address + ", coords="
+				+ Arrays.toString(coords) + ", qualificationOfUsers=" + qualificationOfUsers + ", products=" + products
+				+ ", type=" + type + "]";
+	}
+	
 }

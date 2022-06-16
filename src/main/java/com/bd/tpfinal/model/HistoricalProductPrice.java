@@ -1,46 +1,75 @@
 package com.bd.tpfinal.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 public class HistoricalProductPrice {
 
-    private float price;
+	@Id
+    private String id;
+	
+	private float price;
 
-    private Date startDate;
+	private LocalDate startDate;
 
-    private Date finishDate;
+	private LocalDate finishDate;
 
-    private Product product;
+	@DBRef(lazy = true)
+	@JsonBackReference(value = "product")
+	private Product product;
+	
+	
+	public HistoricalProductPrice() {}
 
-    public float getPrice() {
-        return price;
-    }
+	public HistoricalProductPrice(Product product) {
+		this.price = product.getPrice();
+		this.startDate = LocalDate.now();
+		this.product = product;
+		this.finishDate = null;
+	}
 
-    public void setPrice(float price) {
-        this.price = price;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public Date getStartDate() {
-        return startDate;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
+	public float getPrice() {
+		return price;
+	}
 
-    public Date getFinishDate() {
-        return finishDate;
-    }
+	public void setPrice(float price) {
+		this.price = price;
+	}
 
-    public void setFinishDate(Date finishDate) {
-        this.finishDate = finishDate;
-    }
+	public LocalDate getStartDate() {
+		return startDate;
+	}
 
-    public Product getProduct() {
-        return product;
-    }
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
+	public LocalDate getFinishDate() {
+		return finishDate;
+	}
+
+	public void setFinishDate(LocalDate finishDate) {
+		this.finishDate = finishDate;
+	}
+	
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+	
 }

@@ -1,76 +1,113 @@
 package com.bd.tpfinal.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+
+import org.springframework.data.annotation.Id;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public abstract class User {
 
-    private String name;
+	@Id
+	private String id;
 
-    private String username;
+	private String name;
 
-    private String password;
+	private String username;
 
-    private String email;
+	private String password;
 
-    private Date dateOfBirth;
+	private String email;
 
-    private boolean scrore;
+	@JsonFormat(pattern = "dd-MM-yyyy")
+	private LocalDate dateOfBirth;
 
-    private int score;
+	private boolean active;
 
-    public String getName() {
-        return name;
-    }
+	private int score = 0;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public User() {
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public boolean isScrore() {
-        return scrore;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setScrore(boolean scrore) {
-        this.scrore = scrore;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public int getScore() {
-        return score;
-    }
+	public LocalDate getDateOfBirth() {
+		return dateOfBirth;
+	}
 
-    public void setScore(int score) {
-        this.score = score;
-    }
+	public void setDateOfBirth(LocalDate dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public boolean isValid() {
+		if (name.isBlank())
+			return false;
+		if (username.isBlank())
+			return false;
+		if (password.isBlank())
+			return false;
+		if (email.isBlank())
+			return false;
+		if (dateOfBirth.isAfter(LocalDate.now()))
+			return false;
+		if (score < 0)
+			return false;
+
+		return true;
+	}
+
 }

@@ -1,76 +1,114 @@
 package com.bd.tpfinal.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "Product")
 public class Product {
 
-    private String name;
+	@Id
+    private String id;
+	
+	private String name;
 
-    private float price;
+	private float price;
 
-    private float weight;
+	private float weight;
 
-    private String description;
+	private String description;
 
-    private Supplier supplier;
+	private Supplier supplier;
 
-    private ProductType type;
+	private ProductType type;
 
-    private List<HistoricalProductPrice> prices;
+	@DBRef(lazy = true)
+	private List<HistoricalProductPrice> prices;
 
-    public String getName() {
-        return name;
-    }
+	private boolean productDeleted; 
+	
+	
+	public Product() {
+		this.prices = new ArrayList<HistoricalProductPrice>();
+		this.productDeleted = false;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public float getPrice() {
-        return price;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public void setPrice(float price) {
-        this.price = price;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public float getWeight() {
-        return weight;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setWeight(float weight) {
-        this.weight = weight;
-    }
+	public float getPrice() {
+		return price;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setPrice(float price) {
+		this.price = price;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public float getWeight() {
+		return weight;
+	}
 
-    public Supplier getSupplier() {
-        return supplier;
-    }
+	public void setWeight(float weight) {
+		this.weight = weight;
+	}
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public ProductType getType() {
-        return type;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setType(ProductType type) {
-        this.type = type;
-    }
+	public Supplier getSupplier() {
+		return supplier;
+	}
 
-    public List<HistoricalProductPrice> getPrices() {
-        return prices;
-    }
+	public void setSupplier(Supplier supplier) {
+		this.supplier = supplier;
+	}
 
-    public void setPrices(List<HistoricalProductPrice> prices) {
-        this.prices = prices;
-    }
+	public ProductType getType() {
+		return type;
+	}
+
+	public void setType(ProductType type) {
+		this.type = type;
+	}
+
+	public List<HistoricalProductPrice> getPrices() {
+		return prices;
+	}
+
+	public void setPrices(List<HistoricalProductPrice> prices) {
+		this.prices = prices;
+	}
+	
+	public void addHistoricalPrice(HistoricalProductPrice historical) {
+		this.prices.add(historical);
+	}
+
+	public boolean isProductDeleted() {
+		return productDeleted;
+	}
+
+	public void setProductDeleted(boolean productDeleted) {
+		this.productDeleted = productDeleted;
+	}	
 }
