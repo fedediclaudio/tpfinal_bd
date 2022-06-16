@@ -16,7 +16,7 @@ public class Item {
 
     private String description;
 
-    @DocumentReference
+    @DBRef
     private Order order;
 
     @DBRef
