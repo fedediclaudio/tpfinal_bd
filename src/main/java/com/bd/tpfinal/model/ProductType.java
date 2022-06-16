@@ -14,10 +14,12 @@ import java.util.List;
 @Document
 public class ProductType {
     @Id
-    private ObjectId id;
+    private String id;
+
     private String name;
 
     private String description;
+    @DBRef
     @JsonBackReference
     private List<Product> products;
 }

@@ -1,5 +1,6 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -24,7 +25,9 @@ public class Address {
     private String description;
 
     @DBRef
+    @JsonBackReference
     private Client client;
     @DBRef
+    @JsonBackReference
     private List<Order> orders;
 }

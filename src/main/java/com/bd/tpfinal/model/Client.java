@@ -1,5 +1,6 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -16,6 +17,7 @@ public class Client extends User{
     private Date dateOfRegister;
 
     @DBRef
+    @JsonBackReference
     private List<Order> orders;
 
     @DBRef

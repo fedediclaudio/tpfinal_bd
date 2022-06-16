@@ -92,6 +92,6 @@ public class Product {
 
     @DBRef
     private List<ProductType> type;
-
+    @DBRef
     private List<HistoricalProductPrice> prices;
 }
