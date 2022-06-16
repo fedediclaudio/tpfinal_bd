@@ -3,6 +3,8 @@ package com.bd.tpfinal.services;
 import com.bd.tpfinal.DTOs.ProductoPrecioPromedioDTO;
 import com.bd.tpfinal.model.HistoricalProductPrice;
 import com.bd.tpfinal.model.Product;
+import com.bd.tpfinal.repositories.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -11,6 +13,9 @@ import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService{
+    @Autowired
+    ProductRepository productRepository;
+
     @Override
     public Optional<Product> agregarProductoSupplier(Long product_id, Product product) throws Exception {
         return Optional.empty();
@@ -28,7 +33,8 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<Product> getProductsAndTypeBySupplierId(long supplier_id) {
-        return null;
+        return productRepository.findBySupplierId(supplier_id);
+
     }
 
     @Override
