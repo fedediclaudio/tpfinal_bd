@@ -1,11 +1,19 @@
 package com.bd.tpfinal.controllers;
 
+import java.util.List;
+
+import com.bd.tpfinal.model.dto.ProductAvgDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.bd.tpfinal.model.ProductType;
 import com.bd.tpfinal.services.ProductTypeService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/producttype")
@@ -13,7 +21,7 @@ import java.util.List;
 public class ProductTypeController {
 	@Autowired ProductTypeService productTypeService;
 	
-	@PostMapping("/")
+	@PostMapping("/create")
     public String createProductType( @RequestBody ProductType productType) {
 		try {
 			productType = productTypeService.createNewProductType(productType);
@@ -25,7 +33,7 @@ public class ProductTypeController {
 		}
     }
 	
-	@GetMapping("/")
+	@GetMapping("/list")
     public List<ProductType> getProductTypeList() {
 		try {
 			return productTypeService.getProductTypeList();
@@ -36,10 +44,10 @@ public class ProductTypeController {
 		}
     }
 
-	@GetMapping("/getAveragePriceOfProductsByType")
-	public List<ProductType> getAveragePriceOfProductsByType() {
+	@GetMapping("/getAveragePriceOfProducts")
+	public List<ProductAvgDTO> getAveragePriceOfProducts() {
 		try {
-			return productTypeService.getAveragePriceOfProductsByType();
+			return productTypeService.getAveragePriceOfProducts();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

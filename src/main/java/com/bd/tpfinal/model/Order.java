@@ -1,30 +1,30 @@
 package com.bd.tpfinal.model;
 
-import com.bd.tpfinal.model.orderStatus.Cancel;
-import com.bd.tpfinal.model.orderStatus.Delivered;
-import com.bd.tpfinal.model.orderStatus.Pending;
-import com.bd.tpfinal.model.orderStatus.Sent;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.bd.tpfinal.model.orderStatusTypes.Cancel;
+import com.bd.tpfinal.model.orderStatusTypes.Delivered;
+import com.bd.tpfinal.model.orderStatusTypes.Sent;
 
+@Document(collection = "Order")
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
-@Document("Orders")
 public class Order {
 
-    //    @MongoId(value = FieldType.OBJECT_ID)
+	@Id
+	private String id;
+	
     private String number;
 
     private LocalDate dateOfOrder;
@@ -35,54 +35,38 @@ public class Order {
 
     private OrderStatus status;
 
-    @DocumentReference
+    @DBRef(lazy = true)
     private DeliveryMan deliveryMan;
 
-    @DocumentReference
     private Client client;
 
     private Address address;
 
     private Qualification qualification;
 
-//    @DBRef
     private List<Item> items;
 
     @Version
     private int version;
 
+    private int getPositiveId() {
+    	int id = new Random().nextInt();
+    	while (id <= 0) id = new Random().nextInt();
+    	return id;
+    }
+    
+    public Order() {
+    	this.number = String.valueOf( this.getPositiveId() );
+    	this.dateOfOrder = LocalDate.now();
+        this.items = new ArrayList<Item>();
+    }
 
     public Order(Client client) {
-        // Por defecto la orden esta en Pendiente
-        this.status = new Pending(this);
+    	this.number = String.valueOf( this.getPositiveId() );
         this.dateOfOrder = LocalDate.now();
         this.client = client;
-
-        // Inicializo la lista de Items
-        this.items = new ArrayList<>();
+        this.items = new ArrayList<Item>();
     }
-
-
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "Order [number=" + number + ", dateOfOrder=" + dateOfOrder + ", comments=" + comments + ", totalPrice="
-                + totalPrice + ", status=" + status + ", deliveryMan=" + deliveryMan + ", client=" + client
-                + ", address=" + address + ", qualification=" + qualification + ", items=" + items + ", version="
-                + version + "]";
-    }
-
-    /////////////////////////
-    // Metodos adicionales //
-    /////////////////////////
 
     public boolean addItem(Item item) throws Exception {
         if (this.status.canAddItem()) {
@@ -92,9 +76,6 @@ public class Order {
         return false;
     }
 
-    //////////////////////////////////////
-    // Cambio de estado de las ordenes  //
-    //////////////////////////////////////
     public void cancelOrder() throws Exception {
         this.status = new Cancel(this);
     }
@@ -110,11 +91,6 @@ public class Order {
     public void finishOrder() throws Exception {
         this.status = new Delivered(this);
     }
-
-    //////////////////////////////////////
-    // FIN Cambio de estado de las ordenes  //
-    //////////////////////////////////////
-
 
     public void deductClientScore() throws Exception {
         this.client.deductScore();
@@ -136,4 +112,12 @@ public class Order {
         this.deliveryMan.addScore();
     }
 
+	@Override
+	public String toString() {
+		return "Order [id=" + id + ", number=" + number + ", dateOfOrder=" + dateOfOrder + ", comments=" + comments
+				+ ", totalPrice=" + totalPrice + ", status=" + status + ", deliveryMan=" + deliveryMan + ", client="
+				+ client + ", address=" + address + ", qualification=" + qualification 
+				+ ", version=" + version + "]";
+	}
+    
 }

@@ -1,10 +1,10 @@
 package com.bd.tpfinal.services;
 
+import java.util.List;
+
 import com.bd.tpfinal.model.Address;
 import com.bd.tpfinal.model.Client;
 import com.bd.tpfinal.model.Order;
-
-import java.util.List;
 
 public interface ClientService {
 

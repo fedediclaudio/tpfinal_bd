@@ -1,14 +1,15 @@
-package com.bd.tpfinal.repositories;
+package com.bd.tpfinal.repositories.implementations;
 
-import com.bd.tpfinal.model.Order;
-import com.bd.tpfinal.repositories.interfaces.IOrderRepository;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.bd.tpfinal.model.Order;
+import com.bd.tpfinal.repositories.interfaces.IOrderRepository;
 
 @Repository
 public class OrderRepositoryImpl implements IOrderRepository {

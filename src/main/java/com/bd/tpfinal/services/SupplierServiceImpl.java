@@ -5,22 +5,20 @@ import com.bd.tpfinal.model.ProductType;
 import com.bd.tpfinal.model.Supplier;
 import com.bd.tpfinal.model.SupplierType;
 import com.bd.tpfinal.model.dto.SupplierBadReputation;
-import com.bd.tpfinal.repositories.OrderRepository;
-import com.bd.tpfinal.repositories.ProductTypeRepository;
-import com.bd.tpfinal.repositories.SupplierRepository;
-import com.bd.tpfinal.repositories.SupplierTypeRepository;
+import com.bd.tpfinal.repositories.implementations.OrderRepository;
+import com.bd.tpfinal.repositories.implementations.ProductTypeRepository;
+import com.bd.tpfinal.repositories.implementations.SupplierRepository;
+import com.bd.tpfinal.repositories.implementations.SupplierTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
 
 @Service
 public class SupplierServiceImpl implements SupplierService {
-
-    public static final String BAD_SUPPLIER = "Supplier not exists";
     private SupplierTypeRepository supplierTypeRepository;
     private SupplierRepository supplierRepository;
     private OrderRepository orderRepository;
@@ -36,33 +34,25 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     public Supplier createNewSupplier(Supplier supplier) throws Exception {
-        // Verifico todos los campos
         if (supplier.getName().isBlank()) return null;
         if (supplier.getCuil().isBlank()) return null;
         if (supplier.getAddress().isBlank()) return null;
         if (supplier.getCoords().length != 2) return null;
         if (supplier.getType() == null) return null;
 
-        // Busco el SupplierType en la BD
-        SupplierType supplierType = supplierTypeRepository
-                .findById(supplier.getType().getId())
-                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.BAD_REQUEST, BAD_SUPPLIER));
+        SupplierType supplierType = supplierTypeRepository.getSupplierTypeById(supplier.getType().getId());
 
-        // Si el SupplierType no existe, retorno null
-        if (supplierType == null) {
+        if (isNull(supplierType)) {
             System.out.println("El SupplierType no existe");
             return null;
         }
 
-        // Lo sobreescribo para que el supplier tenga la referencia de la BD
         supplier.setType(supplierType);
 
-        // Inicializo los otros atributos
         supplier.setId(null);
-        supplier.setProducts(null);
+        supplier.setProducts(new ArrayList<>());
         supplier.setQualificationOfUsers(0);
 
-        // Grabo el Supplier
         supplier = supplierRepository.save(supplier);
 
         supplierType.addSupplierToList(supplier);
@@ -77,17 +67,25 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     public List<Supplier> getSupplierListFromType(String idSupplierType) throws Exception {
-        return supplierRepository.getSupplierListFromType(idSupplierType);
+        return supplierTypeRepository.findById(idSupplierType).get().getSuppliers();
     }
 
-    public List<Supplier> getTopTen() throws Exception {
-//		return supplierRepository.findTop10();
-        return null;
+    public Map<Supplier, Integer> getTopTen() throws Exception {
+        Map<Supplier, Integer> result = new HashMap<Supplier, Integer>();
+
+        List<Supplier> suppliers = supplierRepository.findAll();
+
+        suppliers.forEach(supplier -> {
+            result.put(supplier, orderRepository.findByItems_Product_Supplier_Id(supplier.getId()).size());
+        });
+
+        return sortByValue(result);
+
     }
 
     public List<SupplierBadReputation> getSupplierWithAtLeastOneStar() throws Exception {
         List<SupplierBadReputation> badReputations = new ArrayList<>();
-        List<Supplier> suppliers = supplierRepository.findByQualificationOfUsersGreaterThan(1f);
+        List<Supplier> suppliers = supplierRepository.findByQualificationOfUsersGreaterThanEqual(1f);
         suppliers
                 .forEach(supplier -> {
                     badReputations.add(new SupplierBadReputation(
@@ -98,6 +96,29 @@ public class SupplierServiceImpl implements SupplierService {
                 });
 
         return badReputations;
+    }
+
+
+    private Map<Supplier, Integer> sortByValue(Map<Supplier, Integer> hm) {
+        List<Map.Entry<Supplier, Integer>> list = new LinkedList<Map.Entry<Supplier, Integer>>(hm.entrySet());
+
+        // Sort the list
+        Collections.sort(list, new Comparator<Map.Entry<Supplier, Integer>>() {
+            public int compare(Map.Entry<Supplier, Integer> o1,
+                               Map.Entry<Supplier, Integer> o2) {
+                return (o2.getValue()).compareTo(o1.getValue());
+            }
+        });
+
+        // put data from sorted list to hashmap
+        Map<Supplier, Integer> temp = new LinkedHashMap<Supplier, Integer>();
+        for (Map.Entry<Supplier, Integer> aa : list) {
+            temp.put(aa.getKey(), aa.getValue());
+        }
+
+        // Return the top 10
+        return temp.entrySet().stream().limit(10).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                (e1, e2) -> e1, LinkedHashMap::new));
     }
 
 
@@ -121,22 +142,6 @@ public class SupplierServiceImpl implements SupplierService {
         });
 
         return offer;
-    }
-
-    private boolean hasAllSupplierTypes(List<Product> products, List<ProductType> types) {
-        // Creo una copia de la los tipos de productos
-        List<ProductType> actualTypes = new ArrayList<ProductType>();
-        actualTypes.addAll(types);
-
-        int idx = 0;
-        while ((idx < products.size())) {
-            Product actual = products.get(idx);
-            // Elimino el tipo de producto de la lista de tipos
-            actualTypes.removeIf(t -> t.getId() == actual.getType().getId());
-            idx++;
-        }
-        // Retorno si la lista de tipos esta vacia (es decir, que tiene todos los tipos)
-        return actualTypes.isEmpty();
     }
 
 }

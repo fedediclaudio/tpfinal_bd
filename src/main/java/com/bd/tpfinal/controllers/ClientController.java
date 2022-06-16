@@ -1,13 +1,22 @@
 package com.bd.tpfinal.controllers;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.bd.tpfinal.model.Address;
 import com.bd.tpfinal.model.Client;
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.services.ClientService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/client")
@@ -31,7 +40,7 @@ public class ClientController {
 	public String addNewAddress( @RequestBody Address address ) {
     	try {
     		address = clientService.addNewAddress(address);
-    		return (address != null) ? String.valueOf(address.getId()) : "";
+    		return (address != null) ? address.getId() : "";
 		}
     	catch (Exception e) {
 			e.printStackTrace();
@@ -39,7 +48,7 @@ public class ClientController {
 		}
     }
 	
-	@GetMapping("/")
+	@GetMapping("/getAll")
     public List<Client> getAllClients() {
     	try {
     		return clientService.getAllClients();

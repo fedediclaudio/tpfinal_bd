@@ -1,8 +1,8 @@
 package com.bd.tpfinal.services;
 
-import com.bd.tpfinal.model.SupplierType;
-
 import java.util.List;
+
+import com.bd.tpfinal.model.SupplierType;
 
 public interface SupplierTypeService {
 	

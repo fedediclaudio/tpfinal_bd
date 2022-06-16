@@ -1,19 +1,19 @@
 package com.bd.tpfinal.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Version;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 import java.time.LocalDate;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
 public abstract class User {
 
-
+    @Id
     private String id;
 
     private String name;
@@ -31,7 +31,22 @@ public abstract class User {
 
     private int score = 0;
 
-    @Version
-    private Long version;
+    public boolean isActive() {
+        return active;
+    }
+
+    public boolean isValid() {
+        if (name.isBlank())
+            return false;
+        if (username.isBlank())
+            return false;
+        if (password.isBlank())
+            return false;
+        if (email.isBlank())
+            return false;
+        if (dateOfBirth.isAfter(LocalDate.now()))
+            return false;
+        return score >= 0;
+    }
 
 }

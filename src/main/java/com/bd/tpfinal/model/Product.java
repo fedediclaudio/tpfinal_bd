@@ -1,18 +1,20 @@
 package com.bd.tpfinal.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Document(collection = "Product")
+@Getter
+@Setter
 public class Product {
 
+    @Id
     private String id;
 
     private String name;
@@ -27,11 +29,23 @@ public class Product {
 
     private ProductType type;
 
+    @DBRef(lazy = true)
     private List<HistoricalProductPrice> prices;
 
     private boolean productDeleted;
 
+
+    public Product() {
+        this.prices = new ArrayList<HistoricalProductPrice>();
+        this.productDeleted = false;
+    }
+
+
     public void addHistoricalPrice(HistoricalProductPrice historical) {
         this.prices.add(historical);
+    }
+
+    public boolean isProductDeleted() {
+        return productDeleted;
     }
 }

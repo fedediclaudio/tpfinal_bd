@@ -1,15 +1,19 @@
-package com.bd.tpfinal.model.orderStatus;
+package com.bd.tpfinal.model.orderStatusTypes;
+
+import java.time.LocalDate;
+
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.OrderStatus;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.time.LocalDate;
 
 @Document(collection = "Delivered")
 public class Delivered extends OrderStatus {
 	
-	public Delivered() {}
+	public Delivered() {
+		this.setName("Delivered");
+		this.setStartDate( LocalDate.now() );
+	}
 	
 	public Delivered(Order order) {
 		super("Delivered", LocalDate.now(), order);

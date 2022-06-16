@@ -1,9 +1,9 @@
 package com.bd.tpfinal.services;
 
+import java.util.List;
+
 import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.model.Order;
-
-import java.util.List;
 
 public interface DeliveryManService {
 

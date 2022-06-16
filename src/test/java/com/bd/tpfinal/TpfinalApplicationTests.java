@@ -6,16 +6,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class TpfinalApplicationTests {
 
-//	@Autowired
-//	private DeliveryService service;
+    @Test
+    void contextLoads() {
+    }
 
-	@Test
-	void contextLoads() {
-	}
-
-	@Test
-	void prueba() {
-		System.out.println("OK!");
-	}
+    @Test
+    void prueba() {
+        System.out.println("OK!");
+    }
 
 }

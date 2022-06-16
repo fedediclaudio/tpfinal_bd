@@ -1,13 +1,22 @@
 
 package com.bd.tpfinal.controllers;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.services.DeliveryManService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/DeliveryMan")
@@ -15,19 +24,19 @@ import java.util.List;
 public class DeliveryManController {
 	@Autowired private DeliveryManService deliveryManService;
 
-    @PostMapping("/")
-	public long addNewDeliveryMan( @RequestBody DeliveryMan deliveryMan ) {
+    @PostMapping("/addNew")
+	public String addNewDeliveryMan( @RequestBody DeliveryMan deliveryMan ) {
     	try {
     		deliveryMan = deliveryManService.addNewDeliveryMan(deliveryMan);
-    		return (deliveryMan != null) ? Long.valueOf(deliveryMan.getId()) : -1;
+    		return (deliveryMan != null) ? deliveryMan.getId() : "";
 		}
     	catch (Exception e) {
 			e.printStackTrace();
-			return -1;
+			return "";
 		}
     }
     
-    @GetMapping("/")
+    @GetMapping("/getAll")
     public List<DeliveryMan> getAllDeliveryMan() {
     	try {
     		return deliveryManService.getAllDeliveryMan();

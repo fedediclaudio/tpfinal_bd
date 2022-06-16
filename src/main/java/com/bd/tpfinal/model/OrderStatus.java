@@ -1,52 +1,36 @@
 package com.bd.tpfinal.model;
 
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.LocalDate;
-import java.util.Date;
 
+@Getter
+@Setter
 public abstract class OrderStatus {
 
+    @Id
     private String id;
 
     private String name;
 
     private LocalDate startDate;
 
-    @DocumentReference
+    @DBRef(lazy = true)
+    @JsonBackReference
     private Order order;
 
 
-    public OrderStatus() {}
+    public OrderStatus() {
+    }
 
     public OrderStatus(String name, LocalDate startDate, Order order) {
         this.name = name;
         this.startDate = startDate;
         this.order = order;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
     }
 
     public boolean canAddItem() {
@@ -101,11 +85,4 @@ public abstract class OrderStatus {
         throw new Exception("No se puede realizarse esta accion");
     }
 
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
 }
