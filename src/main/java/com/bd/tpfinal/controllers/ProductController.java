@@ -39,8 +39,11 @@ public class ProductController {
             Optional<Product> productoAgregado = productService.agregarProductoSupplier(supplier_id, product);
             if(productoAgregado.isPresent()) {
                 return productoAgregado.get();
-            }}
+            }
+        }
+
         catch (Exception e){}
+
         return null;
     }
 
@@ -69,12 +72,13 @@ public class ProductController {
         return historicalProductPriceService.getPreciosProductoBetweenToFechas(product_id, start_date, finish_date);
     }
 
-    @GetMapping("/get-precios-promedio-productos-de-cada-tipo")
+    // Hay que rehacer esta consulta, esta mapeada en el modelo con SQL y mapeo a DTO
+    /*@GetMapping("/get-precios-promedio-productos-de-cada-tipo")
     @ResponseStatus(HttpStatus.OK)
     public List<ProductoPrecioPromedioDTO> getPrecioPromedioProductosTipo() {
         List<ProductoPrecioPromedioDTO> productosPrecioPromedioDTO = productService.getProductosPrecioPromedioDTO();
         return productosPrecioPromedioDTO;
-    }
+    }*/
 
     // actualiza los datos de un producto, si el precio cambia se deja historial del mismo
     @PutMapping("/update-producto/{product_id}")

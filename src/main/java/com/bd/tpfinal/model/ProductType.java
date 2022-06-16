@@ -1,5 +1,6 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -16,6 +17,6 @@ public class ProductType {
     private String name;
 
     private String description;
-    @DBRef
+    @JsonBackReference
     private List<Product> products;
 }

@@ -14,6 +14,8 @@ public class DeliveryMan extends User{
 
     private boolean free;
 
+    private boolean active;
+
     private Date dateOfAdmission;
     @DBRef
     private List<Order> ordersPending;
@@ -44,4 +46,6 @@ public class DeliveryMan extends User{
         int actualScore = this.getScore();
         this.setScore(actualScore + 1);
     }
+
+
 }
