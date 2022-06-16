@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 
 
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @Data
 public abstract class User {
@@ -19,7 +20,7 @@ public abstract class User {
 
     private String email;
 
-    private DateTimeFormatter dateOfBirth;
+    private Date dateOfBirth;
 
     private boolean scrore;
 

@@ -2,7 +2,10 @@ package com.bd.tpfinal.repositories;
 
 import com.bd.tpfinal.model.SupplierType;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface SupplierTypeRepository extends MongoRepository <SupplierType, ObjectId> {
+import java.util.List;
+
+public interface SupplierTypeRepository extends CrudRepository<SupplierType, ObjectId> {
+    public List<SupplierType> findByNameIgnoreCaseContaining(String supplierTypeName);
 }
