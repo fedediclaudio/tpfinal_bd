@@ -1,6 +1,7 @@
 package com.bd.tpfinal.model;
 
 import lombok.Data;
+import nonapi.io.github.classgraph.json.Id;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -10,8 +11,8 @@ import java.util.Date;
 
 @Data
 public abstract class User {
-    @MongoId
-    private ObjectId id;
+    @Id
+    private String id;
     private String name;
 
     private String username;
@@ -21,8 +22,6 @@ public abstract class User {
     private String email;
 
     private Date dateOfBirth;
-
-    private boolean scrore;
 
     private int score;
 }

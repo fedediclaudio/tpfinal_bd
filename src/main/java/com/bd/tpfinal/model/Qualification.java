@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Qualification {
     @Id
+    private String id;
     private float score;
 
     private String commentary;
