@@ -1,7 +1,11 @@
 package com.bd.tpfinal.model;
 
+import lombok.Data;
+
+import java.util.Calendar;
 import java.util.Date;
 
+@Data
 public abstract class OrderStatus {
 
     private String name;
@@ -10,19 +14,15 @@ public abstract class OrderStatus {
 
     private Order order;
 
-    public String getName() {
-        return name;
+    public OrderStatus(){}
+    public OrderStatus(Order order, String name){
+        this.order = order;
+        this.name =  name;
+        this.startDate = Calendar.getInstance().getTime();
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
+    public OrderStatus(Order order, String name, Date startDate){
+        this.order = order;
+        this.name =  name;
         this.startDate = startDate;
     }
 
@@ -60,13 +60,5 @@ public abstract class OrderStatus {
 
     public boolean finish() throws Exception{
         throw new Exception("No se puede realizarse esta accion");
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
 }

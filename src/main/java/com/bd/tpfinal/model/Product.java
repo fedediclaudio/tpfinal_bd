@@ -1,15 +1,19 @@
 package com.bd.tpfinal.model;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.List;
 
 @Data
+@Document
 public class Product {
 
-    @Id
-    private String Id;
+    @MongoId
+    private ObjectId id;
 
     private String name;
 
@@ -19,8 +23,9 @@ public class Product {
 
     private String description;
 
+    @DBRef
     private Supplier supplier;
-
+    @DBRef
     private ProductType type;
 
     private List<HistoricalProductPrice> prices;

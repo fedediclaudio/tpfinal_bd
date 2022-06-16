@@ -1,16 +1,17 @@
 package com.bd.tpfinal.model;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.List;
 @Data
 @Document
 public class Address {
-    @Id
-    private String id;
+    @MongoId
+    private ObjectId id;
     private String name;
 
     private String address;
@@ -21,8 +22,8 @@ public class Address {
 
     private String description;
 
-    @DocumentReference
+    @DBRef
     private Client client;
-
+    @DBRef
     private List<Order> orders;
 }
