@@ -5,5 +5,5 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.CrudRepository;
 
-public interface SupplierRepository extends CrudRepository<Supplier, ObjectId> {
+public interface SupplierRepository extends MongoRepository<Supplier, String> {
 }

@@ -12,8 +12,8 @@ import java.util.List;
 @Data
 @Document
 public class Supplier {
-    @MongoId
-    private ObjectId id;
+    @Id
+    private String id;
 
     private String name;
 

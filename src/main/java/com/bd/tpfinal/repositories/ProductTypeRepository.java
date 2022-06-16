@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface ProductTypeRepository extends CrudRepository<ProductType, Long> {
+public interface ProductTypeRepository extends MongoRepository<ProductType, String> {
     Optional<ProductType> findProductTypesByNameIgnoreCase(String name);
     Optional<ProductType> findOneProductTypesByNameIgnoreCase(String name);
 }

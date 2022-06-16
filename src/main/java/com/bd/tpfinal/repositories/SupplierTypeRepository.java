@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface SupplierTypeRepository extends CrudRepository<SupplierType, ObjectId> {
+public interface SupplierTypeRepository extends CrudRepository<SupplierType, String> {
     public List<SupplierType> findByNameIgnoreCaseContaining(String supplierTypeName);
 }
