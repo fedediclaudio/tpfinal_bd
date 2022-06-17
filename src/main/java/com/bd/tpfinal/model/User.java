@@ -3,7 +3,6 @@ package com.bd.tpfinal.model;
 import lombok.Data;
 import nonapi.io.github.classgraph.json.Id;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 

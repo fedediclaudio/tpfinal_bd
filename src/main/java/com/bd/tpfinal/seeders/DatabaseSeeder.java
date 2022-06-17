@@ -2,6 +2,7 @@ package com.bd.tpfinal.seeders;
 
 import com.bd.tpfinal.repositories.ProductTypeRepository;
 import org.apache.catalina.Store;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.bd.tpfinal.model.*;
@@ -44,10 +45,10 @@ public class DatabaseSeeder {
         @EventListener
         public void seedTables(ContextRefreshedEvent event) throws Exception {
             seedProductTypeTable();
-            seedSupplierTypeTable();
+             seedSupplierTypeTable();
             seedSupplierTable();
-            seedClientTable();
-            seedOrderTable();
+       //     seedClientTable();
+       //     seedOrderTable();
         }
 
         private void seedProductTypeTable() {
@@ -160,7 +161,6 @@ public class DatabaseSeeder {
         }
 
         private void seedSupplierTable(){
-                List<Product> coffeeProducts;
                 List<Product> generalProducts;
                 List<Product> generalProductsAireLibre;
                 List<Product> generalProductsMuebles;
@@ -181,10 +181,13 @@ public class DatabaseSeeder {
                         .flatMap(Collection::stream)
                         .collect(Collectors.toList());
 
-                supplier_1.setProducts(listaFinal);
-                //supplier_1.setProducts(coffeeProducts);
-                supplier_1.setType(supplierTypeRepository.findByNameIgnoreCaseContaining("supermercado").get(0));
+                // Descomentando aca se genera el error
+                supplier_1.setProducts(generalProducts);
+
+                supplier_1.setType(supplierTypeRepository.findByNameIgnoreCaseContaining("Supermercado").get(0));
+
                 supplierRepository.save(supplier_1);
+
                 generalProducts.clear();
                 generalProductsAireLibre.clear();
                 generalProductsPan.clear();
@@ -218,8 +221,6 @@ public class DatabaseSeeder {
 
                 supplier_3.setProducts(listaFinal);
 
-
-                //supplier_3.setProducts(coffeeProducts);
                 supplier_3.setType(supplierTypeRepository.findByNameIgnoreCaseContaining("supermercado").get(0));
                 supplierRepository.save(supplier_3);
                 generalProducts.clear();
@@ -233,7 +234,9 @@ public class DatabaseSeeder {
                 supplier_4.setCuil("21211121");
                 supplier_4.setQualificationOfUsers(4.5f);
                 generalProducts = createAndReturnMueblesProducts(supplier_4, 4);
+
                 supplier_4.setProducts(generalProducts);
+
                 supplier_4.setType(supplierTypeRepository.findByNameIgnoreCaseContaining("mueble").get(0));
                 supplierRepository.save(supplier_4);
                 generalProducts.clear();
@@ -255,7 +258,6 @@ public class DatabaseSeeder {
 
                 supplier_5.setProducts(listaFinal);
 
-                //supplier_5.setProducts(generalProducts);
                 supplier_5.setType(supplierTypeRepository.findByNameIgnoreCaseContaining("mayorista").get(0));
                 supplierRepository.save(supplier_5);
                 generalProducts.clear();
@@ -360,9 +362,8 @@ public class DatabaseSeeder {
             float random_4 = Math.round (i + r.nextFloat() * (20 - 10));
             float random_5 = Math.round (i + r.nextFloat() * (20 - 10));
 
-            Optional<ProductType> p = productTypeRepository.findById(1L);
 
-            Optional<ProductType> type_1 = productTypeRepository.findOneProductTypesByNameIgnoreCase("Almacen");
+            Optional<ProductType> type_1 = productTypeRepository.findProductTypesByNameIgnoreCase("Almacen");
             Optional<ProductType> type_2 = productTypeRepository.findProductTypesByNameIgnoreCase("Limpieza");
             Optional<ProductType> type_3 = productTypeRepository.findProductTypesByNameIgnoreCase("Panificados");
             Optional<ProductType> type_4 = productTypeRepository.findProductTypesByNameIgnoreCase("Verduleria");
@@ -451,7 +452,7 @@ public class DatabaseSeeder {
             prod_9.setType(Arrays.asList(type_3.get()));
             products.add(prod_9);
 
-
+            productRepository.saveAll(Arrays.asList(prod_1,prod_2,prod_3,prod_4,prod_5, prod_6,prod_7,prod_8,prod_9));
             return products;
         }
         private List<Product> createAndReturnIndumentariaProducts(Supplier aSupplier, int i) {
@@ -459,11 +460,8 @@ public class DatabaseSeeder {
             Random r = new Random();
             float random_1 = Math.round (i + r.nextFloat() * (20 - 10));
             float random_2 = Math.round (i + r.nextFloat() * (20 - 10));
-            float random_3 = Math.round (i + r.nextFloat() * (20 - 10));
-            float random_4 = Math.round (i + r.nextFloat() * (20 - 10));
-            float random_5 = Math.round (i + r.nextFloat() * (20 - 10));
 
-            Optional<ProductType> type_1 = productTypeRepository.findProductTypesByNameIgnoreCase("indumentaria");
+            Optional<ProductType> type_1 = productTypeRepository.findProductTypesByNameIgnoreCase("Indumentaria");
 
             Product prod_1 = new Product();
             prod_1.setPrice(random_1);
@@ -486,40 +484,8 @@ public class DatabaseSeeder {
                 prod_2.setType(Arrays.asList(type_1.get()));
 
             products.add(prod_2);
-/*
-        Product prod_3 = new Product();
-        prod_3.setPrice(random_3);
-        prod_3.setDescription("Zapato de vestir");
-        prod_3.setWeight(70.0f);
-        prod_3.setName("Zapato");
-        prod_3.setSupplier(aSupplier);
-        prod_3.setType(Arrays.asList(type_1.get()));
-        products.add(prod_3);
-        Product prod_4 = new Product();
-        prod_4.setPrice(random_4);
-        prod_4.setDescription("Pashmina de Mohair");
-        prod_4.setWeight(3.0f);
-        prod_4.setName("chalina");
-        prod_4.setSupplier(aSupplier);
-        prod_4.setType(Arrays.asList(type_1.get()));
-        products.add(prod_4);
-        Product prod_5 = new Product();
-        prod_5.setPrice(random_5);
-        prod_5.setDescription("Buzo De niño con friza");
-        prod_5.setWeight(70.0f);
-        prod_5.setName("buzo");
-        prod_5.setSupplier(aSupplier);
-        prod_5.setType(Arrays.asList(type_1.get()));
-        products.add(prod_5);
-        Product prod_6 = new Product();
-        prod_6.setPrice(random_5);
-        prod_6.setDescription("Montagne campera de abrigo");
-        prod_6.setWeight(70.0f);
-        prod_6.setName("campera");
-        prod_6.setSupplier(aSupplier);
-        prod_6.setType(Arrays.asList(type_1.get()));
-        products.add(prod_6);
-*/
+
+            productRepository.saveAll(Arrays.asList(prod_1, prod_2));
             return products;
         }
         private List<Product> createAndReturnMascotasProducts(Supplier aSupplier, int i) {
@@ -530,8 +496,8 @@ public class DatabaseSeeder {
             float random_3 = Math.round (i + r.nextFloat() * (20 - 10));
             float random_4 = Math.round (i + r.nextFloat() * (20 - 10));
 
-            Optional<ProductType> type_1 = productTypeRepository.findProductTypesByNameIgnoreCase("alimento para animales");
-            Optional<ProductType> type_2 = productTypeRepository.findProductTypesByNameIgnoreCase("casas para animales");
+            Optional<ProductType> type_1 = productTypeRepository.findProductTypesByNameIgnoreCase("Alimento para animales");
+            Optional<ProductType> type_2 = productTypeRepository.findProductTypesByNameIgnoreCase("Casas para animales");
 
             Product prod_1 = new Product();
             prod_1.setPrice(random_1);
@@ -569,6 +535,8 @@ public class DatabaseSeeder {
             prod_4.setSupplier(aSupplier);
             prod_4.setType(Arrays.asList(type_1.get()));
             products.add(prod_4);
+            productRepository.saveAll(Arrays.asList(prod_1,prod_2,prod_3,prod_4));
+
             return products;
         }
         private List<Product> createAndReturnToolsConstructionProducts(Supplier aSupplier, int i) {
@@ -628,6 +596,8 @@ public class DatabaseSeeder {
             prod_5.setSupplier(aSupplier);
             prod_5.setType(Arrays.asList(type_3.get()));
             products.add(prod_5);
+            productRepository.saveAll(Arrays.asList(prod_1, prod_2, prod_3, prod_4, prod_5));
+
             return products;
         }
         private List<Product> createAndReturnPanProducts(Supplier aSupplier, int i) {
@@ -685,6 +655,7 @@ public class DatabaseSeeder {
             prod_5.setSupplier(aSupplier);
             prod_5.setType(Arrays.asList(type_1.get()));
             products.add(prod_5);
+            productRepository.saveAll(Arrays.asList(prod_1, prod_2, prod_3, prod_4, prod_5));
             return products;
         }
         private List<Product> createAndReturnAireLibreProducts(Supplier aSupplier, int i) {
@@ -696,8 +667,8 @@ public class DatabaseSeeder {
             float random_5 = Math.round (i + r.nextFloat() * (100 - 10));
             List<Product> products = new ArrayList<>();
 
-            Optional<ProductType> type_1 = productTypeRepository.findProductTypesByNameIgnoreCase("aire libre y jardin");
-            Optional<ProductType> type_2 = productTypeRepository.findProductTypesByNameIgnoreCase("tiempo libre, deporte y entretenimiento");
+            Optional<ProductType> type_1 = productTypeRepository.findProductTypesByNameIgnoreCase("Aire libre y jardín");
+            Optional<ProductType> type_2 = productTypeRepository.findProductTypesByNameIgnoreCase("Tiempo libre, deporte y entretenimiento");
             // random_1 = Math.round(random_1);
 
             Product prod_1 = new Product();
@@ -745,9 +716,11 @@ public class DatabaseSeeder {
             prod_5.setType(Arrays.asList(type_1.get(), type_2.get()));
             HistoricalProductPrice historicalProductPrice = new HistoricalProductPrice();
             historicalProductPrice.setProduct(prod_5);//creo historial de precio nuevo
-            prod_5.setPrices(Arrays.asList(historicalProductPrice)); // lo agrego al historial
+          //  prod_5.setPrices(Arrays.asList(historicalProductPrice)); // lo agrego al historial
 
             products.add(prod_5);
+            productRepository.saveAll(Arrays.asList(prod_1, prod_2, prod_3, prod_4, prod_5));
+
             return products;
         }
         private List<Product> createAndReturnMueblesProducts(Supplier aSupplier, int i) {
@@ -761,7 +734,7 @@ public class DatabaseSeeder {
 
             Optional<ProductType> type_1 = productTypeRepository.findProductTypesByNameIgnoreCase("Muebles de interior");
             Optional<ProductType> type_2 = productTypeRepository.findProductTypesByNameIgnoreCase("Muebles de exterior");
-            Optional<ProductType> type_3 = productTypeRepository.findProductTypesByNameIgnoreCase("aire libre y jardin");
+            Optional<ProductType> type_3 = productTypeRepository.findProductTypesByNameIgnoreCase("Aire libre y jardín");
 
             Product prod_1 = new Product();
             prod_1.setPrice(random_1);
@@ -807,6 +780,7 @@ public class DatabaseSeeder {
             prod_5.setSupplier(aSupplier);
             prod_5.setType(Arrays.asList(type_3.get()));
             products.add(prod_5);
+            productRepository.saveAll(Arrays.asList(prod_1, prod_2, prod_3, prod_4, prod_5));
 
             /**/
             return products;
@@ -863,6 +837,7 @@ public class DatabaseSeeder {
             prod_4.setSupplier(aSupplier);
             prod_4.setType(Arrays.asList(type_2.get()));
             products.add(prod_4);
+
             return products;
         }
         private List<Product> createAndReturnCoffeeProducts(Supplier aSupplier, int i) {
@@ -1091,7 +1066,7 @@ public class DatabaseSeeder {
                 productList.remove(i);
             }
             order_1.setItems(itemsProducts);
-            Optional <Client> clients = clientRepository.findById(id_client) ; // .findByUsername(clientName);
+            Optional <Client> clients = null; ; // .findByUsername(clientName);
             Client client = clients.get();
             order_1.setClient(client);
             // order_1.setAddress(client.getAddresses().get(0));

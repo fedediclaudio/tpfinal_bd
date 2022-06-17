@@ -1,5 +1,6 @@
 package com.bd.tpfinal.model;
 
+import com.bd.tpfinal.annotation.CascadePersist;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -80,6 +81,7 @@ public class Product {
     private String description;
 
     @DBRef
+    @CascadePersist
     private Supplier supplier;
 
     public List<ProductType> getType() {
@@ -92,6 +94,7 @@ public class Product {
 
     @DBRef
     private List<ProductType> type;
+
     @DBRef
     private List<HistoricalProductPrice> prices;
 }
