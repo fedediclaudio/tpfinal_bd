@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bd.tpfinal.model.Order;
+import com.bd.tpfinal.model.projections.OrderMaxPrice;
 
 public interface OrderService {
 	
@@ -16,7 +17,8 @@ public interface OrderService {
 	boolean confirmOrder(String orderNumber) throws Exception;
 	boolean setQualification(String orderNumber, int score, String comment) throws Exception;
 	List<Order> getOrdersFromSupplier(String idSupplier) throws Exception;
-	Order getHighestPriceOrderOfDate(LocalDate date) throws Exception;
+//	OrderMaxPrice getHighestPriceOrderOfDate(LocalDate date) throws Exception;
+	OrderMaxPrice getHighestPriceOrderOfDate(LocalDate date) throws Exception;
 
 	Map<Order, Integer> getOrdersFromSupplierWithMaxProducts(String idSupplier) throws Exception;
 }

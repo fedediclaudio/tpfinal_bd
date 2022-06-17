@@ -9,5 +9,6 @@ public interface ItemRepository extends MongoRepository<Item, String>, IItemRepo
 
 	// Aca se definen los metodos que van a ser utilizados pero que son implementados por Spring Boot
 	
+	Item getItemById(String id);
 	
 }

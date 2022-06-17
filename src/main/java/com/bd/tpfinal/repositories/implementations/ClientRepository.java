@@ -9,4 +9,6 @@ public interface ClientRepository extends MongoRepository<Client, String>, IClie
 
 	// Aca se definen los metodos que van a ser utilizados pero que son implementados por Spring Boot
 	
+	Client getClientById(String id);
+	
 }

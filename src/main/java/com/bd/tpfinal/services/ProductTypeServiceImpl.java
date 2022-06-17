@@ -51,8 +51,8 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     	
         return allTypes.stream().map(type -> {
         	List<ProductAndType> products = productRepository.findByTypeId(type.getId());
-            float average = products.stream().map(prod -> prod.getPrice()).reduce(Float::sum).orElse(0f);
-            ProductAvgDTO dto = new ProductAvgDTO(type.getId(), average / products.size());
+            float sum = products.stream().map(prod -> prod.getPrice()).reduce(Float::sum).orElse(0f);
+            ProductAvgDTO dto = new ProductAvgDTO(type.getId(), type.getName(), (sum / products.size()));
             return dto;
         }).collect(Collectors.toList());
     	

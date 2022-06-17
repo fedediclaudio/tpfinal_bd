@@ -1,22 +1,15 @@
 package com.bd.tpfinal.controllers;
 
+import com.bd.tpfinal.model.Order;
+import com.bd.tpfinal.model.projections.OrderMaxPrice;
+import com.bd.tpfinal.services.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.bd.tpfinal.model.Order;
-import com.bd.tpfinal.services.OrderService;
 
 @RestController
 @RequestMapping(value = "/api/order")
@@ -59,7 +52,7 @@ public class OrderController {
     }
 
     @GetMapping("/getHighestPriceOrderOfDate")
-    public Order getOrdersFromSupplier(@RequestParam(name = "date")
+    public OrderMaxPrice getOrdersFromSupplier(@RequestParam(name = "date")
                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                        LocalDate date) {
         try {

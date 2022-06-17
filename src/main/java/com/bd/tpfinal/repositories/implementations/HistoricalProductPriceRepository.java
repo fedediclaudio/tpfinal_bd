@@ -14,5 +14,6 @@ public interface HistoricalProductPriceRepository extends MongoRepository<Histor
 	List<HistoricalProductPrice> findByProduct_Id(@Param("id") String id);
     List<HistoricalProductPrice> findByProduct_IdAndStartDateGreaterThanAndFinishDateLessThan(@Param("id") String id, @Param("starDate") LocalDate starDate, @Param("endDate") LocalDate endDate);
     HistoricalProductPrice findByProduct_IdAndStartDateGreaterThanAndFinishDateIsNull(@Param("id") String id, @Param("starDate") LocalDate starDate);
+    List<HistoricalProductPrice> findByStartDateGreaterThanAndFinishDateLessThanOrFinishDateIsNullAndProduct_Id(@Param("starDate") LocalDate starDate, @Param("endDate") LocalDate endDate, @Param("id") String id);
     
 }

@@ -1,17 +1,5 @@
 package com.bd.tpfinal.services;
 
-import com.bd.tpfinal.model.Product;
-import com.bd.tpfinal.model.ProductType;
-import com.bd.tpfinal.model.Supplier;
-import com.bd.tpfinal.model.SupplierType;
-import com.bd.tpfinal.model.dto.SupplierBadReputation;
-import com.bd.tpfinal.repositories.implementations.OrderRepository;
-import com.bd.tpfinal.repositories.implementations.ProductTypeRepository;
-import com.bd.tpfinal.repositories.implementations.SupplierRepository;
-import com.bd.tpfinal.repositories.implementations.SupplierTypeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,21 +10,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.bd.tpfinal.model.Product;
+import com.bd.tpfinal.model.ProductType;
+import com.bd.tpfinal.model.Supplier;
+import com.bd.tpfinal.model.SupplierType;
+import com.bd.tpfinal.model.dto.SupplierBadReputation;
+import com.bd.tpfinal.repositories.implementations.OrderRepository;
+import com.bd.tpfinal.repositories.implementations.ProductTypeRepository;
+import com.bd.tpfinal.repositories.implementations.SupplierRepository;
+import com.bd.tpfinal.repositories.implementations.SupplierTypeRepository;
+
 @Service
 public class SupplierServiceImpl implements SupplierService {
-    private SupplierTypeRepository supplierTypeRepository;
-    private SupplierRepository supplierRepository;
-    private OrderRepository orderRepository;
-    private ProductTypeRepository productTypeRepository;
-
-    @Autowired
-    public SupplierServiceImpl(SupplierTypeRepository supplierTypeRepository, SupplierRepository supplierRepository
-            , OrderRepository orderRepository, ProductTypeRepository productTypeRepository) {
-        this.supplierTypeRepository = supplierTypeRepository;
-        this.supplierRepository = supplierRepository;
-        this.orderRepository = orderRepository;
-        this.productTypeRepository = productTypeRepository;
-    }
+	@Autowired OrderRepository orderRepository;
+	@Autowired ProductTypeRepository productTypeRepository;
+	@Autowired SupplierRepository supplierRepository;
+	@Autowired SupplierTypeRepository supplierTypeRepository;
 
     public Supplier createNewSupplier(Supplier supplier) throws Exception {
         // Verifico todos los campos
@@ -111,10 +103,10 @@ public class SupplierServiceImpl implements SupplierService {
 
     
     private Map<Supplier, Integer> sortByValue(Map<Supplier, Integer> hm) {
-        // Create a list from elements of HashMap
+        // Creo una lista con los elemenentos del HashMap
         List<Map.Entry<Supplier, Integer>> list = new LinkedList<Map.Entry<Supplier, Integer>>(hm.entrySet());
 
-        // Sort the list
+        // Ordeno la lista
         Collections.sort(list, new Comparator<Map.Entry<Supplier, Integer>>() {
             public int compare(Map.Entry<Supplier, Integer> o1,
                                Map.Entry<Supplier, Integer> o2) {
@@ -122,13 +114,13 @@ public class SupplierServiceImpl implements SupplierService {
             }
         });
         
-        // put data from sorted list to hashmap
+        // Pongo todos los datos del la lista ordenada en la HashMap
         Map<Supplier, Integer> temp = new LinkedHashMap<Supplier, Integer>();
         for (Map.Entry<Supplier, Integer> aa : list) {
             temp.put(aa.getKey(), aa.getValue());
         }
         
-        // Return the top 10
+        // Retorno el Top10
         return temp.entrySet().stream().limit(10).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                 (e1, e2) -> e1, LinkedHashMap::new));
     }
