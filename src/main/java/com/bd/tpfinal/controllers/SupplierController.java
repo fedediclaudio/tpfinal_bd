@@ -46,7 +46,7 @@ public class SupplierController {
 		}
     }
 
-	@GetMapping("/listOfType")
+	@GetMapping("/Query6")
 	public List<Supplier> getSupplierListFromType(@RequestParam(required = true, name = "idSupplierType") String idSupplierType) {
 		try {
 			return supplierService.getSupplierListFromType(idSupplierType);
@@ -58,7 +58,7 @@ public class SupplierController {
 	}
 	
 	
-	@GetMapping("/getTopTen")
+	@GetMapping("/Query11")
     public Map<Supplier, Integer> getTopTen() {
 		try {
 			return supplierService.getTopTen();
@@ -70,7 +70,7 @@ public class SupplierController {
     }
 	
 	
-	@GetMapping("/getSupplierWithAtLeastOneStar")
+	@GetMapping("/Query14")
 	public List<SupplierBadReputation> getSupplierWithAtLeastOneStar() {
 		try {
 			return supplierService.getSupplierWithAtLeastOneStar();
@@ -82,7 +82,7 @@ public class SupplierController {
 	}
 	
 	
-	@GetMapping("/getSupplierWhoOfferAllProducts")
+	@GetMapping("/Query15")
 	public List<Supplier> getSupplierWhoOfferAllProducts() {
 		try {
 			return supplierService.getSupplierWhoOfferAllProducts();

@@ -29,7 +29,7 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/updateProduct")
+    @PutMapping("/Query4")
     public boolean updateProduct(@RequestBody Product product) {
         try {
             return productService.updateProduct(product);
@@ -49,7 +49,7 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping("/deleteProduct")
+    @DeleteMapping("/Query5")
     public boolean deleteProduct(@RequestParam(name = "idProduct") String idProduct) {
         try {
             return productService.deleteProduct(idProduct);
@@ -82,7 +82,7 @@ public class ProductController {
     /*
             Obtener todos los productos y su tipo, de un proveedor específico.
      */
-    @GetMapping("/getProductsFromSupplier")
+    @GetMapping("/Query7")
     public List<ProductAndType> getProductsFromSupplier(@RequestParam(name = "idSupplier") String idSupplier) {
         try {
             return productService.getProductsFromSupplier(idSupplier);
@@ -92,7 +92,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/getHistoricalPricesBetweenTwoDates")
+    @GetMapping("/Query12")
     public List<HistoricalProductPrice> getHistoricalPricesBetweenTwoDates(@RequestParam(name = "dateFrom")
                                                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                                    LocalDate dateFrom,

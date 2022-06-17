@@ -69,7 +69,7 @@ public class DeliveryManController {
 		}
     }
 
-    @GetMapping("/getTopTen")
+    @GetMapping("/Query10")
     public List<DeliveryMan> getTopTen() {
     	try {
     		return deliveryManService.getTopTen();

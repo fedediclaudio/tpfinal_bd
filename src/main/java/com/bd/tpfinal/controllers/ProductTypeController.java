@@ -44,7 +44,7 @@ public class ProductTypeController {
 		}
     }
 
-	@GetMapping("/getAveragePriceOfProducts")
+	@GetMapping("/Query13")
 	public List<ProductAvgDTO> getAveragePriceOfProducts() {
 		try {
 			return productTypeService.getAveragePriceOfProducts();

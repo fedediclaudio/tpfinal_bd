@@ -51,7 +51,7 @@ public class OrderController {
         return orders;
     }
 
-    @GetMapping("/getHighestPriceOrderOfDate")
+    @GetMapping("/Query9")
     public OrderMaxPrice getOrdersFromSupplier(@RequestParam(name = "date")
                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                        LocalDate date) {
@@ -75,7 +75,7 @@ public class OrderController {
         }
     }
 
-    @PutMapping("/addProduct")
+    @PutMapping("/Query1")
     public boolean addProductToOrder(@RequestParam(name = "orderNumber") String orderNumber,
                                      @RequestParam(name = "idProduct") String idProduct,
                                      @RequestParam(name = "quantity") int quantity,
@@ -98,7 +98,7 @@ public class OrderController {
         }
     }
 
-    @PutMapping("/confirm")
+    @PutMapping("/Query2")
     public boolean confirmOrder(@RequestParam(name = "orderNumber") String orderNumber) {
         try {
             return orderService.confirmOrder(orderNumber);
@@ -108,7 +108,7 @@ public class OrderController {
         }
     }
 
-    @PutMapping("/setQualification")
+    @PutMapping("/Query3")
     public boolean setQualification(@RequestParam(name = "orderNumber") String orderNumber,
                                     @RequestParam(name = "score") int score,
                                     @RequestParam(name = "comment") String comment) {
@@ -120,7 +120,7 @@ public class OrderController {
         }
     }
 
-	@GetMapping("/getOrdersFromSupplierWithMaxProducts")
+	@GetMapping("/Query8")
 	public Map<Order, Integer> getOrdersFromSupplierWithMaxProducts(@RequestParam(name = "idSupplier") String idSupplier){
 		Map<Order, Integer> orders = null;
 		try {
