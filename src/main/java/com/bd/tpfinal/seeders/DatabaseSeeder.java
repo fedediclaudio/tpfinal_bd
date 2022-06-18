@@ -38,12 +38,11 @@ public class DatabaseSeeder {
 
     @EventListener
     public void seedTables(ContextRefreshedEvent event) throws Exception {
-//        seedProductTypeTable();
-//        seedSupplierTypeTable();
-//        seedSupplierTable();
-//        seedPersonsTable();
-     seedOrderTable();
-
+        seedProductTypeTable();
+        seedSupplierTypeTable();
+        seedSupplierTable();
+        seedPersonsTable();
+        seedOrderTable();
     }
 
     private void seedProductTypeTable() {
@@ -1027,7 +1026,7 @@ public class DatabaseSeeder {
 
     private void seedOrderTable() throws Exception {
         // Supplier CUIL y Client Username se usan debido a que los ObjectId son distintos en cada ejecución
-            seedOrderTableSupplier("7022221224", "mesa", "luisa", "casa de rejas negras");
+        seedOrderTableSupplier("7022221224", "mesa", "luisa", "casa de rejas negras");
 //        seedOrderTableSupplier(10L, "", 2L, "pasillo al fondo");
 //        seedOrderTableSupplier(1L, "", 3L, "tocar el timbre");
 //        seedOrderTableSupplier(8L, "pileta", 3L, "nada");
@@ -1044,7 +1043,6 @@ public class DatabaseSeeder {
 
         List<Product> productList = new ArrayList<Product>();
         List<Item> itemsProducts = new ArrayList<>();
-
 
         if (productName.isEmpty()) {
             Optional<Supplier> products_supplier_Id = supplierRepository.findSupplierByCuil("7022221224");
