@@ -1,7 +1,5 @@
 package com.bd.tpfinal.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 public class DeliveryServiceImpl implements DeliveryService{
 
 

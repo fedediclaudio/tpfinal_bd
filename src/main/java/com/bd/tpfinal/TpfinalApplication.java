@@ -1,7 +1,7 @@
 package com.bd.tpfinal;
 
-import com.bd.tpfinal.model.*;
-import com.bd.tpfinal.repositories.*;
+import com.bd.tpfinal.model.ProductType;
+import com.bd.tpfinal.repositories.ProductTypeRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.boot.CommandLineRunner;
@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 @SpringBootApplication
 public class TpfinalApplication {
