@@ -1,6 +1,5 @@
 package com.bd.tpfinal.config;
 
-import com.bd.tpfinal.annotation.CascadePersist;
 import com.bd.tpfinal.event.CascadePersistMongoEventListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

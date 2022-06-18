@@ -1,7 +1,6 @@
 package com.bd.tpfinal.controllers;
 
 import com.bd.tpfinal.DTOs.ProductDTO;
-import com.bd.tpfinal.DTOs.ProductoPrecioPromedioDTO;
 import com.bd.tpfinal.model.HistoricalProductPrice;
 import com.bd.tpfinal.model.Product;
 import com.bd.tpfinal.services.HistoricalProductPriceService;

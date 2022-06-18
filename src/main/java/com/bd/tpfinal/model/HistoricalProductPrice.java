@@ -1,6 +1,6 @@
 package com.bd.tpfinal.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.bd.tpfinal.annotation.CascadePersist;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -12,12 +12,9 @@ public class HistoricalProductPrice {
     @Id
     private String id;
     private float price;
-
     private Date startDate;
-
     private Date finishDate;
-@DBRef
-@JsonBackReference
+    @DBRef
+    @CascadePersist
     private Product product;
-
 }

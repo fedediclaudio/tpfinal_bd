@@ -2,11 +2,9 @@ package com.bd.tpfinal.model;
 
 import com.bd.tpfinal.annotation.CascadePersist;
 import lombok.Data;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 
 import java.util.List;
 
@@ -16,6 +14,17 @@ public class Product {
 
     @Id
     private String id;
+    private String name;
+    private float price;
+    private float weight;
+    private String description;
+    @DBRef
+    @CascadePersist
+    private Supplier supplier;
+    @DBRef
+    private List<ProductType> type;
+    @DBRef
+    private List<HistoricalProductPrice> prices;
 
     public String getId() {
         return id;
@@ -64,6 +73,7 @@ public class Product {
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }
+
     public List<HistoricalProductPrice> getPrices() {
         return prices;
     }
@@ -72,18 +82,6 @@ public class Product {
         this.prices = prices;
     }
 
-    private String name;
-
-    private float price;
-
-    private float weight;
-
-    private String description;
-
-    @DBRef
-    @CascadePersist
-    private Supplier supplier;
-
     public List<ProductType> getType() {
         return type;
     }
@@ -91,10 +89,4 @@ public class Product {
     public void setType(List<ProductType> type) {
         this.type = type;
     }
-
-    @DBRef
-    private List<ProductType> type;
-
-    @DBRef
-    private List<HistoricalProductPrice> prices;
 }
