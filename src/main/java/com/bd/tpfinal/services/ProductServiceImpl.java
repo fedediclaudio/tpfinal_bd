@@ -32,8 +32,8 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public List<Product> getProductsAndTypeBySupplierId(long supplier_id) {
-        return productRepository.findBySupplierId(supplier_id);
+    public List<Product> getProductsAndTypeBySupplierId(String supplier_id) {
+        return productRepository.findProductsBySupplierId(supplier_id);
 
     }
 

@@ -49,7 +49,7 @@ public class ProductController {
     // Obtener todos los productos y su tipo de un proveedor especifico
     @GetMapping("/get-productos-tipos-por-supplier/{supplier_id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<ProductDTO> getProductsAndTypeBySupplier(@PathVariable long supplier_id) {
+    public List<ProductDTO> getProductsAndTypeBySupplier(@PathVariable String supplier_id) {
         List<Product> products = productService.getProductsAndTypeBySupplierId(supplier_id);
         return products.stream()
                 .map(product -> convertToDTO(product))

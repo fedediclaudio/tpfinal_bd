@@ -38,11 +38,12 @@ public class DatabaseSeeder {
 
     @EventListener
     public void seedTables(ContextRefreshedEvent event) throws Exception {
-        seedProductTypeTable();
-        seedSupplierTypeTable();
-        seedSupplierTable();
-        seedPersonsTable();
-    //    seedOrderTable();
+//        seedProductTypeTable();
+//        seedSupplierTypeTable();
+//        seedSupplierTable();
+//        seedPersonsTable();
+     seedOrderTable();
+
     }
 
     private void seedProductTypeTable() {
@@ -1025,55 +1026,37 @@ public class DatabaseSeeder {
     }
 
     private void seedOrderTable() throws Exception {
-        seedOrderTableSupplier(11L, "mesa", 1L, "casa de rejas negras");
-        seedOrderTableSupplier(10L, "", 2L, "pasillo al fondo");
-        seedOrderTableSupplier(1L, "", 3L, "tocar el timbre");
-        seedOrderTableSupplier(8L, "pileta", 3L, "nada");
-        seedOrderTableSupplier(7L, "alimento", 2L, "sin aviso");
-        seedOrderTableSupplier(9L, "pan", 1L, "retiro");
-        seedOrderTableSupplier(1L, "fideo", 3L, "retiro en sucursal");
-        seedOrderTableSupplier(5L, "", 2L, "no funcionan las cuotas");
-        seedOrderTableSupplier(6L, "remera", 2L, "no aplica descuento por pago efectivo");
-        seedOrderTableSupplier(2L, "arroz", 1L, "contraentrega");
+        // Supplier CUIL y Client Username se usan debido a que los ObjectId son distintos en cada ejecución
+            seedOrderTableSupplier("7022221224", "mesa", "luisa", "casa de rejas negras");
+//        seedOrderTableSupplier(10L, "", 2L, "pasillo al fondo");
+//        seedOrderTableSupplier(1L, "", 3L, "tocar el timbre");
+//        seedOrderTableSupplier(8L, "pileta", 3L, "nada");
+//        seedOrderTableSupplier(7L, "alimento", 2L, "sin aviso");
+//        seedOrderTableSupplier(9L, "pan", 1L, "retiro");
+//        seedOrderTableSupplier(1L, "fideo", 3L, "retiro en sucursal");
+//        seedOrderTableSupplier(5L, "", 2L, "no funcionan las cuotas");
+//        seedOrderTableSupplier(6L, "remera", 2L, "no aplica descuento por pago efectivo");
+//        seedOrderTableSupplier(2L, "arroz", 1L, "contraentrega");
     }
 
-    private void seedOrderTableSupplier(long id, String productName, long id_client, String comments) throws Exception {
+    // Hay que rehacer la parte de orders.
+    private void seedOrderTableSupplier(String supplier_cuil, String productName, String username, String comments) throws Exception {
 
         List<Product> productList = new ArrayList<Product>();
         List<Item> itemsProducts = new ArrayList<>();
 
 
         if (productName.isEmpty()) {
-            Iterable<Product> products_supplier_Id = productRepository.findBySupplierId(id);
-            products_supplier_Id.forEach(productList::add);
-        } else {
-            Iterable<Product> products_supplier = productRepository.findBySupplierIdAndNameIgnoreCaseContaining(id, productName);
-            products_supplier.forEach(productList::add);
+            Optional<Supplier> products_supplier_Id = supplierRepository.findSupplierByCuil("7022221224");
+            products_supplier_Id.get().getProducts().forEach(productList::add);
         }
 
         Order order_1 = new Order();
         order_1.setComments(comments);
         order_1.setNumber(1);
-        order_1.setStatus(new Pending(order_1, new Date()));
         order_1.setDateOfOrder(new Date());
+        order_1.setClient(new Client());
 
-
-        int i = 0;
-        while (!productList.isEmpty()) {
-            Product tmp = productList.get(i);
-            Item item_2 = new Item();
-            item_2.setDescription("descripcion del producto");
-            item_2.setQuantity(2);
-            item_2.setOrder(order_1);
-            item_2.setProduct(tmp);
-            itemsProducts.add(item_2);
-            order_1.setTotalPrice((item_2.getProduct().getPrice() * item_2.getQuantity()) + order_1.getTotalPrice());
-            productList.remove(i);
-        }
-        order_1.setItems(itemsProducts);
-        Optional<Client> clients = null;
-        Client client = clients.get();
-        order_1.setClient(client);
         orderRepository.save(order_1);
     }
 }

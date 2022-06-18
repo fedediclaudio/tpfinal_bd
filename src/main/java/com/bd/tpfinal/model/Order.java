@@ -1,5 +1,6 @@
 package com.bd.tpfinal.model;
 
+import com.bd.tpfinal.annotation.CascadePersist;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
@@ -22,12 +23,13 @@ public class Order {
 
     private OrderStatus status;
 
+    @CascadePersist
     private DeliveryMan deliveryMan;
-
+    @CascadePersist
     private Client client;
-
+    @CascadePersist
     private Address address;
-
+    @CascadePersist
     private Qualification qualification;
 
     private List<Item> items;
