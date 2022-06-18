@@ -21,5 +21,6 @@ public class Item {
     private Order order;
 
     @DBRef
+    @CascadePersist
     private Product product;
 }

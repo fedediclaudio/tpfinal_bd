@@ -2,6 +2,7 @@ package com.bd.tpfinal.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,6 +20,7 @@ public class Client extends User {
     private List<Order> orders;
 
     @DBRef
+    @ToString.Exclude
     private List<Address> addresses;
 
     public void decreaseScore() throws Exception {

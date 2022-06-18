@@ -2,6 +2,7 @@ package com.bd.tpfinal.model;
 
 import lombok.Data;
 import nonapi.io.github.classgraph.json.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 import java.util.Date;
 
@@ -12,6 +13,7 @@ public abstract class User {
 
     private String name;
 
+    @Indexed(unique = true)
     private String username;
 
     private String password;
