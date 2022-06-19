@@ -40,7 +40,6 @@ public class Datasets {
             "VEGA", "CARRIL", "SUÁREZ", "NADRA", "PAZOS", "SANTANDER", "GARRO", "LEGASPE", "GOBELLO", "SALLENAVE", "MARTÍ", "CABRERA FISCHER"};
 
 
-//    public static final String[] PRODUCT_TYPES = new String[] {"Bien de consumo", "Servicio", "Bien de uso comun", "Bien de emergencia", "Bien durables", "Bien de especialidad"};
 
     public static final String[] SUPPLIER_TYPES = new String[] {"Servicios", "Sub-contratista", "Productor", "Distribuidor", "Importador"};
 

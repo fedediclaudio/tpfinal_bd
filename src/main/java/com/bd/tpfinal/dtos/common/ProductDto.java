@@ -33,18 +33,4 @@ public class ProductDto {
     private List<HistoricalPriceDto> prices;
 
 
-//    @Builder
-//    public ProductDto(String productId, String productName, String productDescription,
-//                      String supplierId, String supplierName, String productTypeId, String productType, float price, float weight) {
-//        this.productId = productId;
-//        this.productName = productName;
-//        this.productDescription = productDescription;
-//        this.supplierId = supplierId;
-//        this.supplierName = supplierName;
-//        this.productType = productType;
-//        this.productTypeId = productTypeId;
-//        this.price = price;
-//        this.weight = weight;
-//    }
-
 }

@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 public interface OrderMapper {
 
     @Mappings({
-//            @Mapping(source = "number", target = "number"),
             @Mapping(source = "status" ,target = "status", qualifiedByName = "mapStatus"),
             @Mapping(source="deliveryMan", target = "deliveryMan", qualifiedByName = "mapDeliveryMan"),
             @Mapping(source = "client", target = "client", qualifiedByName = "mapClient"),

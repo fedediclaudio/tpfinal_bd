@@ -91,7 +91,6 @@ public class DataInitialization implements ApplicationRunner {
             order.setTotalPrice(0f);
             Pending status = new Pending();
             status.setName();
-//            status.setOrder(order);
             order.setStatus(status);
 
             Client client = clientRepository.findById(clients.get(random.nextInt(clients.size()))).get();
@@ -205,7 +204,6 @@ public class DataInitialization implements ApplicationRunner {
 
             // set product supplier
             Supplier supplier = supplierRepository.findById(suppliers.get(random.nextInt(suppliers.size()))).get();
-//            supplier.getProducts().size();
             product.setSupplier(supplier);
             product = productRepository.save(product);
 

@@ -44,4 +44,3 @@ public class ClientsController extends BaseController {
         return new ResponseEntity<>(response, responseStatus(response));
     }
 }
-
