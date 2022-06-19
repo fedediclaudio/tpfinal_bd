@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 @Document(collection = "delivery")
 public class DeliveryMan extends User {
     @JsonProperty("number_of_success_orders")

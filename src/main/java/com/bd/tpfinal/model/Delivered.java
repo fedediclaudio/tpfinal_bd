@@ -1,7 +1,5 @@
 package com.bd.tpfinal.model;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 public class Delivered extends OrderStatus{
 
     public Delivered() {
