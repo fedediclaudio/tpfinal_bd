@@ -1,6 +1,7 @@
 package com.bd.tpfinal.controllers;
 
 import com.bd.tpfinal.DTOs.ProductDTO;
+import com.bd.tpfinal.DTOs.ProductoPrecioPromedioDTO;
 import com.bd.tpfinal.model.HistoricalProductPrice;
 import com.bd.tpfinal.model.Product;
 import com.bd.tpfinal.services.HistoricalProductPriceService;
@@ -63,7 +64,7 @@ public class ProductController {
 
     //Obtener los precios de un producto entre dos fechas dadas
     @GetMapping("/get-precios-producto-dos-fechas/{product_id}")
-    public List<HistoricalProductPrice> getPreciosProductoBetweenToFechas(@PathVariable long product_id,
+    public List<HistoricalProductPrice> getPreciosProductoBetweenToFechas(@PathVariable String product_id,
                                                                           @RequestParam(value = "start_date") @DateTimeFormat(pattern="dd-MM-yyyy",
                                                                                   iso = DateTimeFormat.ISO.DATE) LocalDate start_date,
                                                                           @RequestParam (value= "finish_date") @DateTimeFormat(pattern="dd-MM-yyyy",
@@ -71,13 +72,12 @@ public class ProductController {
         return historicalProductPriceService.getPreciosProductoBetweenToFechas(product_id, start_date, finish_date);
     }
 
-    // Hay que rehacer esta consulta, esta mapeada en el modelo con SQL y mapeo a DTO
-    /*@GetMapping("/get-precios-promedio-productos-de-cada-tipo")
+    @GetMapping("/get-precios-promedio-productos-de-cada-tipo")
     @ResponseStatus(HttpStatus.OK)
     public List<ProductoPrecioPromedioDTO> getPrecioPromedioProductosTipo() {
         List<ProductoPrecioPromedioDTO> productosPrecioPromedioDTO = productService.getProductosPrecioPromedioDTO();
         return productosPrecioPromedioDTO;
-    }*/
+    }
 
     // actualiza los datos de un producto, si el precio cambia se deja historial del mismo
     @PutMapping("/update-producto/{product_id}")
@@ -98,9 +98,9 @@ public class ProductController {
 
     @DeleteMapping("/remover-producto/{product_id}")
     @ResponseStatus(HttpStatus.OK)
-    public Product removerProducto(@PathVariable long product_id) throws Exception {
+    public Product removerProducto(@PathVariable String product_id) throws Exception {
         try {
-            Optional<Product> productoModificado = productService.EliminaProducto(product_id);
+            Optional<Product> productoModificado = productService.eliminaProducto(product_id);
             if (productoModificado.isPresent()) {
                 return productoModificado.get();
             }

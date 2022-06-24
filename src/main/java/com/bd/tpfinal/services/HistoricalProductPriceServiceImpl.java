@@ -14,7 +14,7 @@ public class HistoricalProductPriceServiceImpl implements HistoricalProductPrice
     private HistoricalProductPriceRepository historicalProductPriceRepository;
 
     @Override
-    public List<HistoricalProductPrice> getPreciosProductoBetweenToFechas(long product_id, LocalDate start_date, LocalDate finish_date) {
-        return historicalProductPriceRepository.findHistoricalProductPricesBetweenTwoDates(product_id, start_date, finish_date);
+    public List<HistoricalProductPrice> getPreciosProductoBetweenToFechas(String product_id, LocalDate start_date, LocalDate finish_date) {
+        return historicalProductPriceRepository.findByStartDateGreaterThanAndFinishDateLessThanOrFinishDateIsNullAndProduct(start_date, finish_date, product_id);
     }
 }
