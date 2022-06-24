@@ -16,6 +16,9 @@ public class ProductServiceImpl implements ProductService{
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    private OrderService orderService;
+
     @Override
     public Optional<Product> agregarProductoSupplier(Long product_id, Product product) throws Exception {
         return Optional.empty();
@@ -27,8 +30,18 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Optional<Product> EliminaProducto(long id_product) throws Exception {
-        return Optional.empty();
+    public Optional<Product> eliminaProducto(String id_product) throws Exception {
+        Optional<Product> productToRemove = productRepository.findById(id_product);
+        if(productToRemove.isPresent()) {
+            Product currentProduct = productToRemove.get();
+            if (!currentProduct.isActive()){
+                throw new Exception("La producto seleccionado no está disponible");
+            }
+            currentProduct.setActive (false);
+            productRepository.save(currentProduct);
+            orderService.updateOrdersTotalPrice("Pending");
+        }
+        return Optional.ofNullable(productToRemove.get());
     }
 
     @Override
@@ -59,6 +72,6 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<ProductoPrecioPromedioDTO> getProductosPrecioPromedioDTO() {
-        return null;
+        return productRepository.getProductosPrecioPromedioDTO();
     }
 }

@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ProductService {
     Optional<Product> agregarProductoSupplier(Long product_id, Product product) throws Exception;
     Optional<Product> modificaProductoConHistorico(long product_id, Product product) throws Exception;
-    Optional<Product> EliminaProducto(long id_product)  throws Exception ;
+    Optional<Product> eliminaProducto(String id_product)  throws Exception ;
     List<Product> getProductsAndTypeBySupplierId(String supplier_id);
     List<HistoricalProductPrice> getPreciosProductoBetweenToFechas(Long product_id, LocalDate from_date, LocalDate to_date);
     Optional<Product> findProduct(Long id);

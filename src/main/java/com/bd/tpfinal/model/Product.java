@@ -18,6 +18,12 @@ public class Product {
     private float price;
     private float weight;
     private String description;
+    private boolean active;
+
+    public Product() {
+        this.setActive(true);
+    }
+
     @DBRef
     @CascadePersist
     private Supplier supplier;

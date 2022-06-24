@@ -6,6 +6,5 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface HistoricalProductPriceService {
-    List<HistoricalProductPrice> getPreciosProductoBetweenToFechas(long product_id, LocalDate start_date, LocalDate finish_date);
-
+    List<HistoricalProductPrice> getPreciosProductoBetweenToFechas(String product_id, LocalDate start_date, LocalDate finish_date);
 }

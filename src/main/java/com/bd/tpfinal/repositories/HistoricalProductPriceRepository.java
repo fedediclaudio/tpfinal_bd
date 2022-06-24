@@ -9,8 +9,9 @@ import java.util.List;
 
 public interface HistoricalProductPriceRepository extends MongoRepository<HistoricalProductPrice, String> {
 
-    @Query("{start_date: {$gte: ?0, $lte: ?1 }}")
-    List<HistoricalProductPrice> findHistoricalProductPricesBetweenTwoDates(long productId, LocalDate start_date, LocalDate finish_date);
+    @Query("{product: $0, start_date: {$gte: ?1, $lte: ?2 }}")
+    List<HistoricalProductPrice> findHistoricalProductPricesBetweenTwoDates();
+    List<HistoricalProductPrice> findByStartDateGreaterThanAndFinishDateLessThanOrFinishDateIsNullAndProduct(LocalDate startDate, LocalDate finishDate, String productId);
 
 
 }
