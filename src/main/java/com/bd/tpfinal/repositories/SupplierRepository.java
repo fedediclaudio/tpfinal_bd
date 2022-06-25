@@ -10,8 +10,17 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SupplierRepository extends MongoRepository<Supplier, String> {
+/*
+    @Query(value="{name:{$eq:?0}},{_id:1,name:1,cuil:1}")
+    List<Supplier> findByNameIgnoreCaseContaining(String supplierName);
 
-    Optional<Supplier> findSupplierByCuil(String cuil);
+    @Query(value= "")
+    List<Supplier> getTop10SupplierConMasOrdenesDespachadas();
 
-    List<Product> findProductsByCuil(String cuil);
+    List<Supplier> findAllByTypeId(long id_tipo);
+
+    @Query(value = "")
+    List<Supplier> getProveedoresWithProductosDeTodosLosTipos();
+
+    Optional<Supplier> findSupplierByCuil(String s);*/
 }

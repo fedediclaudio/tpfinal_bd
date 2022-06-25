@@ -13,7 +13,7 @@ public interface DeliveryManRepository extends MongoRepository<DeliveryMan, Stri
     @Query(value = "{username:{$eq:?0}},{name:1,_id:0}")
     public List<DeliveryMan> findByUsername(String username);
 
-    @Query(value = "find().sort({'score':-1}).limit(2)")//asi en mongodb
+    @Query(value = "find().sort({'score':-1}).limit(10)")//asi en mongodb
     public List<DeliveryMan> getTop10RepartidoresMayorPuntaje();
 
     @Query(value= "{free:{$eq:true}},{name:1,_id:1}") //devuelve los que estan libres, y sus datos nombre e id
