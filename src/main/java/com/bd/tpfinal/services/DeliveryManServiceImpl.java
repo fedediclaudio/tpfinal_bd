@@ -17,12 +17,8 @@ import com.bd.tpfinal.repositories.implementations.OrderRepository;
 public class DeliveryManServiceImpl implements DeliveryManService {
 	@Autowired DeliveryManRepository deliveryManRepository;
 	@Autowired OrderRepository orderRepository;
-	
-	@Transactional
-	public DeliveryMan saveDeliveryMan(DeliveryMan deliveryMan) throws Exception {
-		return deliveryManRepository.save( deliveryMan );
-	}
 
+	@Transactional
 	public DeliveryMan addNewDeliveryMan(DeliveryMan deliveryMan) throws Exception {
 		deliveryMan.setDateOfAdmission( LocalDate.now() );
 		// Valido que el DeliveryMan sea valido
@@ -32,7 +28,7 @@ public class DeliveryManServiceImpl implements DeliveryManService {
 		}
 		
 		// Hay que hacer todas las validaciones previas al guardado!!
-		deliveryMan = saveDeliveryMan( deliveryMan );
+		deliveryMan = deliveryManRepository.save( deliveryMan );
 		
 		return deliveryMan;
 	}
@@ -48,7 +44,7 @@ public class DeliveryManServiceImpl implements DeliveryManService {
 	
 	public List<Order> getAllPendingOrders(long idDeliveryMan) throws Exception {
 		// Retorno todas las ordenes pendientes del DeliveryMan
-		return orderRepository.getAllOrdersForDeliveryMan(idDeliveryMan, null);
+		return orderRepository.getAllOrdersForDeliveryMan(idDeliveryMan, "Assigned");
 	}
 	
 	public Order getNextPendingOrder(long idDeliveryMan) throws Exception {
@@ -186,6 +182,7 @@ public class DeliveryManServiceImpl implements DeliveryManService {
 		
 		// Quito la orden, de la lista de ordenes pendientes del DeliveryMan
 		dm.removePendingOrder(order);
+		
 		// Guardo al DeliveryMan
 		deliveryManRepository.save(dm);
 		

@@ -15,10 +15,6 @@ public class SupplierTypeServiceImpl implements SupplierTypeService {
 	@Autowired SupplierTypeRepository supplierTypeRepository;
 	
 	@Transactional
-	public SupplierType saveSupplierType(SupplierType supplierType) throws Exception {
-		return supplierTypeRepository.save(supplierType);
-	}
-	
 	public SupplierType createNewSupplierType(SupplierType supplierType) throws Exception {
 		// Verifico que tanto el nombre como la descripcion no esten vacíos
 		if (supplierType.getName().isBlank() || 
@@ -38,7 +34,7 @@ public class SupplierTypeServiceImpl implements SupplierTypeService {
 		supplierType.setId(null);
 				
 		// Grabo el ProductType 
-		return saveSupplierType(supplierType);
+		return supplierTypeRepository.save(supplierType);
 	}
 	
 	public List<SupplierType> getSupplierTypeList() throws Exception {

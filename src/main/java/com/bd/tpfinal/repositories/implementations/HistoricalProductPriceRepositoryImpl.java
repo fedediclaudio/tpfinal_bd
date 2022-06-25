@@ -40,16 +40,18 @@ public class HistoricalProductPriceRepositoryImpl implements IHistoricalProductP
 	}
 	
 	
-	public List<HistoricalProductPrice> getHistoricalPricesBetweenTwoDates(LocalDate startDate, LocalDate endDate) {
+	public List<HistoricalProductPrice> getHistoricalPricesBetweenTwoDates(long idProduct, LocalDate startDate, LocalDate endDate) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
 		CriteriaQuery<HistoricalProductPrice> cq = cb.createQuery(HistoricalProductPrice.class);
 		Root<HistoricalProductPrice> root = cq.from(HistoricalProductPrice.class);
+		Join<HistoricalProductPrice, Product> product = root.join(HistoricalProductPrice_.PRODUCT);
 		
+		Predicate onProduct = cb.equal(product.get(Product_.ID), idProduct);
 		Predicate onStart = cb.lessThanOrEqualTo(root.get(HistoricalProductPrice_.START_DATE), startDate);
 		Predicate onEnd = cb.or(cb.isNull(root.get(HistoricalProductPrice_.FINISH_DATE)), 
 								cb.greaterThan(root.get(HistoricalProductPrice_.FINISH_DATE), endDate));
-		cq.where(onStart, onEnd);
+		cq.where(onProduct, onStart, onEnd);
 		
 		cq.select( root );
 		TypedQuery<HistoricalProductPrice> typeQuery = em.createQuery(cq);

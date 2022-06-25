@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.repositories.interfaces.IOrderRepository;
@@ -33,4 +34,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer>, IOrderRe
 			+ "ORDER BY o.totalPrice DESC",
 			countQuery = "1")
 	Order getHighestPriceOrderOfDate(LocalDate date);
+	
+    List<Order> findByItems_Product_Supplier_Id(@Param("id") long id);
+    
 }

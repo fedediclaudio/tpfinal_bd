@@ -15,12 +15,14 @@ import com.bd.tpfinal.model.Item;
 import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.model.Product;
 import com.bd.tpfinal.model.Qualification;
+import com.bd.tpfinal.model.Supplier;
 import com.bd.tpfinal.repositories.implementations.AddressRepository;
 import com.bd.tpfinal.repositories.implementations.ClientRepository;
 import com.bd.tpfinal.repositories.implementations.DeliveryManRepository;
 import com.bd.tpfinal.repositories.implementations.ItemRepository;
 import com.bd.tpfinal.repositories.implementations.OrderRepository;
 import com.bd.tpfinal.repositories.implementations.ProductRepository;
+import com.bd.tpfinal.repositories.implementations.SupplierRepository;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -31,11 +33,7 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired OrderRepository orderRepository;
 	@Autowired OrderStatusService orderStatusService;
 	@Autowired ProductRepository productRepository;
-	
-	@Transactional
-	public Client saveClient(Client client) throws Exception {
-		return clientRepository.save(client);
-	}
+	@Autowired SupplierRepository supplierRepository;
 	
 	public Order getOrder(int orderNumber) throws Exception {
 		// Obtengo la orden de la BD
@@ -47,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
 		return order;
 	}
 	
+	@Transactional
 	public Order createOrder(long idClient) throws Exception {
 		// Obtengo el cliente de la BD
 		Client client = clientRepository.getClientById( idClient );
@@ -73,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
 		client.addOrder(order);
 		
 		// Guardo al cliente
-		saveClient(client);
+		clientRepository.save(client);
 		
 		return order;
 	}
@@ -143,6 +142,15 @@ public class OrderServiceImpl implements OrderService {
 			return false;
 		}
 		
+        if (!order.getItems().isEmpty()) {
+        	Supplier cargado = order.getItems().get(0).getProduct().getSupplier();
+        	// Si el Supplier del producto cargado no es el mismo que el nuevo producto
+        	if (product.getSupplier().getId() != cargado.getId()) {
+        		System.out.println("Solo se admite un Supplier por orden");
+                return false;
+        	}
+        }
+        
 		// Creo el nuevo item
 		Item item = new Item();
 		item.setProduct( product );
@@ -245,6 +253,12 @@ public class OrderServiceImpl implements OrderService {
 		return true;
 	}
 	
+	private float getQualificationSumForSupplier(long idSupplier) {
+		List<Order> orders = orderRepository.findByItems_Product_Supplier_Id(idSupplier);
+		float sum = 0;
+		return (orders.stream().reduce(sum, (partialQualification, order) -> partialQualification + order.getQualification().getScore(), Float::sum)) / orders.size();
+    }
+	
 	@Transactional
 	public boolean setQualification(int orderNumber, int score, String comment) throws Exception {
 		// Obtengo la orden de la BD
@@ -281,6 +295,11 @@ public class OrderServiceImpl implements OrderService {
 		
 		// Grabo la ordn
 		orderRepository.save( order );
+		
+        // Actualizo el Supplier
+        Supplier supplier = supplierRepository.getSupplierById(order.getItems().get(0).getProduct().getSupplier().getId());
+        supplier.setQualificationOfUsers( this.getQualificationSumForSupplier( supplier.getId() ) );
+        supplierRepository.save(supplier);
 		
 		return true;		
 	}

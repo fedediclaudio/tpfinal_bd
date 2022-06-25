@@ -22,11 +22,8 @@ public class SupplierServiceImpl implements SupplierService {
 	@Autowired ProductTypeRepository productTypeRepository;
 	@Autowired SupplierRepository supplierRepository;
 	
-	@Transactional
-	public Supplier saveSupplier(Supplier supplier) throws Exception {
-		return supplierRepository.save(supplier);
-	}
 	
+	@Transactional
 	public Supplier createNewSupplier(Supplier supplier) throws Exception {
 		// Verifico todos los campos
 		if (supplier.getName().isBlank()) return null;
@@ -53,7 +50,7 @@ public class SupplierServiceImpl implements SupplierService {
 		supplier.setQualificationOfUsers(0);
 		
 		// Grabo el Supplier
-		return saveSupplier(supplier);
+		return supplierRepository.save(supplier);
 	}
 	
 	public List<Supplier> getSupplierList() throws Exception {
@@ -72,37 +69,25 @@ public class SupplierServiceImpl implements SupplierService {
 		return supplierRepository.getSupplierWithAtLeastOneStar();
 	}
 	
-	public List<Supplier> getSupplierWhoOfferAllProducts() throws Exception {
-		// Lista que va a contener todos los Suppliers que ofrecen productos de todos los tipos
-		List<Supplier> offer = new ArrayList<Supplier>();
-		
-		// Obtengo todos los tipos de producto y todos los suppliers
-		List<ProductType> allTypes = productTypeRepository.findAll();
-		List<Supplier> allSuppliers = supplierRepository.findAll();
-		
-		// Recorro todos los Suppliers 
-		for (Supplier supplier : allSuppliers) {
-			// Si el Supplier tiene todos los tipos, lo agrego a la lista
-			if (hasAllSupplierTypes(supplier.getProducts(), allTypes))
-				offer.add(supplier);
-		}
-			
-		return offer;
-	}
-	
-	private boolean hasAllSupplierTypes(List<Product> products, List<ProductType> types) {
-		// Creo una copia de la los tipos de productos
-		List<ProductType> actualTypes = new ArrayList<ProductType>();		
-		actualTypes.addAll(types);
-		
-		int idx = 0;
-		while ((idx < products.size())) {
-			Product actual = products.get(idx);
-			// Elimino el tipo de producto de la lista de tipos
-			actualTypes.removeIf(t -> t.getId() == actual.getType().getId());
-			idx ++;
-		}
-		// Retorno si la lista de tipos esta vacia (es decir, que tiene todos los tipos)
-		return actualTypes.isEmpty();
-	}
+    public List<Supplier> getSupplierWhoOfferAllProducts() throws Exception {
+        // Lista que va a contener todos los Suppliers que ofrecen productos de todos los tipos
+        List<Supplier> offer = new ArrayList<Supplier>();
+
+        long productTypes = productTypeRepository.findAll().size();
+        List<Supplier> allSuppliers = supplierRepository.findAll();
+
+        allSuppliers.forEach(supplier -> {
+            long amount = supplier.getProducts()
+                    .stream()
+                    .map(Product::getType)
+                    .map(ProductType::getName)
+                    .distinct()
+                    .count();
+            if(productTypes == amount){
+                offer.add(supplier);
+            }
+        });
+
+        return offer;
+    }
 }

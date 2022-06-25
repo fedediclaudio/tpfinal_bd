@@ -20,10 +20,6 @@ public class ClientServiceImpl implements ClientService {
 	@Autowired OrderRepository orderRepository;
 	
 	@Transactional
-	public Client saveClient(Client client) throws Exception {
-		return clientRepository.save( client );
-	}
-
 	public Client addNewClient(Client client) throws Exception {
 		client.setId(null);
 		client.setDateOfRegister( LocalDate.now() );
@@ -33,11 +29,12 @@ public class ClientServiceImpl implements ClientService {
 			return null;
 		}
 		
-		client = saveClient( client );
+		client = clientRepository.save( client );
 		
 		return client;
 	}
 	
+	@Transactional
 	public Address addNewAddress(Address address) throws Exception {
 		// Valido que la Address sea valido
 		if (!address.isValid()) {
@@ -56,7 +53,7 @@ public class ClientServiceImpl implements ClientService {
 		
 		address.setClient(client);
 		client.addAddress(address);
-		client = saveClient( client );
+		client = clientRepository.save( client );
 		
 		return client.getAddresses().get( client.getAddresses().size() -1 );
 	}

@@ -24,7 +24,8 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long>, ISupp
 				+ "	(SELECT p.id_supplier, SUM(quantity) suma "
 				+ "	FROM item i"
 				+ "	INNER JOIN product p ON (i.id_product = p.id_product) "
-				+ "	GROUP BY p.id_supplier) AS suma "
+				+ "	GROUP BY p.id_supplier"
+				+ " ORDER BY suma, p.id_supplier) AS suma "
 				+ "WHERE s.id_supplier = suma.id_supplier "
 				+ "LIMIT 10;", 
 				nativeQuery = true)

@@ -25,10 +25,6 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired SupplierRepository supplierRepository;
 	
 	@Transactional
-	public Product saveProduct(Product product) throws Exception {
-		return productRepository.save(product);
-	}
-	
 	public Product createNewProduct(Product product) throws Exception {
 		if ((product.getName().isBlank()) ||
 			(product.getDescription().isBlank()) ||
@@ -63,8 +59,6 @@ public class ProductServiceImpl implements ProductService {
 			return null;
 		}
 		
-		
-		
 		// Creo el nuevo Producto
 		product.setSupplier( supplier );
 		product.setType( productType );
@@ -72,9 +66,7 @@ public class ProductServiceImpl implements ProductService {
 		product.addHistoricalPrice( hp );
 		
 		// Grabo el producto 
-		product = productRepository.save( product );
-		
-		return product;
+		return productRepository.save( product );
 	}
 	
 	@Transactional
@@ -95,6 +87,9 @@ public class ProductServiceImpl implements ProductService {
 			System.out.println("El producto ya no esta a la disponible para la venta");
 			return false;
 		}
+		
+		if (dbProducto.getPrice() != product.getPrice())
+			this.changeProductPrice(product.getId(), product.getPrice());
 		
 		// Actualizo el Producto
 		dbProducto.setName( product.getName() );
@@ -122,13 +117,14 @@ public class ProductServiceImpl implements ProductService {
 			return false;
 		}
 		
-		// Borro el producto
+		// Borro el producto en forma logica
 		product.setProductDeleted(true);
 		productRepository.save(product);
 		
 		return true;
 	}
 	
+	@Transactional
 	public boolean changeProductPrice(long idProduct, float newPrice) throws Exception {
 		// Obtengo el Product de la BD
 		Product product = productRepository.getProductById( idProduct );
@@ -173,8 +169,8 @@ public class ProductServiceImpl implements ProductService {
 		return productRepository.getProductsFromSupplier(idSupplier);
 	}
 	
-	public List<HistoricalProductPrice> getHistoricalPricesBetweenTwoDates(LocalDate dateFrom, LocalDate dateTo) throws Exception {
-		return historicalProductPriceRepository.getHistoricalPricesBetweenTwoDates(dateFrom, dateTo);
+	public List<HistoricalProductPrice> getHistoricalPricesBetweenTwoDates(long idProduct, LocalDate dateFrom, LocalDate dateTo) throws Exception {
+		return historicalProductPriceRepository.getHistoricalPricesBetweenTwoDates(idProduct, dateFrom, dateTo);
 	}
 	
 }

@@ -28,7 +28,7 @@ import com.bd.tpfinal.model.orderStatusTypes.Sent;
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int number;
 
     @Column(nullable = false)

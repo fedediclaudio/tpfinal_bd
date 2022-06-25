@@ -10,6 +10,6 @@ public interface IHistoricalProductPriceRepository {
 	// Los metodos que se vayan a porponer aca, tienen que estar implementados en su implementacion (HistoricalProductPriceImpl)
 	
 	List<HistoricalProductPrice> getHistoricalPricesListOrderByStartDate(long idProduct);
-	List<HistoricalProductPrice> getHistoricalPricesBetweenTwoDates(LocalDate startDate, LocalDate endDate);
+	List<HistoricalProductPrice> getHistoricalPricesBetweenTwoDates(long idProduct, LocalDate startDate, LocalDate endDate);
 	
 }

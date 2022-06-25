@@ -105,14 +105,16 @@ public class ProductController {
 	}
 	
 	@GetMapping("/getHistoricalPricesBetweenTwoDates")
-	public List<HistoricalProductPrice> getHistoricalPricesBetweenTwoDates( @RequestParam(name = "dateFrom") 
+	public List<HistoricalProductPrice> getHistoricalPricesBetweenTwoDates( @RequestParam(name = "idProduct") 
+																			long idProduct,
+																			@RequestParam(name = "dateFrom") 
 																			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 																			LocalDate dateFrom,
 																			@RequestParam(name = "dateTo") 
 																			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 																			LocalDate dateTo) {
 		try {
-			return productService.getHistoricalPricesBetweenTwoDates(dateFrom, dateTo);
+			return productService.getHistoricalPricesBetweenTwoDates(idProduct, dateFrom, dateTo);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

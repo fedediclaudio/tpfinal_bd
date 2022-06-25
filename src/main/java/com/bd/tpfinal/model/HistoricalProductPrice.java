@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 public class HistoricalProductPrice {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_historical_product_price")
     private Long id;
 	

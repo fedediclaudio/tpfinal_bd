@@ -17,10 +17,6 @@ public class ProductTypeServiceImpl implements ProductTypeService {
 	@Autowired ProductTypeRepository productTypeRepository;
 	
 	@Transactional
-	public ProductType saveProductType(ProductType productType) throws Exception {
-		return productTypeRepository.save(productType);
-	}
-	
 	public ProductType createNewProductType(ProductType productType) throws Exception {
 		// Verifico que tanto el nombre como la descripcion no esten vacíos
 		if (productType.getName().isBlank() || 
@@ -41,7 +37,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
 		productType.setProducts(null);
 		
 		// Grabo el ProductType 
-		return saveProductType(productType);
+		return productTypeRepository.save(productType);
 	}
 	
 	public List<ProductType> getProductTypeList() throws Exception {

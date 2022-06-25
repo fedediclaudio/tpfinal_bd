@@ -54,7 +54,7 @@ above always returns a proxy that is an instanceof the superclass.
 public abstract class User {
 	
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_user")
     private Long id;
 
