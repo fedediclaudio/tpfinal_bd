@@ -38,11 +38,11 @@ public class DatabaseSeeder {
 
     @EventListener
     public void seedTables(ContextRefreshedEvent event) throws Exception {
-     /*   seedProductTypeTable();
+        seedProductTypeTable();
         seedSupplierTypeTable();
         seedSupplierTable();
         seedPersonsTable();
-        seedOrderTable();*/
+        seedOrderTable();
     }
 
     private void seedProductTypeTable() {
