@@ -1045,7 +1045,7 @@ public class DatabaseSeeder {
         List<Item> itemsProducts = new ArrayList<>();
 
         if (productName.isEmpty()) {
-            Optional<Supplier> products_supplier_Id = supplierRepository.findSupplierByCuil("7022221224");
+            Optional<Supplier> products_supplier_Id = supplierRepository.findById("7022221224");
             products_supplier_Id.get().getProducts().forEach(productList::add);
         }
 

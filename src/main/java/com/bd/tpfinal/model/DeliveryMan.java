@@ -1,5 +1,6 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
@@ -17,6 +18,7 @@ public class DeliveryMan extends User {
 
     private Date dateOfAdmission;
     @DBRef
+    @JsonBackReference("ordersPending")
     private List<Order> ordersPending;
 
     public void addOrder(Order order) {

@@ -16,6 +16,6 @@ public interface DeliveryManRepository extends MongoRepository<DeliveryMan, Stri
     @Query(value = "find().sort({'score':-1}).limit(10)")//asi en mongodb
     public List<DeliveryMan> getTop10RepartidoresMayorPuntaje();
 
-    @Query(value= "{free:{$eq:true}},{name:1,_id:1}") //devuelve los que estan libres, y sus datos nombre e id
-    public Optional<DeliveryMan> findByFreeIsTrue();
+    @Query(value="{'free' : true , 'active' : true}") //devuelve los que estan libres, y sus datos nombre e id
+    Optional<DeliveryMan> findByFreeIsTrue();
 }

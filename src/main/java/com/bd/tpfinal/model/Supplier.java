@@ -1,6 +1,7 @@
 package com.bd.tpfinal.model;
 
 import com.bd.tpfinal.annotation.CascadePersist;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.ToString;
 import org.bson.types.ObjectId;
@@ -27,7 +28,7 @@ public class Supplier {
 
     private float qualificationOfUsers;
     @DBRef
-    @ToString.Exclude
+    @JsonBackReference("products")
     private List<Product> products;
 
     @DBRef

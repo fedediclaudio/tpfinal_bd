@@ -1,6 +1,7 @@
 package com.bd.tpfinal.model;
 
 import com.bd.tpfinal.annotation.CascadePersist;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -28,8 +29,10 @@ public class Product {
     @CascadePersist
     private Supplier supplier;
     @DBRef
+    @JsonBackReference("type")
     private List<ProductType> type;
     @DBRef
+    @JsonBackReference("prices")
     private List<HistoricalProductPrice> prices;
 
     public String getId() {
