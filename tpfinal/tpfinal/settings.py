@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'corsheaders',
+    # Used for documentation
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -82,12 +84,12 @@ WSGI_APPLICATION = 'tpfinal.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'djongo',
         'NAME': 'tpfinaldb',
-        'USER': 'djangouser',
-        'PASSWORD': 'django123',
-        'HOST': 'database-mysql',
-        'PORT': 3306,
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': 'mongodb://django:django123@database-mongo/tpfinaldb?retryWrites=true&w=majority'
+        }
     }
 }
 

@@ -16,6 +16,8 @@ from api.models.product import Product
 from api.views.generic import GenericViewList, GenericViewDetail
 from api.serializers import ProductSerializer, ProductPriceAvgSerializer, ProductPriceHistorySerializer
 
+from bson import ObjectId
+
 logger = logging.getLogger()
 
 # Create your views here.
@@ -53,7 +55,7 @@ class ProductViewHistoricValues(APIView):
             end_date = datetime.strptime(end_date_str, self.date_format)
             end_date = timezone.make_aware(end_date)
         # Get details of all products
-        products = Product.objects.get(id=number)
+        products = Product.objects.get(_id=ObjectId(number))
         historic_prices = products.historic_prices.all().order_by('start_date')
         start_index = None
         end_index = None

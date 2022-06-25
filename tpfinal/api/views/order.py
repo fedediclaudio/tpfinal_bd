@@ -16,6 +16,8 @@ from api.models.delivery_man import DeliveryMan
 from api.views.generic import GenericViewList, GenericViewDetail
 from api.serializers import OrderSerializer, RatingSerializer
 
+from bson import ObjectId
+
 logger = logging.getLogger()
 
 # Create your views here.
@@ -23,27 +25,12 @@ class OrderViewList(GenericViewList):
     model = Order
     serializer = OrderSerializer
 
-class OrderViewDetail(APIView):
-    def get(self, request, number, format=None, *args, **kwargs):
-        # Get details of an existing order
-        try:
-            order = Order.objects.get(number=number)
-        except Order.DoesNotExist:
-            return Response({"status": "error", "message": f"Order number {number} not found"}, status=status.HTTP_404_NOT_FOUND)
-        serializer = OrderSerializer(order)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+class OrderViewDetail(GenericViewDetail):
+    model = Order
+    serializer = OrderSerializer
 
-    # PUT is not supported, we do not want users to directly modify orders like this
-
-    def delete(self, request, number, format=None, *args, **kwargs):
-        # Delete an existing order
-        try:
-            order = Order.objects.get(number=number)
-        except Order.DoesNotExist:
-            return Response({"status": "error", "message": f"Order number {number} not found"}, status=status.HTTP_404_NOT_FOUND)
-        order.delete()
-        return Response({"status": "success", "message": f"Order number {number} deleted"}, status=status.HTTP_204_NO_CONTENT)
-
+    def put(self, request, number, format=None, *args, **kwargs):
+        return Response({"status": "error", "message": f"Method PUT not allowed for Order"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 class OrderMostExpensive(APIView):
     date_format = "%Y-%m-%d"
@@ -68,7 +55,7 @@ class OrderAddItem(APIView):
     def post(self, request, number, format=None, *args, **kwargs):
         data = JSONParser().parse(request)
         try:
-            order = Order.objects.get(number=number)
+            order = Order.objects.get(_id=ObjectId(number))
         except Order.DoesNotExist:
             return Response({"status": "error", "message": f"Order number {number} not found"}, status=status.HTTP_404_NOT_FOUND)
         try:
@@ -87,7 +74,7 @@ class OrderAddItem(APIView):
 class OrderAddRating(APIView):
     def post(self, request, number, format=None, *args, **kwargs):
         try:
-            order = Order.objects.get(number=number)
+            order = Order.objects.get(_id=ObjectId(number))
         except Order.DoesNotExist:
             return Response({"status": "error", "message": f"Order number {number} not found"}, status=status.HTTP_404_NOT_FOUND)
         if not order.can_rate():
@@ -105,7 +92,7 @@ class OrderAddRating(APIView):
 ## This class handles all the status logic
 class OrderViewModifyStatus(APIView):
     def __assign(self, order):
-        available_delivery_men = DeliveryMan.objects.filter(free=True)
+        available_delivery_men = DeliveryMan.objects.filter(free__in=[True])
         if len(available_delivery_men) == 0:
             return Response({"status": "error", "message": f"No delivery man is available"}, status=status.HTTP_409_CONFLICT)
         delivery_man = random.choice(available_delivery_men)
@@ -151,7 +138,7 @@ class OrderViewModifyStatus(APIView):
     def put(self, request, number, stat_update, format=None, *args, **kwargs):
         # Get details of an existing order
         try:
-            order = Order.objects.get(number=number)
+            order = Order.objects.get(_id=ObjectId(number))
         except Order.DoesNotExist:
             return Response({"status": "error", "message": f"Order number {number} not found"}, status=status.HTTP_404_NOT_FOUND)
         function_to_apply = {

@@ -1,14 +1,16 @@
 import datetime
 from math import prod
 
-from django.db import models
+from djongo import models
 from .client import Client
 from .address import Address
 from .delivery_man import DeliveryMan
 from .order_status import OrderStatus, OrderStatusValues
 
+from bson import ObjectId
+
 class Order(models.Model):
-    number = models.AutoField(primary_key=True)
+    _id = models.ObjectIdField(primary_key=True)
     date_of_order = models.DateTimeField(auto_now_add=True)
     comments = models.CharField(max_length=1000, null=True)
     total_price = models.FloatField(default=0.0)
@@ -31,7 +33,7 @@ class Order(models.Model):
 
         if not self.status.can_add_item():
             raise RuntimeError("Cannot add item to this order")
-        product = Product.objects.get(id=product_id)
+        product = Product.objects.get(_id=ObjectId(product_id))
         item = Item(quantity=quantity, description=description, product=product,
                     order=self)
         item.save()

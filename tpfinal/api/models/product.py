@@ -1,10 +1,11 @@
 import django.utils.timezone as timezone
-from django.db import models, transaction
+from djongo import models
 
 from .supplier import Supplier
 from .product_type import ProductType
 
 class Product(models.Model):
+    _id = models.ObjectIdField(primary_key=True)
     name = models.CharField(max_length=200)
     price = models.FloatField()
     weight = models.FloatField()
@@ -14,7 +15,7 @@ class Product(models.Model):
     supplier = models.ForeignKey(Supplier, on_delete=models.PROTECT, related_name='products')
     type = models.ManyToManyField(ProductType)
 
-    @transaction.atomic
+    # @transaction.atomic
     def save(self, *args, **kwargs):
         # avoid circular import
         from .historical_product_price import HistoricalProductPrice

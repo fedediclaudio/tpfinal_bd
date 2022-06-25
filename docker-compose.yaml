@@ -1,31 +1,32 @@
 version: "3.9"
 services:
-  database-mysql:
-    platform: linux/x86_64
-    image: mysql:8
-    hostname: "isl-db"
+  database-mongo:
+    # Mongo 5 does not work on Apple M1 chips
+    image: mongo:4
+    hostname: "mongo-db"
     ports:
-      - "3306:3306"
+      - "27017:27017"
     environment:
-      MYSQL_DATABASE: tpfinaldb
-      MYSQL_USER: djangouser
-      MYSQL_PASSWORD: django123
-      MYSQL_ROOT_PASSWORD: root123
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root123
+      MONGO_INITDB_DATABASE: tpfinaldb
     volumes:
-      - dbdata:/var/lib/mysql
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - mongodata:/data/db
     # Make other containers not start until this one finishes starting
     healthcheck:
-      test: ["CMD-SHELL", 'mysqladmin ping']
+      test: echo 'db.runCommand("ping").ok' | mongo database-mongo:27017/tpfinaldb --quiet
       interval: 10s
       timeout: 2s
       retries: 10
-  web_app:
+      start_period: 30s
+  web_app_mongo:
     build: "./tpfinal"
     entrypoint: /entrypoint.sh
     command: >
       sh -c "python3 manage.py runserver 0.0.0.0:8081"
     depends_on:
-      database-mysql:
+      database-mongo:
         condition: service_healthy
     ports:
       - "8081:8081"
@@ -44,5 +45,5 @@ services:
       SWAGGER_JSON: /openapi.yml
 
 volumes:
-  dbdata:
+  mongodata:
     driver: local

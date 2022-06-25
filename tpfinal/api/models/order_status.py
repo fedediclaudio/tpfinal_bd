@@ -1,5 +1,5 @@
 from email.policy import default
-from django.db import models
+from djongo import models
 from django.forms import ValidationError
 from .delivery_man import DeliveryMan
 
@@ -12,6 +12,7 @@ class OrderStatusValues(models.IntegerChoices):
     CANCELLED = 4, 'Cancelled'
 
 class OrderStatus(models.Model):
+    _id = models.ObjectIdField(primary_key=True)
     name = models.CharField(max_length=200)
     start_date = models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(choices=OrderStatusValues.choices, default=OrderStatusValues.PENDING)

@@ -29,8 +29,8 @@ components:
       description: Respuestas que contienen direcciones
       allOf:
         - properties:
-            id:
-              type: integer
+            _id:
+              type: string
         - $ref: "#/components/schemas/address-request-body"
     user-request-body:
       type: object
@@ -55,8 +55,8 @@ components:
       type: object
       description: Respuestas que contienen usuarios
       properties:
-        id:
-          type: integer
+        _id:
+          type: string
         name:
           type: string
         username:
@@ -86,8 +86,8 @@ components:
       type: object
       description: Respuestas que contienen órdenes
       properties:
-        number:
-          type: integer
+        _id:
+          type: string
         items:
           type: array
           items:
@@ -123,8 +123,8 @@ components:
           format: date-time
     rating:
       properties:
-        id:
-          type: integer
+        _id:
+          type: string
         score:
           type: integer
         commentary:
@@ -141,8 +141,8 @@ components:
           nullable: true
     items:
       properties:
-        id:
-          type: integer
+        _id:
+          type: string
         quantity:
           type: integer
         description:
@@ -171,8 +171,8 @@ components:
             type: integer
     product:
       properties:
-        id:
-          type: integer
+        _id:
+          type: string
         name:
           type: string
         price:
@@ -300,15 +300,14 @@ paths:
                 $ref: '#/components/schemas/generic-error'
       tags:
         - Direcciones
-  /address/{id}:
+  /address/{_id}:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id de la direccion con la cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     get:
       summary: Obtener una dirección por ID.
@@ -420,15 +419,14 @@ paths:
                 $ref: '#/components/schemas/generic-error'
       tags:
         - Clientes
-  /client/{id}:
+  /client/{_id}:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id del cliente con el cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     get:
       summary: Obtener un cliente por ID.
@@ -554,15 +552,14 @@ paths:
                   $ref: '#/components/schemas/client-response'
       tags:
         - Repartidores
-  /delivery-man/{id}:
+  /delivery-man/{_id}:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id del repartidor con el cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     get:
       summary: Obtener un repartidor por ID.
@@ -695,15 +692,14 @@ paths:
                 $ref: '#/components/schemas/generic-error'
       tags:
         - Órdenes
-  /order/{id}:
+  /order/{_id}:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id de la orden con la cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     get:
       summary: Obtener una orden por ID.
@@ -739,15 +735,14 @@ paths:
                 $ref: '#/components/schemas/generic-error'
       tags:
         - Órdenes
-  /order/{id}/add-rating:
+  /order/{_id}/add-rating:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id de la orden con la cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     post:
       summary: Agregar una calificación a una orden
@@ -789,15 +784,14 @@ paths:
                 $ref: '#/components/schemas/generic-error'
       tags:
         - Órdenes/Modificar orden
-  /order/{id}/add-item:
+  /order/{_id}/add-item:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id de la orden con la cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     post:
       summary: Agregar un item a una orden
@@ -839,15 +833,14 @@ paths:
                 $ref: '#/components/schemas/generic-error'
       tags:
         - Órdenes/Modificar orden
-  /order/{id}/assign:
+  /order/{_id}/assign:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id de la orden con la cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     put:
       summary: Asigna la orden a algún repartidor libre
@@ -878,15 +871,14 @@ paths:
                 $ref: '#/components/schemas/generic-error'
       tags:
         - Órdenes/Modificar orden
-  /order/{id}/cancel:
+  /order/{_id}/cancel:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id de la orden con la cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     put:
       summary: Cancela la orden a pedido del cliente
@@ -911,15 +903,14 @@ paths:
                 $ref: '#/components/schemas/generic-error'
       tags:
         - Órdenes/Modificar orden
-  /order/{id}/refuse:
+  /order/{_id}/refuse:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id de la orden con la cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     put:
       summary: Rechaza la orden a pedido del repartidor
@@ -944,15 +935,14 @@ paths:
                 $ref: '#/components/schemas/generic-error'
       tags:
         - Órdenes/Modificar orden
-  /order/{id}/send:
+  /order/{_id}/send:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id de la orden con la cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     put:
       summary: Acepta la orden y el proveedor la entrega al repartidor
@@ -977,15 +967,14 @@ paths:
                 $ref: '#/components/schemas/generic-error'
       tags:
         - Órdenes/Modificar orden
-  /order/{id}/deliver:
+  /order/{_id}/deliver:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id de la orden con la cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     put:
       summary: El repartidor entrega la orden al cliente, finalizando la orden
@@ -1070,15 +1059,14 @@ paths:
                       type: number
       tags:
         - Productos
-  /product/{id}:
+  /product/{_id}:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id del producto con el cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     get:
       summary: Obtener un producto por ID.
@@ -1148,15 +1136,14 @@ paths:
                 $ref: '#/components/schemas/generic-error'
       tags:
         - Productos
-  /product/{id}/historic-prices:
+  /product/{_id}/historic-prices:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id del producto con el cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     get:
       summary: Obtiene los precios históricos de un producto dado por su ID
@@ -1244,15 +1231,14 @@ paths:
                 $ref: '#/components/schemas/generic-error'
       tags:
         - Tipos de producto
-  /product-type/{id}:
+  /product-type/{_id}:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id del tipo de producto con el cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     get:
       summary: Obtener un tipo de producto por ID.
@@ -1364,15 +1350,14 @@ paths:
                 $ref: '#/components/schemas/generic-error'
       tags:
         - Tipos de proveedor
-  /supplier-type/{id}:
+  /supplier-type/{_id}:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id del tipo de proveedor con el cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     get:
       summary: Obtener un tipo de proveedor por ID.
@@ -1553,15 +1538,14 @@ paths:
                       description: Cantidad de órdenes con la calificación más baja
       tags:
         - Proveedores
-  /supplier/{id}:
+  /supplier/{_id}:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id del proveedor con el cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     get:
       summary: Obtener un proveedor por ID.
@@ -1631,15 +1615,14 @@ paths:
                 $ref: '#/components/schemas/generic-error'
       tags:
         - Proveedores
-  /supplier/{id}/products:
+  /supplier/{_id}/products:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id del proveedor con el cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     get:
       summary: Obtener todos los productos de un proveedor dado por ID.
@@ -1660,15 +1643,14 @@ paths:
                 $ref: '#/components/schemas/generic-error'
       tags:
         - Proveedores
-  /supplier/{id}/order-with-most-products:
+  /supplier/{_id}/order-with-most-products:
     parameters:
-      - name: id
+      - name: _id
         in: path
         required: true
         description: El id del proveedor con el cual operar
         schema:
-          type: integer
-          format: int64
+          type: string
           minimum: 1
     get:
       summary: Obtener las órdenes de mayor cantidad de productios para un proveedor

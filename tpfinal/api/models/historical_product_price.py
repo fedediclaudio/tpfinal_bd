@@ -1,8 +1,9 @@
 import django.utils.timezone as timezone
-from django.db import models
+from djongo import models
 from .product import Product
 
 class HistoricalProductPrice(models.Model):
+    _id = models.ObjectIdField(primary_key=True)
     price = models.FloatField()
     start_date = models.DateTimeField(default=timezone.now)
 

@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 
+from bson import ObjectId
+
 logger = logging.getLogger()
 
 # Create your views here.
@@ -36,7 +38,7 @@ class GenericViewDetail(APIView):
     def get(self, request, number, format=None, *args, **kwargs):
         # Get details of an existing product
         try:
-            product = self.model.objects.get(id=number)
+            product = self.model.objects.get(_id=ObjectId(number))
         except self.model.DoesNotExist:
             return Response({"status": "error", "message": f"ID number {number} not found"}, status=status.HTTP_404_NOT_FOUND)
         serializer = self.serializer(product)
@@ -46,7 +48,7 @@ class GenericViewDetail(APIView):
         # Update an existing product
         data = JSONParser().parse(request)
         try:
-            product = self.model.objects.get(id=number)
+            product = self.model.objects.get(_id=ObjectId(number))
         except self.model.DoesNotExist:
             return Response({"status": "error", "message": f"ID number {number} not found"}, status=status.HTTP_404_NOT_FOUND)
         serializer = self.serializer(product, data=data)
@@ -61,7 +63,7 @@ class GenericViewDetail(APIView):
     def delete(self, request, number, format=None, *args, **kwargs):
         # Delete an existing product
         try:
-            product = self.model.objects.get(id=number)
+            product = self.model.objects.get(_id=ObjectId(number))
         except self.serializer.DoesNotExist:
             return Response({"status": "error", "message": f"ID number {number} not found"}, status=status.HTTP_404_NOT_FOUND)
         product.delete()

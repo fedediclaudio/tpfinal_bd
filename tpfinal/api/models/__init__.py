@@ -10,3 +10,4 @@ from .product_type import ProductType
 from .supplier import Supplier
 from .supplier_type import SupplierType
 from .user import User
+from .rating import Rating

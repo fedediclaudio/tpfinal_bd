@@ -9,7 +9,9 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 COPY requirements.txt /
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
+
+# ENV PYTHONPATH "${PYTHONPATH}:/usr/local/lib/python3.9/site-packages/"
 
 COPY . /src/
 WORKDIR /src/

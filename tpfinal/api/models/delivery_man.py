@@ -1,7 +1,8 @@
-from django.db import models
+from djongo import models
 from .user import User
 
 class DeliveryMan(User):
+    _id = models.ObjectIdField(primary_key=True)
     number_of_success = models.IntegerField(default=0)
     free = models.BooleanField(default=True)
     date_of_admission = models.DateField(auto_now_add=True)

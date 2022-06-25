@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.db import models
+from djongo import models
 from .order import Order
 
 class Rating(models.Model):
@@ -8,6 +8,7 @@ class Rating(models.Model):
         if value not in range(1,5+1):
             raise ValidationError(f"{value} is not a valid rating value")
 
+    _id = models.ObjectIdField(primary_key=True)
     score = models.IntegerField(validators=[score_validator.__func__])
     commentary = models.CharField(max_length=200, null=True)
 

@@ -1,8 +1,9 @@
-from django.db import models
+from djongo import models
 from .supplier_type import SupplierType
 from django.db.models import Avg
 
 class Supplier(models.Model):
+    _id = models.ObjectIdField(primary_key=True)
     name = models.CharField(max_length=200)
     cuil = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
