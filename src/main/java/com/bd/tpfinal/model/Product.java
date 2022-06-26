@@ -3,6 +3,7 @@ package com.bd.tpfinal.model;
 import com.bd.tpfinal.annotation.CascadePersist;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -27,6 +28,8 @@ public class Product {
 
     @DBRef
     @CascadePersist
+    @JsonBackReference("supplier")
+    @ToString.Exclude
     private Supplier supplier;
     @DBRef
     @JsonBackReference("type")

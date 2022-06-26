@@ -19,8 +19,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value="/api/products")
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT ,RequestMethod.DELETE})
+@RequestMapping(value = "/api/products")
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class ProductController {
 
     @Autowired
@@ -34,15 +34,14 @@ public class ProductController {
 
     // Agregar un producto nuevo de un proveedor
     @PostMapping("/nuevo-product/{supplier_id}")
-    public Product nuevoProduct(@RequestBody Product product, @PathVariable long supplier_id) throws Exception {
+    public Product nuevoProduct(@RequestBody Product product, @PathVariable String supplier_id) throws Exception {
         try {
             Optional<Product> productoAgregado = productService.agregarProductoSupplier(supplier_id, product);
-            if(productoAgregado.isPresent()) {
+            if (productoAgregado.isPresent()) {
                 return productoAgregado.get();
             }
+        } catch (Exception e) {
         }
-
-        catch (Exception e){}
         return null;
     }
 
@@ -64,9 +63,9 @@ public class ProductController {
     //Obtener los precios de un producto entre dos fechas dadas
     @GetMapping("/get-precios-producto-dos-fechas/{product_id}")
     public List<HistoricalProductPrice> getPreciosProductoBetweenToFechas(@PathVariable String product_id,
-                                                                          @RequestParam(value = "start_date") @DateTimeFormat(pattern="dd-MM-yyyy",
+                                                                          @RequestParam(value = "start_date") @DateTimeFormat(pattern = "dd-MM-yyyy",
                                                                                   iso = DateTimeFormat.ISO.DATE) LocalDate start_date,
-                                                                          @RequestParam (value= "finish_date") @DateTimeFormat(pattern="dd-MM-yyyy",
+                                                                          @RequestParam(value = "finish_date") @DateTimeFormat(pattern = "dd-MM-yyyy",
                                                                                   iso = DateTimeFormat.ISO.DATE) LocalDate finish_date) {
         return historicalProductPriceService.getPreciosProductoBetweenToFechas(product_id, start_date, finish_date);
     }
@@ -82,14 +81,13 @@ public class ProductController {
     @PutMapping("/update-producto/{product_id}")
     @ResponseStatus(HttpStatus.OK)
     @Transactional
-    public Product updateProducto(@RequestBody Product newProduct, @PathVariable long product_id) throws Exception {
+    public Product updateProducto(@RequestBody Product newProduct, @PathVariable String product_id) throws Exception {
         try {
             Optional<Product> productoModificado = productService.modificaProductoConHistorico(product_id, newProduct);
-            if(productoModificado.isPresent()) {
+            if (productoModificado.isPresent()) {
                 return productoModificado.get();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return null;
         }
         return null;
@@ -103,8 +101,8 @@ public class ProductController {
             if (productoModificado.isPresent()) {
                 return productoModificado.get();
             }
+        } catch (Exception e) {
         }
-        catch (Exception e) {}
         return null;
     }
 }
