@@ -18,15 +18,15 @@ public class ItemDTO {
         this.description = description;
     }
 
-    public long getIdProduct() {
+    public String getIdProduct() {
         return idProduct;
     }
 
-    public void setIdProduct(long idProduct) {
+    public void setIdProduct(String idProduct) {
         this.idProduct = idProduct;
     }
 
-    private long idProduct;
+    private String idProduct;
     private int quantity;
     private String description;
 }

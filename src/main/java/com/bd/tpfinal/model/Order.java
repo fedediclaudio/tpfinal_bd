@@ -2,6 +2,7 @@ package com.bd.tpfinal.model;
 
 import com.bd.tpfinal.annotation.CascadePersist;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
@@ -22,10 +23,13 @@ public class Order {
 
     private float totalPrice;
 
+    @DBRef
+    @CascadePersist
     private OrderStatus status;
 
     @DBRef
     @CascadePersist
+    @ToString.Exclude
     private DeliveryMan deliveryMan;
     @DBRef
     @CascadePersist

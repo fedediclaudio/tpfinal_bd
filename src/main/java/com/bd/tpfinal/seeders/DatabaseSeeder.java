@@ -35,6 +35,8 @@ public class DatabaseSeeder {
     private DeliveryManRepository deliveryManRepository;
     @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    private OrderStatusRepository orderStatusRepository;
 
     @EventListener
     public void seedTables(ContextRefreshedEvent event) throws Exception {
@@ -1054,7 +1056,18 @@ public class DatabaseSeeder {
         order_1.setNumber(1);
         order_1.setDateOfOrder(new Date());
         order_1.setClient(new Client());
-
         orderRepository.save(order_1);
+        Optional<Order> order = orderRepository.findById(order_1.getId());
+        Pending pending = new Pending(order_1);
+
+        order.get().setStatus(pending);
+        orderRepository.save(order.get());
+
+        Optional<Order> ordertmp = orderRepository.findById(order_1.getId());
+        List<DeliveryMan> delivery = deliveryManRepository.findByFreeIsTrue();
+
+        ordertmp.get().getStatus().assign(delivery.get(0));
+        orderRepository.save(ordertmp.get());
+
     }
 }

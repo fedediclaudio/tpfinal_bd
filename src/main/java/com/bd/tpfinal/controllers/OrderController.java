@@ -32,8 +32,8 @@ public class OrderController {
     private ModelMapper modelMapper;
 
     // Agregar un item a una orden ya creada.
-    @PutMapping("/put-nuevo-item-Order/{order_id}")
-    public Item nuevoItemForOrder(@RequestBody ItemDTO item, @PathVariable long order_id) throws Exception {
+    @PutMapping("/nuevo-item-Order/{order_id}")
+    public Item nuevoItemForOrder(@RequestBody ItemDTO item, @PathVariable String order_id) throws Exception {
         try
         {
             Optional<Item> itemAgregado = orderService.agregarItemAOrdenCreada(order_id, item);
@@ -62,47 +62,47 @@ public class OrderController {
     }
 
     // Confirmar un pedido.
-    @PutMapping("/put-1-confirmar-pedido/{order_id}") //las ordenes que estan pendientes
-    public void updateOrdenConfirmar(@PathVariable long order_id)  throws Exception  {
+    @PutMapping("/confirmar-pedido/{orderId}") //las ordenes que estan pendientes
+    public void updateOrdenConfirmar(@PathVariable String orderId)  throws Exception  {
         try {
-            Optional<Order> order = orderService.confirmarPedido(order_id);
+            Optional<Order> order = orderService.confirmarPedido(orderId);
         }
         catch (Exception e){}
     }
 
     // cancelar un pedido por el cliente.
-    @PutMapping("/put-4-cancelar-pedido/{order_id}") //las ordenes que estan pendientes y asignadas
-    public void updateOrdenCancelar(@PathVariable long order_id)  throws Exception  {
+    @PutMapping("/cancelar-pedido/{orderId}") //las ordenes que estan pendientes y asignadas
+    public void updateOrdenCancelar(@PathVariable String orderId)  throws Exception  {
         try {
-            Optional<Order> order = orderService.cancelarPedido(order_id);
+            Optional<Order> order = orderService.cancelarPedido(orderId);
         }
         catch (Exception e){}
     }
 
     // rechazar un pedido por el delivery
-    @PutMapping("/put-5-rechazar-pedido/{order_id}") //las ordenes que estan asignadas
-    public void updateOrdenRechazar(@PathVariable long order_id)  throws Exception  {
+    @PutMapping("/rechazar-pedido/{orderId}") //las ordenes que estan asignadas
+    public void updateOrdenRechazar(@PathVariable String orderId)  throws Exception  {
         try {
-            Optional<Order> order = orderService.rechazarPedido(order_id);
+            Optional<Order> order = orderService.rechazarPedido(orderId);
         }
 
         catch (Exception e){}
     }
 
     // entregar un pedido por el delivery
-    @PutMapping("/put-2-entregar-pedido/{order_id}") //las ordenes que estan asignadas
-    public void updateOrdenEntregar(@PathVariable long order_id)  throws Exception  {
+    @PutMapping("/put-2-entregar-pedido/{orderId}") //las ordenes que estan asignadas
+    public void updateOrdenEntregar(@PathVariable String orderId)  throws Exception  {
         try {
-            Optional<Order> order = orderService.entregarPedido(order_id);
+            Optional<Order> order = orderService.entregarPedido(orderId);
         }
         catch (Exception e){}
     }
 
     // finalizar y calificar un pedido por el cliente
-    @PutMapping("/put-3-finalizar-pedido/{order_id}") //las ordenes que estan asignadas
-    public void updateOrdenFinalizar(@RequestBody FinishOrderScore score, @PathVariable long order_id)  throws Exception  {
+    @PutMapping("/put-3-finalizar-pedido/{orderId}") //las ordenes que estan asignadas
+    public void updateOrdenFinalizar(@RequestBody FinishOrderScore score, @PathVariable String orderId)  throws Exception  {
         try {
-            Optional<Order> order = orderService.finalizarPedido(score, order_id);
+            Optional<Order> order = orderService.finalizarPedido(score, orderId);
         }
         catch (Exception e){}
     }

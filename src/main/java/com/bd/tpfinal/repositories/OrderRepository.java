@@ -11,23 +11,26 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends MongoRepository<Order, String> {
-    /*@Query(value = "")
+
+    @Query("{}")
+    List<Order> findOrdersDeSupplier(String supplierId);
+/*
+    @Query(value= "")
+    List<Order> findOrdersConMasProductosDeSupplier(long supplier_id);
+
+    @Query(value = "")
     List<Order> getOrdersConMasProductosDeSupplier(long supplier_id);
 
     @Query(value= "")
     Optional<Order> getOrdenConMayorPrecioDelDia(LocalDate fecha);
 
-    @Query(value= "")
-    List<Order> findOrdersConMasProductosDeSupplier(long supplier_id);
+
 
 
     @Query(value = "")
     Optional<Order> getOrdenConMayorPrecioTotalDelDia(LocalDate fecha);
 
     @Query(value = "")
-    Optional<Order> findOrderWithItemId(Long id);
+    Optional<Order> findOrderWithItemId(Long id);*/
 
-    @Query(value= "")
-    List<Order> findOrdersDeSupplier(long supplier_id);
-*/
 }

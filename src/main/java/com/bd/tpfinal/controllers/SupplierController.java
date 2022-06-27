@@ -33,9 +33,9 @@ public class SupplierController {
         return supplierDTO;
     }
     // Obtener todos los proveedores de un cierto tipo.
-    @GetMapping("/proveedores-de-tipo/{id_tipo}")
-    public List<SupplierDTO> getAllProveedoresDeUnTipo(@PathVariable long id_tipo) {
-        List<Supplier> suppliers = supplierService.getAllProveedoresByTipo(id_tipo);
+    @GetMapping("/proveedores-de-tipo/{tipoId}")
+    public List<SupplierDTO> getAllProveedoresDeUnTipo(@PathVariable String tipoId) {
+        List<Supplier> suppliers = supplierService.getAllProveedoresByTipo(tipoId);
         return suppliers.stream()
                 .map(supplier -> convertToDTO(supplier))
                 .collect(Collectors.toList());

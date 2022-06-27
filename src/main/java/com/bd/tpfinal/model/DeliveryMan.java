@@ -4,11 +4,16 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Data
 public class DeliveryMan extends User {
+
+    public DeliveryMan()  {
+        this.ordersPending = new ArrayList<>();
+    }
 
     private int numberOfSuccessOrders;
 
