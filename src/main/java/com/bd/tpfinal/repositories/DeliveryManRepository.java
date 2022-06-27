@@ -17,5 +17,5 @@ public interface DeliveryManRepository extends MongoRepository<DeliveryMan, Stri
     public List<DeliveryMan> getTop10RepartidoresMayorPuntaje();
 
     @Query(value="{'free' : true , 'active' : true}") //devuelve los que estan libres, y sus datos nombre e id
-    Optional<DeliveryMan> findByFreeIsTrue();
+    List<DeliveryMan> findByFreeIsTrue();
 }

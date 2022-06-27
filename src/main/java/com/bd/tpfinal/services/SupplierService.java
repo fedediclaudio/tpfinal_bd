@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface SupplierService {
     List<Supplier> getTop10SupplierConMasOrdenesDespachadas();
-    List<Supplier> getAllProveedoresByTipo(long id_tipo);
+    List<Supplier> getAllProveedoresByTipo(String tipoId);
     List<Supplier> getProveedoresWithProductosDeTodosLosTipos();
     List<SupplierDTO> getAllProveedoresPorCantEstrellas(int cant_estrellas);
 }
