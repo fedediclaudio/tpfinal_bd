@@ -47,4 +47,14 @@ public class Pending extends OrderStatus {
         this.getOrder().setStatus(orderStatus);
         return true;
     }
+
+    @Override
+    public boolean cancel() throws Exception {// La orden no esta asignada, es cancelada por el cliente y no resta puntos
+        this.getOrder().setStatus(new Cancel(this.getOrder(), new Date())); // la orden queda cancelada
+        ((Cancel)this.getOrder().getStatus()).setCancelledByClient(true); // cancelada por cliente, ver si se puede hacer en cancelorder
+        return true;
+
+
+
+    }
 }

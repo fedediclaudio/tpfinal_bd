@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface DeliveryManService {
     List<DeliveryMan> getTop10RepartidoresMayorPuntaje();
-    Optional<DeliveryMan> getFreeAndActiveDeliveryMan();
+    List<DeliveryMan> getFreeAndActiveDeliveryMan();
     void guardarDeliveryMan(DeliveryMan currenteDeliveryMan);
 }

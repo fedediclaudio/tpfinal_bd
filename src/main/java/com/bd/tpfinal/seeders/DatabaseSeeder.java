@@ -1068,6 +1068,16 @@ public class DatabaseSeeder {
 
         ordertmp.get().getStatus().assign(delivery.get(0));
         orderRepository.save(ordertmp.get());
+ /*       ordertmp.get().getStatus().deliver();
+        orderRepository.save(ordertmp.get());
+
+        Optional<Order> ordertmp2 = orderRepository.findById(order_1.getId());
+
+        ordertmp2.get().getStatus().deliver();
+        orderRepository.save(ordertmp2.get());
+
+ */
+
 
     }
 }

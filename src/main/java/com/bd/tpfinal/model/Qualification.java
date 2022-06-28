@@ -16,8 +16,19 @@ public class Qualification {
     @DBRef
     private Order order;
 
-    public Qualification(float score, String commentary) {
+
+    public Qualification(){}
+
+    public Qualification(Order order, float score, String commentary ){
+        this.order = order;
         this.score = score;
         this.commentary = commentary;
     }
+
+  /*  public Qualification(float score, String commentary) {
+        this.score = score;
+        this.commentary = commentary;
+    }
+
+   */
 }

@@ -25,7 +25,7 @@ public class Order {
 
     @DBRef
     @CascadePersist
-    private OrderStatus status;
+    private OrderStatus orderStatus;
 
     @DBRef
     @CascadePersist
@@ -42,4 +42,57 @@ public class Order {
     private Qualification qualification;
     @DBRef
     private List<Item> items;
+
+    public OrderStatus getStatus() {
+        return orderStatus;
+    }
+
+    public void setStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+    public Supplier getSupplier() {
+
+        return this.items.get(1).getProduct().getSupplier();
+    }
+
+
+    /* para cambiar los estados de las ordenes*/
+    public void cancelOrder() throws Exception {
+        this.orderStatus = new Cancel(this);
+    }
+
+    public void refuseOrder() throws Exception {
+        this.orderStatus = new Cancel(this);
+    }
+
+    public void deliverOrder() throws Exception {
+        this.orderStatus = new Sent(this);
+    }
+
+    public void finishOrder() throws Exception {
+        this.orderStatus = new Delivered(this);
+    }
+
+    public boolean addItem(Item item) throws Exception {
+        if (this.orderStatus.canAddItem()) {
+            this.items.add(item);
+            return true;
+        }
+        return false;
+    }
+
+    public void decreaseClientScore() throws Exception {
+        this.client.decreaseScore();
+    }
+    public void increaseClientScore() throws Exception {
+        this.client.increaseScore();
+    }
+
+
+
+    public void updateQualification(Qualification qualification) throws Exception {
+        this.qualification =  qualification; // la orden
+
+    }
+
 }

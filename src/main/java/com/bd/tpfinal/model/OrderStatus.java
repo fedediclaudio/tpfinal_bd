@@ -95,7 +95,15 @@ public class OrderStatus {
         throw new Exception("No se puede realizarse esta accion");
     }
 
-    public boolean finish() throws Exception {
+    public boolean finish(int score, String commentary) throws Exception{
         throw new Exception("No se puede realizarse esta accion");
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }
