@@ -1,18 +1,25 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
+
+@Embeddable
 public class Qualification {
 
-    private float score;
-
+	private Integer score;
     private String commentary;
+        
+    public Qualification() { /* empty for framework */ }    
 
-    private Order order;
+    public Qualification( Integer score, String commentary) {
+    	this.score = score;
+		this.commentary = commentary;
+	}
 
-    public float getScore() {
+	public int getScore() {
         return score;
     }
 
-    public void setScore(float score) {
+    public void setScore(Integer score) {
         this.score = score;
     }
 
@@ -24,11 +31,4 @@ public class Qualification {
         this.commentary = commentary;
     }
 
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
 }

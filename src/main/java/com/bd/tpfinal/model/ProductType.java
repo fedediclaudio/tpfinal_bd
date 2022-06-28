@@ -1,16 +1,41 @@
 package com.bd.tpfinal.model;
 
-import java.util.List;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
+@Entity
+@Table(name = "products_type")
 public class ProductType {
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	
+	@NotNull(message = "name is required")
+   	@NotBlank(message ="name can't be blank")
+	@Column(unique = true)  
     private String name;
-
+	
+	@Column()
     private String description;
+	
+    public ProductType() { /* empty for framework */ }
+    	
+    public ProductType(String name, String description) {
+    	
+    	this.name = name;
+    	this.description = description;
+    }
+    
+    public Long getId() {
+		return id;
+	}
 
-    private List<Product> products;
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getName() {
+	public String getName() {
         return name;
     }
 
@@ -25,12 +50,5 @@ public class ProductType {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
+    
 }

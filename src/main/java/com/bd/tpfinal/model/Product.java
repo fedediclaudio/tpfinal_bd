@@ -1,30 +1,73 @@
 package com.bd.tpfinal.model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class Product {
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
-    private String name;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-    private float price;
+@Entity
+@Table(name="products")
+
+public class Product implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@EmbeddedId 
+	private ProductPK productPK;
+		
+	@NotNull(message ="price is required")
+	@Column()
+	private float price;
 
     private float weight;
 
     private String description;
+    
+    
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "products_types_mapped",
+	    joinColumns = {@JoinColumn(name ="name_product", referencedColumnName = "name"), @JoinColumn(name ="idsupplier_product", referencedColumnName = "id_supplier")},
+	    inverseJoinColumns = @JoinColumn (name = "id_product_type", referencedColumnName = "id"))
+    private Set<ProductType> types = new HashSet<>();
+    
+	@JsonIgnore
+	@OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumns({@JoinColumn(name ="name_product", referencedColumnName = "name"),
+				  @JoinColumn(name ="idsupplier_product", referencedColumnName ="id_supplier")})
+    private List<HistoricalProductPrice> prices = new ArrayList<HistoricalProductPrice>();
 
-    private Supplier supplier;
+	@Column()
+    private boolean active;
+    
+    @Version
+	private int version; 
+    
+    public Product() { /* empty for framework */ }   	
+    	
+    public Product(String name, float price, float weight, String description, Supplier supplier) {
+    	this.productPK = new ProductPK(name, supplier.getId());
+		this.price = price;
+		this.weight = weight;
+		this.description = description;
+		this.prices = new ArrayList<HistoricalProductPrice>();
+	}   
+    
+    public ProductPK getProductPK() {
+    	return productPK;
+	}
 
-    private ProductType type;
-
-    private List<HistoricalProductPrice> prices;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setProductPK(ProductPK productPK) {
+		this.productPK = productPK;
+	}
 
     public float getPrice() {
         return price;
@@ -50,27 +93,42 @@ public class Product {
         this.description = description;
     }
 
-    public Supplier getSupplier() {
-        return supplier;
-    }
+    public Set<ProductType> getTypes() {
+		return types;
+	}
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
+	public void setTypes(Set<ProductType> types) {
+		this.types = types;
+	}
 
-    public ProductType getType() {
-        return type;
-    }
-
-    public void setType(ProductType type) {
-        this.type = type;
-    }
-
-    public List<HistoricalProductPrice> getPrices() {
+	public List<HistoricalProductPrice> getPrices() {
         return prices;
     }
 
     public void setPrices(List<HistoricalProductPrice> prices) {
         this.prices = prices;
-    }
+    }    
+   
+    public boolean getActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+
+	public void addProductType(ProductType productType) { this.types.add(productType); }		
+	
+	public void deleteProductType(ProductType productType) { this.types.remove(productType); }
+
+	public void addHistoricalProductPrice(HistoricalProductPrice historicalProductPrice) { this.prices.add(historicalProductPrice); }
+
 }

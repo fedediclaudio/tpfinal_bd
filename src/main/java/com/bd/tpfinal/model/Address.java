@@ -1,31 +1,50 @@
 package com.bd.tpfinal.model;
 
-import java.util.List;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
+@Entity
+@Table(name="addresses")
 public class Address {
-
-    private String name;
-
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="id")
+    private Long id;
+	
+	@NotNull(message = "address is required")
+   	@NotBlank(message ="address can't be blank")
+	@Column(length = 100, unique = true)
     private String address;
-
+	
+	@Column
     private String apartment;
-
+	
+	@Column()
     private float[] coords;
-
+	
+	@Column(length = 200)
     private String description;
+	
+	   
+    
+    public Address () { /* empty for framework */ }
+       
+    public Address(String address, String apartment, float[] coords, String description) {
+		this.address = address;
+		this.apartment = apartment;
+		this.coords = coords;
+		this.description = description;
+	}
 
-    private Client client;
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    private List<Order> orders;
-
-    public String getName() {
-        return name;
+	public Long getId() {
+        return id;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    
     public String getAddress() {
         return address;
     }
@@ -57,20 +76,5 @@ public class Address {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
+    
 }
