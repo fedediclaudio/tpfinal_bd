@@ -31,6 +31,7 @@ public class ProductServiceImpl implements ProductService {
     private HistoricalProductPriceRepository historicalProductPriceRepository;
 
     @Override
+    @Transactional
     public Optional<Product> agregarProductoSupplier(String supplier_id, Product product) throws Exception {
         Optional<Supplier> supplier  = supplierRepository.findById(supplier_id);
         if(supplier.isPresent()) {
@@ -94,6 +95,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public Optional<Product> eliminaProducto(String id_product) throws Exception {
         Optional<Product> productToRemove = productRepository.findById(id_product);
         if (productToRemove.isPresent()) {

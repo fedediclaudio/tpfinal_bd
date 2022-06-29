@@ -13,8 +13,6 @@ import java.util.List;
 public class HistoricalProductPriceServiceImpl implements HistoricalProductPriceService {
     @Autowired
     private HistoricalProductPriceRepository historicalProductPriceRepository;
-    @Autowired
-    private ProductRepository productRepository;
 
     @Override
     public List<HistoricalProductPrice> getPreciosProductoBetweenToFechas(String product_id, LocalDate start_date, LocalDate finish_date) {

@@ -4,6 +4,7 @@ import com.bd.tpfinal.annotation.CascadePersist;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.Date;
@@ -42,6 +43,8 @@ public class Order {
     private Qualification qualification;
     @DBRef
     private List<Item> items;
+    @Version
+    private int version;
 
     public OrderStatus getStatus() {
         return orderStatus;
