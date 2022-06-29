@@ -36,7 +36,6 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    @Transactional
     public List<SupplierDTO> getAllProveedoresPorCantEstrellas(int cant_estrellas) {
         List<SupplierDTO> suppliersDTO = new ArrayList(); // para devolver los prov con X cant de estrellas
 
