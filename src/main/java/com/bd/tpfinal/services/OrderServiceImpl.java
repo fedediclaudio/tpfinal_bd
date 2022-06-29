@@ -9,6 +9,7 @@ import com.bd.tpfinal.repositories.ProductRepository;
 import com.bd.tpfinal.repositories.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,13 +32,8 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private ProductRepository productRepository;
 
-
     @Override
-    public Optional<Order> findOrderById(long order_id) {
-        return Optional.empty();
-    }
-
-    @Override
+    @Transactional
     public Optional<Item> agregarItemAOrdenCreada(String order_id, ItemDTO item) throws Exception {
         Optional<Order> order = orderRepository.findById(order_id);
         Optional<Product> product = productRepository.findById(item.getIdProduct());
@@ -78,14 +74,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Optional<Order> confirmarPedido(String orderId) throws Exception {
         List<DeliveryMan> deliveryMan = deliveryManService.getFreeAndActiveDeliveryMan();
-        if(deliveryMan.size() > 0) { // si no hay repartidor libre, no se puede confirmar pedido
+        if (deliveryMan.size() > 0) { // si no hay repartidor libre, no se puede confirmar pedido
             DeliveryMan currentDeliveryMan = deliveryMan.get(0);
             Optional<Order> order = orderRepository.findById(orderId);
-            if(order.isPresent()) {
+            if (order.isPresent()) {
                 Order orderActual = order.get();
-                if (orderActual.getStatus().canAssign()){ // verifica si la orden puede ser confirmada
+                if (orderActual.getStatus().canAssign()) { // verifica si la orden puede ser confirmada
                     orderActual.getStatus().assign(currentDeliveryMan);
                     orderActual.setDeliveryMan(currentDeliveryMan);
                     orderRepository.save(orderActual);
@@ -98,13 +95,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Optional<Order> cancelarPedido(String orderId) throws Exception {
         Optional<Order> order = orderRepository.findById(orderId);
-        if(order.isPresent()) {
+        if (order.isPresent()) {
             Order orderActual = order.get();
             if (orderActual.getStatus().canCancel()) {
                 orderActual.getStatus().cancel();
-                orderRepository.save(orderActual);;
+                orderRepository.save(orderActual);
                 return order;
             }
         }
@@ -112,9 +110,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Optional<Order> rechazarPedido(String orderId) throws Exception {
         Optional<Order> order = orderRepository.findById(orderId);
-        if(order.isPresent()) {
+        if (order.isPresent()) {
             Order orderActual = order.get();
             if (orderActual.getStatus().canRefuse()) {
                 orderActual.getStatus().refuse();
@@ -127,9 +126,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Optional<Order> entregarPedido(String orderId) throws Exception {
         Optional<Order> order = orderRepository.findById(orderId);
-        if(order.isPresent()) {
+        if (order.isPresent()) {
             Order orderActual = order.get();
             if (orderActual.getStatus().canDeliver()) {
                 orderActual.getStatus().deliver();
@@ -141,23 +141,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Optional<Order> finalizarPedido(FinishOrderScore score, String orderId) throws Exception {
         Optional<Order> order = orderRepository.findById(orderId);
-        if(order.isPresent()) {
+        if (order.isPresent()) {
             Order orderActual = order.get();
             if (orderActual.getStatus().canFinish()) {
                 orderActual.getStatus().finish(score.getScore(), score.getCommentary());
                 orderRepository.save(order.get());
 
                 Supplier orderSupplier = orderActual.getSupplier();
-                List<Order> ordersSupplier = orderRepository.findOrdersDeSupplier(orderSupplier.getId() );
+                List<Order> ordersSupplier = orderRepository.findOrdersDeSupplier(orderSupplier.getId());
                 float totalScore = 0;
                 float totalQualification = 0;
-                for (int i=0;i<ordersSupplier.size();i++)
-                {
-                    totalScore = totalScore +  ordersSupplier.get(i).getQualification().getScore();
+                for (int i = 0; i < ordersSupplier.size(); i++) {
+                    totalScore = totalScore + ordersSupplier.get(i).getQualification().getScore();
                 }
-                totalQualification =  totalScore / ordersSupplier.size();
+                totalQualification = totalScore / ordersSupplier.size();
                 orderSupplier.setQualificationOfUsers(totalQualification);
                 supplierRepository.save(orderSupplier);
 
@@ -166,11 +166,6 @@ public class OrderServiceImpl implements OrderService {
             return order;
         }
         return null;
-    }
-
-    @Override
-    public void guardarOrder(Order order) {
-
     }
 
     @Override
@@ -184,23 +179,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getOrderByOrderStatus(String status) {
-        return null;
-    }
-
-    @Override
     public void updateOrdersTotalPrice(String status) {
-     /*   List<Order> orderList = new List<Order>();
-        Iterable<Order> orders = orderRepository.findAll();
-        orders.forEach(orderList::add);*/
         List<Order> orderList = orderRepository.findAll();
         int i = 0;
         while (!orderList.isEmpty()) {
             Order order = orderList.get(i);
             if (!order.getStatus().getName().equals("Pending")) {
                 int j = 0;
-                List <Item> items = itemRepository.findByOrderId(order.getId());
-                float total =0;
+                List<Item> items = itemRepository.findByOrderId(order.getId());
+                float total = 0;
                 while (!items.isEmpty()) {
                     Item it = items.get(j);
                     if (it.getProduct().isActive())

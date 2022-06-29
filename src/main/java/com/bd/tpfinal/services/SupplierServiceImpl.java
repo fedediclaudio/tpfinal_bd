@@ -7,6 +7,7 @@ import com.bd.tpfinal.repositories.OrderRepository;
 import com.bd.tpfinal.repositories.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,14 +36,15 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public List<SupplierDTO> getAllProveedoresPorCantEstrellas(int cant_estrellas)   {
-        List <SupplierDTO> suplliersDTO = new ArrayList(); // para devolver los prov con X cant de estrellas
+    @Transactional
+    public List<SupplierDTO> getAllProveedoresPorCantEstrellas(int cant_estrellas) {
+        List<SupplierDTO> suppliersDTO = new ArrayList(); // para devolver los prov con X cant de estrellas
 
-        Iterable <Supplier> supplierAll = supplierRepository.findAll();
+        Iterable<Supplier> supplierAll = supplierRepository.findAll();
         List<Supplier> supplier = new ArrayList<>();
         supplierAll.forEach(supplier::add);
 
-        for (int j=0;j< supplier.size();j++) //// recorro todos los suppliers
+        for (int j = 0; j < supplier.size(); j++) //// recorro todos los suppliers
         {
             Supplier s = supplier.get(j);
             List<Order> ordersSupplier = orderRepository.findOrdersDeSupplier(s.getId());// busco las ordenes del supplier
@@ -60,9 +62,9 @@ public class SupplierServiceImpl implements SupplierService {
                 sDTO.setName(s.getName());
                 sDTO.setStarQualification(cant_estrellas);
                 sDTO.setCantQualifications(cantQualification);
-                suplliersDTO.add(sDTO);
+                suppliersDTO.add(sDTO);
             }
         }
-        return suplliersDTO;
+        return suppliersDTO;
     }
 }

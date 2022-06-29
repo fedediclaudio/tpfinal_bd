@@ -4,10 +4,11 @@ import com.bd.tpfinal.model.DeliveryMan;
 import com.bd.tpfinal.model.Client;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-
+@Repository
 public interface DeliveryManRepository extends MongoRepository<DeliveryMan, String> {
     public List<Client> findByUsernameIgnoreCaseContaining(String username);
     @Query(value = "{username:{$eq:?0}},{name:1,_id:0}")
