@@ -18,9 +18,6 @@ public class HistoricalProductPrice {
     private Date startDate;
 
     private Date finishDate;
-    //@OneToOne//( fetch = FetchType.EAGER)
-    //@JoinColumn( name="id_product" )
-
 
     @ManyToOne (fetch = FetchType.EAGER, cascade = CascadeType.ALL )
     @JoinColumn( name = "id_product")

@@ -47,7 +47,6 @@ public class DatabaseSeeder {
         seedSupplierTable();
         seedClientTable();
         seedOrderTable();
-        // seedHistoricalProductPriceTable();
     }
 
     private void seedProductTypeTable() {
@@ -200,8 +199,6 @@ public class DatabaseSeeder {
 
             supplier_1.setProducts(listaFinal);
 
-
-            //supplier_1.setProducts(coffeeProducts);
             supplier_1.setType(supplierTypeRepository.findByNameIgnoreCaseContaining("supermercado").get(0));
             supplierRepository.save(supplier_1);
             generalProducts.clear();
@@ -209,7 +206,7 @@ public class DatabaseSeeder {
             generalProductsPan.clear();
             listaFinal.clear();
 
-         Supplier supplier_2 = new Supplier();
+            Supplier supplier_2 = new Supplier();
             supplier_2.setAddress("Ruta 3");
             supplier_2.setName("Diarco");
             supplier_2.setCoords(new float[]{-143.44f,310.22f});
@@ -238,7 +235,6 @@ public class DatabaseSeeder {
             supplier_3.setProducts(listaFinal);
 
 
-            //supplier_3.setProducts(coffeeProducts);
             supplier_3.setType(supplierTypeRepository.findByNameIgnoreCaseContaining("supermercado").get(0));
             supplierRepository.save(supplier_3);
             generalProducts.clear();
@@ -274,7 +270,7 @@ public class DatabaseSeeder {
 
             supplier_5.setProducts(listaFinal);
 
-            //supplier_5.setProducts(generalProducts);
+
             supplier_5.setType(supplierTypeRepository.findByNameIgnoreCaseContaining("mayorista").get(0));
             supplierRepository.save(supplier_5);
             generalProducts.clear();
@@ -506,44 +502,7 @@ public class DatabaseSeeder {
             prod_2.setType(Arrays.asList(type_1.get()));
 
         products.add(prod_2);
-/*
-        Product prod_3 = new Product();
-        prod_3.setPrice(random_3);
-        prod_3.setDescription("Zapato de vestir");
-        prod_3.setWeight(70.0f);
-        prod_3.setName("Zapato");
-        prod_3.setSupplier(aSupplier);
-        prod_3.setType(Arrays.asList(type_1.get()));
-        products.add(prod_3);
 
-        Product prod_4 = new Product();
-        prod_4.setPrice(random_4);
-        prod_4.setDescription("Pashmina de Mohair");
-        prod_4.setWeight(3.0f);
-        prod_4.setName("chalina");
-        prod_4.setSupplier(aSupplier);
-        prod_4.setType(Arrays.asList(type_1.get()));
-        products.add(prod_4);
-
-        Product prod_5 = new Product();
-        prod_5.setPrice(random_5);
-        prod_5.setDescription("Buzo De niño con friza");
-        prod_5.setWeight(70.0f);
-        prod_5.setName("buzo");
-        prod_5.setSupplier(aSupplier);
-        prod_5.setType(Arrays.asList(type_1.get()));
-        products.add(prod_5);
-
-        Product prod_6 = new Product();
-        prod_6.setPrice(random_5);
-        prod_6.setDescription("Montagne campera de abrigo");
-        prod_6.setWeight(70.0f);
-        prod_6.setName("campera");
-        prod_6.setSupplier(aSupplier);
-        prod_6.setType(Arrays.asList(type_1.get()));
-        products.add(prod_6);
-
-*/
         return products;
     }
     private List<Product> createAndReturnMascotasProducts(Supplier aSupplier, int i) {
@@ -1179,22 +1138,3 @@ public class DatabaseSeeder {
 */
     }
 }
-/*
-    private void seedHistoricalProductPriceTable() {
-        String sql = "SELECT * FROM historical_product_price";
-        List<HistoricalProductPrice> u = jdbcTemplate.query(sql, (resultSet, rowNum) -> null);
-        if(u == null || u.size() <= 0) {
-            Date startDate = new GregorianCalendar(2014, 2, 11).getTime();
-            Date endDate = new GregorianCalendar(2014, 3, 11).getTime();
-            HistoricalProductPrice historicalProductPrice = new HistoricalProductPrice();
-            historicalProductPrice.setPrice(10f);
-            historicalProductPrice.setStartDate(startDate);
-            historicalProductPrice.setFinishDate(endDate);
-            List<Product> products = productRepository.findByNameIgnoreCaseContaining("Café");
-            historicalProductPrice.setProduct(products.get(0));
-            historicalProductPriceRepository.save(historicalProductPrice);
-            logger.info("HistoricalProductPrice table Cargada");
-        } else {
-            logger.info("HistoricalProductPrice Seeding no requerido, tabla con datos");
-        }
-*/

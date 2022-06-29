@@ -115,15 +115,5 @@ public class ProductController {
         }
         catch (Exception e) {}
         return null;
-
-
-
-/*        Optional<Product> productToRemove = productService.findProduct(product_id);
-        if(productToRemove.isPresent()) {
-            Optional<Item> itemToRemove = itemService.itemWithProductId(product_id);
-            if(itemToRemove.isPresent()) {
-                orderService.removeProductAndItemFromOrderAndUpdatePrice(itemToRemove.get(), productToRemove.get());
-            }
-        }*/
     }
 }

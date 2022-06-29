@@ -24,8 +24,6 @@ public class Sent extends OrderStatus{
         this.getOrder().getDeliveryMan().addNumberOfSuccessfulOrders(); // incrementa las ordenes finalizadas del repartidor
         this.getOrder().setStatus( new Delivered( this.getOrder()) ); // Se pasa la Orden a estado de Entregado
         this.getOrder().setQualification(new Qualification(this.getOrder(), score, commentary)); // califica la operación
-       // this.getOrder().updateQualification(new Qualification(score, commentary)); // califica la operación y ver si puedo hacer calificar al supplier
-
         return true;
     }
 }
