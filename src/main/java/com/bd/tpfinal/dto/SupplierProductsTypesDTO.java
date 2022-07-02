@@ -1,0 +1,64 @@
+package com.bd.tpfinal.dto;
+
+import org.bson.types.ObjectId;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
+public class SupplierProductsTypesDTO {
+	
+	@JsonSerialize(using= ToStringSerializer.class)
+	private ObjectId id;
+	private String name;
+	private String cuil;
+	private String address;
+	private long countTypes;
+	
+	public SupplierProductsTypesDTO() { /* empty for framework */ }
+	
+	public SupplierProductsTypesDTO(ObjectId id, String name, String cuil, String address, long countTypes) {
+		this.id = id;
+		this.name = name;
+		this.cuil = cuil;
+		this.address = address;
+		this.countTypes = countTypes;
+	}
+	public ObjectId getId() {
+		return id;
+	}
+	public void setId(ObjectId id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getCuil() {
+		return cuil;
+	}
+	public void setCuil(String cuil) {
+		this.cuil = cuil;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public long getCountTypes() {
+		return countTypes;
+	}
+	public void setCountTypes(long countTypes) {
+		this.countTypes = countTypes;
+	}
+	@Override
+	public String toString() {
+		return "supplierProductsTypesDTO [id=" + id + ", name=" + name + ", cuil=" + cuil + ", address=" + address
+				+ ", countTypes=" + countTypes + "]";
+	}
+	
+	
+	
+}

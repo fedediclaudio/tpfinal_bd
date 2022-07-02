@@ -1,24 +1,72 @@
 package com.bd.tpfinal.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
+@Document
 public abstract class User {
 
+	@MongoId
+	@JsonSerialize(using= ToStringSerializer.class)
+	private ObjectId id;
+	
+	@Field
     private String name;
-
+	
+	@Field
     private String username;
-
+	
+	@Field
     private String password;
-
+	
+	@Field
     private String email;
+	
+	@Field
+	private LocalDate dateOfBirth;
+	
+	@Field
+    private Boolean active;
+	
+	@Field
+    private Integer score;
+    
+	@Version
+	private int version;
+    
+    public User(){ /*empty for framework */ }
 
-    private Date dateOfBirth;
+      
+	public User(String name, String username, String password, String email, LocalDate dateOfBirth) {
+		this.name = name;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.dateOfBirth = dateOfBirth;
+		this.active = true;
+		this.score = 0;
+	}
 
-    private boolean scrore;
 
-    private int score;
+	public ObjectId getId() {
+		return id;
+	}
 
-    public String getName() {
+
+	public void setId(ObjectId id) {
+		this.id = id;
+	}
+
+
+	public String getName() {
         return name;
     }
 
@@ -50,27 +98,40 @@ public abstract class User {
         this.email = email;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public boolean isScrore() {
-        return scrore;
+    public Boolean isActive() {
+        return active;
     }
 
-    public void setScrore(boolean scrore) {
-        this.scrore = scrore;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
-    public int getScore() {
+    public Integer getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(Integer score) {
         this.score = score;
     }
+    
+    public void addScore(Integer scoreObtained) {
+        this.score = this.score + scoreObtained;
+    }
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+    
 }

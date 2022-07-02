@@ -1,18 +1,38 @@
 package com.bd.tpfinal.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 public class HistoricalProductPrice {
-
+	
+	@Field
     private float price;
+	
+	@Field
+	private LocalDate startDate;
+	
+	@Field
+	private LocalDate finishDate;
+    
+    @Version
+	private int version;
+    
+    public HistoricalProductPrice() { /* empty for framework */ } 
+    
+    public HistoricalProductPrice(float price, LocalDate startDate) {
+		this.price = price;
+		this.startDate = startDate;
+		this.finishDate = null;
+	}
 
-    private Date startDate;
+    public HistoricalProductPrice(float price, LocalDate startDate, LocalDate finishDate) {
+		this.price = price;
+		this.startDate = startDate;
+		this.finishDate = finishDate;
+	}
 
-    private Date finishDate;
-
-    private Product product;
-
-    public float getPrice() {
+	public float getPrice() {
         return price;
     }
 
@@ -20,27 +40,27 @@ public class HistoricalProductPrice {
         this.price = price;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getFinishDate() {
+    public LocalDate getFinishDate() {
         return finishDate;
     }
 
-    public void setFinishDate(Date finishDate) {
+    public void setFinishDate(LocalDate finishDate) {
         this.finishDate = finishDate;
     }
-
-    public Product getProduct() {
-        return product;
+    
+    public int getVersion() {
+    	return version;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setVersion(int version) {
+    	this.version = version;
     }
 }

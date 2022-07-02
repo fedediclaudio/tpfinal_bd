@@ -1,31 +1,56 @@
 package com.bd.tpfinal.model;
 
-import java.util.List;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
+@Document
 public class Address {
-
-    private String name;
-
+	
+	@MongoId
+	@JsonSerialize(using= ToStringSerializer.class)
+    private ObjectId id;
+	
+	@Field
+	@NotNull(message = "address is required")
+   	@NotBlank(message ="address can't be blank")
     private String address;
-
+	
+	@Field
     private String apartment;
-
+	
+	@Field
     private float[] coords;
-
+	
+	@Field
     private String description;
+	
+	   
+    
+    public Address () { /* empty for framework */ }
+       
+    public Address(String address, String apartment, float[] coords, String description) {
+		this.address = address;
+		this.apartment = apartment;
+		this.coords = coords;
+		this.description = description;
+	}
 
-    private Client client;
+	public void setId(ObjectId id) {
+		this.id = id;
+	}
 
-    private List<Order> orders;
-
-    public String getName() {
-        return name;
+	public ObjectId getId() {
+        return id;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    
     public String getAddress() {
         return address;
     }
@@ -57,20 +82,5 @@ public class Address {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
+    
 }
